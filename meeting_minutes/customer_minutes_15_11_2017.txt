@@ -1,0 +1,23 @@
+Medicines:
+Never vary by type from the cards supplied, only thing that needs to be custom and editable is the dosage of each drug, so the names of the drugs can be a dropdown list.
+
+Graphs:
+Wanting to keep the statistics page simple. Could the graphs be an option rather than by default always being there? Because some girls would want to see it and some (like younger ones) wouldn't.
+
+Notes:
+Should be able to add them to appointments so they can put questions and such they think of. No general notes section, only specific.
+
+Icons:
+Will ask the girls what they think about the icons. No preference from staff. Email the icon ideas as a basis for what they want. 
+
+Name: 
+Could ask the girls for ideas what they think for a name of the app (like the icon header), should be quite private, but we should come up with some ideas for the name anyway. 
+
+Milestones: 
+Next meeting - Dec 8th
+Implement the wireframes, should have something with the pages on there already. 
+
+Tests:
+Hearing, heart scans, regular blood tests. Add past/due dates in the statistics page for different things - i.e. "Last heart scan: 01/03/2017, next due: 01/03/2018". Don't need to have records of what the tests showed, just when the tests took place. Have an 'other' section, because some tests might be specialised. 
+
+
