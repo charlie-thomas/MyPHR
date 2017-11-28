@@ -27,7 +27,7 @@
         android:id="@+id/appointments"
         android:enabled="true"
         android:icon="@drawable/ic_appointments"
-        android:title="Apppointments"
+        android:title="Appointments"
         app:showAsAction="ifRoom"/>
 
     <item
