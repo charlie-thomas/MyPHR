@@ -18,21 +18,27 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Toast toast = Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT);
                 switch (item.getItemId()) {
                     case R.id.contacts:
-                        Toast.makeText(MainActivity.this, "Contacts Clicked", Toast.LENGTH_SHORT).show();
+                        toast.setText("Contacts Clicked");
+                        toast.show();
                         break;
                     case R.id.medicine:
-                        Toast.makeText(MainActivity.this, "Medicine Clicked", Toast.LENGTH_SHORT).show();
+                        toast.setText("Medicine Clicked");
+                        toast.show();
                         break;
                     case R.id.calendar:
-                        Toast.makeText(MainActivity.this, "Calendar Clicked", Toast.LENGTH_SHORT).show();
+                        toast.setText("Calendar Clicked");
+                        toast.show();
                         break;
                     case R.id.appointments:
-                        Toast.makeText(MainActivity.this, "Contacts Clicked", Toast.LENGTH_SHORT).show();
+                        toast.setText("Appointments Clicked");
+                        toast.show();
                         break;
                     case R.id.statistics:
-                        Toast.makeText(MainActivity.this, "Contacts Clicked", Toast.LENGTH_SHORT).show();
+                        toast.setText("Statistics Clicked");
+                        toast.show();
                         break;
                 }
                 return true;
