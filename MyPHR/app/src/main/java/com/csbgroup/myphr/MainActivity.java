@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Show calendar when app first loads
+        bottomNavigationView.setSelectedItemId(R.id.calendar);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, CalendarDay.newInstance());
         transaction.commit();
