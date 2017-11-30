@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                         selectedPage = Medicine.newInstance();
                         break;
                     case R.id.calendar:
-                        selectedPage = CalendarDay.newInstance();
+                        selectedPage = Calendar.newInstance();
                         break;
                     case R.id.appointments:
                         selectedPage = Appointments.newInstance();
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         // Show calendar when app first loads
         bottomNavigationView.setSelectedItemId(R.id.calendar);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, CalendarDay.newInstance());
+        transaction.replace(R.id.frame_layout, Calendar.newInstance());
         transaction.commit();
     }
 
