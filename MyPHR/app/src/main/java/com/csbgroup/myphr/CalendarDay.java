@@ -22,7 +22,12 @@ public class CalendarDay extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_calendar_day, container, false);
+        View rootView =  inflater.inflate(R.layout.fragment_calendar_day, container, false);
+
+        ((MainActivity) getActivity()).setToolbar("My Calendar");
+        setHasOptionsMenu(false);
+
+        return rootView;
     }
 
 }
