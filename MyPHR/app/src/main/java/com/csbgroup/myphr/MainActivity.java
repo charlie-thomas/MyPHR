@@ -39,24 +39,24 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
 
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.frame_layout, selectedPage);
-                transaction.commit();
-
+                switchFragment(selectedPage);
                 return true;
             }
         });
 
         // Show calendar when app first loads
-        bottomNavigationView.setSelectedItemId(R.id.calendar);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, Calendar.newInstance());
-        transaction.commit();
+        switchFragment(Calendar.newInstance());
     }
 
     public void setToolbar(String title) {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(title);
+    }
+
+    public void switchFragment(Fragment newFragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_layout, newFragment);
+        transaction.commit();
     }
 }
