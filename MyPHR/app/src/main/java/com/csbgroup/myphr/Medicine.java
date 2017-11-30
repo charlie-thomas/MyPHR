@@ -3,6 +3,8 @@ package com.csbgroup.myphr;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -29,8 +31,11 @@ public class Medicine extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_medicine, container, false);
 
+        ((MainActivity) getActivity()).setToolbar("My Medicine");
+        setHasOptionsMenu(true);
+
         List<String> medicines = new ArrayList<>();
-        for (int i = 1; i < 10; i++) medicines.add("Medicine " + i);
+        for (int i = 1; i < 16; i++) medicines.add("Medicine " + i);
 
         ArrayAdapter<String> medicineAdapter = new ArrayAdapter<>(
                 getActivity(),
@@ -46,6 +51,11 @@ public class Medicine extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.settings, menu);
     }
 
 }
