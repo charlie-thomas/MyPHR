@@ -25,7 +25,9 @@ public class MedicineDetails extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_medicine_details, container, false);
 
-        ((MainActivity) getActivity()).setToolbar("Medicine A");
+        Bundle args = getArguments();
+
+        ((MainActivity) getActivity()).setToolbar(args.getString("title", "Medicine A"));
         setHasOptionsMenu(true);
 
         return rootView;
