@@ -1,8 +1,16 @@
 <resources>
     <string name="app_name">MyPHR</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="my_medicine">My Medicine</string>
     <string name="settings_cog">Settings Cog</string>
+    <string name="edit_icon">Edit Icon</string>
+    <string name="remind_when">Remind When</string>
+    <string name="reminder_type">Reminder Type</string>
+    <string name="_1_hour_prior">1 Hour Prior</string>
+    <string name="_20_minutes_prior">20 Minutes Prior</string>
+    <string name="at_dose_time">At Dose Time</string>
+    <string name="general">General</string>
+    <string name="descriptive">Descriptive</string>
+    <string name="reminders">Reminders</string>
+    <string name="notes">Notes</string>
 </resources>

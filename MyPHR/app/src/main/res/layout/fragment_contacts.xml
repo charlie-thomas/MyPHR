@@ -4,7 +4,7 @@
     android:id="@+id/contacts_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.csbgroup.myphr.CalendarDay">
+    tools:context="com.csbgroup.myphr.Contacts">
 
     <SearchView
         android:id="@+id/contacts_search"
