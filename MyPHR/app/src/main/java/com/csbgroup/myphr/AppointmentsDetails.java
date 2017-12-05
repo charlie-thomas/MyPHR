@@ -28,8 +28,8 @@ public class AppointmentsDetails extends Fragment {
 
         Bundle args = getArguments();
 
-        TextView medTitle = rootView.findViewById(R.id.appointments_title);
-        medTitle.setText(args.getString("title", "Blood Test"));
+        TextView apptTitle = rootView.findViewById(R.id.appointments_title);
+        apptTitle.setText(args.getString("title", "Appointment"));
 
         TextView apptInfo = rootView.findViewById(R.id.appointments_info);
         apptInfo.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam " +
@@ -45,6 +45,7 @@ public class AppointmentsDetails extends Fragment {
                 "vitae augue finibus, non vulputate tortor vulputate. Interdum et malesuada " +
                 "fames ac ante ipsum primis in faucibus.");
 
+        ((MainActivity) getActivity()).setToolbar(args.getString("title"));
         setHasOptionsMenu(true);
 
         return rootView;

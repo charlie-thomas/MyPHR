@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Show calendar when app first loads
         switchFragment(Calendar.newInstance());
+        // Set bottom nav bar to calendar when app first loads
+        bottomNavigationView.setSelectedItemId(R.id.calendar);
     }
 
     public void setToolbar(String title) {

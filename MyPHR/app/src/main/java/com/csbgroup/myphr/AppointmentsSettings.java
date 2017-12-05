@@ -23,7 +23,7 @@ public class AppointmentsSettings extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_appointments_settings, container, false);
 
-        ((MainActivity) getActivity()).setToolbar("Clinic - Dr Smith");
+        ((MainActivity) getActivity()).setToolbar("Appointments Settings");
         setHasOptionsMenu(false);
 
         return rootView;
