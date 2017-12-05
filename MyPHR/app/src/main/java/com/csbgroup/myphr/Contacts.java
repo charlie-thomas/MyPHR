@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -43,6 +44,19 @@ public class Contacts extends Fragment {
 
         ListView listView = rootView.findViewById(R.id.contacts_list);
         listView.setAdapter(contactsAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Fragment details = ContactDetails.newInstance();
+
+                // Create a bundle to pass the medicine name to the details fragment
+                Bundle bundle = new Bundle();
+                bundle.putString("title", parent.getAdapter().getItem(position).toString());
+                details.setArguments(bundle);
+
+                ((MainActivity) getActivity()).switchFragment(details);
+            }
+        });
 
         return rootView;
     }
