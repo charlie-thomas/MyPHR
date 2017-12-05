@@ -2,7 +2,6 @@ package com.csbgroup.myphr;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -75,7 +74,7 @@ public class Medicine extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.medicine_settings) {
+        if (item.getItemId() == R.id.settings) {
             ((MainActivity) getActivity()).switchFragment(MedicineSettings.newInstance());
             return true;
         }

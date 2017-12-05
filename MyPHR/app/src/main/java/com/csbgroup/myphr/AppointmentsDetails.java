@@ -31,7 +31,7 @@ public class AppointmentsDetails extends Fragment {
         TextView medTitle = rootView.findViewById(R.id.appointments_title);
         medTitle.setText(args.getString("title", "Blood Test"));
 
-        TextView apptsInfo = rootView.findViewById(R.id.appointments_info);
+        TextView apptInfo = rootView.findViewById(R.id.appointments_info);
         apptInfo.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam " +
                 "facilisis magna vel volutpat blandit. Etiam id ex urna. Nunc luctus justo " +
                 "eget lorem consequat, quis efficitur ipsum aliquet. Integer tristique tortor " +
