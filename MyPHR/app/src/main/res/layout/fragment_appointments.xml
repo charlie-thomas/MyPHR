@@ -1,15 +1,37 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/appointments_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.csbgroup.myphr.Appointments">
 
-    <TextView
+    <SearchView
+        android:id="@+id/appointments_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="5dp" />
+
+    <ListView
+        android:id="@+id/appointments_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Appointments View"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/appointments_search"
+        android:layout_marginTop="5dp" />
 
-</FrameLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/add"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabSize="normal" />
+
+
+</RelativeLayout>
