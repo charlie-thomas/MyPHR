@@ -1,0 +1,151 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.csbgroup.myphr.Login">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="37dp"
+        app:srcCompat="@mipmap/ic_login" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/login_1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="47dp"
+        android:ems="10"
+        android:inputType="numberPassword" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/login_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="260dp"
+        android:layout_marginEnd="275dp"
+        android:src="@drawable/login_1"
+        app:fabSize="normal"
+        app:backgroundTint="@color/colorPrimary" />
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/login_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="260dp"
+        android:layout_marginEnd="165dp"
+        android:src="@drawable/login_2"
+        app:fabSize="normal"
+        app:backgroundTint="@color/colorPrimary" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/login_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="260dp"
+        android:layout_marginEnd="55dp"
+        android:src="@drawable/login_3"
+        app:fabSize="normal"
+        app:backgroundTint="@color/colorPrimary" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/login_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="180dp"
+        android:layout_marginEnd="275dp"
+        android:src="@drawable/login_4"
+        app:fabSize="normal"
+        app:backgroundTint="@color/colorPrimary" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/login_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="180dp"
+        android:layout_marginEnd="165dp"
+        android:src="@drawable/login_5"
+        app:fabSize="normal"
+        app:backgroundTint="@color/colorPrimary" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/login_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="180dp"
+        android:layout_marginEnd="55dp"
+        android:src="@drawable/login_6"
+        app:fabSize="normal"
+        app:backgroundTint="@color/colorPrimary" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/login_7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="275dp"
+        android:src="@drawable/login_7"
+        app:fabSize="normal"
+        app:backgroundTint="@color/colorPrimary" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/login_8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="165dp"
+        android:src="@drawable/login_8"
+        app:fabSize="normal"
+        app:backgroundTint="@color/colorPrimary" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/login_9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginEnd="55dp"
+        android:src="@drawable/login_9"
+        app:fabSize="normal"
+        app:backgroundTint="@color/colorPrimary" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/login_0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="165dp"
+        android:src="@drawable/login_0"
+        app:fabSize="normal"
+        app:backgroundTint="@color/colorPrimary" />
+
+
+</RelativeLayout>
