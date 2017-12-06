@@ -1,0 +1,19 @@
+logo approved of
+turner's syndrome - colours purple and pink.
+Won't have many contacts so we probably won't need a search for it.
+Graph to show centiles because the girls would understand it. 
+Need to figure out a way for the girls to enter a centile and then graph it. Designing the actual
+centile graph is too complicated. Work out a way to plot centiles and make sense of it. 
+Now sure yet about whether including standard deviation is neccessery, clients will find out then
+get back to us.
+Seperate section for the scans. Contains the dates that they had the scan. Also need to be able
+to add notes to each. Do not need to include the actual results of the scan, just the date which they
+occured on.
+Height displayed in feet and inches.
+Families more likely to understand centiles than standard deviation so focus on centiles. 
+Recieving feedback for the app - could send out a questionaire to the girls, feedback is important. Helps up
+validate the app and ensure it reaches the functional requiremetns. 
+Need to work on database and get actual information about each drug etc.
+
+
+ 
