@@ -5,21 +5,21 @@
     <item
         android:id="@+id/contacts"
         android:enabled="true"
-        android:icon="@drawable/ic_contacts_new"
+        android:icon="@drawable/ic_contacts"
         android:title="Contacts"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/medicine"
         android:enabled="true"
-        android:icon="@drawable/ic_medicine_new"
+        android:icon="@drawable/ic_medicine"
         android:title="Medicine"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/calendar"
         android:enabled="true"
-        android:icon="@drawable/ic_calendar_new"
+        android:icon="@drawable/ic_calendar"
         android:title="Calendar"
         app:showAsAction="ifRoom"/>
 
@@ -33,7 +33,7 @@
     <item
         android:id="@+id/statistics"
         android:enabled="true"
-        android:icon="@drawable/ic_statistics_new"
+        android:icon="@drawable/ic_statistics"
         android:title="Statistics"
         app:showAsAction="ifRoom"/>
 

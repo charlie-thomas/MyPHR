@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Medicine extends Fragment {
@@ -35,8 +36,8 @@ public class Medicine extends Fragment {
         ((MainActivity) getActivity()).setToolbar("My Medicine");
         setHasOptionsMenu(true);
 
-        List<String> medicines = new ArrayList<>();
-        for (int i = 1; i < 16; i++) medicines.add("Medicine " + i);
+        String[] meds = {"Growth Hormone", "Oestrogen", "Progesterone", "Thyroxine"};
+        List<String> medicines = new ArrayList<>(Arrays.asList(meds));
 
         ArrayAdapter<String> medicineAdapter = new ArrayAdapter<>(
                 getActivity(),
