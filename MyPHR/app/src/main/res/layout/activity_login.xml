@@ -4,7 +4,8 @@
     android:id="@+id/login_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.csbgroup.myphr.Login">
+    android:background="@color/colorPrimary"
+    tools:context="com.csbgroup.myphr.LoginActivity">
 
 
     <ImageView
@@ -14,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="37dp"
-        app:srcCompat="@mipmap/ic_login" />
+        app:srcCompat="@mipmap/ic_launcher_foreground" />
 
     <EditText
         android:id="@+id/editText"
@@ -34,9 +35,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="260dp"
         android:layout_marginEnd="275dp"
-        android:src="@drawable/login_1"
+        android:src="@drawable/login_1_dark"
         app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
+        app:backgroundTint="#ffffff" />
 
 
     <android.support.design.widget.FloatingActionButton
@@ -47,9 +48,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="260dp"
         android:layout_marginEnd="165dp"
-        android:src="@drawable/login_2"
+        android:src="@drawable/login_2_dark"
         app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
+        app:backgroundTint="#ffffff" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/login_3"
@@ -59,9 +60,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="260dp"
         android:layout_marginEnd="55dp"
-        android:src="@drawable/login_3"
+        android:src="@drawable/login_3_dark"
         app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
+        app:backgroundTint="#ffffff" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/login_4"
@@ -71,9 +72,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="180dp"
         android:layout_marginEnd="275dp"
-        android:src="@drawable/login_4"
+        android:src="@drawable/login_4_dark"
         app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
+        app:backgroundTint="#ffffff" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/login_5"
@@ -83,9 +84,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="180dp"
         android:layout_marginEnd="165dp"
-        android:src="@drawable/login_5"
+        android:src="@drawable/login_5_dark"
         app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
+        app:backgroundTint="#ffffff" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/login_6"
@@ -95,9 +96,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="180dp"
         android:layout_marginEnd="55dp"
-        android:src="@drawable/login_6"
+        android:src="@drawable/login_6_dark"
         app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
+        app:backgroundTint="#ffffff" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/login_7"
@@ -107,9 +108,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="100dp"
         android:layout_marginEnd="275dp"
-        android:src="@drawable/login_7"
+        android:src="@drawable/login_7_dark"
         app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
+        app:backgroundTint="#ffffff" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/login_8"
@@ -119,9 +120,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="100dp"
         android:layout_marginEnd="165dp"
-        android:src="@drawable/login_8"
+        android:src="@drawable/login_8_dark"
         app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
+        app:backgroundTint="#ffffff" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/login_9"
@@ -131,9 +132,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="100dp"
         android:layout_marginEnd="55dp"
-        android:src="@drawable/login_9"
+        android:src="@drawable/login_9_dark"
         app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
+        app:backgroundTint="#ffffff" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/login_0"
@@ -143,9 +144,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="20dp"
         android:layout_marginEnd="165dp"
-        android:src="@drawable/login_0"
+        android:src="@drawable/login_0_dark"
         app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
+        app:backgroundTint="#ffffff" />
 
 
 </RelativeLayout>
