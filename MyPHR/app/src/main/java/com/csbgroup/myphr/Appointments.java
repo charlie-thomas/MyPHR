@@ -2,6 +2,7 @@ package com.csbgroup.myphr;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,8 +13,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.csbgroup.myphr.database.AppDatabase;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public class Appointments extends Fragment {
 
@@ -35,11 +41,7 @@ public class Appointments extends Fragment {
         ((MainActivity) getActivity()).setToolbar("My Appointments");
         setHasOptionsMenu(true);
 
-        List<String> appointments = new ArrayList<String>() {{
-            add("Clinic - Dr Smith");
-            add("Blood Test");
-            add("Checkup - Nurse Lane");
-        }};
+        List<String> appointments = AppDatabase.getAppDatabase(getActivity()).appointmentsDao().getAllTitles();
 
         ArrayAdapter<String> appointmentsAdapter = new ArrayAdapter<>(
                 getActivity(),
