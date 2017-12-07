@@ -1,4 +1,4 @@
-package com.csbgroup.myphr;
+package com.csbgroup.myphr.database;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
