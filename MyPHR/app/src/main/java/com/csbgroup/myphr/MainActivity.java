@@ -11,7 +11,10 @@ import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
 
 import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.AppointmentsDao;
 import com.csbgroup.myphr.database.AppointmentsEntity;
+import com.csbgroup.myphr.database.MedicineDao;
+import com.csbgroup.myphr.database.MedicineEntity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,8 +27,9 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                AppDatabase.getAppDatabase(MainActivity.this).appointmentsDao().deleteAll();
-                populateAppointments(AppDatabase.getAppDatabase(MainActivity.this));
+                AppDatabase db = AppDatabase.getAppDatabase(MainActivity.this);
+                populateMedicine(db.medicineDao());
+                populateAppointments(db.appointmentsDao());
             }
         }).start();
 
@@ -79,18 +83,33 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    private static void populateAppointments(AppDatabase db)  {
+    private static void populateMedicine(MedicineDao dao) {
+        dao.deleteAll();
+
+        String[] meds = {"Growth Hormone", "Oestrogen", "Progesterone", "Thyroxine"};
+
+        for (String med : meds) {
+            MedicineEntity me = new MedicineEntity(
+                    med,
+                    med + " Description",
+                    med + " Notes",
+                    true);
+            dao.insertAll(me);
+        }
+    }
+
+
+    private static void populateAppointments(AppointmentsDao dao)  {
+        dao.deleteAll();
+
         for (int i = 1; i < 6; i++) {
             AppointmentsEntity ae = new AppointmentsEntity();
-            ae.setUid(i);
             ae.setTitle("Appointment " + i);
             ae.setDescription("Appointment description " + i);
             ae.setReminders(0);
             ae.setNotes("Appointment notes " + i);
 
-            db.appointmentsDao().insertAll(ae);
-
-            Log.d("DB", "Size" + db.appointmentsDao().getAll().size());
+            dao.insertAll(ae);
         }
     }
 }
