@@ -8,7 +8,7 @@ import android.arch.persistence.room.PrimaryKey;
 public class AppointmentsEntity {
 
     // Columns
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int uid;
 
     @ColumnInfo(name = "title")

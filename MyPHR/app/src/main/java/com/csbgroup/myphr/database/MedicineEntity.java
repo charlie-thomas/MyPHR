@@ -3,15 +3,14 @@ package com.csbgroup.myphr.database;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 @Entity
 public class MedicineEntity {
 
     // Columns
+    @NonNull
     @PrimaryKey
-    private int uid;
-
-    @ColumnInfo(name = "title")
     private String title;
 
     @ColumnInfo(name = "description")
@@ -21,7 +20,7 @@ public class MedicineEntity {
     private String notes;
 
     @ColumnInfo(name = "reminders")
-    private int reminders;
+    private boolean reminders;
 
     @ColumnInfo(name = "reminder_type")
     private int reminder_type;
@@ -29,16 +28,15 @@ public class MedicineEntity {
     @ColumnInfo(name = "remind_when")
     private int remind_when;
 
+    // Constructor
+    public MedicineEntity(String title, String description, String notes, boolean reminders) {
+        this.title = title;
+        this.description = description;
+        this.notes = notes;
+        this.reminders = reminders;
+    }
 
     // Getters and Setters
-    public int getUid() {
-        return uid;
-    }
-
-    public void setUid(int uid) {
-        this.uid = uid;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -63,11 +61,11 @@ public class MedicineEntity {
         this.notes = notes;
     }
 
-    public int getReminders() {
+    public boolean getReminders() {
         return reminders;
     }
 
-    public void setReminders(int reminders) {
+    public void setReminders(boolean reminders) {
         this.reminders = reminders;
     }
 

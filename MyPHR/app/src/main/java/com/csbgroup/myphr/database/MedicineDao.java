@@ -14,6 +14,9 @@ public interface MedicineDao {
     @Query("SELECT * FROM medicineentity")
     List<MedicineEntity> getAll();
 
+    @Query("SELECT * FROM medicineentity WHERE title LIKE :title")
+    MedicineEntity getMedicine(String title);
+
     @Query("SELECT title FROM medicineentity")
     List<String> getAllTitles();
 

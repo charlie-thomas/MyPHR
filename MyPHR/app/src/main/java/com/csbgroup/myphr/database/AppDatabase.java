@@ -12,8 +12,12 @@ public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 
     public abstract AppointmentsDao appointmentsDao();
+    public abstract MedicineDao medicineDao();
+    public abstract ContactsDao contactsDao();
+    public abstract StatisticsDao statisticsDao();
 
     public static AppDatabase getAppDatabase(Context context) {
+
         if (INSTANCE == null) INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                     AppDatabase.class, "database").fallbackToDestructiveMigration().build();
         return INSTANCE;
