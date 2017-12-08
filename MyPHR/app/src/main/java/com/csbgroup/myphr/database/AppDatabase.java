@@ -5,7 +5,8 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = {AppointmentsEntity.class, MedicineEntity.class}, version = 1)
+@Database(entities = {AppointmentsEntity.class, MedicineEntity.class,
+        StatisticsEntity.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;
