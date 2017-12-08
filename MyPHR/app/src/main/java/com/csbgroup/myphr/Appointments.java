@@ -20,6 +20,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Appointments extends Fragment {
 
@@ -41,7 +45,9 @@ public class Appointments extends Fragment {
         ((MainActivity) getActivity()).setToolbar("My Appointments");
         setHasOptionsMenu(true);
 
-        List<String> appointments = AppDatabase.getAppDatabase(getActivity()).appointmentsDao().getAllTitles();
+        // Get all the appointments from the database
+        List<String> appointments = getAppointmentNames();
+        if (appointments == null) return rootView;
 
         ArrayAdapter<String> appointmentsAdapter = new ArrayAdapter<>(
                 getActivity(),
@@ -65,6 +71,28 @@ public class Appointments extends Fragment {
         });
 
         return rootView;
+    }
+
+    private List<String> getAppointmentNames() {
+        // Create a callable object for database transactions
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(getActivity()).appointmentsDao().getAllTitles();
+            }
+        };
+
+        // Get a Future object of all the appointment names
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<List<String>> result = service.submit(callable);
+
+        // Create a list of the appointment names
+        List<String> appointments = null;
+        try {
+            appointments = result.get();
+        } catch (Exception e) {}
+
+        return appointments;
     }
 
     @Override
