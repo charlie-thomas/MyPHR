@@ -12,9 +12,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.MedicineEntity;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Medicine extends Fragment {
 
@@ -36,13 +43,19 @@ public class Medicine extends Fragment {
         ((MainActivity) getActivity()).setToolbar("My Medicine");
         setHasOptionsMenu(true);
 
-        String[] meds = {"Growth Hormone", "Oestrogen", "Progesterone", "Thyroxine"};
-        List<String> medicines = new ArrayList<>(Arrays.asList(meds));
+
+        List<MedicineEntity> medicines = getMedicines();
+        if (medicines == null) return rootView;
+
+        List<String> medicineTitles = new ArrayList<>();
+        for (MedicineEntity me : medicines) {
+            medicineTitles.add(me.getTitle());
+        }
 
         ArrayAdapter<String> medicineAdapter = new ArrayAdapter<>(
                 getActivity(),
                 R.layout.simple_list_item,
-                medicines);
+                medicineTitles);
 
         ListView listView = rootView.findViewById(R.id.medicine_list);
         listView.setAdapter(medicineAdapter);
@@ -61,6 +74,28 @@ public class Medicine extends Fragment {
         });
 
         return rootView;
+    }
+
+    private List<MedicineEntity> getMedicines() {
+        // Create a callable object for database transactions
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(getActivity()).medicineDao().getAll();
+            }
+        };
+
+        // Get a Future object of all the medicine titles
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<List<MedicineEntity>> result = service.submit(callable);
+
+        // Create a list of the appointment names
+        List<MedicineEntity> medicines = null;
+        try {
+            medicines = result.get();
+        } catch (Exception e) {}
+
+        return medicines;
     }
 
     @Override

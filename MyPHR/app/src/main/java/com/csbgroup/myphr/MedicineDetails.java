@@ -7,7 +7,18 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
+
+import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.MedicineEntity;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class MedicineDetails extends Fragment {
 
@@ -27,27 +38,43 @@ public class MedicineDetails extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_medicine_details, container, false);
 
         Bundle args = getArguments();
+        MedicineEntity medicine = getMedicine(args.getString("title"));
 
         TextView medTitle = rootView.findViewById(R.id.medicine_title);
-        medTitle.setText(args.getString("title", "Medicine A"));
+        medTitle.setText(medicine.getTitle());
 
         TextView medInfo = rootView.findViewById(R.id.medicine_info);
-        medInfo.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam " +
-                        "facilisis magna vel volutpat blandit. Etiam id ex urna. Nunc luctus justo " +
-                        "eget lorem consequat, quis efficitur ipsum aliquet. Integer tristique tortor " +
-                        "vitae augue finibus, non vulputate tortor vulputate. Interdum et malesuada " +
-                        "fames ac ante ipsum primis in faucibus.");
+        medInfo.setText(medicine.getDescription());
+
+        Switch reminders = rootView.findViewById(R.id.reminder_switch);
+        reminders.setChecked(medicine.getReminders());
 
         TextView notes = rootView.findViewById(R.id.notes);
-        notes.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam " +
-                "facilisis magna vel volutpat blandit. Etiam id ex urna. Nunc luctus justo " +
-                "eget lorem consequat, quis efficitur ipsum aliquet. Integer tristique tortor " +
-                "vitae augue finibus, non vulputate tortor vulputate. Interdum et malesuada " +
-                "fames ac ante ipsum primis in faucibus.");
+        notes.setText(medicine.getNotes());
 
         setHasOptionsMenu(true);
 
         return rootView;
+    }
+
+    private MedicineEntity getMedicine(final String medTitle) {
+        // Create a callable object for database transactions
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(getActivity()).medicineDao().getMedicine(medTitle);
+            }
+        };
+
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<MedicineEntity> result = service.submit(callable);
+
+        MedicineEntity medicine = null;
+        try {
+            medicine = result.get();
+        } catch (Exception e) {}
+
+        return medicine;
     }
 
     @Override
