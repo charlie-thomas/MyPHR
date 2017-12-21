@@ -42,7 +42,7 @@ public class Appointments extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_appointments, container, false);
 
-        ((MainActivity) getActivity()).setToolbar("My Appointments");
+        ((MainActivity) getActivity()).setToolbar("My Appointments", false);
         setHasOptionsMenu(true);
 
         // Get all the appointments from the database

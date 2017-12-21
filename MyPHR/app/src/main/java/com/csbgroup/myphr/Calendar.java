@@ -22,7 +22,7 @@ public class Calendar extends Fragment {
                              Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_calendar, container, false);
 
-        ((MainActivity) getActivity()).setToolbar("My Calendar");
+        ((MainActivity) getActivity()).setToolbar("My Calendar", false);
         setHasOptionsMenu(false);
 
         return rootView;

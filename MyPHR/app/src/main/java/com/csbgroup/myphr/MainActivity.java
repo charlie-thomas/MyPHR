@@ -70,11 +70,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /* Helper function to set the title of the toolbar */
-    public void setToolbar(String title) {
+    public void setToolbar(String title, boolean back) {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(title);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(back);
+        getSupportActionBar().setDisplayShowHomeEnabled(back);
     }
+
 
     /* Helper function to switch the current fragment in the frame */
     public void switchFragment(Fragment newFragment) {

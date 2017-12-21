@@ -31,7 +31,7 @@ public class Contacts extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
 
-        ((MainActivity) getActivity()).setToolbar("My Contacts");
+        ((MainActivity) getActivity()).setToolbar("My Contacts", false);
         setHasOptionsMenu(true);
 
         List<String> contacts = new ArrayList<String>(){{

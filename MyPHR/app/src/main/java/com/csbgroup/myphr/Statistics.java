@@ -31,7 +31,7 @@ public class Statistics extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
 
-        ((MainActivity) getActivity()).setToolbar("My Statistics");
+        ((MainActivity) getActivity()).setToolbar("My Statistics", false);
         setHasOptionsMenu(true);
 
         List<String> statistics = new ArrayList<String>(){{

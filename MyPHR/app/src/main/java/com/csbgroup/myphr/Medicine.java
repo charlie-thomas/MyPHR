@@ -40,7 +40,7 @@ public class Medicine extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_medicine, container, false);
 
-        ((MainActivity) getActivity()).setToolbar("My Medicine");
+        ((MainActivity) getActivity()).setToolbar("My Medicine", false);
         setHasOptionsMenu(true);
 
 
