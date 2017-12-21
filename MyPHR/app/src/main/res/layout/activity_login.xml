@@ -26,15 +26,13 @@
         />
 
     <EditText
-        android:id="@+id/editText"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/login_pin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/login_1"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="70dp"
-        android:ems="10"
-        android:inputType="numberPassword" />
+        android:ems="10" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/login_1"

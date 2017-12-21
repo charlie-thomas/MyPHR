@@ -1,14 +1,13 @@
 package com.csbgroup.myphr;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsDao;
@@ -101,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private static void populateAppointments(AppointmentsDao dao)  {
         dao.deleteAll();
 
@@ -114,5 +112,10 @@ public class MainActivity extends AppCompatActivity {
 
             dao.insertAll(ae);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // stops user going back to login screen
     }
 }
