@@ -17,4 +17,5 @@
     <string name="_1_week_prior_">1 Week Prior</string>
     <string name="_day_before">Day before</string>
     <string name="_morning_of">Morning of</string>
+    <string name="enter_pin">Enter Your Pin:</string>
 </resources>
