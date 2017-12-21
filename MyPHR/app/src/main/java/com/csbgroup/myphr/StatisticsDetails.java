@@ -71,6 +71,7 @@ public class StatisticsDetails extends Fragment {
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, list);
         listview.setAdapter(adapter);
 
+        ((MainActivity) getActivity()).setToolbar("My Statistics", true);
         setHasOptionsMenu(true);
 
         return rootView;

@@ -52,6 +52,7 @@ public class MedicineDetails extends Fragment {
         TextView notes = rootView.findViewById(R.id.notes);
         notes.setText(medicine.getNotes());
 
+        ((MainActivity) getActivity()).setToolbar("My Medicine", true);
         setHasOptionsMenu(true);
 
         return rootView;

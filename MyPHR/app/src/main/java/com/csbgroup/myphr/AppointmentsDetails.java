@@ -45,6 +45,7 @@ public class AppointmentsDetails extends Fragment {
                 "vitae augue finibus, non vulputate tortor vulputate. Interdum et malesuada " +
                 "fames ac ante ipsum primis in faucibus.");
 
+        ((MainActivity) getActivity()).setToolbar("My Appointments", true);
         setHasOptionsMenu(true);
 
         return rootView;
