@@ -13,8 +13,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="Main"
-            android:parentActivityName="com.csbgroup.myphr.MainActivity" >
+            android:label="Main">
         </activity>
 
         <activity
