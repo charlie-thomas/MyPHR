@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -44,6 +45,8 @@ public class ContactDetails extends Fragment {
                 "vitae augue finibus, non vulputate tortor vulputate. Interdum et malesuada " +
                 "fames ac ante ipsum primis in faucibus.");
 
+        ((MainActivity) getActivity()).setToolbar("My Contacts", true);
+
         setHasOptionsMenu(true);
 
         return rootView;
@@ -57,6 +60,16 @@ public class ContactDetails extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                ((MainActivity) getActivity()).switchFragment(Contacts.newInstance());
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
