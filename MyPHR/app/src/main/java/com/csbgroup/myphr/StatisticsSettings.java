@@ -43,7 +43,7 @@ public class StatisticsSettings extends Fragment {
         switch (item.getItemId()) {
             case android.R.id.home:
                 ((MainActivity) getActivity()).switchFragment(Statistics.newInstance());
-                break;
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
