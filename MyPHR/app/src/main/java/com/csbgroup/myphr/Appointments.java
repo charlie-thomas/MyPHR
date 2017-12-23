@@ -99,6 +99,7 @@ public class Appointments extends Fragment {
         inflater.inflate(R.menu.settings, menu);
     }
 
+    /* Navigation from Appointments to settings fragment */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.settings) {
@@ -107,6 +108,5 @@ public class Appointments extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 }

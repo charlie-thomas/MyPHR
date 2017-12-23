@@ -96,6 +96,7 @@ public class StatisticsDetails extends Fragment {
         inflater.inflate(R.menu.edit, menu);
     }
 
+    /* Navigation from details fragment back to Statistics */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

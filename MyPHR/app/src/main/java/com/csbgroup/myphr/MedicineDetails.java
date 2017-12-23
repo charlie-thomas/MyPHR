@@ -95,7 +95,7 @@ public class MedicineDetails extends Fragment {
         switch (item.getItemId()) {
             case android.R.id.home:
                 ((MainActivity) getActivity()).switchFragment(Medicine.newInstance());
-                break;
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

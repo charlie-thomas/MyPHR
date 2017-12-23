@@ -62,12 +62,13 @@ public class AppointmentsDetails extends Fragment {
         inflater.inflate(R.menu.edit, menu);
     }
 
+    /* Navigation from details fragment back to Appointments */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 ((MainActivity) getActivity()).switchFragment(Appointments.newInstance());
-                break;
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

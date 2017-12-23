@@ -108,6 +108,7 @@ public class Medicine extends Fragment {
         inflater.inflate(R.menu.settings, menu);
     }
 
+    /* Navigation from Medicine to settings fragment */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.settings) {

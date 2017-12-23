@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -26,7 +27,7 @@ public class MedicineSettings extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_medicine_settings, container, false);
 
         ((MainActivity) getActivity()).setToolbar("Medicines Settings", true);
-        setHasOptionsMenu(false);
+        setHasOptionsMenu(true);
 
         return rootView;
     }
@@ -34,6 +35,17 @@ public class MedicineSettings extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    /* Navigation from settings fragment back to Medicine */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                ((MainActivity) getActivity()).switchFragment(Medicine.newInstance());
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
