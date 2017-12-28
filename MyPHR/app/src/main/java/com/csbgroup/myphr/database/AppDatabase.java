@@ -3,10 +3,12 @@ package com.csbgroup.myphr.database;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 @Database(entities = {AppointmentsEntity.class, MedicineEntity.class,
-        StatisticsEntity.class, ContactsEntity.class}, version = 2)
+        StatisticsEntity.class, ContactsEntity.class}, version = 4)
+@TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase INSTANCE;

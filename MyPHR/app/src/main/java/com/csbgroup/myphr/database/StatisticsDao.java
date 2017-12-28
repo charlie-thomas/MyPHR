@@ -14,8 +14,11 @@ public interface StatisticsDao {
     @Query("SELECT * FROM statisticsentity")
     List<StatisticsEntity> getAll();
 
-    @Query("SELECT title FROM statisticsentity")
-    List<String> getAllTitles();
+    @Query("SELECT unit FROM statisticsentity")
+    List<String> getAllUnits();
+
+    @Query("SELECT * FROM statisticsentity WHERE unit LIKE :unit")
+    StatisticsEntity getStatistic(String unit);
 
     @Insert
     void insertAll(StatisticsEntity... statisticsEntities);
@@ -29,3 +32,4 @@ public interface StatisticsDao {
     @Query("DELETE FROM statisticsentity")
     void deleteAll();
 }
+

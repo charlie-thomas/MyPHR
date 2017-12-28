@@ -3,32 +3,42 @@ package com.csbgroup.myphr.database;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
+import java.util.ArrayList;
 
 @Entity
 public class StatisticsEntity {
 
     // Columns
+    @NonNull
     @PrimaryKey
-    private int uid;
+    private String unit;
 
-    @ColumnInfo(name = "title")
-    private String title;
+    @ColumnInfo(name = "values")
+    private ArrayList<String> values;
 
+
+    // Constructor
+    public StatisticsEntity(String unit, ArrayList<String> values) {
+        this.unit = unit;
+        this.values = values;
+    }
 
     // Getters and Setters
-    public int getUid() {
-        return uid;
+
+    public String getUnit() {
+        return unit;
     }
 
-    public void setUid(int uid) {
-        this.uid = uid;
+    public void setValues(ArrayList<String> values) {this.values = values;}
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
-    public String getTitle() {
-        return title;
-    }
+    public ArrayList<String> getValues(){ return values; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public void addValue(String value){ this.values.add(value);}
+
 }

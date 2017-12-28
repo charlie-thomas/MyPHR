@@ -12,8 +12,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.StatisticsEntity;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Statistics extends Fragment {
 
@@ -35,12 +42,13 @@ public class Statistics extends Fragment {
         ((MainActivity) getActivity()).setToolbar("My Statistics", false);
         setHasOptionsMenu(true);
 
-        List<String> statistics = new ArrayList<String>(){{
-            add("Height Velocity");
-            add("Weight");
-            add("BMI");
-            add("Blood Pressure");
-        }};
+
+        List<StatisticsEntity> stats = getStats();
+
+        List<String> statistics = new ArrayList<String>();
+        for (StatisticsEntity st : stats) {
+            statistics.add(st.getUnit());
+        }
 
         ArrayAdapter<String> statisticsAdapter = new ArrayAdapter<>(
                 getActivity(),
@@ -64,6 +72,28 @@ public class Statistics extends Fragment {
         });
 
         return rootView;
+    }
+
+    private List<StatisticsEntity> getStats() {
+        // Create a callable object for database transactions
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(getActivity()).statisticsDao().getAll();
+            }
+        };
+
+        // Get a Future object of all the medicine titles
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<List<StatisticsEntity>> result = service.submit(callable);
+
+        // Create a list of the appointment names
+        List<StatisticsEntity> statistics = null;
+        try {
+            statistics = result.get();
+        } catch (Exception e) {}
+
+        return statistics;
     }
 
     @Override

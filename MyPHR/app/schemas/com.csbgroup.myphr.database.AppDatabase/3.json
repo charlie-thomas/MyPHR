@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 2,
-    "identityHash": "24a579610c59e7f16f90689da8ccc8be",
+    "version": 3,
+    "identityHash": "5ad46e635038663dca85a7a47a312398",
     "entities": [
       {
         "tableName": "AppointmentsEntity",
@@ -112,19 +112,13 @@
       },
       {
         "tableName": "StatisticsEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER NOT NULL, `unit` TEXT, `values` TEXT, PRIMARY KEY(`uid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`unit` TEXT NOT NULL, `values` TEXT, PRIMARY KEY(`unit`))",
         "fields": [
-          {
-            "fieldPath": "uid",
-            "columnName": "uid",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
           {
             "fieldPath": "unit",
             "columnName": "unit",
             "affinity": "TEXT",
-            "notNull": false
+            "notNull": true
           },
           {
             "fieldPath": "values",
@@ -135,7 +129,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "uid"
+            "unit"
           ],
           "autoGenerate": false
         },
@@ -189,7 +183,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"24a579610c59e7f16f90689da8ccc8be\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"5ad46e635038663dca85a7a47a312398\")"
     ]
   }
 }
