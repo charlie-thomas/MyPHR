@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         String[] stats = {"Height Velocity", "Weight", "BMI"};
         ArrayList<String> list = new ArrayList<String>();
         for (String stat : stats) {
-            StatisticsEntity st = new StatisticsEntity(stat,list);
+            StatisticsEntity st = new StatisticsEntity(stat, list);
             dao.insertAll(st);
         }
     }

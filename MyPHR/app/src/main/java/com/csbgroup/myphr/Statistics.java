@@ -1,7 +1,11 @@
 package com.csbgroup.myphr;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,19 +14,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.StatisticsDao;
 import com.csbgroup.myphr.database.StatisticsEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class Statistics extends Fragment {
+
+    FloatingActionButton but;
 
     public Statistics() {
         // Required empty public constructor
@@ -55,7 +66,7 @@ public class Statistics extends Fragment {
                 R.layout.simple_list_item,
                 statistics);
 
-        ListView listView = rootView.findViewById(R.id.statistics_list );
+        ListView listView = rootView.findViewById(R.id.statistics_list);
         listView.setAdapter(statisticsAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -68,6 +79,43 @@ public class Statistics extends Fragment {
                 details.setArguments(bundle);
 
                 ((MainActivity) getActivity()).switchFragment(details);
+
+            }
+        });
+
+        but = (FloatingActionButton) rootView.findViewById(R.id.s_fab);
+        but.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
+                ab.setTitle("Enter the name of the measurement you would like to track:");
+                final EditText et = new EditText(getActivity());
+                ab.setView(et);
+                ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                ArrayList<String> list = new ArrayList<String>();
+                                StatisticsEntity st = new StatisticsEntity(et.getText().toString(),list);
+                                db.statisticsDao().insertAll(st);
+                            }
+                        }).start();
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.detach(Statistics.this).attach(Statistics.this).commit();
+                    }
+                });
+                ab.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                    }
+                });
+
+                AlertDialog a = ab.create();
+                a.show();
             }
         });
 
