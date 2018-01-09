@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -48,7 +51,9 @@ public class CalendarDay extends Fragment {
 
         // Get the date passed from the Calendar fragment
         Bundle args = getArguments();
-        Log.d("Date", args.getInt("day") + "/" + args.getInt("month") + "/" + args.getInt("year"));
+        TextView dateTitle = rootView.findViewById(R.id.date);
+        String dateString = args.getInt("day") + "/" + args.getInt("month") + "/" + args.getInt("year");
+        dateTitle.setText(dateString);
 
         return rootView;
     }
