@@ -9,6 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class CalendarDay extends Fragment {
 
@@ -29,11 +33,18 @@ public class CalendarDay extends Fragment {
 
         View rootView =  inflater.inflate(R.layout.fragment_calendar_day, container, false);
 
-        // Create a grid with two columns (time and events)
-        RecyclerView recyclerView = rootView.findViewById(R.id.calendar_grid);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        recyclerView.setAdapter(new NumberedAdapter(30));
+        ArrayList<CalendarEvent> events = new ArrayList<>();
+        for (int i = 0; i < 24; i++) {
+            String event = null;
+            if (i == 8) event = "Appointment";
+            events.add(new CalendarEvent(i+":00", null, event));
+        }
+
+        CalendarAdapter adapter = new CalendarAdapter(getActivity(), events);
+
+        ListView calendarList = rootView.findViewById(R.id.calendar_list);
+        calendarList.setAdapter(adapter);
+
 
         // Get the date passed from the Calendar fragment
         Bundle args = getArguments();
