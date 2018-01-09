@@ -37,7 +37,7 @@ public class Calendar extends Fragment {
                 // Create a bundle to pass the selected date to the day view fragment
                 Bundle bundle = new Bundle();
                 bundle.putInt("year", year);
-                bundle.putInt("month", month);
+                bundle.putInt("month", month + 1);
                 bundle.putInt("day", dayOfMonth);
                 dayFragment.setArguments(bundle);
 
