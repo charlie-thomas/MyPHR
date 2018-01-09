@@ -33,6 +33,7 @@ public class CalendarDay extends Fragment {
         RecyclerView recyclerView = rootView.findViewById(R.id.calendar_grid);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recyclerView.setAdapter(new NumberedAdapter(30));
 
         // Get the date passed from the Calendar fragment
         Bundle args = getArguments();
