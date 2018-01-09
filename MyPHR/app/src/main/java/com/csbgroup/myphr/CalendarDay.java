@@ -3,23 +3,16 @@ package com.csbgroup.myphr;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 public class CalendarDay extends Fragment {
-
-
+    
     public CalendarDay() {
         // Required empty public constructor
     }
@@ -28,7 +21,6 @@ public class CalendarDay extends Fragment {
         CalendarDay fragment = new CalendarDay();
         return fragment;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,5 +49,4 @@ public class CalendarDay extends Fragment {
 
         return rootView;
     }
-
 }
