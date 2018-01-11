@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:weightSum="1"
-    android:paddingStart="10dp">
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/time"
@@ -12,8 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.1"
         android:textStyle="bold"
-        android:padding="5dp"
-        android:paddingTop="5dp" />
+        android:padding="10dp" />
 
     <TextView
         android:id="@+id/event"
@@ -21,6 +21,5 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.7"
         android:backgroundTint="@color/colorAccent"
-        android:padding="5dp"
-        android:paddingTop="5dp" />
+        android:padding="5dp" />
 </LinearLayout>

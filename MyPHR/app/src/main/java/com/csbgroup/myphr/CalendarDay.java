@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class CalendarDay extends Fragment {
-    
+
     public CalendarDay() {
         // Required empty public constructor
     }
