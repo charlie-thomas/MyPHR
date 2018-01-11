@@ -1,20 +1,23 @@
+# image: blang/latex
+# build:
+#   script:
+#     - latexmk -pdf -cd docs/dissertation.tex
+#   artifacts:
+#     paths:
+#       - "*.pdf"
+
 before_script:
+  - cd MyPHR
+  - gem install bundler --no-ri --no-rdoc --user-install
+  - PATH=$PATH:~/home/gitlab-runner/.gem/ruby/2.3.0/bin
   - export ANDROID_HOME="$HOME/Library/Android/sdk"
   - bundle install
 
 stages:
-  - build
-  - test
-  - quality_assurance
-  - deploy
-
-image: blang/latex
-build:
-  script:
-    - latexmk -pdf -cd docs/dissertation.tex
-  artifacts:
-    paths:
-      - "*.pdf"
+- build
+- test
+- quality_assurance
+- deploy
 
 build_job:
   stage: build
@@ -22,14 +25,14 @@ build_job:
     - ./gradlew clean assembleRelease
   artifacts:
     paths:
-      - app/build/outputs
+    - app/build/outputs/
 
- unit_tests:
+unit_tests:
   stage: test
   script:
     - ./gradlew test
   artifacts:
-    name: "reports_${CSB-Project}_${dev-testing}"
+    name: "reports_${CI_PROJECT_NAME}_${CI_BUILD_REF_NAME}"
     when: on_failure
     expire_in: 4 days
     paths:
@@ -62,7 +65,7 @@ static_analysis:
     - ./gradlew pmd
     - ./gradlew findbugs
   artifacts:
-    name: "reports_${CSB-Project}_${dev-testing}"
+    name: "reports_${CI_PROJECT_NAME}_${CI_BUILD_REF_NAME}"
     when: on_failure
     expire_in: 4 days
     paths:
