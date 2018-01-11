@@ -29,6 +29,9 @@ public class Calendar extends Fragment {
 
         CalendarView calendarView = rootView.findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+
+            /* Creates a bundle containing the date selected from the CalendarView, and passes this
+             * date through to the new day view fragment, which the app switches to */
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
 
