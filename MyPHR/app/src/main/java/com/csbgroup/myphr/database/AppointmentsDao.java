@@ -17,6 +17,9 @@ public interface AppointmentsDao {
     @Query("SELECT title FROM appointmentsentity")
     List<String> getAllTitles();
 
+    @Query("SELECT * FROM appointmentsentity WHERE title LIKE :title")
+    AppointmentsEntity getAppointment(String title);
+
     @Insert
     void insertAll(AppointmentsEntity... appointmentsEntities);
 
