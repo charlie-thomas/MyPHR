@@ -6,10 +6,17 @@ import android.support.test.InstrumentationRegistry;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsDao;
+import com.csbgroup.myphr.database.AppointmentsEntity;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class AppointmentsEntityTest {
 
@@ -30,21 +37,51 @@ public class AppointmentsEntityTest {
 
     @Test
     public void createAppointmentTest() throws Exception {
+        AppointmentsEntity appointmentsEntity = new AppointmentsEntity("Appointment",
+                "Description", "Notes", 1);
+        appointmentsDao.insertAll(appointmentsEntity);
 
+        AppointmentsEntity ae = appointmentsDao.getAppointment("Appointment");
+        assertEquals(appointmentsEntity.getTitle(), ae.getTitle());
     }
 
     @Test
     public void deleteAppointmentTest() throws Exception {
+        AppointmentsEntity appointmentsEntity = new AppointmentsEntity("Appointment",
+                "Description", "Notes", 1);
+        appointmentsDao.insertAll(appointmentsEntity);
 
+        // Ensure the database contains the appointment to be deleted
+        assertEquals(appointmentsEntity.getTitle(), appointmentsDao.getAppointment("Appointment").getTitle());
+
+        // Delete the appointment from the database and ensure the getAppointment query returns null
+        appointmentsDao.delete(appointmentsDao.getAppointment("Appointment"));
+        assertEquals(null, appointmentsDao.getAppointment("Appointment"));
     }
 
     @Test
     public void insertMultipleAppointmentsTest() throws Exception {
+        List<String> titles = Arrays.asList("App 1", "App 2", "App 3", "App 4");
 
+        List<AppointmentsEntity> appointments = new ArrayList<>();
+        for (int i = 1; i < 5; i++)
+            appointments.add(new AppointmentsEntity("App " + i, null, null, 1));
+        appointmentsDao.insertAll(appointments.toArray(new AppointmentsEntity[appointments.size()]));
+
+        assertEquals(titles, appointmentsDao.getAllTitles());
     }
 
     @Test
     public void deleteAllAppointmentsTest() throws Exception {
+        for (int i = 1; i < 5; i++)
+            appointmentsDao.insertAll(new AppointmentsEntity("App " + i, null, null, 1));
+
+        // Ensure there are currently 4 appointments in the database
+        assertEquals(4, appointmentsDao.getAll().size());
+
+        // Delete all appointments and ensure there are 0 left
+        appointmentsDao.deleteAll();
+        assertEquals(0, appointmentsDao.getAll().size());
 
     }
 }
