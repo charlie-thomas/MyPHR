@@ -1,6 +1,5 @@
 package com.csbgroup.myphr;
 
-import android.app.Instrumentation;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
