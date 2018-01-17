@@ -8,7 +8,7 @@ import android.arch.persistence.room.PrimaryKey;
 public class ContactsEntity {
 
     // Columns
-    @PrimaryKey
+    @PrimaryKey (autoGenerate = true)
     private int uid;
 
     @ColumnInfo(name = "name")
@@ -22,6 +22,14 @@ public class ContactsEntity {
 
     @ColumnInfo(name = "notes")
     private String notes;
+
+    // Constructor
+    public ContactsEntity(String name, String email, String phone, String notes) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.notes = notes;
+    }
 
 
     // Getters and Setters

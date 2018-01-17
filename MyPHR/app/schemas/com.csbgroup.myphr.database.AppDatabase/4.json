@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "5ad46e635038663dca85a7a47a312398",
+    "identityHash": "0a70653924311a74ea4b6cf4beb98ada",
     "entities": [
       {
         "tableName": "AppointmentsEntity",
@@ -138,7 +138,7 @@
       },
       {
         "tableName": "ContactsEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER NOT NULL, `name` TEXT, `email` TEXT, `phone` TEXT, `notes` TEXT, PRIMARY KEY(`uid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `email` TEXT, `phone` TEXT, `notes` TEXT)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -175,7 +175,7 @@
           "columnNames": [
             "uid"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
@@ -183,7 +183,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"5ad46e635038663dca85a7a47a312398\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0a70653924311a74ea4b6cf4beb98ada\")"
     ]
   }
 }
