@@ -30,10 +30,6 @@ public class MedicineEntityTest {
         Context context = InstrumentationRegistry.getTargetContext();
         appDatabase = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).build();
         medicineDao = appDatabase.medicineDao();
-
-        MedicineEntity medicineEntity = new MedicineEntity("Medicine",
-                "Description", "Notes", true);
-        medicineDao.insertAll(medicineEntity);
     }
 
     @After
@@ -53,13 +49,22 @@ public class MedicineEntityTest {
 
     @Test
     public void deleteMedicineTest() throws Exception {
+        MedicineEntity medicineEntity = new MedicineEntity("Medicine",
+                "Description", "Notes", true);
+        medicineDao.insertAll(medicineEntity);
+
+        // Ensure that the medicine was added to the database before deleting it
+        assertEquals(medicineEntity.getTitle(), medicineDao.getMedicine("Medicine").getTitle());
+
+        // Delete the medicine from the database, and ensure that subsequent queries for the medicine
+        // return null
         medicineDao.delete(medicineDao.getMedicine("Medicine"));
         assertEquals(null, medicineDao.getMedicine("Medicine"));
     }
 
     @Test
     public void insertMultipleMedicinesTest() throws Exception {
-        List<String> titles = Arrays.asList("Med 1", "Med 2", "Med 3", "Med 4", "Medicine");
+        List<String> titles = Arrays.asList("Med 1", "Med 2", "Med 3", "Med 4");
 
         List<MedicineEntity> medicines = new ArrayList<>();
         for (int i = 1; i < 5; i++)
@@ -67,5 +72,18 @@ public class MedicineEntityTest {
         medicineDao.insertAll(medicines.toArray(new MedicineEntity[medicines.size()]));
 
         assertEquals(titles, medicineDao.getAllTitles());
+    }
+
+    @Test
+    public void deleteAllMedicinesTest() throws Exception {
+        for (int i = 1; i < 5; i++)
+            medicineDao.insertAll(new MedicineEntity("Med " + i, null, null, false));
+
+        // Ensure there are currently 4 medicines in the database
+        assertEquals(4, medicineDao.getAll().size());
+
+        // Delete all medicines and ensure there are 0 left
+        medicineDao.deleteAll();
+        assertEquals(0, medicineDao.getAll().size());
     }
 }
