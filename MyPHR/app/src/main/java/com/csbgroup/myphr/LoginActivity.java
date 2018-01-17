@@ -7,9 +7,6 @@ import android.view.View;
 
 public class LoginActivity extends AppCompatActivity {
 
-    /* Button login_1, login_2, login_3, login_4, login_5, login_6, login_7, login_8, login_9, login_0;
-
-    EditText login_pin; */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -34,7 +34,7 @@
         android:id="@+id/statistics"
         android:enabled="true"
         android:icon="@drawable/ic_statistics"
-        android:title="Statistics"
+        android:title="Measurements"
         app:showAsAction="ifRoom"/>
 
 </menu>
