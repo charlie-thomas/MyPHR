@@ -82,6 +82,5 @@ public class AppointmentsEntityTest {
         // Delete all appointments and ensure there are 0 left
         appointmentsDao.deleteAll();
         assertEquals(0, appointmentsDao.getAll().size());
-
     }
 }
