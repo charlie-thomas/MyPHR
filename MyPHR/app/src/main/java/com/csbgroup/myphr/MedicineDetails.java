@@ -47,6 +47,9 @@ public class MedicineDetails extends Fragment {
         TextView medInfo = rootView.findViewById(R.id.medicine_info);
         medInfo.setText(medicine.getDescription());
 
+        TextView medDose = rootView.findViewById(R.id.medicine_dose);
+        medDose.setText(medicine.getDose());
+
         Switch reminders = rootView.findViewById(R.id.reminder_switch);
         reminders.setChecked(medicine.getReminders());
 
