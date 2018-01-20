@@ -7,70 +7,82 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/contact_title"
+        android:id="@+id/appointment_title"
 
         android:background="@color/colorAccent"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:paddingLeft="10dp"
         android:paddingTop="20dp"
-        android:text="@string/ctitle"
+        android:text="@string/atitle"
         android:textColor="#FFFFFF"
         android:textSize="17dp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/contact_message"
+        android:id="@+id/appointment_message"
 
         android:background="@color/colorAccent"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:paddingBottom="17dp"
         android:paddingLeft="10dp"
-        android:text="@string/cmessage"
+        android:text="@string/amessage"
         android:textColor="#FFFFFF"
         android:textSize="16dp"
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/contact_name"
+        android:id="@+id/appointment_name"
 
-        android:hint="@string/cname"
-        android:inputType="textPersonName"
+        android:hint="@string/appname"
+        android:inputType="textCapWords"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:paddingLeft="8dp"
         android:scrollbars="horizontal" />
 
     <EditText
-        android:id="@+id/contact_phone"
+        android:id="@+id/appointment_date"
 
-        android:hint="@string/cphone"
-        android:inputType="phone"
+        android:hint="@string/appdate"
+        android:inputType="date"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:paddingLeft="8dp"
         android:scrollbars="horizontal" />
 
     <EditText
-        android:id="@+id/contact_email"
+        android:id="@+id/appointment_time"
 
-        android:hint="@string/cemail"
-        android:inputType="textEmailAddress"
+        android:hint="@string/apptime"
+        android:inputType="time"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:paddingLeft="8dp"
         android:scrollbars="horizontal" />
 
     <EditText
-        android:id="@+id/contact_notes"
+        android:id="@+id/appointment_notes"
 
-        android:hint="@string/cnotes"
+        android:hint="@string/appnotes"
         android:inputType="textMultiLine"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:lines="2"
         android:paddingLeft="8dp"
         android:scrollbars="vertical" />
+
+    <TextView
+        android:id="@+id/app_message2"
+
+        android:text="@string/appmessage2"
+        android:textColor="#545454"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp" />
 
 </LinearLayout>

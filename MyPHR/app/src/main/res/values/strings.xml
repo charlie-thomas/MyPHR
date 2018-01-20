@@ -37,5 +37,13 @@
     <string name="mednotes">notes</string>
     <string name="meddose">dose</string>
 
+    // Add appointment dialog strings
+    <string name="atitle">Add a New Appointment</string>
+    <string name="amessage">Enter the details for your new appointment:</string>
+    <string name="appname">appointment</string>
+    <string name="appdate">date</string>
+    <string name="apptime">time</string>
+    <string name="appnotes">notes</string>
+    <string name="appmessage2">You can schedule reminders later.</string>
 
 </resources>

@@ -65,9 +65,9 @@ public class Contacts extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment details = ContactDetails.newInstance();
 
-                // Create a bundle to pass the medicine name to the details fragment
+                // Create a bundle to pass the contact to the details fragment
                 Bundle bundle = new Bundle();
-                bundle.putString("title", parent.getAdapter().getItem(position).toString());
+                bundle.putString("name", parent.getAdapter().getItem(position).toString());
                 details.setArguments(bundle);
 
                 ((MainActivity) getActivity()).switchFragment(details);

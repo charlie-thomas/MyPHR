@@ -17,7 +17,7 @@
         android:textSize="20dp"
         android:textStyle="bold"
         android:paddingLeft="10dp"
-        android:paddingTop="20dp" />
+        android:paddingTop="17dp" />
 
     <TextView
         android:id="@+id/med_message"
@@ -25,7 +25,7 @@
         android:background="@color/colorAccent"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:paddingBottom="20dp"
+        android:paddingBottom="17dp"
         android:paddingLeft="10dp"
         android:text="@string/medmessage"
         android:textColor="#FFFFFF"
@@ -84,6 +84,6 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:paddingLeft="10dp"
-        android:paddingTop="10dp" />
+        android:paddingTop="5dp" />
 
 </LinearLayout>

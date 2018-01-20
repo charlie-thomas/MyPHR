@@ -68,7 +68,7 @@ public class Medicine extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment details = MedicineDetails.newInstance();
 
-                // Create a bundle to pass the medicine name to the details fragment
+                // Create a bundle to pass the medicine to the details fragment
                 Bundle bundle = new Bundle();
                 bundle.putString("title", parent.getAdapter().getItem(position).toString());
                 details.setArguments(bundle);

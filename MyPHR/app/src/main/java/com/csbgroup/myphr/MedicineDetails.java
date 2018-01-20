@@ -63,6 +63,7 @@ public class MedicineDetails extends Fragment {
     }
 
     private MedicineEntity getMedicine(final String medTitle) {
+
         // Create a callable object for database transactions
         Callable callable = new Callable() {
             @Override
@@ -92,15 +93,19 @@ public class MedicineDetails extends Fragment {
         inflater.inflate(R.menu.edit, menu);
     }
 
-    /* Navigation from details fragment back to Medicine */
+    /**
+     * Provides navigation for menu items; currently only needed for navigation back to the
+     * main medicine fragment.
+     * @param item the clicked menu item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
+            case android.R.id.home: // back button
                 ((MainActivity) getActivity()).switchFragment(Medicine.newInstance());
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
 }
