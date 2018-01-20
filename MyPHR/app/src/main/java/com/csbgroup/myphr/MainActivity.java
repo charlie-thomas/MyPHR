@@ -17,6 +17,7 @@ import com.csbgroup.myphr.database.MedicineEntity;
 import com.csbgroup.myphr.database.StatisticsDao;
 import com.csbgroup.myphr.database.StatisticsEntity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -115,8 +116,10 @@ public class MainActivity extends AppCompatActivity {
             Calendar c = Calendar.getInstance();
             c.set(Calendar.HOUR_OF_DAY, 0);
             c.add(Calendar.DATE, i);
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+
             AppointmentsEntity ae = new AppointmentsEntity("Appointment" + i, "Appointment description " + i,
-                    c.getTime(),"Appointment notes " + i, 0);
+                    df.format(c.getTime()), 8,"Appointment notes " + i, 0);
             dao.insertAll(ae);
         }
     }

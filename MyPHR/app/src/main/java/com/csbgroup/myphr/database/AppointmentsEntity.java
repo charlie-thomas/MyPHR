@@ -17,7 +17,10 @@ public class AppointmentsEntity {
     private String title;
 
     @ColumnInfo(name = "date")
-    private Date date;
+    private String date;
+
+    @ColumnInfo(name = "time")
+    private int time;
 
     @ColumnInfo(name = "description")
     private String description;
@@ -35,10 +38,11 @@ public class AppointmentsEntity {
     private int remind_when;
 
     // Constructor
-    public AppointmentsEntity(String title, String description, Date date, String notes, int reminders) {
+    public AppointmentsEntity(String title, String description, String date, int time, String notes, int reminders) {
         this.title = title;
         this.description = description;
         this.date = date;
+        this.time = time;
         this.notes = notes;
         this.reminders = reminders;
     }
@@ -101,11 +105,19 @@ public class AppointmentsEntity {
         this.remind_when = remind_when;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
     }
 }

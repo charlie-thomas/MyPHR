@@ -3,12 +3,16 @@ package com.csbgroup.myphr;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.AppointmentsEntity;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -17,6 +21,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class CalendarDay extends Fragment {
 
@@ -67,14 +76,23 @@ public class CalendarDay extends Fragment {
             }
         });
 
-        ArrayList<CalendarEvent> events = new ArrayList<>();
+
+        List<AppointmentsEntity> daysEvents = getEvents(dateString);
+
+        ArrayList<CalendarEvent> hours = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
             String event = null;
-            if (i == 8) event = "Appointment";
-            events.add(new CalendarEvent(i+":00", null, event));
+
+            if (daysEvents != null) {
+                for (AppointmentsEntity de : daysEvents) {
+                    if (i == de.getTime()) event = de.getTitle();
+                }
+            }
+
+            hours.add(new CalendarEvent(i+":00", null, event));
         }
 
-        CalendarAdapter adapter = new CalendarAdapter(getActivity(), events);
+        CalendarAdapter adapter = new CalendarAdapter(getActivity(), hours);
 
         ListView calendarList = rootView.findViewById(R.id.calendar_list);
         calendarList.setAdapter(adapter);
@@ -108,5 +126,27 @@ public class CalendarDay extends Fragment {
         newDayFragment.setArguments(bundle);
 
         ((MainActivity) getActivity()).switchFragment(newDayFragment);
+    }
+
+    public List<AppointmentsEntity> getEvents(final String date) {
+        // Create a callable object for database transactions
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(getActivity()).appointmentsDao().getAppointmentByDate(date);
+            }
+        };
+
+        // Get a Future object of all the appointment names
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<List<AppointmentsEntity>> result = service.submit(callable);
+
+        // Create a list of the appointment names
+        List<AppointmentsEntity> appointments = null;
+        try {
+            appointments = result.get();
+        } catch (Exception e) {}
+
+        return appointments;
     }
 }
