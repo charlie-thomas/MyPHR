@@ -89,7 +89,7 @@ public class CalendarDay extends Fragment {
                 }
             }
 
-            hours.add(new CalendarEvent(i+":00", null, event));
+            hours.add(new CalendarEvent(i+":00", dateString, event));
         }
 
         CalendarAdapter adapter = new CalendarAdapter(getActivity(), hours);
@@ -129,6 +129,9 @@ public class CalendarDay extends Fragment {
     }
 
     public List<AppointmentsEntity> getEvents(final String date) {
+
+        Log.d("HELLO", date);
+
         // Create a callable object for database transactions
         Callable callable = new Callable() {
             @Override

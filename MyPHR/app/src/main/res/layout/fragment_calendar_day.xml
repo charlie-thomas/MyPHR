@@ -32,7 +32,6 @@
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat"
             android:textSize="24sp"
-            android:text="03/12/1997"
             android:layout_weight="1"/>
 
         <ImageButton

@@ -3,6 +3,7 @@ package com.csbgroup.myphr;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,9 +38,16 @@ public class Calendar extends Fragment {
 
                 Fragment dayFragment = CalendarDay.newInstance();
 
+                String day = String.valueOf(dayOfMonth);
+                if (dayOfMonth < 10) day = "0" + dayOfMonth;
+
+                Log.d("month", String.valueOf(month + 1));
+                String month_ = String.valueOf(month + 1);
+                if ((month + 1) < 10) month_ = "0" + month_;
+
                 // Create a bundle to pass the selected date to the day view fragment
                 Bundle bundle = new Bundle();
-                bundle.putString("date", dayOfMonth + "/" + (month + 1) + "/" + year);
+                bundle.putString("date", day + "/" + month_ + "/" + year);
                 dayFragment.setArguments(bundle);
 
                 ((MainActivity) getActivity()).switchFragment(dayFragment);
