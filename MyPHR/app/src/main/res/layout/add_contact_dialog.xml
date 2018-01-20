@@ -8,12 +8,10 @@
 
     <TextView
         android:id="@+id/contact_title"
-
         android:text="@string/ctitle"
         android:textSize="20dp"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="20dp"
@@ -22,12 +20,10 @@
 
     <TextView
         android:id="@+id/contact_message"
-
         android:text="@string/cmessage"
         android:textSize="16dp"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
@@ -40,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingLeft="8dp"
-        android:inputType="textCapWords"
+        android:inputType="textPersonName"
         android:scrollbars="horizontal"
         android:hint="@string/cname"/>
 
@@ -66,6 +62,7 @@
         android:id="@+id/contact_notes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
         android:inputType="textMultiLine"
         android:lines="2"
         android:scrollbars="vertical"
