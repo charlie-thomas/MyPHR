@@ -5,20 +5,59 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.support.v4.content.ContextCompat;
-
-import com.andrognito.pinlockview.PinLockView;
-
 import android.util.Log;
 
+import com.andrognito.pinlockview.PinLockView;
 import com.andrognito.pinlockview.IndicatorDots;
 import com.andrognito.pinlockview.PinLockListener;
 
+import android.app.KeyguardManager;
+import android.content.pm.PackageManager;
+import android.hardware.fingerprint.FingerprintManager;
+import android.Manifest;
+import android.os.Build;
+import android.os.Bundle;
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyPermanentlyInvalidatedException;
+import android.security.keystore.KeyProperties;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.ActivityCompat;
+import android.widget.TextView;
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+
+
+
 public class LoginActivity extends AppCompatActivity {
 
+    // Fingerprint variables
+    private static final String KEY_NAME = "yourKey";
+    private Cipher cipher;
+    private KeyStore keyStore;
+    private KeyGenerator keyGenerator;
+    private TextView textView;
+    private FingerprintManager.CryptoObject cryptoObject;
+    private FingerprintManager fingerprintManager;
+    private KeyguardManager keyguardManager;
+
+
+    // PIN input variables
     public static final String TAG = "PinLockView";
     private PinLockView mPinLockView;
     private IndicatorDots mIndicatorDots;
 
+    // Listener function for the PIN input buttons
     private PinLockListener mPinLockListener = new PinLockListener() {
         @Override
         public void onComplete(String pin) {
@@ -43,17 +82,50 @@ public class LoginActivity extends AppCompatActivity {
 
         mPinLockView = (PinLockView) findViewById(R.id.pin_lock_view);
         mPinLockView.setPinLockListener(mPinLockListener);
-
         mPinLockView = (PinLockView) findViewById(R.id.pin_lock_view);
         mIndicatorDots = (IndicatorDots) findViewById(R.id.indicator_dots);
-
         mPinLockView.attachIndicatorDots(mIndicatorDots);
         mPinLockView.setPinLockListener(mPinLockListener);
-
         mPinLockView.setPinLength(4);
         mPinLockView.setTextColor(ContextCompat.getColor(this, R.color.white));
-
         mIndicatorDots.setIndicatorType(IndicatorDots.IndicatorType.FILL_WITH_ANIMATION);
+
+        // If you’ve set your app’s minSdkVersion to anything lower than 23, then you’ll need to verify that the device is running Marshmallow
+        // or higher before executing any fingerprint-related code
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //Get an instance of KeyguardManager and FingerprintManager//
+            keyguardManager =
+                    (KeyguardManager) getSystemService(KEYGUARD_SERVICE);
+            fingerprintManager =
+                    (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
+
+            textView = (TextView) findViewById(R.id.textview);
+
+            //Check whether the device has a fingerprint sensor//
+            if (!fingerprintManager.isHardwareDetected()) {
+                // If a fingerprint sensor isn’t available, then inform the user that they’ll be unable to use your app’s fingerprint functionality//
+                textView.setText("Your device doesn't support fingerprint authentication");
+            }
+            //Check whether the user has granted your app the USE_FINGERPRINT permission//
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
+                // If your app doesn't have this permission, then display the following text//
+                textView.setText("Please enable the fingerprint permission");
+            }
+
+            //Check that the user has registered at least one fingerprint//
+            if (!fingerprintManager.hasEnrolledFingerprints()) {
+                // If the user hasn’t configured any fingerprints, then display the following message//
+                textView.setText("No fingerprint configured. Please register at least one fingerprint in your device's Settings");
+            }
+
+            //Check that the lockscreen is secured//
+            if (!keyguardManager.isKeyguardSecure()) {
+                // If the user hasn’t secured their lockscreen with a PIN password or pattern, then display the following text//
+                textView.setText("Please enable lockscreen security in your device's Settings");
+            } else {
+                try {
+
+
 
     }
 
