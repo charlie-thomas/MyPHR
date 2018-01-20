@@ -1,6 +1,9 @@
 package com.csbgroup.myphr;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +27,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class Medicine extends Fragment {
+
+    private FloatingActionButton fab;
 
     public Medicine() {
         // Required empty public constructor
@@ -73,6 +78,10 @@ public class Medicine extends Fragment {
             }
         });
 
+        // fab action for adding medicine
+        fab = (android.support.design.widget.FloatingActionButton) rootView.findViewById(R.id.med_fab);
+        buildDialog(fab);
+
         return rootView;
     }
 
@@ -116,6 +125,45 @@ public class Medicine extends Fragment {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * buildDialog builds the pop-up dialog for adding a new medicine
+     * @param fab the floating action button which pulls up the dialog
+     */
+    public void buildDialog(FloatingActionButton fab) {
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+
+                // build the dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setView(inflater.inflate(R.layout.add_medicine_dialog, null));
+
+                // action for confirming add
+                builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        // TODO: database activity
+
+                        // TODO: should redirect to details fragment upon ADD
+                    }
+                });
+
+                // action for cancelling activity
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
     }
 
 }

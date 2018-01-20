@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class Contacts extends Fragment {
 
-    FloatingActionButton fab; //the add contact fab
+    private FloatingActionButton fab; //the add contact fab
 
     public Contacts() {
         // Required empty public constructor
@@ -101,6 +101,8 @@ public class Contacts extends Fragment {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
                         // TODO: database activity
+
+                        // TODO: should redirect to details fragment upon ADD
                     }
                 });
 

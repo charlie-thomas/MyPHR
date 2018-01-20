@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
             MedicineEntity me = new MedicineEntity(
                     med,
                     med + " Description",
+                    med + "Dose",
                     med + " Notes",
                     true);
             dao.insertAll(me);
