@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,8 +15,6 @@ import android.widget.ListView;
 import android.support.design.widget.FloatingActionButton;
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.ContactsEntity;
-import com.csbgroup.myphr.database.StatisticsEntity;
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -43,26 +39,27 @@ public class Contacts extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // view set up
         View rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
-
         ((MainActivity) getActivity()).setToolbar("My Contacts", false);
         setHasOptionsMenu(true);
 
+        // fetch contacts from database
         List<ContactsEntity> conts = getContacts();
-
-        List<String> contacts = new ArrayList<String>();
+        List<String> contacts = new ArrayList<>();
         for (ContactsEntity ct : conts) {
             contacts.add(ct.getName());
         }
 
+        // display the contacts in list
         ArrayAdapter<String> contactsAdapter = new ArrayAdapter<>(
                 getActivity(),
                 R.layout.simple_list_item,
                 contacts);
-
         ListView listView = rootView.findViewById(R.id.contacts_list);
         listView.setAdapter(contactsAdapter);
 
+        // switching to details fragment
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment details = ContactDetails.newInstance();
@@ -77,8 +74,8 @@ public class Contacts extends Fragment {
         });
 
         // fab action for adding contact
-        fab = (FloatingActionButton) rootView.findViewById(R.id.contact_fab);
-         buildDialog(fab);
+        fab = rootView.findViewById(R.id.contact_fab);
+        buildDialog(fab);
 
         return rootView;
     }
@@ -88,6 +85,10 @@ public class Contacts extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
+    /**
+     * getContacts fetches the list of contacts from the database
+     * @return the list of contact entities
+     */
     private List<ContactsEntity> getContacts() {
 
         // Create a callable object for database transactions
@@ -110,8 +111,8 @@ public class Contacts extends Fragment {
         } catch (Exception e) {}
 
         // TODO: contact added for testing purposes, at some point add Avril etc
-        ContactsEntity contact = new ContactsEntity("Dr. Cool","dr@cool.com",
-                "07700432121", "legend");
+        ContactsEntity contact = new ContactsEntity("Dr. Doctor","dr@hospital.com",
+                "07700432121", "my doctor");
         contacts.add(contact);
 
         return contacts;
@@ -175,9 +176,5 @@ public class Contacts extends Fragment {
                 dialog.show();
             }
         });
-
-
     }
-
-
 }

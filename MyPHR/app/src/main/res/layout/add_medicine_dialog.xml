@@ -8,74 +8,82 @@
 
     <TextView
         android:id="@+id/med_title"
-        android:text="@string/medtitle"
-        android:textSize="20dp"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
+
+        android:background="@color/colorAccent"
         android:layout_height="wrap_content"
-        android:paddingTop="20dp"
+        android:layout_width="match_parent"
+        android:text="@string/medtitle"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:textStyle="bold"
         android:paddingLeft="10dp"
-        android:background="@color/colorAccent" />
+        android:paddingTop="20dp" />
 
     <TextView
         android:id="@+id/med_message"
-        android:text="@string/medmessage"
-        android:textSize="16dp"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
+
+        android:background="@color/colorAccent"
         android:layout_height="wrap_content"
+        android:layout_width="match_parent"
         android:paddingBottom="20dp"
         android:paddingLeft="10dp"
-        android:background="@color/colorAccent"/>
+        android:text="@string/medmessage"
+        android:textColor="#FFFFFF"
+        android:textSize="16dp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/med_name"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="8dp"
+
+        android:hint="@string/medname"
         android:inputType="textCapWords"
-        android:scrollbars="horizontal"
-        android:hint="@string/medname"/>
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:paddingLeft="8dp"
+        android:scrollbars="horizontal" />
 
     <EditText
         android:id="@+id/med_description"
-        android:layout_width="match_parent"
+
+        android:hint="@string/meddescription"
+        android:inputType="textMultiLine"
         android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:lines="1"
         android:paddingLeft="8dp"
-        android:inputType="phone"
-        android:scrollbars="horizontal"
-        android:hint="@string/meddescription"/>
+        android:scrollbars="vertical" />
 
     <EditText
         android:id="@+id/med_dose"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="8dp"
+
+        android:hint="@string/meddose"
         android:inputType="text"
-        android:scrollbars="horizontal"
-        android:hint="@string/meddose"/>
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:paddingLeft="8dp"
+        android:scrollbars="horizontal" />
 
     <EditText
         android:id="@+id/med_notes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
+
+        android:hint="@string/mednotes"
         android:inputType="textMultiLine"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
         android:lines="2"
-        android:scrollbars="vertical"
-        android:hint="@string/mednotes"/>
+        android:paddingLeft="8dp"
+        android:scrollbars="vertical" />
 
     <TextView
         android:id="@+id/med_message2"
+
         android:text="@string/medmessage2"
-        android:textSize="16dp"
         android:textColor="#545454"
+        android:textSize="16dp"
         android:textStyle="bold"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingLeft="10dp"/>
+        android:layout_width="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp" />
 
 </LinearLayout>
