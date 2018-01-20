@@ -16,10 +16,15 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.support.design.widget.FloatingActionButton;
 import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.ContactsEntity;
 import com.csbgroup.myphr.database.StatisticsEntity;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class Contacts extends Fragment {
 
@@ -43,8 +48,12 @@ public class Contacts extends Fragment {
         ((MainActivity) getActivity()).setToolbar("My Contacts", false);
         setHasOptionsMenu(true);
 
-        List<String> contacts = new ArrayList<String>(){{
-            add("Dr. A"); add("Dr. B"); add("Dr. C"); add("Ms. D"); add("Mr. E");}};
+        List<ContactsEntity> conts = getContacts();
+
+        List<String> contacts = new ArrayList<String>();
+        for (ContactsEntity ct : conts) {
+            contacts.add(ct.getName());
+        }
 
         ArrayAdapter<String> contactsAdapter = new ArrayAdapter<>(
                 getActivity(),
@@ -68,9 +77,8 @@ public class Contacts extends Fragment {
         });
 
         // fab action for adding contact
-        fab = (android.support.design.widget.FloatingActionButton) rootView.findViewById(R.id.contact_fab);
-        buildDialog(fab);
-
+        fab = (FloatingActionButton) rootView.findViewById(R.id.contact_fab);
+         buildDialog(fab);
 
         return rootView;
     }
@@ -78,6 +86,35 @@ public class Contacts extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    private List<ContactsEntity> getContacts() {
+
+        // Create a callable object for database transactions
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(getActivity()).contactsDao().getAll();
+            }
+        };
+
+        // Get a Future object of all the contact titles
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<List<ContactsEntity>> result = service.submit(callable);
+
+        // Create a list of the contact names
+        List<ContactsEntity> contacts = null;
+
+        try {
+            contacts = result.get();
+        } catch (Exception e) {}
+
+        // TODO: contact added for testing purposes, at some point add Avril etc
+        ContactsEntity contact = new ContactsEntity("Dr. Cool","dr@cool.com",
+                "07700432121", "legend");
+        contacts.add(contact);
+
+        return contacts;
     }
 
     /**
@@ -90,23 +127,44 @@ public class Contacts extends Fragment {
             @Override
             public void onClick(View view) {
 
+                // set up the dialog
                 LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-
-                // build the dialog
+                View v = inflater.inflate(R.layout.add_contact_dialog,null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setView(inflater.inflate(R.layout.add_contact_dialog,null));
+                builder.setView(v);
 
-                // action for confirming add
+                // fetch the input values
+                final EditText name = (EditText)v.findViewById(R.id.contact_name);
+                final EditText email = (EditText)v.findViewById(R.id.contact_email);
+                final EditText phone = (EditText)v.findViewById(R.id.contact_phone);
+                final EditText notes = (EditText)v.findViewById(R.id.contact_notes);
+
+                // add new contact action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        // TODO: database activity
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
 
-                        // TODO: should redirect to details fragment upon ADD
+                                // add the new contact to the database
+                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                ContactsEntity contact = new ContactsEntity(name.getText().toString(),
+                                        email.getText().toString(),phone.getText().toString(),
+                                        notes.getText().toString());
+                                db.contactsDao().insertAll(contact);
+                            }
+                        }).start();
+
+                        // update the list view
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.detach(Contacts.this).attach(Contacts.this).commit();
+
                     }
+                    // TODO: redirect to details fragment upon ADD
                 });
 
-                // action for cancelling activity
+                // cancel the add
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
@@ -117,6 +175,7 @@ public class Contacts extends Fragment {
                 dialog.show();
             }
         });
+
 
     }
 
