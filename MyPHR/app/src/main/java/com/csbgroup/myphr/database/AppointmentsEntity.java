@@ -4,6 +4,8 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.util.Date;
+
 @Entity
 public class AppointmentsEntity {
 
@@ -13,6 +15,9 @@ public class AppointmentsEntity {
 
     @ColumnInfo(name = "title")
     private String title;
+
+    @ColumnInfo(name = "date")
+    private Date date;
 
     @ColumnInfo(name = "description")
     private String description;
@@ -30,9 +35,10 @@ public class AppointmentsEntity {
     private int remind_when;
 
     // Constructor
-    public AppointmentsEntity(String title, String description, String notes, int reminders) {
+    public AppointmentsEntity(String title, String description, Date date, String notes, int reminders) {
         this.title = title;
         this.description = description;
+        this.date = date;
         this.notes = notes;
         this.reminders = reminders;
     }
@@ -93,5 +99,13 @@ public class AppointmentsEntity {
 
     public void setRemind_when(int remind_when) {
         this.remind_when = remind_when;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

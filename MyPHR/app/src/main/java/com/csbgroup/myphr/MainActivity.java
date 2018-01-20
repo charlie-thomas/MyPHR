@@ -18,6 +18,8 @@ import com.csbgroup.myphr.database.StatisticsDao;
 import com.csbgroup.myphr.database.StatisticsEntity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                         selectedPage = Medicine.newInstance();
                         break;
                     case R.id.calendar:
-                        selectedPage = Calendar.newInstance();
+                        selectedPage = com.csbgroup.myphr.Calendar.newInstance();
                         break;
                     case R.id.appointments:
                         selectedPage = Appointments.newInstance();
@@ -69,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Show calendar when app first loads
-        switchFragment(Calendar.newInstance());
+        switchFragment(com.csbgroup.myphr.Calendar.newInstance());
         bottomNavigationView.setSelectedItemId(R.id.calendar);
     }
 
@@ -110,8 +112,11 @@ public class MainActivity extends AppCompatActivity {
         dao.deleteAll();
 
         for (int i = 1; i < 6; i++) {
+            Calendar c = Calendar.getInstance();
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.add(Calendar.DATE, i);
             AppointmentsEntity ae = new AppointmentsEntity("Appointment" + i, "Appointment description " + i,
-                    "Appointment notes " + i, 0);
+                    c.getTime(),"Appointment notes " + i, 0);
             dao.insertAll(ae);
         }
     }
