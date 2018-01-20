@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.csbgroup.myphr">
 
+    <!-- Tells Google Play Store that fingerprint scanners are preferred but *not* required -->
+    <uses-feature android:name="android.hardware.fingerprint"
+        android:required="false"/>
+
+    <!-- Lets app ask for permissions to use the fingerprint scanner -->
+    <uses-permission
+        android:name="android.permission.USE_FINGERPRINT" />
+
     <application
         android:resizeableActivity="false"
         android:allowBackup="true"
