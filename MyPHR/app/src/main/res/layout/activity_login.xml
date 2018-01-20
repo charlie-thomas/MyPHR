@@ -12,9 +12,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/forward"
-        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="180dp"
         android:layout_marginBottom="170dp"
+        android:cursorVisible="false"
+        android:background="@android:color/transparent"
+        android:maxLength="4"
         android:ems="10"
+        android:textColor="#FFFFFF"
+        android:textSize="15pt"
         android:password="true"
         android:inputType="phone"
         />
@@ -43,6 +48,16 @@
         android:onClick="goToMain"
         app:fabSize="normal"
         app:backgroundTint="@color/colorAccent" />
+
+    <ImageView
+        android:id="@+id/fingerprintIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/iconLogin"
+        android:layout_marginTop="350dp"
+        app:srcCompat="@drawable/ic_fingerprint_white" />
+
 
 
 </RelativeLayout>
