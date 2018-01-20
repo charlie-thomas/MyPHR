@@ -1,5 +1,6 @@
 package com.csbgroup.myphr;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
@@ -58,13 +59,18 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
     //so to provide the user with as much feedback as possible I’m incorporating this information into my toast//
     public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
         Toast.makeText(context, "Authentication help\n" + helpString, Toast.LENGTH_LONG).show();
-    }@Override
+    }
+
+    public void CustomAdapter(Context context) {
+        this.context = context;
+    }
 
     //onAuthenticationSucceeded is called when a fingerprint has been successfully matched to one of the fingerprints stored on the user’s device//
     public void onAuthenticationSucceeded(
             FingerprintManager.AuthenticationResult result) {
-
+        CustomAdapter(context);
         Toast.makeText(context, "Success!", Toast.LENGTH_LONG).show();
+        context.startActivity(new Intent(context, MainActivity.class));
     }
 
 }

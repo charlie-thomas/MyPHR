@@ -33,6 +33,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".FingerprintHandler"
+            android:label="MyPHR" >
+        </activity>
+
     </application>
 
 </manifest>
