@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/contact_title"
+
+        android:text="@string/ctitle"
+        android:textSize="20dp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingLeft="10dp"
+        android:background="@color/colorAccent" />
+
+    <TextView
+        android:id="@+id/contact_message"
+
+        android:text="@string/cmessage"
+        android:textSize="16dp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:paddingBottom="20dp"
+        android:paddingLeft="10dp"
+        android:background="@color/colorAccent"/>
+
+    <EditText
+        android:id="@+id/contact_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="8dp"
+        android:inputType="textCapWords"
+        android:scrollbars="horizontal"
+        android:hint="@string/cname"/>
+
+    <EditText
+        android:id="@+id/cotact_phone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="8dp"
+        android:inputType="phone"
+        android:scrollbars="horizontal"
+        android:hint="@string/cphone"/>
+
+    <EditText
+        android:id="@+id/contact_email"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="8dp"
+        android:inputType="textEmailAddress"
+        android:scrollbars="horizontal"
+        android:hint="@string/cemail"/>
+
+    <EditText
+        android:id="@+id/contact_notes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:lines="2"
+        android:scrollbars="vertical"
+        android:hint="@string/cnotes"/>
+
+</LinearLayout>

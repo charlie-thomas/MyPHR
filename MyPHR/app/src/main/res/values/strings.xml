@@ -18,16 +18,13 @@
     <string name="_day_before">Day before</string>
     <string name="_morning_of">Morning of</string>
     <string name="enter_pin">Enter Your Pin:</string>
-    <string name="height">height</string>
-    <string name="weight">weight</string>
-    <string name="bmi">bmi</string>
-    <string name="date">date (dd/mm/yyyy)</string>
-    <string name="centile">centile</string>
-    <string name="htitle">Add a Height</string>
-    <string name="hmessage">Enter your new height measurement:</string>
-    <string name="wtitle">Add a Weight</string>
-    <string name="wmessage">Enter your new weight measurement:</string>
-    <string name="btitle">Add a BMI</string>
-    <string name="bmessage">Enter your new BMI measurement:</string>
+
+    // Add contact dialog strings
+    <string name="ctitle">Add a New Contact</string>
+    <string name="cmessage">Enter the details for your new contact:</string>
+    <string name="cname">name</string>
+    <string name="cphone">phone</string>
+    <string name="cemail">email</string>
+    <string name="cnotes">notes</string>
 
 </resources>
