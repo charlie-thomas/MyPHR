@@ -1,10 +1,11 @@
 package com.csbgroup.myphr;
 
 import android.app.AlertDialog;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,13 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
-
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.MedicineEntity;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -28,7 +27,7 @@ import java.util.concurrent.Future;
 
 public class Medicine extends Fragment {
 
-    private FloatingActionButton fab;
+    private FloatingActionButton fab; // the add medicine fab
 
     public Medicine() {
         // Required empty public constructor
@@ -43,28 +42,28 @@ public class Medicine extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // view set up
         View rootView = inflater.inflate(R.layout.fragment_medicine, container, false);
-
         ((MainActivity) getActivity()).setToolbar("My Medicine", false);
         setHasOptionsMenu(true);
 
-
+        // fetch medicines entities from database
         List<MedicineEntity> medicines = getMedicines();
         if (medicines == null) return rootView;
-
         List<String> medicineTitles = new ArrayList<>();
         for (MedicineEntity me : medicines) {
             medicineTitles.add(me.getTitle());
         }
 
+        // display the medicines in list
         ArrayAdapter<String> medicineAdapter = new ArrayAdapter<>(
                 getActivity(),
                 R.layout.simple_list_item,
                 medicineTitles);
-
         ListView listView = rootView.findViewById(R.id.medicine_list);
         listView.setAdapter(medicineAdapter);
 
+        // switching to details fragment
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment details = MedicineDetails.newInstance();
@@ -79,13 +78,18 @@ public class Medicine extends Fragment {
         });
 
         // fab action for adding medicine
-        fab = (android.support.design.widget.FloatingActionButton) rootView.findViewById(R.id.med_fab);
+        fab = rootView.findViewById(R.id.med_fab);
         buildDialog(fab);
 
         return rootView;
     }
 
+    /**
+     * getMedicines fetches the list of medicines from the database
+     * @return the list of medicine entities
+     */
     private List<MedicineEntity> getMedicines() {
+
         // Create a callable object for database transactions
         Callable callable = new Callable() {
             @Override
@@ -117,7 +121,11 @@ public class Medicine extends Fragment {
         inflater.inflate(R.menu.settings, menu);
     }
 
-    /* Navigation from Medicine to settings fragment */
+    /**
+     *  Provides navigation for menu items; currently only needed for navigation to settings
+     *  fragment.
+     *  @param item is the clicked menu item
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.settings) {
@@ -137,20 +145,40 @@ public class Medicine extends Fragment {
             @Override
             public void onClick(View view) {
 
+                // set up the dialog
                 LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-
-                // build the dialog
+                View v = inflater.inflate(R.layout.add_medicine_dialog, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setView(inflater.inflate(R.layout.add_medicine_dialog, null));
+                builder.setView(v);
 
-                // action for confirming add
+                // fetch the input values
+                final EditText name = v.findViewById(R.id.med_name);
+                final EditText description = v.findViewById(R.id.med_description);
+                final EditText dose = v.findViewById(R.id.med_dose);
+                final EditText notes = v.findViewById(R.id.med_notes);
+
+                // add new medicine action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        // TODO: database activity
+                        new Thread(new Runnable(){
+                            @Override
+                            public void run(){
 
-                        // TODO: should redirect to details fragment upon ADD
+                                // add the new medicine to the database
+                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                MedicineEntity medicine = new MedicineEntity(name.getText().toString(),
+                                        description.getText().toString(), dose.getText().toString(),
+                                        notes.getText().toString(), false);
+                                db.medicineDao().insertAll(medicine);
+                            }
+                        }).start();
+
+                        // update the list view
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.detach(Medicine.this).attach(Medicine.this).commit();
                     }
+                    // TODO: should redirect to details fragment upon ADD
                 });
 
                 // action for cancelling activity
@@ -165,5 +193,4 @@ public class Medicine extends Fragment {
             }
         });
     }
-
 }

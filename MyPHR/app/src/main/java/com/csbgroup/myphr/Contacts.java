@@ -44,8 +44,9 @@ public class Contacts extends Fragment {
         ((MainActivity) getActivity()).setToolbar("My Contacts", false);
         setHasOptionsMenu(true);
 
-        // fetch contacts from database
+        // fetch contacts entities from database
         List<ContactsEntity> conts = getContacts();
+        if (conts == null) return rootView;
         List<String> contacts = new ArrayList<>();
         for (ContactsEntity ct : conts) {
             contacts.add(ct.getName());
@@ -110,10 +111,13 @@ public class Contacts extends Fragment {
             contacts = result.get();
         } catch (Exception e) {}
 
-        // TODO: contact added for testing purposes, at some point add Avril etc
-        ContactsEntity contact = new ContactsEntity("Dr. Doctor","dr@hospital.com",
+     // TODO: contacts added for testing purposes, at some point add Avril etc
+        ContactsEntity contact = new ContactsEntity("Dr. Doctor","drdr@hospital.com",
                 "07700432121", "my doctor");
+        ContactsEntity contact2 = new ContactsEntity("Ms. Smith","mssmith@hospital.com",
+                "07652332087", "my consultant");
         contacts.add(contact);
+        contacts.add(contact2);
 
         return contacts;
     }
@@ -135,10 +139,10 @@ public class Contacts extends Fragment {
                 builder.setView(v);
 
                 // fetch the input values
-                final EditText name = (EditText)v.findViewById(R.id.contact_name);
-                final EditText email = (EditText)v.findViewById(R.id.contact_email);
-                final EditText phone = (EditText)v.findViewById(R.id.contact_phone);
-                final EditText notes = (EditText)v.findViewById(R.id.contact_notes);
+                final EditText name = v.findViewById(R.id.contact_name);
+                final EditText email = v.findViewById(R.id.contact_email);
+                final EditText phone = v.findViewById(R.id.contact_phone);
+                final EditText notes = v.findViewById(R.id.contact_notes);
 
                 // add new contact action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
@@ -160,7 +164,6 @@ public class Contacts extends Fragment {
                         // update the list view
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
                         ft.detach(Contacts.this).attach(Contacts.this).commit();
-
                     }
                     // TODO: redirect to details fragment upon ADD
                 });
