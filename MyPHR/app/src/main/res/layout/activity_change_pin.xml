@@ -17,7 +17,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Change PIN"
+        android:text="@string/change_pin"
         android:textColor="#FFFF"
         android:textSize="12pt"
         android:layout_marginTop="10dp"
@@ -41,9 +41,11 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/change_pin"
+        android:text="Save"
+        android:id="@+id/saveChangePin"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="400dp"
+        android:onClick="changeButton"
         />
 
 

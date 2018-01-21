@@ -1,6 +1,7 @@
 package com.csbgroup.myphr;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -20,7 +21,9 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.v4.app.ActivityCompat;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -42,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // Fingerprint variables
     private static final String KEY_NAME = "yourKey";
+    public static final String PREFS = "pin";
     private Cipher cipher;
     private KeyStore keyStore;
     private KeyGenerator keyGenerator;
@@ -60,6 +64,16 @@ public class LoginActivity extends AppCompatActivity {
     private PinLockListener mPinLockListener = new PinLockListener() {
         @Override
         public void onComplete(String pin) {
+            SharedPreferences preferences = getSharedPreferences(PREFS,0);
+            String pinn = preferences.getString("PIN", "0000"); // default pin is 0000
+
+            if (pin.equals(pinn)) {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
+            } else {
+                Toast.makeText(LoginActivity.this, "PIN Incorrect", Toast.LENGTH_SHORT).show();
+            }
+
             Log.d(TAG, "Pin complete: " + pin);
         }
 
@@ -73,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
             Log.d(TAG, "Pin changed, new length " + pinLength + " with intermediate pin " + intermediatePin);
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
