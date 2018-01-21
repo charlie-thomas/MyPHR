@@ -4,160 +4,76 @@
     android:id="@+id/login_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryLight"
     tools:context="com.csbgroup.myphr.LoginActivity">
-
-    <ImageView
-        android:id="@+id/iconLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="37dp"
-        app:srcCompat="@mipmap/ic_launcher" />
-        />
-
-    <EditText
-        android:id="@+id/login_pin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/login_1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="70dp"
-        android:ems="10" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/login_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="350dp"
-        android:layout_marginEnd="300dp"
-        android:src="@drawable/login_1"
-        app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/login_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="350dp"
-        android:layout_marginEnd="175dp"
-        android:src="@drawable/login_2"
-        app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/login_3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="350dp"
-        android:layout_marginEnd="50dp"
-        android:src="@drawable/login_3"
-        app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/login_4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="250dp"
-        android:layout_marginEnd="300dp"
-        android:src="@drawable/login_4"
-        app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/login_5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="250dp"
-        android:layout_marginEnd="175dp"
-        android:src="@drawable/login_5"
-        app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/login_6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="250dp"
-        android:layout_marginEnd="50dp"
-        android:src="@drawable/login_6"
-        app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/login_7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="150dp"
-        android:layout_marginEnd="300dp"
-        android:src="@drawable/login_7"
-        app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/login_8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="150dp"
-        android:layout_marginEnd="175dp"
-        android:src="@drawable/login_8"
-        app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/login_9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="150dp"
-        android:layout_marginEnd="50dp"
-        android:src="@drawable/login_9"
-        app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/login_0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="50dp"
-        android:layout_marginEnd="175dp"
-        android:src="@drawable/login_0"
-        app:fabSize="normal"
-        app:backgroundTint="@color/colorPrimary" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/forward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="50dp"
-        android:layout_marginEnd="50dp"
-        android:src="@drawable/forward"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:onClick="goToMain"
-        app:fabSize="normal"
-        app:backgroundTint="@color/colorAccent" />
+        android:src="@drawable/forward"
+        app:backgroundTint="#81D4FA"
+        app:fabSize="normal" />
 
+    <ImageView
+        android:id="@+id/iconLogin"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:adjustViewBounds="true"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@mipmap/ic_launcher" />
+    />
+
+    <com.andrognito.pinlockview.IndicatorDots
+        android:id="@+id/indicator_dots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="230dp"
+        app:dotDiameter="20dp" />
+
+    <com.andrognito.pinlockview.PinLockView
+        android:id="@+id/pin_lock_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iconLogin"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="130dp"
+        app:keypadButtonSize="72dp"
+        app:keypadShowDeleteButton="true"
+        app:keypadTextColor="#FFFFFF"
+        app:keypadTextSize="22dp" />
+
+    <ImageView
+        android:id="@+id/fingerprintIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iconLogin"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="460dp"
+        app:srcCompat="@drawable/ic_fingerprint_white" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textview"
+        android:layout_marginTop="430dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:text="@string/instructions"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="680dp"
+        android:textColor="#FFFF"/>
 
 </RelativeLayout>

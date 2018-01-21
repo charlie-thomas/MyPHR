@@ -5,7 +5,7 @@
     <item
         android:id="@+id/contacts"
         android:enabled="true"
-        android:icon="@drawable/ic_contacts_new"
+        android:icon="@drawable/ic_contacts"
         android:title="Contacts"
         app:showAsAction="ifRoom"/>
 
@@ -33,8 +33,8 @@
     <item
         android:id="@+id/statistics"
         android:enabled="true"
-        android:icon="@drawable/ic_statistics_new"
-        android:title="Statistics"
+        android:icon="@drawable/ic_statistics"
+        android:title="Measurements"
         app:showAsAction="ifRoom"/>
 
 </menu>
