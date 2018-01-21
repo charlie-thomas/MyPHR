@@ -106,18 +106,9 @@ public class Contacts extends Fragment {
 
         // Create a list of the contact names
         List<ContactsEntity> contacts = null;
-
         try {
             contacts = result.get();
         } catch (Exception e) {}
-
-     // TODO: contacts added for testing purposes, at some point add Avril etc
-        ContactsEntity contact = new ContactsEntity("Dr. Doctor","drdr@hospital.com",
-                "07700432121", "my doctor");
-        ContactsEntity contact2 = new ContactsEntity("Ms. Smith","mssmith@hospital.com",
-                "07652332087", "my consultant");
-        contacts.add(contact);
-        contacts.add(contact2);
 
         return contacts;
     }

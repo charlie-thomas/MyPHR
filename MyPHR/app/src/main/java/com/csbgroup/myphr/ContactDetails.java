@@ -39,21 +39,16 @@ public class ContactDetails extends Fragment {
         ContactsEntity contact = getContact(args.getString("name"));
 
         TextView contactTitle = rootView.findViewById(R.id.contact_title);
-        //contactTitle.setText(contact.getName());
-        contactTitle.setText("Title");
+        contactTitle.setText(contact.getName());
 
         TextView email = rootView.findViewById(R.id.email);
-        //email.setText(contact.getEmail());
-        email.setText("email");
+        email.setText(contact.getEmail());
 
         TextView phone = rootView.findViewById(R.id.phone);
-        //phone.setText(contact.getPhone());
-        phone.setText("phone");
+        phone.setText(contact.getPhone());
 
         TextView notes = rootView.findViewById(R.id.notes);
-        //notes.setText(contact.getNotes());
-        notes.setText("notes");
-
+        notes.setText(contact.getNotes());
 
         ((MainActivity) getActivity()).setToolbar("My Contacts", true);
         setHasOptionsMenu(true);

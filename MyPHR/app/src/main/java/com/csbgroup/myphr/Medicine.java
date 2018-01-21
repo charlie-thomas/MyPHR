@@ -102,7 +102,7 @@ public class Medicine extends Fragment {
         ExecutorService service = Executors.newFixedThreadPool(2);
         Future<List<MedicineEntity>> result = service.submit(callable);
 
-        // Create a list of the appointment names
+        // Create a list of the medicine names
         List<MedicineEntity> medicines = null;
         try {
             medicines = result.get();
