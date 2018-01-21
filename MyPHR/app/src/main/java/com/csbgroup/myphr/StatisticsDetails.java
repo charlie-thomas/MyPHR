@@ -10,16 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
+import java.util.Calendar;
 
 /**
  * Created by JBizzle on 04/12/2017.
@@ -51,23 +52,37 @@ public class StatisticsDetails extends Fragment {
 
         GraphView graph = rootView.findViewById(R.id.statistics_graph);
         series = new LineGraphSeries<DataPoint>();
-        int date = 0;
+        int date = 1;
         double variable = 50;
         ArrayList<String> list = new ArrayList<String>();
+        Calendar calendar = Calendar.getInstance();
+        Date d = calendar.getTime();
+        Date d1 = calendar.getTime();
         for(int i =0 ; i<=30; i++){
-            series.appendData(new DataPoint(date,variable),true,500);
-            list.add("Date:"+Integer.toString(date) + "                         "+ (args.getString("title", "Statistics"))+":"+Double.toString(round(variable,2)));
-            date  = date + 1;
+            series.appendData(new DataPoint(d1,variable),true,500);
+            calendar.add(Calendar.DATE,1);
+            d1 = calendar.getTime();
+            list.add("Date:"+d1 + "                         "+ (args.getString("title", "Statistics"))+":"+Double.toString(round(variable,2)));
             Random r = new Random();
             double randomValue = r.nextDouble() * 2 - 1;
             randomValue /= 10;
             variable += randomValue;
         }
         graph.addSeries(series);
-        graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(30);
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+        graph.getGridLabelRenderer().setNumHorizontalLabels(4);
+        graph.getGridLabelRenderer().setTextSize(25);
+        graph.getViewport().setScrollable(true);
+        graph.getViewport().setScalable(true);
+        graph.getGridLabelRenderer().setHumanRounding(false);
         graph.getViewport().setXAxisBoundsManual(true);
-
+        calendar.add(Calendar.DATE,-4);
+        d1 = calendar.getTime();
+        graph.getViewport().setMinX(d1.getTime());
+        graph.getGridLabelRenderer().setVerticalAxisTitle(args.getString("title","Statistics"));
+        graph.getGridLabelRenderer().setVerticalAxisTitleTextSize(35);
+        graph.getGridLabelRenderer().setPadding(58);
+        graph.getGridLabelRenderer().setLabelVerticalWidth(75);
         ListView listview = (ListView) rootView.findViewById(R.id.statistics_graph_list);
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, list);
         listview.setAdapter(adapter);
