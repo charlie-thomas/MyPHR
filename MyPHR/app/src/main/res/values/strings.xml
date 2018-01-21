@@ -19,6 +19,7 @@
     <string name="_day_before">Day before</string>
     <string name="_morning_of">Morning of</string>
     <string name="enter_pin">Enter Your Pin:</string>
+    <string name="centile">centile</string>
 
     // Contact strings
     <string name="ctitle">Add a New Contact</string>
@@ -43,7 +44,7 @@
     <string name="appname">appointment title</string>
     <string name="applocation">location</string>
     <string name="appdate">date (dd/mm/yyyy)</string>
-    <string name="apptime">time (00:00)</string>
+    <string name="apptime">time (hh:mm)</string>
     <string name="appnotes">notes</string>
     <string name="appmessage2">You can schedule reminders later.</string>
     <string name="location_title">Location</string>
