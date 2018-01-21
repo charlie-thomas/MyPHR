@@ -131,11 +131,11 @@ public class Statistics extends Fragment {
             }
         };
 
-        // Get a Future object of all the medicine titles
+        // Get a Future object of all the statistics titles
         ExecutorService service = Executors.newFixedThreadPool(2);
         Future<List<StatisticsEntity>> result = service.submit(callable);
 
-        // Create a list of the appointment names
+        // Create a list of the statistics names
         List<StatisticsEntity> statistics = null;
         try {
             statistics = result.get();
@@ -154,11 +154,10 @@ public class Statistics extends Fragment {
         inflater.inflate(R.menu.settings, menu);
     }
 
-    /* Navigation from Statistics to settings fragment */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.settings) {
-            ((MainActivity) getActivity()).switchFragment(StatisticsSettings.newInstance());
+            ((MainActivity) getActivity()).switchFragment(MedicineSettings.newInstance());
             return true;
         }
         return super.onOptionsItemSelected(item);
