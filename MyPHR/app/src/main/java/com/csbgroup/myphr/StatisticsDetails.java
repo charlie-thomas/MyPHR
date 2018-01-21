@@ -62,7 +62,7 @@ public class StatisticsDetails extends Fragment {
         Bundle args = getArguments();
 
         TextView medTitle = rootView.findViewById(R.id.statistics_title);
-        medTitle.setText(args.getString("title", "Statistics"));
+        medTitle.setText(args.getString("title", "Measurements"));
 
         GraphView graph = rootView.findViewById(R.id.statistics_graph);
         series = new LineGraphSeries<DataPoint>();
