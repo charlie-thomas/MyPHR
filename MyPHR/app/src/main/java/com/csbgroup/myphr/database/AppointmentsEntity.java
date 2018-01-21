@@ -27,7 +27,7 @@ public class AppointmentsEntity {
     private String notes;
 
     @ColumnInfo(name = "reminders")
-    private int reminders;
+    private boolean reminders;
 
     @ColumnInfo(name = "reminder_type")
     private int reminder_type;
@@ -36,7 +36,8 @@ public class AppointmentsEntity {
     private int remind_when;
 
     // Constructor
-    public AppointmentsEntity(String title, String location, String date, String time, String notes, int reminders) {
+    public AppointmentsEntity(String title, String location, String date, String time, String notes,
+                              boolean reminders) {
         this.title = title;
         this.location = location;
         this.date = date;
@@ -101,11 +102,11 @@ public class AppointmentsEntity {
     }
 
 
-    public int getReminders() {
+    public boolean getReminders() {
         return reminders;
     }
 
-    public void setReminders(int reminders) {
+    public void setReminders(boolean reminders) {
         this.reminders = reminders;
     }
 
