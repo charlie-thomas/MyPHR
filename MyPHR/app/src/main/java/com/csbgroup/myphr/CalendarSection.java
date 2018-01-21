@@ -46,7 +46,7 @@ public class CalendarSection extends Fragment {
         // Add content to tabs
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.replace(R.id.calendar_tab, CalendarMonth.newInstance());
-        transaction.replace(R.id.investigations_tab, Appointments.newInstance());
+        transaction.replace(R.id.investigations_tab, Investigations.newInstance());
         transaction.commit();
 
         return rootView;
