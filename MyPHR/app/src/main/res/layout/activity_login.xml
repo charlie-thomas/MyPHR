@@ -48,7 +48,7 @@
         android:layout_marginLeft="20dp"
         android:onClick="goToChangePIN"
         android:src="@drawable/settings"
-        app:backgroundTint="@color/colorAccent"
+        app:backgroundTint="#2196f3"
         android:textColor="#FFFF"
         />
 

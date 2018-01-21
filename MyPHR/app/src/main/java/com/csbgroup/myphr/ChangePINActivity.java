@@ -24,11 +24,6 @@ public class ChangePINActivity extends AppCompatActivity {
 
     }
 
-    public void goToMain(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
-
     public void changeButton(View view) {
         pin = editText.getText().toString();
 
@@ -38,5 +33,8 @@ public class ChangePINActivity extends AppCompatActivity {
         editor.commit();
 
         Toast.makeText(this, "PIN changed to " + pin, Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 }
