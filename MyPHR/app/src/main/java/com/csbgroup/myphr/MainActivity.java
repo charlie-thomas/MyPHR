@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsDao;
 import com.csbgroup.myphr.database.AppointmentsEntity;
+import com.csbgroup.myphr.database.InvestigationsDao;
+import com.csbgroup.myphr.database.InvestigationsEntity;
 import com.csbgroup.myphr.database.MedicineDao;
 import com.csbgroup.myphr.database.MedicineEntity;
 import com.csbgroup.myphr.database.StatisticsDao;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 populateMedicine(db.medicineDao());
                 populateAppointments(db.appointmentsDao());
                 populateStatistics(db.statisticsDao());
+                populateInvestigations(db.investigationDao());
             }
         }).start();
 
@@ -121,6 +124,17 @@ public class MainActivity extends AppCompatActivity {
                     df.format(c.getTime()), 8,"Appointment notes " + i, 0);
             dao.insertAll(ae);
         }
+    }
+
+    private static void populateInvestigations(InvestigationsDao dao)  {
+        dao.deleteAll();
+
+        InvestigationsEntity ie = new InvestigationsEntity("Blood Test", "03/01/2018");
+        InvestigationsEntity ie1 = new InvestigationsEntity("Hearing Test", "29/12/2017");
+        InvestigationsEntity ie2 = new InvestigationsEntity("Blood Test", "04/06/2017");
+        InvestigationsEntity ie3 = new InvestigationsEntity("Hearing Test", "30/06/2017");
+
+        dao.insertAll(ie, ie1, ie2, ie3);
     }
 
     private static void populateStatistics(StatisticsDao dao) {
