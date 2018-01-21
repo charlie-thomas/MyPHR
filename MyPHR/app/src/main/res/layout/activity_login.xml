@@ -16,8 +16,7 @@
         android:layout_marginEnd="20dp"
         android:onClick="goToMain"
         android:src="@drawable/forward"
-        app:backgroundTint="#81D4FA"
-        app:fabSize="normal" />
+        app:backgroundTint="#81D4FA"/>
 
     <ImageView
         android:id="@+id/iconLogin"
@@ -48,17 +47,19 @@
         android:layout_marginTop="130dp"
         app:keypadButtonSize="72dp"
         app:keypadShowDeleteButton="true"
-        app:keypadTextColor="#FFFFFF"
+        app:keypadTextColor="#FFFF"
         app:keypadTextSize="22dp" />
 
-    <Button
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/change_pin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/change_pin"
-        android:layout_below="@id/pin_lock_view"
-        android:layout_marginTop="200dp"
-        android:layout_centerHorizontal="true"
-        android:background="@null"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/settings"
+        app:backgroundTint="@color/colorAccent"
+        android:textColor="#FFFF"
         />
 
     <ImageView
@@ -67,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/iconLogin"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="460dp"
+        android:layout_marginTop="480dp"
         app:srcCompat="@drawable/ic_fingerprint_white" />
 
     <TextView
@@ -83,7 +84,7 @@
         android:id="@+id/textView2"
         android:text="@string/instructions"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="680dp"
+        android:layout_marginTop="690dp"
         android:textColor="#FFFF"/>
 
 </RelativeLayout>

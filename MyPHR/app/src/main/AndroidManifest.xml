@@ -38,6 +38,11 @@
             android:label="MyPHR" >
         </activity>
 
+        <activity
+            android:name=".ChangePINActivity"
+            android:label="MyPHR" >
+        </activity>
+
     </application>
 
 </manifest>
