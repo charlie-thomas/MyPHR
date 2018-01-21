@@ -111,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
         dao.deleteAll();
 
         for (int i = 1; i < 6; i++) {
-            AppointmentsEntity ae = new AppointmentsEntity("Appointment" + i, "Appointment description " + i,
-                    "Appointment notes " + i, 0);
+            AppointmentsEntity ae = new AppointmentsEntity("Appointment" + i, "Appointment location " + i,
+                    "Appointment date: " + i, "Appointment time " + i, "Appointment notes " + i, 0);
             dao.insertAll(ae);
         }
     }

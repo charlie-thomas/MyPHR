@@ -14,8 +14,14 @@ public class AppointmentsEntity {
     @ColumnInfo(name = "title")
     private String title;
 
-    @ColumnInfo(name = "description")
-    private String description;
+    @ColumnInfo(name = "location")
+    private String location;
+
+    @ColumnInfo (name = "date")
+    private String date;
+
+    @ColumnInfo (name = "time")
+    private String time;
 
     @ColumnInfo(name = "notes")
     private String notes;
@@ -30,9 +36,11 @@ public class AppointmentsEntity {
     private int remind_when;
 
     // Constructor
-    public AppointmentsEntity(String title, String description, String notes, int reminders) {
+    public AppointmentsEntity(String title, String location, String date, String time, String notes, int reminders) {
         this.title = title;
-        this.description = description;
+        this.location = location;
+        this.date = date;
+        this.time = time;
         this.notes = notes;
         this.reminders = reminders;
     }
@@ -47,6 +55,7 @@ public class AppointmentsEntity {
         this.uid = uid;
     }
 
+
     public String getTitle() {
         return title;
     }
@@ -55,13 +64,33 @@ public class AppointmentsEntity {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+
+    public String getLocation() {
+        return location;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setLocation(String location) {
+        this.location = location;
     }
+
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = title;
+    }
+
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = title;
+    }
+
 
     public String getNotes() {
         return notes;
@@ -71,6 +100,7 @@ public class AppointmentsEntity {
         this.notes = notes;
     }
 
+
     public int getReminders() {
         return reminders;
     }
@@ -79,6 +109,7 @@ public class AppointmentsEntity {
         this.reminders = reminders;
     }
 
+
     public int getReminder_type() {
         return reminder_type;
     }
@@ -86,6 +117,7 @@ public class AppointmentsEntity {
     public void setReminder_type(int reminder_type) {
         this.reminder_type = reminder_type;
     }
+
 
     public int getRemind_when() {
         return remind_when;
