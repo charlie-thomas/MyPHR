@@ -73,7 +73,6 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(LoginActivity.this, "PIN Incorrect", Toast.LENGTH_SHORT).show();
             }
-
             Log.d(TAG, "Pin complete: " + pin);
         }
 
@@ -230,12 +229,6 @@ public class LoginActivity extends AppCompatActivity {
         public FingerprintException(Exception e) {
             super(e);
         }
-    }
-
-
-    public void goToMain(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 
     public void goToChangePIN(View view) {
