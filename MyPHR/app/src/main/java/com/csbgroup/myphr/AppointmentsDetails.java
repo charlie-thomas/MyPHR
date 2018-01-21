@@ -10,6 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.AppointmentsEntity;
+import com.csbgroup.myphr.database.MedicineEntity;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 public class AppointmentsDetails extends Fragment {
 
     public AppointmentsDetails() {
@@ -28,28 +37,55 @@ public class AppointmentsDetails extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_appointments_details, container, false);
 
         Bundle args = getArguments();
+        AppointmentsEntity appointment = getAppointment(args.getString("title"));
 
-        TextView apptTitle = rootView.findViewById(R.id.appointments_title);
-        apptTitle.setText(args.getString("title", "Appointment"));
+        TextView title = rootView.findViewById(R.id.appointments_title);
+        title.setText(appointment.getTitle());
 
-        TextView apptInfo = rootView.findViewById(R.id.appointments_info);
-        apptInfo.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam " +
-                "facilisis magna vel volutpat blandit. Etiam id ex urna. Nunc luctus justo " +
-                "eget lorem consequat, quis efficitur ipsum aliquet. Integer tristique tortor " +
-                "vitae augue finibus, non vulputate tortor vulputate. Interdum et malesuada " +
-                "fames ac ante ipsum primis in faucibus.");
+        TextView location = rootView.findViewById(R.id.app_location);
+        location.setText(appointment.getLocation());
+
+        TextView date = rootView.findViewById(R.id.app_date);
+        date.setText(appointment.getDate());
+
+        TextView time = rootView.findViewById(R.id.app_time);
+        time.setText(appointment.getTime());
 
         TextView notes = rootView.findViewById(R.id.notes);
-        notes.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam " +
-                "facilisis magna vel volutpat blandit. Etiam id ex urna. Nunc luctus justo " +
-                "eget lorem consequat, quis efficitur ipsum aliquet. Integer tristique tortor " +
-                "vitae augue finibus, non vulputate tortor vulputate. Interdum et malesuada " +
-                "fames ac ante ipsum primis in faucibus.");
+        notes.setText(appointment.getNotes());
 
+        // back button
         ((MainActivity) getActivity()).setToolbar("My Appointments", true);
         setHasOptionsMenu(true);
 
         return rootView;
+    }
+
+    /**
+     * Fetches a single appointment from the database, found by title
+     * @param title is the title of the appointment to be retrieved
+     * @return the appointment entity
+     */
+    private AppointmentsEntity getAppointment(final String title) {
+
+        // Create a callable object for database transactions
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(getActivity()).appointmentsDao().getAppointment(title);
+            }
+        };
+
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<AppointmentsEntity> result = service.submit(callable);
+
+        AppointmentsEntity appointment = null;
+        try {
+            appointment = result.get();
+        } catch (Exception e) {}
+
+        return appointment;
+
     }
 
     @Override
@@ -62,11 +98,16 @@ public class AppointmentsDetails extends Fragment {
         inflater.inflate(R.menu.edit, menu);
     }
 
-    /* Navigation from details fragment back to Appointments */
+    /**
+     * Provides navigation for menu items; currently only needed for navigation back to the
+     * main appointments fragment.
+     * @param item is the clicked menu item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
+            case android.R.id.home: // back button
                 ((MainActivity) getActivity()).switchFragment(Appointments.newInstance());
                 return true;
         }

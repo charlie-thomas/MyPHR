@@ -1,7 +1,12 @@
 package com.csbgroup.myphr;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -9,11 +14,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.MedicineEntity;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -28,6 +36,7 @@ import java.util.Random;
 public class StatisticsDetails extends Fragment {
 
     LineGraphSeries<DataPoint> series;
+    private FloatingActionButton fab; //the add measurement fab
 
     public StatisticsDetails() {
         // Required empty public constructor
@@ -42,7 +51,13 @@ public class StatisticsDetails extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // view set up
         View rootView = inflater.inflate(R.layout.fragment_statistics_details, container, false);
+        ((MainActivity) getActivity()).setToolbar("My Statistics", true);
+        setHasOptionsMenu(true);
+
+        // TODO: fetch measurement values from database
+
 
         Bundle args = getArguments();
 
@@ -72,8 +87,10 @@ public class StatisticsDetails extends Fragment {
         ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, list);
         listview.setAdapter(adapter);
 
-        ((MainActivity) getActivity()).setToolbar("My Measurements", true);
-        setHasOptionsMenu(true);
+        // fab action for adding medicine
+        String type = args.getString("title");
+        fab = rootView.findViewById(R.id.stat_fab);
+        buildDialog(fab, type);
 
         return rootView;
     }
@@ -105,6 +122,131 @@ public class StatisticsDetails extends Fragment {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * buildDialog builds the pop-up dialog for adding a new measurement instance;
+     * in the case of the height velocity fragment it will hide the fab.
+     * @param fab the floating action button which pulls up the dialog
+     */
+    public void buildDialog(FloatingActionButton fab, final String type) {
+
+        // no fab action for height velocity
+        if (type.equals("Height Velocity")) {fab.setVisibility(View.GONE); return;}
+
+        // fab action for height and weight (w/ centiles)
+        if (type.equals("Height") || type.equals("Weight")){
+
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // set up the dialog
+                    LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+                    View v = inflater.inflate(R.layout.add_measurement_centile, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setView(v);
+
+                    // set measurement specific texts
+                    final TextView title = v.findViewById(R.id.dialog_title);
+                    title.setText("Add a New " + type);
+                    final EditText measurement = v.findViewById(R.id.measurement);
+                    measurement.setHint(type.toLowerCase());
+
+                    // fetch the input values (measurement already fetched above ^)
+                    final EditText date = v.findViewById(R.id.measdate);
+                    final EditText centile = v.findViewById(R.id.centile);
+
+                    // add new medicine action
+                    builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    // TODO: add the new measurement to the database
+
+                                }
+                            }).start();
+
+                            // TODO: update the list view
+                        }
+                    });
+
+                    // action for cancelling activity
+
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
+
+            return;
+        }
+
+        // fab action for all other measurements
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // set up the dialog
+                LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+                View v = inflater.inflate(R.layout.add_measurement_basic, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setView(v);
+
+                // set measurement specific texts
+                if (type.equals("Body Mass Index (BMI)")){
+                    final TextView title = v.findViewById((R.id.dialog_title));
+                    title.setText("Add a New BMI");
+                    final EditText meashint = v.findViewById(R.id.measurement);
+                    meashint.setHint("BMI");
+                } else {
+                    final TextView title = v.findViewById(R.id.dialog_title);
+                    title.setText("Add a New " + type);
+                    final EditText measurement = v.findViewById(R.id.measurement);
+                    measurement.setHint(type.toLowerCase());
+                }
+
+                // fetch the input values (measurement fetched above ^)
+                final EditText date = v.findViewById(R.id.measdate);
+
+                // add new medicine action
+                builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                // TODO: add the new measurement to the database
+
+                            }
+                        }).start();
+
+                        // TODO: update the list view
+                    }
+                });
+
+                // action for cancelling activity
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+
     }
 
 }
