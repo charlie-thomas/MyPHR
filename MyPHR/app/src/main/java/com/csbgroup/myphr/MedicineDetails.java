@@ -14,8 +14,6 @@ import android.widget.TextView;
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.MedicineEntity;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -38,6 +36,8 @@ public class MedicineDetails extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_medicine_details, container, false);
 
+        // fill in the values
+
         Bundle args = getArguments();
         MedicineEntity medicine = getMedicine(args.getString("title"));
 
@@ -56,12 +56,18 @@ public class MedicineDetails extends Fragment {
         TextView notes = rootView.findViewById(R.id.notes);
         notes.setText(medicine.getNotes());
 
+        // back button
         ((MainActivity) getActivity()).setToolbar("My Medicine", true);
         setHasOptionsMenu(true);
 
         return rootView;
     }
 
+    /**
+     * Fetches a single medicine entity from the database, found by the title
+     * @param medTitle is the title of the medicine to be retrieved
+     * @return the medicine entity
+     */
     private MedicineEntity getMedicine(final String medTitle) {
 
         // Create a callable object for database transactions

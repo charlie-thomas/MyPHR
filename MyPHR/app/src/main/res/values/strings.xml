@@ -20,7 +20,7 @@
     <string name="_morning_of">Morning of</string>
     <string name="enter_pin">Enter Your Pin:</string>
 
-    // Add contact dialog strings
+    // Contact strings
     <string name="ctitle">Add a New Contact</string>
     <string name="cmessage">Enter the details for your new contact:</string>
     <string name="cname">name</string>
@@ -28,7 +28,7 @@
     <string name="cemail">email</string>
     <string name="cnotes">notes</string>
 
-    // Add medicine dialog strings
+    // Medicine strings
     <string name="medtitle">Add a New Medicine</string>
     <string name="medmessage">Enter the details for your new medicine:</string>
     <string name="medmessage2">You can schedule reminders later.</string>
@@ -37,14 +37,18 @@
     <string name="mednotes">notes</string>
     <string name="meddose">dose</string>
 
-    // Add appointment dialog strings
+    // Appointment strings
     <string name="atitle">Add a New Appointment</string>
     <string name="amessage">Enter the details for your new appointment:</string>
-    <string name="appname">appointment name</string>
-    <string name="appdate">date</string>
-    <string name="apptime">time</string>
+    <string name="appname">appointment title</string>
+    <string name="applocation">location</string>
+    <string name="appdate">date (dd/mm/yyyy)</string>
+    <string name="apptime">time (24:60)</string>
     <string name="appnotes">notes</string>
     <string name="appmessage2">You can schedule reminders later.</string>
-    <string name="applocation">location</string>
+    <string name="location_title">Location</string>
+    <string name="date_title">Date</string>
+    <string name="time_title">Time</string>
+
 
 </resources>

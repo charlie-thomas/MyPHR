@@ -35,6 +35,8 @@ public class ContactDetails extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_contact_details, container, false);
 
+        // fill in the values
+
         Bundle args = getArguments();
         ContactsEntity contact = getContact(args.getString("name"));
 
@@ -50,12 +52,18 @@ public class ContactDetails extends Fragment {
         TextView notes = rootView.findViewById(R.id.notes);
         notes.setText(contact.getNotes());
 
+        // back button
         ((MainActivity) getActivity()).setToolbar("My Contacts", true);
         setHasOptionsMenu(true);
 
         return rootView;
     }
 
+    /**
+     * Fetches a single contact entity from the database, found by name
+     * @param name is the name of the contact to be retrieved
+     * @return the contact entity
+     */
     private ContactsEntity getContact(final String name) {
 
         // Create a callable object for database transactions
