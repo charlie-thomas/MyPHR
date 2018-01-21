@@ -32,7 +32,8 @@ public class ChangePINActivity extends AppCompatActivity {
         editor.putString("PIN", pin);
         editor.commit();
 
-        Toast.makeText(this, "PIN changed to " + pin, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "PIN changed to " + pin, Toast.LENGTH_SHORT).show();
+        //removed toast due to spam
 
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
