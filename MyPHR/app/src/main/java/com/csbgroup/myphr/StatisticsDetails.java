@@ -26,6 +26,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -34,7 +35,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
 /**
  * Created by JBizzle on 04/12/2017.
  */
@@ -82,6 +82,7 @@ public class StatisticsDetails extends Fragment {
                 String stringdate = formatter.format(d1);
                 list.add("Date:"+stringdate + "                   "+ (args.getString("title", "Statistics"))+":"+Double.parseDouble(variable));
         }
+        Collections.reverse(list);
 
         graph.addSeries(series);
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
