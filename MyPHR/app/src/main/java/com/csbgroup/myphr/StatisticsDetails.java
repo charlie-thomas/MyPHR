@@ -17,6 +17,7 @@ import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -58,11 +59,13 @@ public class StatisticsDetails extends Fragment {
         Calendar calendar = Calendar.getInstance();
         Date d = calendar.getTime();
         Date d1 = calendar.getTime();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         for(int i =0 ; i<=30; i++){
             series.appendData(new DataPoint(d1,variable),true,500);
             calendar.add(Calendar.DATE,1);
             d1 = calendar.getTime();
-            list.add("Date:"+d1 + "                         "+ (args.getString("title", "Statistics"))+":"+Double.toString(round(variable,2)));
+            String stringdate = formatter.format(d1);
+            list.add("Date:"+stringdate + "                         "+ (args.getString("title", "Statistics"))+":"+Double.toString(round(variable,2)));
             Random r = new Random();
             double randomValue = r.nextDouble() * 2 - 1;
             randomValue /= 10;
