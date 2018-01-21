@@ -46,7 +46,7 @@ public class CalendarDay extends Fragment {
 
         View rootView =  inflater.inflate(R.layout.fragment_calendar_day, container, false);
 
-        // Get the date passed from the Calendar fragment
+        // Get the date passed from the CalendarMonth fragment
         Bundle args = getArguments();
         TextView dateTitle = rootView.findViewById(R.id.date);
         dateString = args.getString("date");
@@ -129,8 +129,6 @@ public class CalendarDay extends Fragment {
     }
 
     public List<AppointmentsEntity> getEvents(final String date) {
-
-        Log.d("HELLO", date);
 
         // Create a callable object for database transactions
         Callable callable = new Callable() {

@@ -9,21 +9,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 
-public class Calendar extends Fragment {
+public class CalendarMonth extends Fragment {
 
-    public Calendar() {
+    public CalendarMonth() {
         // Required empty public constructor
     }
 
-    public static Calendar newInstance() {
-        Calendar fragment = new Calendar();
+    public static CalendarMonth newInstance() {
+        CalendarMonth fragment = new CalendarMonth();
         return fragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_calendar, container, false);
+        View rootView =  inflater.inflate(R.layout.fragment_calendar_month, container, false);
 
         ((MainActivity) getActivity()).setToolbar("My Calendar", false);
         setHasOptionsMenu(false);

@@ -20,7 +20,6 @@ import com.csbgroup.myphr.database.StatisticsEntity;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                         selectedPage = Medicine.newInstance();
                         break;
                     case R.id.calendar:
-                        selectedPage = com.csbgroup.myphr.Calendar.newInstance();
+                        selectedPage = CalendarMonth.newInstance();
                         break;
                     case R.id.appointments:
                         selectedPage = Appointments.newInstance();
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Show calendar when app first loads
-        switchFragment(com.csbgroup.myphr.Calendar.newInstance());
+        switchFragment(CalendarMonth.newInstance());
         bottomNavigationView.setSelectedItemId(R.id.calendar);
     }
 
