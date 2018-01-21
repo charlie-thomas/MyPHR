@@ -51,6 +51,16 @@
         app:keypadTextColor="#FFFFFF"
         app:keypadTextSize="22dp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/change_pin"
+        android:layout_below="@id/pin_lock_view"
+        android:layout_marginTop="200dp"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        />
+
     <ImageView
         android:id="@+id/fingerprintIcon"
         android:layout_width="wrap_content"

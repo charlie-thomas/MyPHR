@@ -19,5 +19,7 @@
     <string name="_morning_of">Morning of</string>
     <string name="enter_pin">Enter Your Pin:</string>
     <string name="fingerprint">Fingerprint Authentication</string>
-    <string name="instructions"> Use fingerprint or PIN to unlock </string>
+    <string name="instructions">Use fingerprint or PIN to unlock</string>
+    <string name="change_pin">Change PIN</string>
+    <string name="forgot_pin">Forgot PIN?</string>
 </resources>
