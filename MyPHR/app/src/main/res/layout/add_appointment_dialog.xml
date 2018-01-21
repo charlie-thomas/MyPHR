@@ -13,10 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:paddingLeft="10dp"
-        android:paddingTop="20dp"
+        android:paddingTop="15dp"
         android:text="@string/atitle"
         android:textColor="#FFFFFF"
-        android:textSize="17dp"
+        android:textSize="20dp"
         android:textStyle="bold" />
 
     <TextView
@@ -25,7 +25,7 @@
         android:background="@color/colorAccent"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:paddingBottom="17dp"
+        android:paddingBottom="15dp"
         android:paddingLeft="10dp"
         android:text="@string/amessage"
         android:textColor="#FFFFFF"
@@ -83,6 +83,6 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:paddingLeft="10dp"
-        android:paddingTop="5dp" />
+        android:paddingTop="2dp" />
 
 </LinearLayout>
