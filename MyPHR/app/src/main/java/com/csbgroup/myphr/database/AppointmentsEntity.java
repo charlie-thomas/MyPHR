@@ -29,6 +29,14 @@ public class AppointmentsEntity {
     @ColumnInfo(name = "remind_when")
     private int remind_when;
 
+    // Constructor
+    public AppointmentsEntity(String title, String description, String notes, int reminders) {
+        this.title = title;
+        this.description = description;
+        this.notes = notes;
+        this.reminders = reminders;
+    }
+
 
     // Getters and Setters
     public int getUid() {
