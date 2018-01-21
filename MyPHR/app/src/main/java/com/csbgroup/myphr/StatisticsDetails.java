@@ -134,6 +134,118 @@ public class StatisticsDetails extends Fragment {
         // no fab action for height velocity
         if (type.equals("Height Velocity")) {fab.setVisibility(View.GONE); return;}
 
+        // fab action for height and weight (w/ centiles)
+        if (type.equals("Height") || type.equals("Weight")){
+
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // set up the dialog
+                    LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+                    View v = inflater.inflate(R.layout.add_measurement_centile, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setView(v);
+
+                    // set measurement specific texts
+                    final TextView title = v.findViewById(R.id.dialog_title);
+                    title.setText("Add a New " + type);
+                    final EditText measurement = v.findViewById(R.id.measurement);
+                    measurement.setHint(type.toLowerCase());
+
+                    // fetch the input values (measurement already fetched above ^)
+                    final EditText date = v.findViewById(R.id.measdate);
+                    final EditText centile = v.findViewById(R.id.centile);
+
+                    // add new medicine action
+                    builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    // TODO: add the new measurement to the database
+
+                                }
+                            }).start();
+
+                            // TODO: update the list view
+                        }
+                    });
+
+                    // action for cancelling activity
+
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
+
+            return;
+        }
+
+        // fab action for all other measurements
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // set up the dialog
+                LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+                View v = inflater.inflate(R.layout.add_measurement_basic, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setView(v);
+
+                // set measurement specific texts
+                if (type.equals("Body Mass Index (BMI)")){
+                    final TextView title = v.findViewById((R.id.dialog_title));
+                    title.setText("Add a New BMI");
+                    final EditText meashint = v.findViewById(R.id.measurement);
+                    meashint.setHint("BMI");
+                } else {
+                    final TextView title = v.findViewById(R.id.dialog_title);
+                    title.setText("Add a New " + type);
+                    final EditText measurement = v.findViewById(R.id.measurement);
+                    measurement.setHint(type.toLowerCase());
+                }
+
+                // fetch the input values (measurement fetched above ^)
+                final EditText date = v.findViewById(R.id.measdate);
+
+                // add new medicine action
+                builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                // TODO: add the new measurement to the database
+
+                            }
+                        }).start();
+
+                        // TODO: update the list view
+                    }
+                });
+
+                // action for cancelling activity
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
 
     }
 

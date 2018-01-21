@@ -26,12 +26,13 @@
         android:layout_width="match_parent"
         android:paddingBottom="15dp"
         android:paddingLeft="10dp"
+        android:text="@string/measmessage"
         android:textColor="#FFFFFF"
         android:textSize="16dp"
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/date"
+        android:id="@+id/measdate"
 
         android:hint="@string/appdate"
         android:inputType="date"

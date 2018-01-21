@@ -19,7 +19,6 @@
     <string name="_day_before">Day before</string>
     <string name="_morning_of">Morning of</string>
     <string name="enter_pin">Enter Your Pin:</string>
-    <string name="centile">centile</string>
 
     // Contact strings
     <string name="ctitle">Add a New Contact</string>
@@ -51,5 +50,9 @@
     <string name="date_title">Date</string>
     <string name="time_title">Time</string>
 
+    // Measurement strings
+
+    <string name="centile">centile</string>
+    <string name="measmessage">Enter the details for your new measurement:</string>
 
 </resources>
