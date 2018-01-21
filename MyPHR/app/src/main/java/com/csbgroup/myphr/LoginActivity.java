@@ -222,6 +222,11 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
+
+    public void goToChangePIN(View view) {
+        Intent intent = new Intent(this, ChangePINActivity.class);
+        startActivity(intent);
+    }
 }
 
 
