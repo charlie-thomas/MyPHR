@@ -43,7 +43,7 @@
     <string name="appname">appointment title</string>
     <string name="applocation">location</string>
     <string name="appdate">date (dd/mm/yyyy)</string>
-    <string name="apptime">time (24:60)</string>
+    <string name="apptime">time (00:00)</string>
     <string name="appnotes">notes</string>
     <string name="appmessage2">You can schedule reminders later.</string>
     <string name="location_title">Location</string>

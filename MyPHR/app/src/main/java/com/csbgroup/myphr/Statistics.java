@@ -83,41 +83,6 @@ public class Statistics extends Fragment {
             }
         });
 
-        but = (FloatingActionButton) rootView.findViewById(R.id.s_fab);
-        but.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
-                ab.setTitle("Enter the name of the measurement you would like to track:");
-                final EditText et = new EditText(getActivity());
-                ab.setView(et);
-                ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                ArrayList<String> list = new ArrayList<String>();
-                                StatisticsEntity st = new StatisticsEntity(et.getText().toString(),list);
-                                db.statisticsDao().insertAll(st);
-                            }
-                        }).start();
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.detach(Statistics.this).attach(Statistics.this).commit();
-                    }
-                });
-                ab.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                    }
-                });
-
-                AlertDialog a = ab.create();
-                a.show();
-            }
-        });
 
         return rootView;
     }
