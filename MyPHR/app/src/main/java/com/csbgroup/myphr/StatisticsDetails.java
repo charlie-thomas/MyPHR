@@ -26,9 +26,12 @@ import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.concurrent.Callable;
@@ -68,20 +71,31 @@ public class StatisticsDetails extends Fragment {
         series = new LineGraphSeries<DataPoint>();
         int date = 1;
         final ArrayList<String> list = new ArrayList<String>();
-        Calendar calendar = Calendar.getInstance();
-        Date d = calendar.getTime();
-        Date d1 = calendar.getTime();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date d1 = null;
         final StatisticsEntity currentstat = getStats(args.getString("title", "Statistics"));
+        ArrayList<DataPoint> dpa = new ArrayList<DataPoint>();
         for(int i=0;i<currentstat.getValues().size();i++){
-                String variable = currentstat.getValues().get(i);
-                series.appendData(new DataPoint(d1,Double.parseDouble(variable)),true,500);
-                calendar.add(Calendar.DATE,1);
-                d1 = calendar.getTime();
-                String stringdate = formatter.format(d1);
-                list.add("Date:"+stringdate + "                   "+ (args.getString("title", "Statistics"))+":"+Double.parseDouble(variable));
+                String variable = currentstat.getValues().get(i).getValue();
+                String stringdate = currentstat.getValues().get(i).getDate();
+
+            try {
+                d1 = formatter.parse(stringdate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            dpa.add(new DataPoint(d1,Double.parseDouble(variable)));
+            list.add("Date:"+stringdate + "                   "+ (args.getString("title", "Statistics"))+":"+Double.parseDouble(variable));
         }
+        Collections.sort(dpa, new Comparator<DataPoint>() {
+            @Override
+            public int compare(DataPoint o1, DataPoint o2) {
+                return Double.compare(o1.getX(),o2.getX());
+            }
+        });
+        DataPoint[] DataPointArray = dpa.toArray(new DataPoint[dpa.size()]);
+        series.resetData(DataPointArray);
         Collections.reverse(list);
 
         graph.addSeries(series);
@@ -91,10 +105,13 @@ public class StatisticsDetails extends Fragment {
         graph.getViewport().setScrollable(true);
         graph.getGridLabelRenderer().setHumanRounding(false);
         graph.getViewport().setXAxisBoundsManual(true);
-        calendar.add(Calendar.DATE,-4);
-        d1 = calendar.getTime();
-        if(currentstat.getValues().size()>4){
-            graph.getViewport().setMinX(d1.getTime());
+        if(currentstat.getValues().size() > 4){
+            try {
+                Date mindate = formatter.parse(currentstat.getValues().get(currentstat.getValues().size()-4).getDate());
+                graph.getViewport().setMinX(mindate.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
         graph.getGridLabelRenderer().setVerticalAxisTitle(args.getString("title","Statistics"));
         graph.getGridLabelRenderer().setVerticalAxisTitleTextSize(35);
@@ -130,8 +147,27 @@ public class StatisticsDetails extends Fragment {
                             public void run() {
                                 AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                 //StatisticsEntity st = new StatisticsEntity(et.getText().toString());
-                                currentstat.addValue(value.getText().toString());
-                                db.statisticsDao().update(currentstat);
+
+
+                                String day = datedd.getText().toString();
+                                String month = datemm.getText().toString();
+                                String year = dateyyyy.getText().toString();
+                                String fulldate = day+"/"+month+"/"+year;
+
+                                Date date = null;
+                                try {
+                                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                    date = sdf.parse(fulldate);
+                                    if (!fulldate.equals(sdf.format(date))) {
+                                        date = null;
+                                    }
+                                } catch (ParseException ex) {
+                                    ex.printStackTrace();
+                                }
+                                if (date != null) {
+                                    currentstat.addValue(value.getText().toString(),fulldate,null);
+                                    db.statisticsDao().update(currentstat);
+                                }
                             }
                         }).start();
                         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -204,6 +240,12 @@ public class StatisticsDetails extends Fragment {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    static <T> T[] append(T[] arr, T element) {
+        final int N = arr.length;
+        arr = Arrays.copyOf(arr, N + 1);
+        arr[N] = element;
+        return arr;
     }
 
 }

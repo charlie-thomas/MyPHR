@@ -14,6 +14,7 @@ import com.csbgroup.myphr.database.AppointmentsDao;
 import com.csbgroup.myphr.database.AppointmentsEntity;
 import com.csbgroup.myphr.database.MedicineDao;
 import com.csbgroup.myphr.database.MedicineEntity;
+import com.csbgroup.myphr.database.StatValueEntity;
 import com.csbgroup.myphr.database.StatisticsDao;
 import com.csbgroup.myphr.database.StatisticsEntity;
 
@@ -124,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         dao.deleteAll();
 
         String[] stats = {"Height Velocity", "Weight", "BMI"};
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<StatValueEntity> list = new ArrayList<StatValueEntity>();
         for (String stat : stats) {
             StatisticsEntity st = new StatisticsEntity(stat, list);
             dao.insertAll(st);

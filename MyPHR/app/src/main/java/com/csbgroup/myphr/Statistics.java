@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.StatValueEntity;
 import com.csbgroup.myphr.database.StatisticsDao;
 import com.csbgroup.myphr.database.StatisticsEntity;
 
@@ -99,7 +100,7 @@ public class Statistics extends Fragment {
                             @Override
                             public void run() {
                                 AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                ArrayList<String> list = new ArrayList<String>();
+                                ArrayList<StatValueEntity> list = new ArrayList<StatValueEntity>();
                                 StatisticsEntity st = new StatisticsEntity(et.getText().toString(),list);
                                 db.statisticsDao().insertAll(st);
                             }
