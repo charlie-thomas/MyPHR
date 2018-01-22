@@ -12,10 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -67,15 +64,21 @@ public class StatisticsDetails extends Fragment {
         TextView medTitle = rootView.findViewById(R.id.statistics_title);
         medTitle.setText(args.getString("title", "Statistics"));
 
+        /* Setting up the variable for the graph/list */
         GraphView graph = rootView.findViewById(R.id.statistics_graph);
         series = new LineGraphSeries<DataPoint>();
-        int date = 1;
-        final ArrayList<String> list = new ArrayList<String>();
+
+        //This formatter is for changing the string entered in form "dd/MM/yyyy" into a Java Date type
         final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date d1 = null;
+
+        //currentstat is a the StatisticsEntity for the current statistics page (e.g weight, height etc)
         final StatisticsEntity currentstat = getStats(args.getString("title", "Statistics"));
+        //valueslist is the list of all the entity's in currentstat. Each contains a date, value and centile.
         ArrayList<StatValueEntity> valueslist =  currentstat.getValues();
 
+        //Sorting valueslist so it's ordered in date order, oldest first.
+        //Need to do this because the graph must plot from oldest to newest.
         Collections.sort(valueslist, new Comparator<StatValueEntity>(){
             @Override
             public int compare(StatValueEntity t1, StatValueEntity t2) {
@@ -88,38 +91,44 @@ public class StatisticsDetails extends Fragment {
             }
         });
 
+        //Iterating through the valueslist we format each string date intot a java Date and add it as a datapoint
         for(int i=0;i<valueslist.size();i++){
-                String centile = "";
                 StatValueEntity sve = valueslist.get(i);
-                System.out.println(valueslist.get(i).getDate());
             try {
                 d1 = formatter.parse(sve.getDate());
-                DataPoint dp = new DataPoint(d1,Double.parseDouble(sve.getValue()));
-                series.appendData(dp,true,valueslist.size());
-                if(sve.getCentile() != ""){
-                    centile = "Centile:"+sve.getCentile();
-                }
-                list.add("Date:"+sve.getDate() + "        "+ (args.getString("title", "Statistics"))+":"+sve.getValue()+"        "+centile);
-
+                DataPoint dp = new DataPoint(d1,Double.parseDouble(sve.getValue())); //added as a datapoint here
+                series.appendData(dp,true,valueslist.size()); //adding the datapoint to the graph series here
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
         }
-        Collections.reverse(list);
+
+        /*Reversing the list now so its ordered newest to oldest
+          This is so the listview underneath prints from newest to oldest */
+        Collections.reverse(valueslist);
 
         ListView listview = (ListView) rootView.findViewById(R.id.statistics_graph_list);
+        /*The listview uses a custom adapter which uses an xml to print each list item
+        Format located in stat_list_adapter.xml
+        Listview is formatted in StatValueAdpater.java */
         StatValueAdapter adapter = new StatValueAdapter(getActivity(),R.layout.stat_list_adapter, valueslist);
         listview.setAdapter(adapter);
 
 
-        graph.addSeries(series);
+        //All of these "graph." make adjustments to the graph so it displays correctly
+        graph.addSeries(series); //adds the datapoint series to the graph
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
         graph.getGridLabelRenderer().setNumHorizontalLabels(4);
         graph.getGridLabelRenderer().setTextSize(25);
         graph.getViewport().setScrollable(true);
         graph.getGridLabelRenderer().setHumanRounding(false);
         graph.getViewport().setXAxisBoundsManual(true);
+        graph.getGridLabelRenderer().setVerticalAxisTitle(args.getString("title","Statistics"));
+        graph.getGridLabelRenderer().setVerticalAxisTitleTextSize(35);
+        graph.getGridLabelRenderer().setPadding(58);
+        graph.getGridLabelRenderer().setLabelVerticalWidth(75);
+
+        //this if statement allows for the graph to keep four values at a time and begin scrolling after 4 have been added.
         if(currentstat.getValues().size() > 4){
             try {
                 Date mindate = formatter.parse(currentstat.getValues().get(currentstat.getValues().size()-4).getDate());
@@ -128,10 +137,6 @@ public class StatisticsDetails extends Fragment {
                 e.printStackTrace();
             }
         }
-        graph.getGridLabelRenderer().setVerticalAxisTitle(args.getString("title","Statistics"));
-        graph.getGridLabelRenderer().setVerticalAxisTitleTextSize(35);
-        graph.getGridLabelRenderer().setPadding(58);
-        graph.getGridLabelRenderer().setLabelVerticalWidth(75);
 
         ((MainActivity) getActivity()).setToolbar("My Statistics", true);
         setHasOptionsMenu(true);
@@ -215,6 +220,7 @@ public class StatisticsDetails extends Fragment {
     }
 
 
+    //method to get the StatisticsEntity for a given measurement(e.g weight, height etc)
     public StatisticsEntity getStats(final String unit) {
         // Create a callable object for database transactions
         Callable callable = new Callable() {
@@ -237,16 +243,6 @@ public class StatisticsDetails extends Fragment {
         return statistics;
     }
 
-
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        long factor = (long) Math.pow(10, places);
-        value = value * factor;
-        long tmp = Math.round(value);
-        return (double) tmp / factor;
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -266,12 +262,6 @@ public class StatisticsDetails extends Fragment {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-    static <T> T[] append(T[] arr, T element) {
-        final int N = arr.length;
-        arr = Arrays.copyOf(arr, N + 1);
-        arr[N] = element;
-        return arr;
     }
 
 }

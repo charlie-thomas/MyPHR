@@ -19,12 +19,10 @@ import java.util.List;
  */
 
 public class StatValueAdapter extends ArrayAdapter<StatValueEntity> {
-    private static final String TAG = "StatValueAdapter";
     private Context mContext;
     int mResource;
 
     /**
-     *
      * @param context
      * @param resource
      * @param objects
@@ -52,9 +50,10 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity> {
         TextView tvValue = (TextView) convertView.findViewById(R.id.textView2);
         TextView tvCentile = (TextView) convertView.findViewById(R.id.textView3);
 
-        tvDate.setText("Date:"+date);
-        tvValue.setText("Value:"+value);
+        tvDate.setText("Date: "+date);
+        tvValue.setText("Value: "+value);
 
+        //if the centile doesn't exist then we remove the textview and double the height of the value's textview
         if(centile==null || centile==""){
             final float scale = getContext().getResources().getDisplayMetrics().density;
             int pixels = (int) (60 * scale + 0.5f);
@@ -63,7 +62,7 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity> {
             tvValue.setLayoutParams(params);
             tvCentile.setVisibility(View.GONE);
         } else {
-            tvCentile.setText("Centile:"+centile);
+            tvCentile.setText("Centile: "+centile);
         }
 
         return convertView;
