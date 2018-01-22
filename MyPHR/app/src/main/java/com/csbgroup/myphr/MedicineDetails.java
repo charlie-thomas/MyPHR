@@ -14,8 +14,6 @@ import android.widget.TextView;
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.MedicineEntity;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -38,6 +36,8 @@ public class MedicineDetails extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_medicine_details, container, false);
 
+        // fill in the values
+
         Bundle args = getArguments();
         MedicineEntity medicine = getMedicine(args.getString("title"));
 
@@ -47,19 +47,29 @@ public class MedicineDetails extends Fragment {
         TextView medInfo = rootView.findViewById(R.id.medicine_info);
         medInfo.setText(medicine.getDescription());
 
+        TextView medDose = rootView.findViewById(R.id.medicine_dose);
+        medDose.setText(medicine.getDose());
+
         Switch reminders = rootView.findViewById(R.id.reminder_switch);
         reminders.setChecked(medicine.getReminders());
 
         TextView notes = rootView.findViewById(R.id.notes);
         notes.setText(medicine.getNotes());
 
+        // back button
         ((MainActivity) getActivity()).setToolbar("My Medicine", true);
         setHasOptionsMenu(true);
 
         return rootView;
     }
 
+    /**
+     * Fetches a single medicine entity from the database, found by the title
+     * @param medTitle is the title of the medicine to be retrieved
+     * @return the medicine entity
+     */
     private MedicineEntity getMedicine(final String medTitle) {
+
         // Create a callable object for database transactions
         Callable callable = new Callable() {
             @Override
@@ -89,15 +99,19 @@ public class MedicineDetails extends Fragment {
         inflater.inflate(R.menu.edit, menu);
     }
 
-    /* Navigation from details fragment back to Medicine */
+    /**
+     * Provides navigation for menu items; currently only needed for navigation back to the
+     * main medicine fragment.
+     * @param item the clicked menu item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
+            case android.R.id.home: // back button
                 ((MainActivity) getActivity()).switchFragment(Medicine.newInstance());
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

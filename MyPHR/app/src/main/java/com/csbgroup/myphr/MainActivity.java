@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsDao;
 import com.csbgroup.myphr.database.AppointmentsEntity;
+import com.csbgroup.myphr.database.ContactsDao;
+import com.csbgroup.myphr.database.ContactsEntity;
 import com.csbgroup.myphr.database.MedicineDao;
 import com.csbgroup.myphr.database.MedicineEntity;
 import com.csbgroup.myphr.database.StatisticsDao;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 AppDatabase db = AppDatabase.getAppDatabase(MainActivity.this);
+                populateContacts(db.contactsDao());
                 populateMedicine(db.medicineDao());
                 populateAppointments(db.appointmentsDao());
                 populateStatistics(db.statisticsDao());
@@ -90,6 +93,22 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    private static void populateContacts(ContactsDao dao) {
+
+        dao.deleteAll();
+
+        // TODO: get contact details for main staff and load in
+
+        ContactsEntity c1 = new ContactsEntity("Dr. Doctor", "drdoctor@hospital.com",
+                "012334567890", "My main doctor at hospital.");
+
+        ContactsEntity c2 = new ContactsEntity("Mr. Nurse", "mrnurse@hospital.com",
+                "015567892343", "My main nurse at hospital.");
+
+        dao.insertAll(c1,c2);
+
+    }
+
     private static void populateMedicine(MedicineDao dao) {
         dao.deleteAll();
 
@@ -99,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
             MedicineEntity me = new MedicineEntity(
                     med,
                     med + " Description",
+                    med + "Dose",
                     med + " Notes",
                     true);
             dao.insertAll(me);
@@ -110,8 +130,8 @@ public class MainActivity extends AppCompatActivity {
         dao.deleteAll();
 
         for (int i = 1; i < 6; i++) {
-            AppointmentsEntity ae = new AppointmentsEntity("Appointment" + i, "Appointment description " + i,
-                    "Appointment notes " + i, 0);
+            AppointmentsEntity ae = new AppointmentsEntity("Appointment" + i, "Appointment location " + i,
+                    "Appointment date: " + i, "Appointment time " + i, "Appointment notes " + i, false);
             dao.insertAll(ae);
         }
     }
@@ -119,7 +139,8 @@ public class MainActivity extends AppCompatActivity {
     private static void populateStatistics(StatisticsDao dao) {
         dao.deleteAll();
 
-        String[] stats = {"Height Velocity", "Weight", "BMI"};
+        String[] stats = {"Blood Pressure", "Body Mass Index (BMI)", "Head Circumference", "Height",
+                "Height Velocity", "Length", "Weight"};
         ArrayList<String> list = new ArrayList<String>();
         for (String stat : stats) {
             StatisticsEntity st = new StatisticsEntity(stat, list);

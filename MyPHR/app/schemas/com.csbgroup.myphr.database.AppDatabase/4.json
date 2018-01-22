@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 4,
-    "identityHash": "0a70653924311a74ea4b6cf4beb98ada",
+    "identityHash": "369ccaa47123f4d5bcfc022e84d25fe3",
     "entities": [
       {
         "tableName": "AppointmentsEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `description` TEXT, `notes` TEXT, `reminders` INTEGER NOT NULL, `reminder_type` INTEGER NOT NULL, `remind_when` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `location` TEXT, `date` TEXT, `time` TEXT, `notes` TEXT, `reminders` INTEGER NOT NULL, `reminder_type` INTEGER NOT NULL, `remind_when` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -21,8 +21,20 @@
             "notNull": false
           },
           {
-            "fieldPath": "description",
-            "columnName": "description",
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "time",
+            "columnName": "time",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -62,7 +74,7 @@
       },
       {
         "tableName": "MedicineEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `description` TEXT, `notes` TEXT, `reminders` INTEGER NOT NULL, `reminder_type` INTEGER NOT NULL, `remind_when` INTEGER NOT NULL, PRIMARY KEY(`title`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `description` TEXT, `dose` TEXT, `notes` TEXT, `reminders` INTEGER NOT NULL, `reminder_type` INTEGER NOT NULL, `remind_when` INTEGER NOT NULL, PRIMARY KEY(`title`))",
         "fields": [
           {
             "fieldPath": "title",
@@ -73,6 +85,12 @@
           {
             "fieldPath": "description",
             "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dose",
+            "columnName": "dose",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -183,7 +201,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"0a70653924311a74ea4b6cf4beb98ada\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"369ccaa47123f4d5bcfc022e84d25fe3\")"
     ]
   }
 }
