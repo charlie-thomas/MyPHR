@@ -108,7 +108,7 @@ public class AppointmentsDetails extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: // back button
-                ((MainActivity) getActivity()).switchFragment(Appointments.newInstance());
+                ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance());
                 return true;
         }
         return super.onOptionsItemSelected(item);

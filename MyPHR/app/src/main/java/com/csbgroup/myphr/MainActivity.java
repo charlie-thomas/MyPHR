@@ -61,10 +61,10 @@ public class MainActivity extends AppCompatActivity {
                         selectedPage = Medicine.newInstance();
                         break;
                     case R.id.calendar:
-                        selectedPage = CalendarSection.newInstance();
+                        selectedPage = CalendarMonth.newInstance();
                         break;
                     case R.id.appointments:
-                        selectedPage = Appointments.newInstance();
+                        selectedPage = AppointmentsSection.newInstance();
                         break;
                     case R.id.statistics:
                         selectedPage = Statistics.newInstance();
