@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsDao;
 import com.csbgroup.myphr.database.AppointmentsEntity;
+import com.csbgroup.myphr.database.InvestigationsDao;
+import com.csbgroup.myphr.database.InvestigationsEntity;
 import com.csbgroup.myphr.database.ContactsDao;
 import com.csbgroup.myphr.database.ContactsEntity;
 import com.csbgroup.myphr.database.MedicineDao;
@@ -19,7 +21,9 @@ import com.csbgroup.myphr.database.MedicineEntity;
 import com.csbgroup.myphr.database.StatisticsDao;
 import com.csbgroup.myphr.database.StatisticsEntity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
                 populateMedicine(db.medicineDao());
                 populateAppointments(db.appointmentsDao());
                 populateStatistics(db.statisticsDao());
+                populateInvestigations(db.investigationDao());
             }
         }).start();
 
@@ -56,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                         selectedPage = Medicine.newInstance();
                         break;
                     case R.id.calendar:
-                        selectedPage = Calendar.newInstance();
+                        selectedPage = CalendarSection.newInstance();
                         break;
                     case R.id.appointments:
                         selectedPage = Appointments.newInstance();
@@ -72,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Show calendar when app first loads
-        switchFragment(Calendar.newInstance());
+        switchFragment(CalendarMonth.newInstance());
         bottomNavigationView.setSelectedItemId(R.id.calendar);
     }
 
@@ -130,10 +135,26 @@ public class MainActivity extends AppCompatActivity {
         dao.deleteAll();
 
         for (int i = 1; i < 6; i++) {
-            AppointmentsEntity ae = new AppointmentsEntity("Appointment" + i, "Appointment location " + i,
-                    "Appointment date: " + i, "Appointment time " + i, "Appointment notes " + i, false);
+            Calendar c = Calendar.getInstance();
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.add(Calendar.DATE, i);
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+
+            AppointmentsEntity ae = new AppointmentsEntity("Appointment " + i, "Appointment location " + i,
+                    df.format(c.getTime()), "8","Appointment notes " + i, false);
             dao.insertAll(ae);
         }
+    }
+
+    private static void populateInvestigations(InvestigationsDao dao)  {
+        dao.deleteAll();
+
+        InvestigationsEntity ie = new InvestigationsEntity("Blood Test", "03/01/2018");
+        InvestigationsEntity ie1 = new InvestigationsEntity("Hearing Test", "29/12/2017");
+        InvestigationsEntity ie2 = new InvestigationsEntity("Blood Test", "04/06/2017");
+        InvestigationsEntity ie3 = new InvestigationsEntity("Hearing Test", "30/06/2017");
+
+        dao.insertAll(ie, ie1, ie2, ie3);
     }
 
     private static void populateStatistics(StatisticsDao dao) {
