@@ -108,6 +108,11 @@ public class StatisticsDetails extends Fragment {
         }
         Collections.reverse(list);
 
+        ListView listview = (ListView) rootView.findViewById(R.id.statistics_graph_list);
+        StatValueAdapter adapter = new StatValueAdapter(getActivity(),R.layout.stat_list_adapter, valueslist);
+        listview.setAdapter(adapter);
+
+
         graph.addSeries(series);
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
         graph.getGridLabelRenderer().setNumHorizontalLabels(4);
@@ -127,9 +132,6 @@ public class StatisticsDetails extends Fragment {
         graph.getGridLabelRenderer().setVerticalAxisTitleTextSize(35);
         graph.getGridLabelRenderer().setPadding(58);
         graph.getGridLabelRenderer().setLabelVerticalWidth(75);
-        ListView listview = (ListView) rootView.findViewById(R.id.statistics_graph_list);
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, list);
-        listview.setAdapter(adapter);
 
         ((MainActivity) getActivity()).setToolbar("My Statistics", true);
         setHasOptionsMenu(true);
