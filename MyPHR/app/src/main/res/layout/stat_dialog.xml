@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:text="Enter a new value"
+        android:textSize="25sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/valuetitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView"
+        android:layout_marginTop="22dp"
+        android:text="Value:"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/valuetitle"
+        android:layout_marginTop="5dp"
+        android:ems="0"
+        android:hint=""
+        android:inputType="numberDecimal" />
+
+    <TextView
+        android:id="@+id/datetitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/etValue"
+        android:layout_marginTop="22dp"
+        android:text="Date:"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etDatedd"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/datetitle"
+        android:layout_marginTop="5dp"
+        android:ems="0"
+        android:hint="dd"
+        android:maxLength = "2"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/etDatemm"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/etDatedd"
+        android:layout_alignBottom="@+id/etDatedd"
+        android:layout_marginStart="11dp"
+        android:layout_toEndOf="@+id/etDatedd"
+        android:ems="0"
+        android:hint="mm"
+        android:inputType="number"
+        android:maxLength="2" />
+
+    <EditText
+        android:id="@+id/etDateyyyy"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/etDatemm"
+        android:layout_alignBottom="@+id/etDatemm"
+        android:layout_marginStart="11dp"
+        android:layout_toEndOf="@+id/etDatemm"
+        android:ems="0"
+        android:hint="yyyy"
+        android:maxLength = "4"
+        android:inputType="number" />
+
+
+</RelativeLayout>

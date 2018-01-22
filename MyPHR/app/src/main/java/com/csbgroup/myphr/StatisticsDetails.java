@@ -12,8 +12,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,8 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
-import java.util.Random;
 import java.util.Calendar;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -111,10 +111,16 @@ public class StatisticsDetails extends Fragment {
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
-                ab.setTitle("Enter a new value:");
-                final EditText et = new EditText(getActivity());
-                ab.setView(et);
+                View mView = getLayoutInflater().inflate(R.layout.stat_dialog,null);
+                final EditText value = (EditText) mView.findViewById(R.id.etValue);
+                final EditText datedd = (EditText) mView.findViewById(R.id.etDatedd);
+                final EditText datemm = (EditText) mView.findViewById(R.id.etDatemm);
+                final EditText dateyyyy = (EditText) mView.findViewById(R.id.etDateyyyy);
+
+                ab.setView(mView);
+
                 ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
                     @Override
@@ -124,7 +130,7 @@ public class StatisticsDetails extends Fragment {
                             public void run() {
                                 AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                 //StatisticsEntity st = new StatisticsEntity(et.getText().toString());
-                                currentstat.addValue(et.getText().toString());
+                                currentstat.addValue(value.getText().toString());
                                 db.statisticsDao().update(currentstat);
                             }
                         }).start();
@@ -138,8 +144,8 @@ public class StatisticsDetails extends Fragment {
                     }
                 });
 
-                AlertDialog a = ab.create();
-                a.show();
+                final AlertDialog dialog = ab.create();
+                dialog.show();
             }
         });
 
@@ -190,7 +196,7 @@ public class StatisticsDetails extends Fragment {
     }
 
     /* Navigation from details fragment back to Statistics */
-    @Override
+   @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
