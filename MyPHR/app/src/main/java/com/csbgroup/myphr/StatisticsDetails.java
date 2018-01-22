@@ -93,7 +93,7 @@ public class StatisticsDetails extends Fragment {
 
         //Iterating through the valueslist we format each string date intot a java Date and add it as a datapoint
         for(int i=0;i<valueslist.size();i++){
-                StatValueEntity sve = valueslist.get(i);
+            StatValueEntity sve = valueslist.get(i);
             try {
                 d1 = formatter.parse(sve.getDate());
                 DataPoint dp = new DataPoint(d1,Double.parseDouble(sve.getValue())); //added as a datapoint here
@@ -147,19 +147,17 @@ public class StatisticsDetails extends Fragment {
             public void onClick(View view) {
 
                 AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
-                View mView = getLayoutInflater().inflate(R.layout.stat_dialog,null);
-                final EditText value = (EditText) mView.findViewById(R.id.etValue);
-                final EditText datedd = (EditText) mView.findViewById(R.id.etDatedd);
-                final EditText datemm = (EditText) mView.findViewById(R.id.etDatemm);
-                final EditText dateyyyy = (EditText) mView.findViewById(R.id.etDateyyyy);
+                View mView = getLayoutInflater().inflate(R.layout.add_measurement_centile,null);
+                final TextView title = mView.findViewById(R.id.dialog_title);
+                title.setText("Add a New "+ currentstat.getUnit());
 
-                TextView title = (TextView) mView.findViewById(R.id.textView);
-                title.setText(currentstat.getUnit());
+                final EditText value = (EditText) mView.findViewById(R.id.measurement);
+                value.setHint(currentstat.getUnit());
 
-                TextView centiletitle = (TextView) mView.findViewById(R.id.centileTitle);
-                final EditText etCentile = (EditText) mView.findViewById(R.id.etCentile);
+                final EditText date = mView.findViewById(R.id.measdate);
+
+                final EditText etCentile = (EditText) mView.findViewById(R.id.centile);
                 if(!currentstat.getUnit().equalsIgnoreCase("Height") && !currentstat.getUnit().equalsIgnoreCase("Weight")){
-                    centiletitle.setVisibility(View.GONE);
                     etCentile.setVisibility(View.GONE);
                 }
 
@@ -174,13 +172,9 @@ public class StatisticsDetails extends Fragment {
                             @Override
                             public void run() {
                                 AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                //StatisticsEntity st = new StatisticsEntity(et.getText().toString());
 
+                                String fulldate = date.getText().toString();
 
-                                String day = datedd.getText().toString();
-                                String month = datemm.getText().toString();
-                                String year = dateyyyy.getText().toString();
-                                String fulldate = day+"/"+month+"/"+year;
                                 String centile = null;
                                 if(etCentile.getVisibility() == View.VISIBLE){
                                     centile = etCentile.getText().toString();
@@ -254,7 +248,7 @@ public class StatisticsDetails extends Fragment {
     }
 
     /* Navigation from details fragment back to Statistics */
-   @Override
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:

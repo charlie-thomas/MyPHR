@@ -6,6 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import java.util.Date;
 import java.util.List;
 
 @Dao
@@ -16,6 +17,12 @@ public interface AppointmentsDao {
 
     @Query("SELECT title FROM appointmentsentity")
     List<String> getAllTitles();
+
+    @Query("SELECT * FROM appointmentsentity WHERE title LIKE :title")
+    AppointmentsEntity getAppointment(String title);
+
+    @Query("SELECT * FROM appointmentsentity WHERE date LIKE :date")
+    List<AppointmentsEntity> getAppointmentByDate(String date);
 
     @Insert
     void insertAll(AppointmentsEntity... appointmentsEntities);

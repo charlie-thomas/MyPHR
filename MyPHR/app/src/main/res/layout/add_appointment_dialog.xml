@@ -1,0 +1,119 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/appointment_title"
+
+            android:background="@color/colorAccent"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingTop="15dp"
+            android:text="@string/atitle"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/appointment_message"
+
+            android:background="@color/colorAccent"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:text="@string/amessage"
+            android:textColor="#FFFFFF"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/appointment_name"
+
+            android:hint="@string/appname"
+            android:inputType="textCapWords"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:paddingLeft="8dp"
+            android:scrollbars="horizontal" />
+
+        <EditText
+            android:id="@+id/appointment_location"
+
+            android:hint="@string/applocation"
+            android:inputType="textCapWords"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:paddingLeft="8dp"
+            android:scrollbars="horizontal" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/appointment_date"
+
+            android:hint="@string/appdate"
+            android:inputType="date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="8dp"
+            android:layout_weight="1"
+            android:scrollbars="horizontal" />
+
+        <EditText
+            android:id="@+id/appointment_time"
+
+            android:hint="@string/apptime"
+            android:inputType="time"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:paddingLeft="8dp"
+            android:layout_weight="1"
+            android:scrollbars="horizontal" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/appointment_notes"
+
+            android:hint="@string/appnotes"
+            android:inputType="textMultiLine"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:lines="2"
+            android:paddingLeft="8dp"
+            android:scrollbars="vertical" />
+
+        <TextView
+            android:id="@+id/app_message2"
+
+            android:text="@string/appmessage2"
+            android:textColor="#545454"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingTop="2dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

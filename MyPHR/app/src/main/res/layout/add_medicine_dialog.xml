@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/med_title"
+
+        android:background="@color/colorAccent"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingTop="15dp"
+        android:text="@string/medtitle"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/med_message"
+
+        android:background="@color/colorAccent"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+        android:text="@string/medmessage"
+        android:textColor="#FFFFFF"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/med_name"
+
+        android:hint="@string/medname"
+        android:inputType="textCapWords"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:paddingLeft="8dp"
+        android:scrollbars="horizontal" />
+
+    <EditText
+        android:id="@+id/med_description"
+
+        android:hint="@string/meddescription"
+        android:inputType="textMultiLine"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:lines="1"
+        android:paddingLeft="8dp"
+        android:scrollbars="vertical" />
+
+    <EditText
+        android:id="@+id/med_dose"
+
+        android:hint="@string/meddose"
+        android:inputType="text"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:paddingLeft="8dp"
+        android:scrollbars="horizontal" />
+
+    <EditText
+        android:id="@+id/med_notes"
+
+        android:hint="@string/mednotes"
+        android:inputType="textMultiLine"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:lines="2"
+        android:paddingLeft="8dp"
+        android:scrollbars="vertical" />
+
+    <TextView
+        android:id="@+id/med_message2"
+
+        android:text="@string/medmessage2"
+        android:textColor="#545454"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingTop="2dp" />
+
+</LinearLayout>
