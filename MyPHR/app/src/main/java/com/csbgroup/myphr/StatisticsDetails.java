@@ -78,15 +78,12 @@ public class StatisticsDetails extends Fragment {
         for(int i=0;i<currentstat.getValues().size();i++){
                 String variable = currentstat.getValues().get(i).getValue();
                 String stringdate = currentstat.getValues().get(i).getDate();
-
             try {
                 d1 = formatter.parse(stringdate);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-
             dpa.add(new DataPoint(d1,Double.parseDouble(variable)));
-            list.add("Date:"+stringdate + "                   "+ (args.getString("title", "Statistics"))+":"+Double.parseDouble(variable));
         }
         Collections.sort(dpa, new Comparator<DataPoint>() {
             @Override
@@ -94,6 +91,10 @@ public class StatisticsDetails extends Fragment {
                 return Double.compare(o1.getX(),o2.getX());
             }
         });
+
+        for(int i=0; i<dpa.size(); i++){
+            list.add("Date:"+formatter.format(dpa.get(i).getX()) + "                   "+ (args.getString("title", "Statistics"))+":"+dpa.get(i).getY());
+        }
         DataPoint[] DataPointArray = dpa.toArray(new DataPoint[dpa.size()]);
         series.resetData(DataPointArray);
         Collections.reverse(list);
