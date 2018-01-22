@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.StatValueEntity;
 import com.csbgroup.myphr.database.StatisticsEntity;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
@@ -33,7 +34,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.Calendar;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -71,32 +71,41 @@ public class StatisticsDetails extends Fragment {
         series = new LineGraphSeries<DataPoint>();
         int date = 1;
         final ArrayList<String> list = new ArrayList<String>();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date d1 = null;
         final StatisticsEntity currentstat = getStats(args.getString("title", "Statistics"));
-        ArrayList<DataPoint> dpa = new ArrayList<DataPoint>();
-        for(int i=0;i<currentstat.getValues().size();i++){
-                String variable = currentstat.getValues().get(i).getValue();
-                String stringdate = currentstat.getValues().get(i).getDate();
-            try {
-                d1 = formatter.parse(stringdate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            dpa.add(new DataPoint(d1,Double.parseDouble(variable)));
-        }
-        Collections.sort(dpa, new Comparator<DataPoint>() {
+        ArrayList<StatValueEntity> valueslist =  currentstat.getValues();
+
+        Collections.sort(valueslist, new Comparator<StatValueEntity>(){
             @Override
-            public int compare(DataPoint o1, DataPoint o2) {
-                return Double.compare(o1.getX(),o2.getX());
+            public int compare(StatValueEntity t1, StatValueEntity t2) {
+                try {
+                    return formatter.parse(t1.getDate()).compareTo(formatter.parse(t2.getDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return 0;
             }
         });
 
-        for(int i=0; i<dpa.size(); i++){
-            list.add("Date:"+formatter.format(dpa.get(i).getX()) + "                   "+ (args.getString("title", "Statistics"))+":"+dpa.get(i).getY());
+        for(int i=0;i<valueslist.size();i++){
+                String centile = "";
+                StatValueEntity sve = valueslist.get(i);
+                System.out.println(valueslist.get(i).getDate());
+            try {
+                d1 = formatter.parse(sve.getDate());
+                DataPoint dp = new DataPoint(d1,Double.parseDouble(sve.getValue()));
+                series.appendData(dp,true,valueslist.size());
+                if(sve.getCentile() != ""){
+                    centile = "Centile:"+sve.getCentile();
+                }
+                list.add("Date:"+sve.getDate() + "        "+ (args.getString("title", "Statistics"))+":"+sve.getValue()+"        "+centile);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
         }
-        DataPoint[] DataPointArray = dpa.toArray(new DataPoint[dpa.size()]);
-        series.resetData(DataPointArray);
         Collections.reverse(list);
 
         graph.addSeries(series);
@@ -137,9 +146,20 @@ public class StatisticsDetails extends Fragment {
                 final EditText datemm = (EditText) mView.findViewById(R.id.etDatemm);
                 final EditText dateyyyy = (EditText) mView.findViewById(R.id.etDateyyyy);
 
+                TextView title = (TextView) mView.findViewById(R.id.textView);
+                title.setText(currentstat.getUnit());
+
+                TextView centiletitle = (TextView) mView.findViewById(R.id.centileTitle);
+                final EditText etCentile = (EditText) mView.findViewById(R.id.etCentile);
+                if(!currentstat.getUnit().equalsIgnoreCase("Height") && !currentstat.getUnit().equalsIgnoreCase("Weight")){
+                    centiletitle.setVisibility(View.GONE);
+                    etCentile.setVisibility(View.GONE);
+                }
+
+
                 ab.setView(mView);
 
-                ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                ab.setPositiveButton("Add", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
@@ -154,7 +174,10 @@ public class StatisticsDetails extends Fragment {
                                 String month = datemm.getText().toString();
                                 String year = dateyyyy.getText().toString();
                                 String fulldate = day+"/"+month+"/"+year;
-
+                                String centile = null;
+                                if(etCentile.getVisibility() == View.VISIBLE){
+                                    centile = etCentile.getText().toString();
+                                }
                                 Date date = null;
                                 try {
                                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -166,7 +189,7 @@ public class StatisticsDetails extends Fragment {
                                     ex.printStackTrace();
                                 }
                                 if (date != null) {
-                                    currentstat.addValue(value.getText().toString(),fulldate,null);
+                                    currentstat.addValue(value.getText().toString(),fulldate,centile);
                                     db.statisticsDao().update(currentstat);
                                 }
                             }

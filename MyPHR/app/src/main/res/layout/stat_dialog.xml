@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/etValue"
+        android:layout_below="@+id/etCentile"
         android:layout_marginTop="22dp"
         android:text="Date:"
         android:textSize="18sp"
@@ -87,6 +87,28 @@
         android:hint="yyyy"
         android:maxLength = "4"
         android:inputType="number" />
+
+    <TextView
+        android:id="@+id/centileTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/etValue"
+        android:layout_marginTop="22dp"
+        android:text="Centile:"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etCentile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/centileTitle"
+        android:layout_marginTop="5dp"
+        android:ems="0"
+        android:hint=""
+        android:inputType="numberDecimal" />
 
 
 </RelativeLayout>
