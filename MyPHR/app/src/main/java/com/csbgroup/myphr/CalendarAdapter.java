@@ -1,6 +1,10 @@
 package com.csbgroup.myphr;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +22,11 @@ public class CalendarAdapter extends ArrayAdapter<CalendarEvent> {
         this.events = events;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
-        CalendarEvent e = events.get(position);
+        final CalendarEvent e = events.get(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.calendar_event_item, parent, false);
@@ -32,7 +37,22 @@ public class CalendarAdapter extends ArrayAdapter<CalendarEvent> {
             TextView event = convertView.findViewById(R.id.event);
 
             if (time != null) time.setText(e.getTime());
-            if (event != null) event.setText(e.getEvent());
+            if (e.getEvent() != null) {
+                event.setText(e.getEvent());
+                event.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+
+                event.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Fragment eventFrag = AppointmentsDetails.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("title", e.getEvent());
+                        eventFrag.setArguments(bundle);
+
+                        ((MainActivity) getContext()).switchFragment(eventFrag);
+                    }
+                });
+            }
         }
 
         return convertView;

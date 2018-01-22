@@ -19,6 +19,10 @@
     <string name="_day_before">Day before</string>
     <string name="_morning_of">Morning of</string>
     <string name="enter_pin">Enter Your Pin:</string>
+    <string name="last_date_arrow">Last Date Arrow</string>
+    <string name="next_date_arrow">Next Date Arrow</string>
+    <string name="calendar">Calendar</string>
+    <string name="investigations">Investigations</string>
     <string name="fingerprint">Fingerprint Authentication</string>
     <string name="instructions"> Use fingerprint or PIN to unlock </string>
 

@@ -39,7 +39,7 @@ public class MedicineEntityTest {
     @Test
     public void createMedicineTest() throws Exception {
         MedicineEntity medicineEntity = new MedicineEntity("Test Medicine",
-                "Description", "Notes", true);
+                "Description", "Dose", "Notes", true);
         medicineDao.insertAll(medicineEntity);
 
         MedicineEntity me = medicineDao.getMedicine("Test Medicine");
@@ -49,7 +49,7 @@ public class MedicineEntityTest {
     @Test
     public void deleteMedicineTest() throws Exception {
         MedicineEntity medicineEntity = new MedicineEntity("Medicine",
-                "Description", "Notes", true);
+                "Description", "Dose","Notes", true);
         medicineDao.insertAll(medicineEntity);
 
         // Ensure that the medicine was added to the database before deleting it
@@ -67,7 +67,7 @@ public class MedicineEntityTest {
 
         List<MedicineEntity> medicines = new ArrayList<>();
         for (int i = 1; i < 5; i++)
-            medicines.add(new MedicineEntity("Med " + i, null, null, false));
+            medicines.add(new MedicineEntity("Med " + i, null, null,null, false));
         medicineDao.insertAll(medicines.toArray(new MedicineEntity[medicines.size()]));
 
         assertEquals(titles, medicineDao.getAllTitles());
@@ -76,7 +76,7 @@ public class MedicineEntityTest {
     @Test
     public void deleteAllMedicinesTest() throws Exception {
         for (int i = 1; i < 5; i++)
-            medicineDao.insertAll(new MedicineEntity("Med " + i, null, null, false));
+            medicineDao.insertAll(new MedicineEntity("Med " + i, null, null, null, false));
 
         // Ensure there are currently 4 medicines in the database
         assertEquals(4, medicineDao.getAll().size());
