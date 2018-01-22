@@ -38,7 +38,7 @@ public class AppointmentsEntityTest {
     @Test
     public void createAppointmentTest() throws Exception {
         AppointmentsEntity appointmentsEntity = new AppointmentsEntity("Appointment",
-                "Description", "Notes", 1);
+                "Location", "Date", "Time", "Notes", false);
         appointmentsDao.insertAll(appointmentsEntity);
 
         AppointmentsEntity ae = appointmentsDao.getAppointment("Appointment");
@@ -48,7 +48,7 @@ public class AppointmentsEntityTest {
     @Test
     public void deleteAppointmentTest() throws Exception {
         AppointmentsEntity appointmentsEntity = new AppointmentsEntity("Appointment",
-                "Description", "Notes", 1);
+                "Location", "Date", "Time", "Notes", false);
         appointmentsDao.insertAll(appointmentsEntity);
 
         // Ensure the database contains the appointment to be deleted
@@ -65,7 +65,7 @@ public class AppointmentsEntityTest {
 
         List<AppointmentsEntity> appointments = new ArrayList<>();
         for (int i = 1; i < 5; i++)
-            appointments.add(new AppointmentsEntity("App " + i, null, null, 1));
+            appointments.add(new AppointmentsEntity("App " + i, null, null,null, null, false));
         appointmentsDao.insertAll(appointments.toArray(new AppointmentsEntity[appointments.size()]));
 
         assertEquals(titles, appointmentsDao.getAllTitles());
@@ -74,7 +74,7 @@ public class AppointmentsEntityTest {
     @Test
     public void deleteAllAppointmentsTest() throws Exception {
         for (int i = 1; i < 5; i++)
-            appointmentsDao.insertAll(new AppointmentsEntity("App " + i, null, null, 1));
+            appointmentsDao.insertAll(new AppointmentsEntity("App " + i, null, null,null, null, false));
 
         // Ensure there are currently 4 appointments in the database
         assertEquals(4, appointmentsDao.getAll().size());
