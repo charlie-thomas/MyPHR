@@ -29,35 +29,35 @@
     // Contact strings
     <string name="ctitle">Add a New Contact</string>
     <string name="cmessage">Enter the details for your new contact:</string>
-    <string name="cname">name</string>
-    <string name="cphone">phone</string>
-    <string name="cemail">email</string>
-    <string name="cnotes">notes</string>
+    <string name="cname">Name</string>
+    <string name="cphone">Phone</string>
+    <string name="cemail">Email</string>
+    <string name="cnotes">Notes</string>
 
     // Medicine strings
     <string name="medtitle">Add a New Medicine</string>
     <string name="medmessage">Enter the details for your new medicine:</string>
     <string name="medmessage2">You can schedule reminders later.</string>
-    <string name="medname">name</string>
-    <string name="meddescription">description</string>
-    <string name="mednotes">notes</string>
-    <string name="meddose">dose</string>
+    <string name="medname">Name</string>
+    <string name="meddescription">Description</string>
+    <string name="mednotes">Notes</string>
+    <string name="meddose">Dose</string>
 
     // Appointment strings
     <string name="atitle">Add a New Appointment</string>
     <string name="amessage">Enter the details for your new appointment:</string>
-    <string name="appname">appointment title</string>
-    <string name="applocation">location</string>
-    <string name="appdate">date (dd/mm/yyyy)</string>
-    <string name="apptime">time (hh:mm)</string>
-    <string name="appnotes">notes</string>
+    <string name="appname">Appointment Title</string>
+    <string name="applocation">Location</string>
+    <string name="appdate">Date (dd/mm/yyyy)</string>
+    <string name="apptime">Time (hh:mm)</string>
+    <string name="appnotes">Notes</string>
     <string name="appmessage2">You can schedule reminders later.</string>
     <string name="location_title">Location</string>
     <string name="date_title">Date</string>
     <string name="time_title">Time</string>
 
     // Measurement strings
-    <string name="centile">centile</string>
+    <string name="centile">Centile</string>
     <string name="measmessage">Enter the details for your new measurement:</string>
 
 </resources>

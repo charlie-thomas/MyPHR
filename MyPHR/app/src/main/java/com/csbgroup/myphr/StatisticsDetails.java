@@ -151,7 +151,7 @@ public class StatisticsDetails extends Fragment {
                     final TextView title = v.findViewById(R.id.dialog_title);
                     title.setText("Add a New " + type);
                     final EditText measurement = v.findViewById(R.id.measurement);
-                    measurement.setHint(type.toLowerCase());
+                    measurement.setHint(type);
 
                     // fetch the input values (measurement already fetched above ^)
                     final EditText date = v.findViewById(R.id.measdate);
@@ -211,7 +211,7 @@ public class StatisticsDetails extends Fragment {
                     final TextView title = v.findViewById(R.id.dialog_title);
                     title.setText("Add a New " + type);
                     final EditText measurement = v.findViewById(R.id.measurement);
-                    measurement.setHint(type.toLowerCase());
+                    measurement.setHint(type);
                 }
 
                 // fetch the input values (measurement fetched above ^)
