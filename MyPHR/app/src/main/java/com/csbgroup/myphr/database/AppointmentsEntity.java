@@ -129,20 +129,4 @@ public class AppointmentsEntity {
     public void setRemind_when(int remind_when) {
         this.remind_when = remind_when;
     }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public int getTime() {
-        return time;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
-    }
 }

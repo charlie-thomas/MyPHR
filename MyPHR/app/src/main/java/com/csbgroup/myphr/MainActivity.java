@@ -140,8 +140,8 @@ public class MainActivity extends AppCompatActivity {
             c.add(Calendar.DATE, i);
             SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 
-            AppointmentsEntity ae = new AppointmentsEntity("Appointment" + i, "Appointment location " + i,
-                    df.format(c.getTime()), 8,"Appointment notes " + i, false);
+            AppointmentsEntity ae = new AppointmentsEntity("Appointment " + i, "Appointment location " + i,
+                    df.format(c.getTime()), "8","Appointment notes " + i, false);
             dao.insertAll(ae);
         }
     }

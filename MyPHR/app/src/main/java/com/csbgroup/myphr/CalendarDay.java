@@ -85,7 +85,7 @@ public class CalendarDay extends Fragment {
 
             if (daysEvents != null) {
                 for (AppointmentsEntity de : daysEvents) {
-                    if (i == de.getTime()) event = de.getTitle();
+                    if (String.valueOf(i).equals(de.getTime())) event = de.getTitle();
                 }
             }
 
