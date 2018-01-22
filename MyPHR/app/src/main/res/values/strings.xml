@@ -59,5 +59,6 @@
     // Measurement strings
     <string name="centile">centile</string>
     <string name="measmessage">Enter the details for your new measurement:</string>
+    <string name="upcoming_appointment">Upcoming Appointment</string>
 
 </resources>
