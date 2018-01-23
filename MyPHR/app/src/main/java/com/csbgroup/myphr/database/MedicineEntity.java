@@ -16,6 +16,9 @@ public class MedicineEntity {
     @ColumnInfo(name = "description")
     private String description;
 
+    @ColumnInfo(name = "dose")
+    private String dose;
+
     @ColumnInfo(name = "notes")
     private String notes;
 
@@ -29,9 +32,10 @@ public class MedicineEntity {
     private int remind_when;
 
     // Constructor
-    public MedicineEntity(String title, String description, String notes, boolean reminders) {
+    public MedicineEntity(String title, String description, String dose, String notes, boolean reminders) {
         this.title = title;
         this.description = description;
+        this.dose = dose;
         this.notes = notes;
         this.reminders = reminders;
     }
@@ -51,6 +55,14 @@ public class MedicineEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getDose() {
+        return dose;
+    }
+
+    public void setDose(String dose) {
+        this.dose = dose;
     }
 
     public String getNotes() {
