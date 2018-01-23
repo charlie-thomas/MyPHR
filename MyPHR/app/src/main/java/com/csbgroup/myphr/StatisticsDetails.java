@@ -141,7 +141,7 @@ public class StatisticsDetails extends Fragment {
             }
         }
 
-        // fab action for adding medicine
+        // fab action for adding measurement
         String type = args.getString("title");
         fab = rootView.findViewById(R.id.s_fab);
         buildDialog(fab, type);

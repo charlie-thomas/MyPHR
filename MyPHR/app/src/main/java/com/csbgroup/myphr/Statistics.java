@@ -123,7 +123,7 @@ public class Statistics extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.settings) {
-            ((MainActivity) getActivity()).switchFragment(MedicineSettings.newInstance());
+            ((MainActivity) getActivity()).switchFragment(StatisticsSettings.newInstance());
             return true;
         }
         return super.onOptionsItemSelected(item);
