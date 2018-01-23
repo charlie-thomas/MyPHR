@@ -1,4 +1,5 @@
 <resources>
+    
     <string name="app_name">MyPHR</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="my_medicine">My Medicine</string>
@@ -23,8 +24,6 @@
     <string name="next_date_arrow">Next Date Arrow</string>
     <string name="calendar">Calendar</string>
     <string name="investigations">Investigations</string>
-    <string name="fingerprint">Fingerprint Authentication</string>
-    <string name="instructions"> Use fingerprint or PIN to unlock </string>
 
     // Contact strings
     <string name="ctitle">Add a New Contact</string>
@@ -62,5 +61,21 @@
     <string name="upcoming_appointment">Upcoming Appointment</string>
     <string name="email">Email</string>
     <string name="phone">Phone</string>
-
+    
+    // Login strings
+    <string name="fingerprint">Fingerprint Authentication</string>
+    <string name="instructions">Use fingerprint or PIN to unlock</string>
+    <string name="change_pin">Change PIN</string>
+    <string name="forgot_pin">Forgot PIN?</string>
+    <string name="save">Save</string>
+    <string name="pin">Enter PIN</string>
+    <string name="new_pin">Enter new PIN</string>
+    <string name="icon_desc">App Icon</string>
+    <string name="finger_desc">Fingerprint Icon</string>
+    <string name="welcome">Welcome to MyPHR. Please enter a PIN"</string>
+    <string name="setup">Setup</string>
+    <string name="finger_unsupported">Your device does not support fingerprint authentication</string>
+    <string name="finger_perm">Please enable the fingerprint permission</string>
+    <string name="finger_deconfigured">No fingerprint configured. Please register at least one fingerprint in your device\'s Settings</string>
+    <string name="lockscreen_off">Please enable lockscreen security in your device\'s Settings</string>
 </resources>

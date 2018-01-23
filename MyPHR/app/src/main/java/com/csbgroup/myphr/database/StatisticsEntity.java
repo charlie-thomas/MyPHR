@@ -16,11 +16,11 @@ public class StatisticsEntity {
     private String unit;
 
     @ColumnInfo(name = "values")
-    private ArrayList<String> values;
+    private ArrayList<StatValueEntity> values;
 
 
     // Constructor
-    public StatisticsEntity(String unit, ArrayList<String> values) {
+    public StatisticsEntity(String unit, ArrayList<StatValueEntity> values) {
         this.unit = unit;
         this.values = values;
     }
@@ -31,14 +31,16 @@ public class StatisticsEntity {
         return unit;
     }
 
-    public void setValues(ArrayList<String> values) {this.values = values;}
+    public void setValues(ArrayList<StatValueEntity> values) {this.values = values;}
 
     public void setUnit(String unit) {
         this.unit = unit;
     }
 
-    public ArrayList<String> getValues(){ return values; }
+    public ArrayList<StatValueEntity> getValues(){ return values; }
 
-    public void addValue(String value){ this.values.add(value);}
+    public void addValue(String value,String date,String centile){
+        StatValueEntity sve = new StatValueEntity(value,date,centile);
+        this.values.add(sve);}
 
 }
