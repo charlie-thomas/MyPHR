@@ -33,5 +33,4 @@
         app:backgroundTint="@color/colorAccent"
         app:fabSize="normal" />
 
-
 </RelativeLayout>
