@@ -1,9 +1,9 @@
 package com.csbgroup.myphr;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
@@ -21,6 +21,7 @@ import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.v4.app.ActivityCompat;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
@@ -42,24 +43,34 @@ public class LoginActivity extends AppCompatActivity {
 
     // Fingerprint variables
     private static final String KEY_NAME = "yourKey";
+    public static final String PREFS = "pin";
     private Cipher cipher;
     private KeyStore keyStore;
-    private KeyGenerator keyGenerator;
-    private TextView textView;
-    private FingerprintManager.CryptoObject cryptoObject;
-    private FingerprintManager fingerprintManager;
-    private KeyguardManager keyguardManager;
+    KeyGenerator keyGenerator;
+    TextView textView;
+    FingerprintManager.CryptoObject cryptoObject;
+    FingerprintManager fingerprintManager;
+    KeyguardManager keyguardManager;
 
 
     // PIN input variables
     public static final String TAG = "PinLockView";
-    private PinLockView mPinLockView;
-    private IndicatorDots mIndicatorDots;
+    PinLockView mPinLockView;
+    IndicatorDots mIndicatorDots;
 
     // Listener function for the PIN input buttons
     private PinLockListener mPinLockListener = new PinLockListener() {
         @Override
         public void onComplete(String pin) {
+            SharedPreferences preferences = getSharedPreferences(PREFS,0);
+            String pinn = preferences.getString("PIN", "0000"); // default pin is 0000
+
+            if (pin.equals(pinn)) {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
+            } else {
+                Toast.makeText(LoginActivity.this, "PIN Incorrect", Toast.LENGTH_SHORT).show();
+            }
             Log.d(TAG, "Pin complete: " + pin);
         }
 
@@ -74,20 +85,30 @@ public class LoginActivity extends AppCompatActivity {
         }
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Test for first time setup
+        SharedPreferences preferences = getSharedPreferences(PREFS,0);
+        String pin = preferences.getString("PIN", "0000");
+        if (pin.equals("0000")) {
+            Intent intent = new Intent(this, StartupActivity.class);
+            startActivity(intent);
+        }
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mPinLockView = (PinLockView) findViewById(R.id.pin_lock_view);
+        mPinLockView = findViewById(R.id.pin_lock_view);
         mPinLockView.setPinLockListener(mPinLockListener);
-        mPinLockView = (PinLockView) findViewById(R.id.pin_lock_view);
-        mIndicatorDots = (IndicatorDots) findViewById(R.id.indicator_dots);
+        mPinLockView = findViewById(R.id.pin_lock_view);
+        mIndicatorDots = findViewById(R.id.indicator_dots);
         mPinLockView.attachIndicatorDots(mIndicatorDots);
         mPinLockView.setPinLockListener(mPinLockListener);
         mPinLockView.setPinLength(4);
         mPinLockView.setTextColor(ContextCompat.getColor(this, R.color.white));
-        mIndicatorDots.setIndicatorType(IndicatorDots.IndicatorType.FILL_WITH_ANIMATION);
+        mIndicatorDots.setIndicatorType(IndicatorDots.IndicatorType.FIXED);
 
         // If you’ve set your app’s minSdkVersion to anything lower than 23, then you’ll need to verify that the device is running Marshmallow
         // or higher before executing any fingerprint-related code
@@ -98,29 +119,29 @@ public class LoginActivity extends AppCompatActivity {
             fingerprintManager =
                     (FingerprintManager) getSystemService(FINGERPRINT_SERVICE);
 
-            textView = (TextView) findViewById(R.id.textview);
+            textView = findViewById(R.id.textview);
 
             //Check whether the device has a fingerprint sensor//
             if (!fingerprintManager.isHardwareDetected()) {
                 // If a fingerprint sensor isn’t available, then inform the user that they’ll be unable to use your app’s fingerprint functionality//
-                textView.setText("Your device doesn't support fingerprint authentication");
+                textView.setText(R.string.finger_unsupported);
             }
             //Check whether the user has granted your app the USE_FINGERPRINT permission//
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
                 // If your app doesn't have this permission, then display the following text//
-                textView.setText("Please enable the fingerprint permission");
+                textView.setText(R.string.finger_perm);
             }
 
             //Check that the user has registered at least one fingerprint//
             if (!fingerprintManager.hasEnrolledFingerprints()) {
                 // If the user hasn’t configured any fingerprints, then display the following message//
-                textView.setText("No fingerprint configured. Please register at least one fingerprint in your device's Settings");
+                textView.setText(R.string.finger_deconfigured);
             }
 
             //Check that the lockscreen is secured//
             if (!keyguardManager.isKeyguardSecure()) {
                 // If the user hasn’t secured their lockscreen with a PIN password or pattern, then display the following text//
-                textView.setText("Please enable lockscreen security in your device's Settings");
+                textView.setText(R.string.lockscreen_off);
             } else {
                 try {
                     generateKey();
@@ -212,15 +233,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private class FingerprintException extends Exception {
-        public FingerprintException(Exception e) {
+        private FingerprintException(Exception e) {
             super(e);
         }
-    }
-
-
-    public void goToMain(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
     }
 }
 
