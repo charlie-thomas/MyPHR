@@ -58,6 +58,9 @@
     // Measurement strings
     <string name="centile">centile</string>
     <string name="measmessage">Enter the details for your new measurement:</string>
+    <string name="upcoming_appointment">Upcoming Appointment</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
     
     // Login strings
     <string name="fingerprint">Fingerprint Authentication</string>
@@ -75,5 +78,4 @@
     <string name="finger_perm">Please enable the fingerprint permission</string>
     <string name="finger_deconfigured">No fingerprint configured. Please register at least one fingerprint in your device\'s Settings</string>
     <string name="lockscreen_off">Please enable lockscreen security in your device\'s Settings</string>
-    
 </resources>
