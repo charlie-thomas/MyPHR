@@ -29,4 +29,8 @@
     <string name="finger_desc">Fingerprint Icon</string>
     <string name="welcome">Welcome to MyPHR. Please enter a PIN"</string>
     <string name="setup">Setup</string>
+    <string name="finger_unsupported">Your device does not support fingerprint authentication</string>
+    <string name="finger_perm">Please enable the fingerprint permission</string>
+    <string name="finger_deconfigured">No fingerprint configured. Please register at least one fingerprint in your device\'s Settings</string>
+    <string name="lockscreen_off">Please enable lockscreen security in your device\'s Settings</string>
 </resources>
