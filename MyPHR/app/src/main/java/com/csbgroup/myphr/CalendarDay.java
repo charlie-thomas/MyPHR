@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -97,6 +98,10 @@ public class CalendarDay extends Fragment {
         ListView calendarList = rootView.findViewById(R.id.calendar_list);
         calendarList.setAdapter(adapter);
 
+        // back button
+        ((MainActivity) getActivity()).setToolbar("My Calendar", true);
+        setHasOptionsMenu(true);
+
         return rootView;
     }
 
@@ -149,5 +154,21 @@ public class CalendarDay extends Fragment {
         } catch (Exception e) {}
 
         return appointments;
+    }
+
+    /**
+     * Provides navigation for menu items; currenty only needed for navigation back to the
+     * main calendar view.
+     * @param item the clicked menu item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: // back button
+                ((MainActivity) getActivity()).switchFragment(CalendarMonth.newInstance());
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
