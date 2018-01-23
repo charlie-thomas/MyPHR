@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences(PREFS,0);
         String pin = preferences.getString("PIN", "0000");
         if (pin.equals("0000")) {
-            Intent intent = new Intent(this, ChangePINActivity.class);
+            Intent intent = new Intent(this, StartupActivity.class);
             startActivity(intent);
         }
 
