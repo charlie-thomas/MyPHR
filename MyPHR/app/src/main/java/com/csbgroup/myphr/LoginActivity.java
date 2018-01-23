@@ -90,6 +90,15 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Test for first time setup
+        SharedPreferences preferences = getSharedPreferences(PREFS,0);
+        String pin = preferences.getString("PIN", "0000");
+        if (pin.equals("0000")) {
+            Intent intent = new Intent(this, ChangePINActivity.class);
+            startActivity(intent);
+        }
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
