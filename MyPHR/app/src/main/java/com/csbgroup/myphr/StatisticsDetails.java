@@ -42,7 +42,7 @@ import java.util.concurrent.Future;
 public class StatisticsDetails extends Fragment {
 
     LineGraphSeries<DataPoint> series;
-    FloatingActionButton but;
+    FloatingActionButton fab; // the add measurement fab
 
     public StatisticsDetails() {
         // Required empty public constructor
@@ -57,14 +57,17 @@ public class StatisticsDetails extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // view set up
         View rootView = inflater.inflate(R.layout.fragment_statistics_details, container, false);
+        ((MainActivity) getActivity()).setToolbar("My Statistics", true);
+        setHasOptionsMenu(true);
 
         Bundle args = getArguments();
 
         TextView medTitle = rootView.findViewById(R.id.statistics_title);
-        medTitle.setText(args.getString("title", "Statistics"));
+        medTitle.setText(args.getString("title", "Measurements"));
 
-        /* Setting up the variable for the graph/list */
+        // Setting up the variable for the graph/list
         GraphView graph = rootView.findViewById(R.id.statistics_graph);
         series = new LineGraphSeries<DataPoint>();
 
@@ -138,79 +141,13 @@ public class StatisticsDetails extends Fragment {
             }
         }
 
-        ((MainActivity) getActivity()).setToolbar("My Statistics", true);
-        setHasOptionsMenu(true);
-
-        but = (FloatingActionButton) rootView.findViewById(R.id.s_fab);
-        but.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                AlertDialog.Builder ab = new AlertDialog.Builder(getActivity());
-                View mView = getLayoutInflater().inflate(R.layout.add_measurement_centile,null);
-                final TextView title = mView.findViewById(R.id.dialog_title);
-                title.setText("Add a New "+ currentstat.getUnit());
-
-                final EditText value = (EditText) mView.findViewById(R.id.measurement);
-                value.setHint(currentstat.getUnit());
-
-                final EditText date = mView.findViewById(R.id.measdate);
-
-                final EditText etCentile = (EditText) mView.findViewById(R.id.centile);
-                if(!currentstat.getUnit().equalsIgnoreCase("Height") && !currentstat.getUnit().equalsIgnoreCase("Weight")){
-                    etCentile.setVisibility(View.GONE);
-                }
-
-
-                ab.setView(mView);
-
-                ab.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-
-                                String fulldate = date.getText().toString();
-
-                                String centile = null;
-                                if(etCentile.getVisibility() == View.VISIBLE){
-                                    centile = etCentile.getText().toString();
-                                }
-                                Date date = null;
-                                try {
-                                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                    date = sdf.parse(fulldate);
-                                    if (!fulldate.equals(sdf.format(date))) {
-                                        date = null;
-                                    }
-                                } catch (ParseException ex) {
-                                    ex.printStackTrace();
-                                }
-                                if (date != null) {
-                                    currentstat.addValue(value.getText().toString(),fulldate,centile);
-                                    db.statisticsDao().update(currentstat);
-                                }
-                            }
-                        }).start();
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.detach(StatisticsDetails.this).attach(StatisticsDetails.this).commit();
-                    }
-                });
-                ab.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                    }
-                });
-
-                final AlertDialog dialog = ab.create();
-                dialog.show();
-            }
-        });
+        // fab action for adding medicine
+        String type = args.getString("title");
+        fab = rootView.findViewById(R.id.s_fab);
+        buildDialog(fab, type);
 
         return rootView;
+
     }
 
 
@@ -256,6 +193,172 @@ public class StatisticsDetails extends Fragment {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void buildDialog(FloatingActionButton fab, final String type){
+
+        // no fab for height velocity
+        if (type.equals("Height Velocity")){fab.setVisibility(View.GONE); return;}
+
+        // fab action for height and weight (w/centiles)
+        if (type.equals("Height") || type.equals("Weight")){
+
+            fab.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view){
+
+                    // set up the dialog
+                    LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+                    View v = inflater.inflate(R.layout.add_measurement_centile, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setView(v);
+
+                    // set measurement specific texts
+                    final TextView title = v.findViewById(R.id.dialog_title);
+                    title.setText("Add a New " + type);
+                    final EditText measurement = v.findViewById(R.id.measurement);
+                    measurement.setHint(type);
+
+                    // fetch the input values (measurement already fetched above ^)
+                    final EditText date = v.findViewById(R.id.measdate);
+                    final EditText cent = v.findViewById(R.id.centile);
+
+                    // add a new measurement action
+                    builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            new Thread(new Runnable(){
+
+                                @Override
+                                public void run() {
+
+                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+
+                                    String fulldate = date.getText().toString();
+                                    String centile = cent.getText().toString();
+
+                                    // valid date string checking
+                                    Date date = null;
+                                    try {
+                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                        date = sdf.parse(fulldate);
+
+                                        if (!fulldate.equals(sdf.format(date))) {
+                                            date = null;
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    if (date != null) {
+                                        final StatisticsEntity thisstat = getStats(type);
+                                        thisstat.addValue(measurement.getText().toString(), fulldate, centile);
+                                        db.statisticsDao().update(thisstat);
+                                    }
+                                }
+                            }).start();
+
+                            // update the list view
+                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+                            ft.detach(StatisticsDetails.this).attach(StatisticsDetails.this).commit();
+                        }
+                    });
+
+                    // dismiss dialog, cancel add
+                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
+            return;
+        }
+
+        // fab action for all other measurement types
+        fab.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                // set up the dialog
+                LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+                View v = inflater.inflate(R.layout.add_measurement_basic, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setView(v);
+
+                // set measurement specific texts
+                final TextView title = v.findViewById((R.id.dialog_title));
+                final EditText measurement = v.findViewById(R.id.measurement);
+                if (type.equals("Body Mass Index (BMI)")) {
+                    title.setText("Add a New BMI");
+                    measurement.setHint("BMI");
+                } else {
+                    title.setText("Add a New " + type);
+                    measurement.setHint(type);
+                }
+
+                // fetch the input values (measurement fetched above ^)
+                final EditText date = v.findViewById(R.id.measdate);
+
+                // add new measurement action
+                builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+
+                                String fulldate = date.getText().toString();
+                                String centile = null;
+
+                                // valid date string checking
+                                Date date = null;
+                                try {
+                                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                    date = sdf.parse(fulldate);
+
+                                    if (!fulldate.equals(sdf.format(date))) {
+                                        date = null;
+                                    }
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                                if (date != null) {
+                                    final StatisticsEntity thisstat = getStats(type);
+                                    thisstat.addValue(measurement.getText().toString(), fulldate, centile);
+                                    db.statisticsDao().update(thisstat);
+                                }
+                            }
+                        }).start();
+
+                        // update the list view
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.detach(StatisticsDetails.this).attach(StatisticsDetails.this).commit();
+                    }
+                });
+
+                // dismiss dialog, cancel add
+                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+        return;
     }
 
 }
