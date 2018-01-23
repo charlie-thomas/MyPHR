@@ -128,7 +128,11 @@ public class CalendarMonth extends Fragment {
             }
         });
 
-        return appointments.get(0);
+        try {
+            return appointments.get(0);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }
