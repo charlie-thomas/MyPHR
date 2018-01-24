@@ -100,51 +100,76 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static void populateContacts(ContactsDao dao) {
-
         dao.deleteAll();
 
         // TODO: get contact details for main staff and load in
-
-        ContactsEntity c1 = new ContactsEntity("Dr. Doctor", "drdoctor@hospital.com",
-                "012334567890", "My main doctor at hospital.");
-
-        ContactsEntity c2 = new ContactsEntity("Mr. Nurse", "mrnurse@hospital.com",
-                "015567892343", "My main nurse at hospital.");
-
-        dao.insertAll(c1,c2);
-
+        dao.insertAll(new ContactsEntity(
+                "Dr. Jones",
+                "james.jones@hospital.com",
+                "012334567890",
+                "My main doctor at hospital."),
+                new ContactsEntity(
+                "Nurse Williams",
+                "amy.williams@hospital.com",
+                "012334567890",
+                "My main nurse at hospital."
+                ));
     }
 
     private static void populateMedicine(MedicineDao dao) {
         dao.deleteAll();
 
-        String[] meds = {"Growth Hormone", "Oestrogen", "Progesterone", "Thyroxine"};
-
-        for (String med : meds) {
-            MedicineEntity me = new MedicineEntity(
-                    med,
-                    med + " Description",
-                    med + "Dose",
-                    med + " Notes",
-                    true);
-            dao.insertAll(me);
-        }
+        dao.insertAll(new MedicineEntity(
+                "Growth Hormone",
+                "Natural Hormone to simulate growth.",
+                "5mg",
+                "Take once a day.",
+                true),
+                new MedicineEntity(
+                "Oestrogen",
+                "Helps in the development and maintenance of sexual maturation.",
+                "2mg",
+                "Tablets and patches should be taken once a day.",
+                true),
+                new MedicineEntity(
+                "Progesterone",
+                "Progesterone description",
+                "2mg",
+                "To be taken on 7-12 days of calendar month either monthly, every 2nd month or\n" +
+                        "every 3rd month",
+                true),
+                new MedicineEntity(
+                "Thyroxine",
+                "Thyroxine description",
+                "2mg",
+                "To be taken daily",
+                true)
+                );
     }
 
 
     private static void populateAppointments(AppointmentsDao dao)  {
         dao.deleteAll();
 
-        for (int i = 1; i < 6; i++) {
-            Calendar c = Calendar.getInstance();
-            c.set(Calendar.HOUR_OF_DAY, 0);
-            c.add(Calendar.DATE, i);
-            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 
-            AppointmentsEntity ae = new AppointmentsEntity("Appointment " + i, "Appointment location " + i,
-                    df.format(c.getTime()), "8","Appointment notes " + i, false);
-            dao.insertAll(ae);
-        }
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Clinic 1", "Children's Hospital",
+                df.format(c.getTime()), "8","Appointment Notes", true));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Check Up 1", "Children's Hospital",
+                df.format(c.getTime()), "8","Appointment Notes", true));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Check Up 2", "Children's Hospital",
+                df.format(c.getTime()), "8","Appointment Notes", true));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Clinic 2", "Children's Hospital",
+                df.format(c.getTime()), "8","Appointment Notes", true));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Check Up 3", "Children's Hospital",
+                df.format(c.getTime()), "8","Appointment Notes", true));
     }
 
     private static void populateInvestigations(InvestigationsDao dao)  {

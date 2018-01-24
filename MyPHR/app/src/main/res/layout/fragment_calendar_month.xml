@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/calendarView"
         android:layout_marginStart="10dp"
-        android:text="@string/upcoming_appointment"
+        android:text="@string/next_appointment"
         android:textSize="18sp"
         android:textStyle="bold" />
 
