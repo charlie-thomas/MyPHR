@@ -190,6 +190,21 @@ public class MainActivity extends AppCompatActivity {
                 "Height Velocity", "Length", "Weight"};
         ArrayList<StatValueEntity> list = new ArrayList<StatValueEntity>();
 
+        list.add(new StatValueEntity("50.09","24/01/2018","49"));
+        list.add(new StatValueEntity("51.98","20/01/2018","53"));
+        list.add(new StatValueEntity("50.67","16/01/2018","54"));
+        list.add(new StatValueEntity("49.3","12/01/2018","47"));
+        list.add(new StatValueEntity("52.9","08/01/2018",null));
+        list.add(new StatValueEntity("52.3","03/01/2018","51"));
+        list.add(new StatValueEntity("52.3","01/01/2018","55"));
+        list.add(new StatValueEntity("50.09","24/12/2017","49"));
+        list.add(new StatValueEntity("51.98","20/12/2017","53"));
+        list.add(new StatValueEntity("50.67","16/12/2017","54"));
+        list.add(new StatValueEntity("49.3","12/12/2017","47"));
+        list.add(new StatValueEntity("52.9","08/12/2017",null));
+        list.add(new StatValueEntity("52.3","03/12/2017","51"));
+        list.add(new StatValueEntity("52.3","01/12/2017","55"));
+
         for (String stat : stats) {
             StatisticsEntity st = new StatisticsEntity(stat, list);
             dao.insertAll(st);
