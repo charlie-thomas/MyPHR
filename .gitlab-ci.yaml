@@ -16,23 +16,20 @@ variables:
 
 before_script:
   - cd ./MyPHR
-  - mkdir $HOME/.android
-  - echo 'count=0' > $HOME/.android/repositories.cfg
-  - wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_TOOLS_REV}.zip
-  - mkdir $PWD/android-sdk-linux
-  - unzip -qq android-sdk.zip -d $PWD/android-sdk-linux
+  - apt-get --quiet update --yes
+  - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1
+  - wget --quiet --output-document=android-sdk.tgz https://dl.google.com/android/android-sdk_r${ANDROID_SDK_TOOLS}-linux.tgz
+  - tar --extract --gzip --file=android-sdk.tgz
+  - echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter android-${ANDROID_COMPILE_SDK}
+  - echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter platform-tools
+  - echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter build-tools-${ANDROID_BUILD_TOOLS}
+  - echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter extra-android-m2repository
+  - echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter extra-google-google_play_services
+  - echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter extra-google-m2repository
   - export ANDROID_HOME=$PWD/android-sdk-linux
-  - export PATH=$PATH:$ANDROID_HOME/platform-tools/:$ANDROID_NDK_HOME
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent --update
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent 'tools'
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent 'platform-tools'
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent 'build-tools;'$ANDROID_BUILD_TOOLS
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent 'platforms;android-'$ANDROID_COMPILE_SDK
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent 'extras;android;m2repository'
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent 'extras;google;google_play_services'
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent 'extras;google;m2repository'
+  - export ANDROID_SDK_ROOT=$PWD/android-sdk-linux
+  - export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
   - chmod +x ./gradlew
-
 
 stages:
   - build
