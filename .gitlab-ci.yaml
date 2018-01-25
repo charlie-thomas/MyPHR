@@ -23,14 +23,14 @@ before_script:
   - unzip -qq android-sdk.zip -d $PWD/android-sdk-linux
   - export ANDROID_HOME=$PWD/android-sdk-linux
   - export PATH=$PATH:$ANDROID_HOME/platform-tools/:$ANDROID_NDK_HOME
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --update
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'tools'
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'platform-tools'
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'build-tools;'$ANDROID_BUILD_TOOLS
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'platforms;android-'$ANDROID_COMPILE_SDK
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'extras;android;m2repository'
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'extras;google;google_play_services'
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'extras;google;m2repository'
+  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent --update
+  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent 'tools'
+  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent 'platform-tools'
+  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent 'build-tools;'$ANDROID_BUILD_TOOLS
+  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent 'platforms;android-'$ANDROID_COMPILE_SDK
+  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent 'extras;android;m2repository'
+  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent 'extras;google;google_play_services'
+  - echo y | $ANDROID_HOME/tools/bin/sdkmanager --silent 'extras;google;m2repository'
   - chmod +x ./gradlew
 
 
@@ -54,8 +54,6 @@ unitTests:
 
 instrumentation_tests:
   stage: test
-  allow_failure: true
-  when: manual
   script:
     - apt-get update
     - apt-get install  -y --no-install-recommends file libmagic1 libglu1-mesa mesa-utils libpci3 pciutils libpulse0
