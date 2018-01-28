@@ -70,8 +70,7 @@
             android:layout_height="match_parent"
             android:layout_width="50dp"
             android:paddingLeft="8dp"
-            android:maxLength="2"
-            />
+            android:maxLength="2" />
 
         <EditText
             android:id="@+id/appointment_MM"
@@ -90,10 +89,9 @@
             android:hint="@string/YYYY"
             android:inputType="number"
             android:layout_height="match_parent"
-            android:layout_width="80dp"
+            android:layout_width="74dp"
             android:paddingLeft="8dp"
-            android:maxLength="4"
-            />
+            android:maxLength="4" />
 
 
         <EditText
@@ -102,10 +100,9 @@
             android:hint="@string/apptime"
             android:inputType="time"
             android:layout_height="match_parent"
-            android:layout_width="159dp"
-            android:layout_marginLeft="20dp"
-            android:paddingLeft="8dp"
-            />
+            android:layout_width="165dp"
+            android:layout_marginLeft="19dp"
+            android:paddingLeft="8dp"/>
 
     </LinearLayout>
 

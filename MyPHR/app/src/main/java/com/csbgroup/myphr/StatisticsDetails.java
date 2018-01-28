@@ -221,7 +221,7 @@ public class StatisticsDetails extends Fragment {
                     measurement.setHint(type);
 
                     // fetch the input values (measurement already fetched above ^)
-                    final EditText date = v.findViewById(R.id.measdate);
+                    final EditText date = v.findViewById(R.id.meas_DD);
                     final EditText cent = v.findViewById(R.id.centile);
 
                     // add a new measurement action
@@ -305,7 +305,7 @@ public class StatisticsDetails extends Fragment {
                 }
 
                 // fetch the input values (measurement fetched above ^)
-                final EditText date = v.findViewById(R.id.measdate);
+                final EditText date = v.findViewById(R.id.meas_DD);
 
                 // add new measurement action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
