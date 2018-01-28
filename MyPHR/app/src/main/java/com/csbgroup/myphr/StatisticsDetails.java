@@ -221,7 +221,9 @@ public class StatisticsDetails extends Fragment {
                     measurement.setHint(type);
 
                     // fetch the input values (measurement already fetched above ^)
-                    final EditText date = v.findViewById(R.id.meas_DD);
+                    final EditText day = v.findViewById(R.id.meas_DD);
+                    final EditText month = v.findViewById(R.id.meas_MM);
+                    final EditText year = v.findViewById(R.id.meas_YYYY);
                     final EditText cent = v.findViewById(R.id.centile);
 
                     // add a new measurement action
@@ -237,7 +239,10 @@ public class StatisticsDetails extends Fragment {
 
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
 
-                                    String fulldate = date.getText().toString();
+                                    // join date into one string
+                                    String fulldate = day.getText().toString() + "/" + month.getText().toString()
+                                            + "/" + year.getText().toString();
+
                                     String centile = cent.getText().toString();
 
                                     // valid date string checking
@@ -305,7 +310,9 @@ public class StatisticsDetails extends Fragment {
                 }
 
                 // fetch the input values (measurement fetched above ^)
-                final EditText date = v.findViewById(R.id.meas_DD);
+                final EditText day = v.findViewById(R.id.meas_DD);
+                final EditText month = v.findViewById(R.id.meas_MM);
+                final EditText year = v.findViewById(R.id.meas_YYYY);
 
                 // add new measurement action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
@@ -317,7 +324,10 @@ public class StatisticsDetails extends Fragment {
 
                                 AppDatabase db = AppDatabase.getAppDatabase(getActivity());
 
-                                String fulldate = date.getText().toString();
+                                // join date into one string
+                                String fulldate = day.getText().toString() + "/" + month.getText().toString()
+                                        + "/" + year.getText().toString();
+
                                 String centile = null;
 
                                 // valid date string checking
@@ -333,6 +343,7 @@ public class StatisticsDetails extends Fragment {
                                     e.printStackTrace();
                                 }
 
+                                // add the new measurement to the database
                                 if (date != null) {
                                     final StatisticsEntity thisstat = getStats(type);
                                     thisstat.addValue(measurement.getText().toString(), fulldate, centile);
