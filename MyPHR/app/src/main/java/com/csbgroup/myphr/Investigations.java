@@ -7,15 +7,20 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.InvestigationsEntity;
 import com.csbgroup.myphr.database.MedicineEntity;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +120,10 @@ public class Investigations extends Fragment {
                 final EditText year = v.findViewById(R.id.inv_YYYY);
                 final EditText notes = v.findViewById(R.id.inv_notes);
 
+                // auto shift view focus when entering date
+                shiftFocus(day, month, year, notes);
+
+
                 // add a new investigation action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
@@ -154,5 +163,62 @@ public class Investigations extends Fragment {
                 dialog.show();
             }
         });
+
+    }
+
+    /**
+     * shiftFocus automatically shifts the fab dialog view focus from day->month and month->year
+     * when two digits have been entered for day and month, respectively.
+     * @param day is the EditText for the dialog day('DD') field
+     * @param month is the EditText for the dialog month('MM') field
+     * @param year is the EditText for the dialog year('YYYY') field
+     * @param notes is the EditText for the dialog notes field
+     */
+    public void shiftFocus(final EditText day, final EditText month, final EditText year, final EditText notes){
+
+        day.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (day.getText().toString().length() == 2) {month.requestFocus();}
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) { }
+        });
+
+        month.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (month.getText().toString().length() == 2) {year.requestFocus();}
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) { }
+        });
+
+        year.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (year.getText().toString().length() == 4) {notes.requestFocus();}
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) { }
+        });
+
+
+
     }
 }
