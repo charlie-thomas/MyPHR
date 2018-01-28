@@ -14,12 +14,14 @@ import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
+import com.csbgroup.myphr.database.MedicineEntity;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
@@ -78,19 +80,23 @@ public class CalendarDay extends Fragment {
         });
 
 
-        List<AppointmentsEntity> daysEvents = getEvents(dateString);
+        List<CalendarEvent> daysEvents = getEvents(dateString);
 
         ArrayList<CalendarEvent> hours = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
             String event = null;
+            String type = "Empty";
 
             if (daysEvents != null) {
-                for (AppointmentsEntity de : daysEvents) {
-                    if (String.valueOf(i).equals(de.getTime())) event = de.getTitle();
+                for (CalendarEvent ce : daysEvents) {
+                    if (String.valueOf(i).equals(ce.getTime())) {
+                        event = ce.getEvent();
+                        type = ce.getType();
+                    }
                 }
             }
 
-            hours.add(new CalendarEvent(i+":00", dateString, event));
+            hours.add(new CalendarEvent(i + ":00", dateString, event, type));
         }
 
         CalendarAdapter adapter = new CalendarAdapter(getActivity(), hours);
@@ -133,10 +139,11 @@ public class CalendarDay extends Fragment {
         ((MainActivity) getActivity()).switchFragment(newDayFragment);
     }
 
-    public List<AppointmentsEntity> getEvents(final String date) {
+    public List<CalendarEvent> getEvents(final String date) {
+        List<CalendarEvent> all_events = new ArrayList<>();
 
-        // Create a callable object for database transactions
-        Callable callable = new Callable() {
+        // Create a callable object to get appointments from database
+        Callable callable_app = new Callable() {
             @Override
             public Object call() throws Exception {
                 return AppDatabase.getAppDatabase(getActivity()).appointmentsDao().getAppointmentByDate(date);
@@ -145,15 +152,19 @@ public class CalendarDay extends Fragment {
 
         // Get a Future object of all the appointment names
         ExecutorService service = Executors.newFixedThreadPool(2);
-        Future<List<AppointmentsEntity>> result = service.submit(callable);
+        Future<List<AppointmentsEntity>> result_app = service.submit(callable_app);
 
-        // Create a list of the appointment names
-        List<AppointmentsEntity> appointments = null;
+        // Create lists of the appointment and medicine names
+        List<AppointmentsEntity> appointments = Collections.emptyList();
         try {
-            appointments = result.get();
-        } catch (Exception e) {}
+            appointments = result_app.get();
+        } catch (Exception e) {
+        }
 
-        return appointments;
+        for (AppointmentsEntity ae : appointments)
+            all_events.add(new CalendarEvent(ae.getTime(), ae.getDate(), ae.getTitle(), "Appointment"));
+
+        return all_events;
     }
 
     /**

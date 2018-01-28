@@ -3,7 +3,6 @@ package com.csbgroup.myphr;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,22 +12,29 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
-import com.csbgroup.myphr.database.MedicineEntity;
+import com.csbgroup.myphr.database.StatValueEntity;
+import com.csbgroup.myphr.database.StatisticsEntity;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Random;
-
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 /**
  * Created by JBizzle on 04/12/2017.
  */
@@ -36,7 +42,7 @@ import java.util.Random;
 public class StatisticsDetails extends Fragment {
 
     LineGraphSeries<DataPoint> series;
-    private FloatingActionButton fab; //the add measurement fab
+    FloatingActionButton fab; // the add measurement fab
 
     public StatisticsDetails() {
         // Required empty public constructor
@@ -56,51 +62,116 @@ public class StatisticsDetails extends Fragment {
         ((MainActivity) getActivity()).setToolbar("My Statistics", true);
         setHasOptionsMenu(true);
 
-        // TODO: fetch measurement values from database
-
-
         Bundle args = getArguments();
 
         TextView medTitle = rootView.findViewById(R.id.statistics_title);
         medTitle.setText(args.getString("title", "Measurements"));
 
+        // Setting up the variable for the graph/list
         GraphView graph = rootView.findViewById(R.id.statistics_graph);
         series = new LineGraphSeries<DataPoint>();
-        int date = 0;
-        double variable = 50;
-        ArrayList<String> list = new ArrayList<String>();
-        for(int i =0 ; i<=30; i++){
-            series.appendData(new DataPoint(date,variable),true,500);
-            list.add("Date:"+Integer.toString(date) + "                         "+ (args.getString("title", "Statistics"))+":"+Double.toString(round(variable,2)));
-            date  = date + 1;
-            Random r = new Random();
-            double randomValue = r.nextDouble() * 2 - 1;
-            randomValue /= 10;
-            variable += randomValue;
+
+        //This formatter is for changing the string entered in form "dd/MM/yyyy" into a Java Date type
+        final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date d1 = null;
+
+        //currentstat is a the StatisticsEntity for the current statistics page (e.g weight, height etc)
+        final StatisticsEntity currentstat = getStats(args.getString("title", "Statistics"));
+        //valueslist is the list of all the entity's in currentstat. Each contains a date, value and centile.
+        ArrayList<StatValueEntity> valueslist =  currentstat.getValues();
+
+        //Sorting valueslist so it's ordered in date order, oldest first.
+        //Need to do this because the graph must plot from oldest to newest.
+        Collections.sort(valueslist, new Comparator<StatValueEntity>(){
+            @Override
+            public int compare(StatValueEntity t1, StatValueEntity t2) {
+                try {
+                    return formatter.parse(t1.getDate()).compareTo(formatter.parse(t2.getDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        });
+
+        //Iterating through the valueslist we format each string date intot a java Date and add it as a datapoint
+        for(int i=0;i<valueslist.size();i++){
+            StatValueEntity sve = valueslist.get(i);
+            try {
+                d1 = formatter.parse(sve.getDate());
+                DataPoint dp = new DataPoint(d1,Double.parseDouble(sve.getValue())); //added as a datapoint here
+                series.appendData(dp,true,valueslist.size()); //adding the datapoint to the graph series here
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
-        graph.addSeries(series);
-        graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(30);
-        graph.getViewport().setXAxisBoundsManual(true);
+
+        /*Reversing the list now so its ordered newest to oldest
+          This is so the listview underneath prints from newest to oldest */
+        Collections.reverse(valueslist);
 
         ListView listview = (ListView) rootView.findViewById(R.id.statistics_graph_list);
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, list);
+        /*The listview uses a custom adapter which uses an xml to print each list item
+        Format located in stat_list_adapter.xml
+        Listview is formatted in StatValueAdpater.java */
+        StatValueAdapter adapter = new StatValueAdapter(getActivity(),R.layout.stat_list_adapter, valueslist);
         listview.setAdapter(adapter);
 
-        // fab action for adding medicine
+
+        //All of these "graph." make adjustments to the graph so it displays correctly
+        graph.addSeries(series); //adds the datapoint series to the graph
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+        graph.getGridLabelRenderer().setNumHorizontalLabels(4);
+        graph.getGridLabelRenderer().setTextSize(25);
+        graph.getViewport().setScrollable(true);
+        graph.getGridLabelRenderer().setHumanRounding(false);
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getGridLabelRenderer().setVerticalAxisTitle(args.getString("title","Statistics"));
+        graph.getGridLabelRenderer().setVerticalAxisTitleTextSize(35);
+        graph.getGridLabelRenderer().setPadding(58);
+        graph.getGridLabelRenderer().setLabelVerticalWidth(75);
+
+        //this if statement allows for the graph to keep four values at a time and begin scrolling after 4 have been added.
+        if(currentstat.getValues().size() > 4){
+            try {
+                Date mindate = formatter.parse(currentstat.getValues().get(currentstat.getValues().size()-4).getDate());
+                graph.getViewport().setMinX(mindate.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // fab action for adding measurement
         String type = args.getString("title");
-        fab = rootView.findViewById(R.id.stat_fab);
+        fab = rootView.findViewById(R.id.s_fab);
         buildDialog(fab, type);
 
         return rootView;
-    }
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
 
-        long factor = (long) Math.pow(10, places);
-        value = value * factor;
-        long tmp = Math.round(value);
-        return (double) tmp / factor;
+    }
+
+
+    //method to get the StatisticsEntity for a given measurement(e.g weight, height etc)
+    public StatisticsEntity getStats(final String unit) {
+        // Create a callable object for database transactions
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(getActivity()).statisticsDao().getStatistic(unit);
+            }
+        };
+
+        // Get a Future object of all the statistics titles
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<StatisticsEntity> result = service.submit(callable);
+
+        // Create a list of the statistics names
+        StatisticsEntity statistics = null;
+        try {
+            statistics = result.get();
+        } catch (Exception e) {}
+
+        return statistics;
     }
 
     @Override
@@ -124,22 +195,18 @@ public class StatisticsDetails extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * buildDialog builds the pop-up dialog for adding a new measurement instance;
-     * in the case of the height velocity fragment it will hide the fab.
-     * @param fab the floating action button which pulls up the dialog
-     */
-    public void buildDialog(FloatingActionButton fab, final String type) {
+    public void buildDialog(FloatingActionButton fab, final String type){
 
-        // no fab action for height velocity
-        if (type.equals("Height Velocity")) {fab.setVisibility(View.GONE); return;}
+        // no fab for height velocity
+        if (type.equals("Height Velocity")){fab.setVisibility(View.GONE); return;}
 
-        // fab action for height and weight (w/ centiles)
+        // fab action for height and weight (w/centiles)
         if (type.equals("Height") || type.equals("Weight")){
 
-            fab.setOnClickListener(new View.OnClickListener() {
+            fab.setOnClickListener(new View.OnClickListener(){
+
                 @Override
-                public void onClick(View view) {
+                public void onClick(View view){
 
                     // set up the dialog
                     LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
@@ -155,30 +222,55 @@ public class StatisticsDetails extends Fragment {
 
                     // fetch the input values (measurement already fetched above ^)
                     final EditText date = v.findViewById(R.id.measdate);
-                    final EditText centile = v.findViewById(R.id.centile);
+                    final EditText cent = v.findViewById(R.id.centile);
 
-                    // add new medicine action
+                    // add a new measurement action
                     builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
+
                         @Override
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            new Thread(new Runnable() {
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                            new Thread(new Runnable(){
+
                                 @Override
                                 public void run() {
 
-                                    // TODO: add the new measurement to the database
+                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
 
+                                    String fulldate = date.getText().toString();
+                                    String centile = cent.getText().toString();
+
+                                    // valid date string checking
+                                    Date date = null;
+                                    try {
+                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                        date = sdf.parse(fulldate);
+
+                                        if (!fulldate.equals(sdf.format(date))) {
+                                            date = null;
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    if (date != null) {
+                                        final StatisticsEntity thisstat = getStats(type);
+                                        thisstat.addValue(measurement.getText().toString(), fulldate, centile);
+                                        db.statisticsDao().update(thisstat);
+                                    }
                                 }
                             }).start();
 
-                            // TODO: update the list view
+                            // update the list view
+                            FragmentTransaction ft = getFragmentManager().beginTransaction();
+                            ft.detach(StatisticsDetails.this).attach(StatisticsDetails.this).commit();
                         }
                     });
 
-                    // action for cancelling activity
-
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    // dismiss dialog, cancel add
+                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(DialogInterface arg0, int arg1) {
+                        public void onClick(DialogInterface dialogInterface, int i) {
                         }
                     });
 
@@ -186,12 +278,12 @@ public class StatisticsDetails extends Fragment {
                     dialog.show();
                 }
             });
-
             return;
         }
 
-        // fab action for all other measurements
+        // fab action for all other measurement types
         fab.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
 
@@ -202,22 +294,20 @@ public class StatisticsDetails extends Fragment {
                 builder.setView(v);
 
                 // set measurement specific texts
-                if (type.equals("Body Mass Index (BMI)")){
-                    final TextView title = v.findViewById((R.id.dialog_title));
+                final TextView title = v.findViewById((R.id.dialog_title));
+                final EditText measurement = v.findViewById(R.id.measurement);
+                if (type.equals("Body Mass Index (BMI)")) {
                     title.setText("Add a New BMI");
-                    final EditText meashint = v.findViewById(R.id.measurement);
-                    meashint.setHint("BMI");
+                    measurement.setHint("BMI");
                 } else {
-                    final TextView title = v.findViewById(R.id.dialog_title);
                     title.setText("Add a New " + type);
-                    final EditText measurement = v.findViewById(R.id.measurement);
                     measurement.setHint(type);
                 }
 
                 // fetch the input values (measurement fetched above ^)
                 final EditText date = v.findViewById(R.id.measdate);
 
-                // add new medicine action
+                // add new measurement action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
@@ -225,20 +315,42 @@ public class StatisticsDetails extends Fragment {
                             @Override
                             public void run() {
 
-                                // TODO: add the new measurement to the database
+                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
 
+                                String fulldate = date.getText().toString();
+                                String centile = null;
+
+                                // valid date string checking
+                                Date date = null;
+                                try {
+                                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                    date = sdf.parse(fulldate);
+
+                                    if (!fulldate.equals(sdf.format(date))) {
+                                        date = null;
+                                    }
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+
+                                if (date != null) {
+                                    final StatisticsEntity thisstat = getStats(type);
+                                    thisstat.addValue(measurement.getText().toString(), fulldate, centile);
+                                    db.statisticsDao().update(thisstat);
+                                }
                             }
                         }).start();
 
-                        // TODO: update the list view
+                        // update the list view
+                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.detach(StatisticsDetails.this).attach(StatisticsDetails.this).commit();
                     }
                 });
 
-                // action for cancelling activity
-
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                // dismiss dialog, cancel add
+                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 });
 
@@ -246,7 +358,7 @@ public class StatisticsDetails extends Fragment {
                 dialog.show();
             }
         });
-
+        return;
     }
 
 }
