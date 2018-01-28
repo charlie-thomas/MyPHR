@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/investigation_title"
+
+        android:background="@color/colorAccent"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingTop="15dp"
+        android:text="@string/investigationtitle"
+        android:textColor="#FFFFFF"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/investigation_message"
+
+        android:background="@color/colorAccent"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+        android:text="@string/investigationmessage"
+        android:textColor="#FFFFFF"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/inv_title"
+
+        android:hint="@string/invtitle"
+        android:inputType="textCapWords"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:paddingLeft="8dp"
+        android:scrollbars="horizontal" />
+
+    <EditText
+        android:id="@+id/inv_date"
+
+        android:hint="@string/invdate"
+        android:inputType="date"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:paddingLeft="8dp"
+        android:scrollbars="horizontal" />
+
+    <EditText
+        android:id="@+id/inv_notes"
+
+        android:hint="@string/invnotes"
+        android:inputType="textMultiLine"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:lines="2"
+        android:paddingLeft="8dp"
+        android:scrollbars="vertical" />
+
+</LinearLayout>
