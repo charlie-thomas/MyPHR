@@ -110,7 +110,9 @@ public class Investigations extends Fragment {
 
                 // fetch the input values
                 final EditText title = v.findViewById(R.id.inv_title);
-                final EditText date = v.findViewById(R.id.inv_DD); //TODO: UPDATE THIS FOR DD MM AND YY
+                final EditText day = v.findViewById(R.id.inv_DD);
+                final EditText month = v.findViewById(R.id.inv_MM);
+                final EditText year = v.findViewById(R.id.inv_YYYY);
                 final EditText notes = v.findViewById(R.id.inv_notes);
 
                 // add a new investigation action
@@ -121,11 +123,14 @@ public class Investigations extends Fragment {
                             @Override
                             public void run() {
 
+                                // join date into one string
+                                String date = day.getText().toString() + "/" + month.getText().toString()
+                                        + "/" + year.getText().toString();
+
                                 // add the new investigation to the database
                                 AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                 InvestigationsEntity investigation = new InvestigationsEntity(
-                                        title.getText().toString(), date.getText().toString(),
-                                        notes.getText().toString());
+                                        title.getText().toString(), date, notes.getText().toString());
                                 db.investigationDao().insertAll(investigation);
 
                             }
