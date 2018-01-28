@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 5,
-    "identityHash": "e832389480a5241b41bb42334f5d4354",
+    "identityHash": "fcac6f7ec79bced8d484378a94ab53ec",
     "entities": [
       {
         "tableName": "AppointmentsEntity",
@@ -200,7 +200,7 @@
       },
       {
         "tableName": "InvestigationsEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `date` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `date` TEXT, `notes` TEXT)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -219,6 +219,12 @@
             "columnName": "date",
             "affinity": "TEXT",
             "notNull": false
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -233,7 +239,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"e832389480a5241b41bb42334f5d4354\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"fcac6f7ec79bced8d484378a94ab53ec\")"
     ]
   }
 }

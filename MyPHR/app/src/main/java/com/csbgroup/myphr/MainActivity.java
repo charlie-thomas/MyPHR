@@ -149,10 +149,10 @@ public class MainActivity extends AppCompatActivity {
     private static void populateInvestigations(InvestigationsDao dao)  {
         dao.deleteAll();
 
-        InvestigationsEntity ie = new InvestigationsEntity("Blood Test", "03/01/2018");
-        InvestigationsEntity ie1 = new InvestigationsEntity("Hearing Test", "29/12/2017");
-        InvestigationsEntity ie2 = new InvestigationsEntity("Blood Test", "04/06/2017");
-        InvestigationsEntity ie3 = new InvestigationsEntity("Hearing Test", "30/06/2017");
+        InvestigationsEntity ie = new InvestigationsEntity("Blood Test", "03/01/2018", "due in 6 months");
+        InvestigationsEntity ie1 = new InvestigationsEntity("Hearing Test", "29/12/2017", "due in 12 months");
+        InvestigationsEntity ie2 = new InvestigationsEntity("Blood Test", "04/06/2017", "due in 6 months");
+        InvestigationsEntity ie3 = new InvestigationsEntity("Hearing Test", "30/06/2017", "due in 12 months");
 
         dao.insertAll(ie, ie1, ie2, ie3);
     }

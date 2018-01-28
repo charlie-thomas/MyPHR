@@ -17,34 +17,47 @@ public class InvestigationsEntity {
     @ColumnInfo(name = "date")
     private String date;
 
+    @ColumnInfo(name = "notes")
+    private String notes;
+
     // Constructor
-    public InvestigationsEntity(String title, String date) {
+    public InvestigationsEntity(String title, String date, String notes) {
         this.title = title;
         this.date = date;
+        this.notes = notes;
     }
 
     // Getters and setters
+
     public int getUid() {
         return uid;
     }
-
     public void setUid(int uid) {
         this.uid = uid;
     }
 
+
     public String getTitle() {
         return title;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
 
+
     public String getDate() {
         return date;
     }
-
     public void setDate(String date) {
         this.date = date;
     }
+
+
+    public String getNotes() {
+        return notes;
+    }
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
 }
