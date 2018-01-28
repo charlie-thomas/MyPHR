@@ -182,7 +182,7 @@ public class Medicine extends Fragment {
                 });
 
                 // action for cancelling activity
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
                     }
