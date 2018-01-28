@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.InvestigationsEntity;
+import com.csbgroup.myphr.database.MedicineEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,6 +122,11 @@ public class Investigations extends Fragment {
                             public void run() {
 
                                 // add the new investigation to the database
+                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                InvestigationsEntity investigation = new InvestigationsEntity(
+                                        title.getText().toString(), date.getText().toString(),
+                                        notes.getText().toString());
+                                db.investigationDao().insertAll(investigation);
 
                             }
                         }).start();
