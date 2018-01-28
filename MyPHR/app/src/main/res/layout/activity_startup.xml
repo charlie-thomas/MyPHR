@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimary"
+    tools:context="com.csbgroup.myphr.ChangePINActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/setup"
+        android:textColor="#FFFF"
+        android:textSize="12pt"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"/>
+
+    <ImageView
+        android:id="@+id/iconLoginStart"
+        android:contentDescription="@string/icon_desc"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="90dp"
+        android:adjustViewBounds="true"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome"
+        android:textColor="#FFFF"
+        android:textSize="10pt"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="280dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/initialPin"
+        android:inputType="number"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="350dp"
+        android:hint="@string/pin"
+        android:textSize="12pt"
+        android:maxLength="4"
+        android:textColorHint="#FFFF"
+        android:textColor="#FFFF"
+        android:backgroundTint="#FFFF"
+        tools:ignore="TextFields" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:id="@+id/saveChangePin"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="450dp"
+        android:onClick="changeButton"
+        />
+
+
+
+</RelativeLayout>
