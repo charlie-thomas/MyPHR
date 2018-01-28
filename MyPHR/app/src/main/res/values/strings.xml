@@ -47,8 +47,7 @@
     <string name="amessage">Enter the details for your new appointment:</string>
     <string name="appname">Appointment Title</string>
     <string name="applocation">Location</string>
-    <string name="appdate">Date (dd/mm/yyyy)</string>
-    <string name="apptime">Time (hh:mm)</string>
+    <string name="apptime">Time (HH:MM)</string>
     <string name="appnotes">Notes</string>
     <string name="appmessage2">You can schedule reminders later.</string>
     <string name="location_title">Location</string>
@@ -63,8 +62,11 @@
     <string name="investigationtitle">Add an Investigation</string>
     <string name="investigationmessage">Enter the details of your recent investigation</string>
     <string name="invtitle">Title</string>
-    <string name="invdate">Date</string>
+    <string name="DD">DD</string>
+    <string name="MM">MM</string>
+    <string name="YYYY">YYYY</string>
     <string name="invnotes">Notes</string>
+    <string name="dash">_</string>
 
 
 

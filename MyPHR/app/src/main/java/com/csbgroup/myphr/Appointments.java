@@ -154,7 +154,7 @@ public class Appointments extends Fragment {
                 // fetch the input values
                 final EditText title = v.findViewById(R.id.appointment_name);
                 final EditText location = v.findViewById(R.id.appointment_location);
-                final EditText date = v.findViewById(R.id.appointment_date);
+                final EditText date = v.findViewById(R.id.appointment_DD);
                 final EditText time = v.findViewById(R.id.appointment_time);
                 final EditText notes = v.findViewById(R.id.appointment_notes);
 

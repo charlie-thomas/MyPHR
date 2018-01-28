@@ -63,15 +63,38 @@
         android:layout_height="wrap_content" >
 
         <EditText
-            android:id="@+id/appointment_date"
+            android:id="@+id/appointment_DD"
 
-            android:hint="@string/appdate"
-            android:inputType="date"
-            android:layout_width="match_parent"
+            android:hint="@string/DD"
+            android:inputType="number"
             android:layout_height="match_parent"
+            android:layout_width="50dp"
             android:paddingLeft="8dp"
-            android:layout_weight="1"
-            android:scrollbars="horizontal" />
+            android:maxLength="2"
+            />
+
+        <EditText
+            android:id="@+id/appointment_MM"
+
+            android:hint="@string/MM"
+            android:inputType="number"
+            android:layout_height="match_parent"
+            android:layout_width="50dp"
+            android:paddingLeft="8dp"
+            android:maxLength="2"
+            />
+
+        <EditText
+            android:id="@+id/appoitment_YYYY"
+
+            android:hint="@string/YYYY"
+            android:inputType="number"
+            android:layout_height="match_parent"
+            android:layout_width="80dp"
+            android:paddingLeft="8dp"
+            android:maxLength="4"
+            />
+
 
         <EditText
             android:id="@+id/appointment_time"
@@ -79,10 +102,10 @@
             android:hint="@string/apptime"
             android:inputType="time"
             android:layout_height="match_parent"
-            android:layout_width="match_parent"
+            android:layout_width="159dp"
+            android:layout_marginLeft="20dp"
             android:paddingLeft="8dp"
-            android:layout_weight="1"
-            android:scrollbars="horizontal" />
+            />
 
     </LinearLayout>
 
