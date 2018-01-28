@@ -18,6 +18,7 @@ import com.csbgroup.myphr.database.ContactsDao;
 import com.csbgroup.myphr.database.ContactsEntity;
 import com.csbgroup.myphr.database.MedicineDao;
 import com.csbgroup.myphr.database.MedicineEntity;
+import com.csbgroup.myphr.database.StatValueEntity;
 import com.csbgroup.myphr.database.StatisticsDao;
 import com.csbgroup.myphr.database.StatisticsEntity;
 
@@ -61,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
                         selectedPage = Medicine.newInstance();
                         break;
                     case R.id.calendar:
-                        selectedPage = CalendarSection.newInstance();
+                        selectedPage = CalendarMonth.newInstance();
                         break;
                     case R.id.appointments:
-                        selectedPage = Appointments.newInstance();
+                        selectedPage = AppointmentsSection.newInstance();
                         break;
                     case R.id.statistics:
                         selectedPage = Statistics.newInstance();
@@ -162,7 +163,8 @@ public class MainActivity extends AppCompatActivity {
 
         String[] stats = {"Blood Pressure", "Body Mass Index (BMI)", "Head Circumference", "Height",
                 "Height Velocity", "Length", "Weight"};
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<StatValueEntity> list = new ArrayList<StatValueEntity>();
+
         for (String stat : stats) {
             StatisticsEntity st = new StatisticsEntity(stat, list);
             dao.insertAll(st);

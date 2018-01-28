@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class CalendarAdapter extends ArrayAdapter<CalendarEvent> {
 
-    private ArrayList<CalendarEvent> events;
+    private final ArrayList<CalendarEvent> events;
 
     public CalendarAdapter(Context context, ArrayList<CalendarEvent> events) {
         super(context, 0, events);
@@ -26,35 +26,72 @@ public class CalendarAdapter extends ArrayAdapter<CalendarEvent> {
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
-        final CalendarEvent e = events.get(position);
+        final ViewHolder holder;
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.calendar_event_item, parent, false);
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.calendar_event_item, parent, false);
+
+            holder = new ViewHolder();
+
+            holder.time = convertView.findViewById(R.id.time);
+            holder.event = convertView.findViewById(R.id.event);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
+
+
+        final CalendarEvent e = events.get(position);
+
         if (e != null) {
-            TextView time = convertView.findViewById(R.id.time);
-            TextView event = convertView.findViewById(R.id.event);
 
-            if (time != null) time.setText(e.getTime());
-            if (e.getEvent() != null) {
-                event.setText(e.getEvent());
-                event.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+            holder.time.setText(e.getTime());
 
-                event.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Fragment eventFrag = AppointmentsDetails.newInstance();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("title", e.getEvent());
-                        eventFrag.setArguments(bundle);
+            switch (e.getType()) {
+                case "Empty":
+                    break;
+                case "Appointment":
+                    holder.event.setText(e.getEvent());
+                    holder.event.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
 
-                        ((MainActivity) getContext()).switchFragment(eventFrag);
-                    }
-                });
+                    holder.event.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Fragment eventFrag = AppointmentsDetails.newInstance();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("title", e.getEvent());
+                            eventFrag.setArguments(bundle);
+
+                            ((MainActivity) getContext()).switchFragment(eventFrag);
+                        }
+                    });
+                    break;
+                case "Medicine":
+                    holder.event.setText(e.getEvent());
+                    holder.event.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+
+                    holder.event.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Fragment eventFrag = MedicineDetails.newInstance();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("title", e.getEvent());
+                            eventFrag.setArguments(bundle);
+
+                            ((MainActivity) getContext()).switchFragment(eventFrag);
+                        }
+                    });
+                    break;
             }
         }
 
         return convertView;
+    }
+
+    private class ViewHolder {
+        private TextView time;
+        private TextView event;
     }
 }

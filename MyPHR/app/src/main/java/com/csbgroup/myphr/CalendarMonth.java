@@ -8,6 +8,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.AppointmentsEntity;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class CalendarMonth extends Fragment {
 
@@ -54,7 +69,70 @@ public class CalendarMonth extends Fragment {
             }
         });
 
+        final AppointmentsEntity upcoming_appointment = getUpcomingAppointment();
+
+        if (upcoming_appointment == null) return rootView;
+
+        TextView upcomingDate = rootView.findViewById(R.id.upcoming_date);
+        final TextView upcomingApp = rootView.findViewById(R.id.upcoming_app_name);
+        upcomingDate.setText(upcoming_appointment.getDate());
+        upcomingApp.setText(upcoming_appointment.getTitle());
+
+        upcomingApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment eventFrag = AppointmentsDetails.newInstance();
+                Bundle bundle = new Bundle();
+                bundle.putString("title", upcoming_appointment.getTitle());
+                eventFrag.setArguments(bundle);
+
+                ((MainActivity) getContext()).switchFragment(eventFrag);
+            }
+        });
+
         return rootView;
+    }
+
+    public AppointmentsEntity getUpcomingAppointment() {
+
+        // Create a callable object for database transactions
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(getActivity()).appointmentsDao().getAll();
+            }
+        };
+
+        // Get a Future object of all the appointment names
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<List<AppointmentsEntity>> result = service.submit(callable);
+
+        // Create a list of the appointment names
+        List<AppointmentsEntity> appointments = null;
+        try {
+            appointments = result.get();
+        } catch (Exception e) {}
+
+        if (appointments == null) return null;
+
+        Collections.sort(appointments, new Comparator<AppointmentsEntity>() {
+            DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+
+            @Override
+            public int compare(AppointmentsEntity d1, AppointmentsEntity d2) {
+                try {
+                    return f.parse(d1.getDate()).compareTo(f.parse(d2.getDate()));
+                } catch (Exception e) {
+                }
+                return 0;
+            }
+        });
+
+        try {
+            return appointments.get(0);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }
