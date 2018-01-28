@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         dao.deleteAll();
 
         String[] stats = {"Blood Pressure", "Body Mass Index (BMI)", "Head Circumference", "Height",
-                "Height Velocity", "Length", "Weight"};
+                "Height Velocity", "Weight"};
         ArrayList<StatValueEntity> list = new ArrayList<StatValueEntity>();
 
         for (String stat : stats) {
