@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -221,8 +223,13 @@ public class StatisticsDetails extends Fragment {
                     measurement.setHint(type);
 
                     // fetch the input values (measurement already fetched above ^)
-                    final EditText date = v.findViewById(R.id.measdate);
+                    final EditText day = v.findViewById(R.id.meas_DD);
+                    final EditText month = v.findViewById(R.id.meas_MM);
+                    final EditText year = v.findViewById(R.id.meas_YYYY);
                     final EditText cent = v.findViewById(R.id.centile);
+
+                    // auto shift view focus when entering date
+                    shiftFocus(day, month, year, measurement);
 
                     // add a new measurement action
                     builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
@@ -237,7 +244,10 @@ public class StatisticsDetails extends Fragment {
 
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
 
-                                    String fulldate = date.getText().toString();
+                                    // join date into one string
+                                    String fulldate = day.getText().toString() + "/" + month.getText().toString()
+                                            + "/" + year.getText().toString();
+
                                     String centile = cent.getText().toString();
 
                                     // valid date string checking
@@ -305,7 +315,12 @@ public class StatisticsDetails extends Fragment {
                 }
 
                 // fetch the input values (measurement fetched above ^)
-                final EditText date = v.findViewById(R.id.measdate);
+                final EditText day = v.findViewById(R.id.meas_DD);
+                final EditText month = v.findViewById(R.id.meas_MM);
+                final EditText year = v.findViewById(R.id.meas_YYYY);
+
+                // auto shift view focus when entering date
+                shiftFocus(day, month, year, measurement);
 
                 // add new measurement action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
@@ -317,7 +332,10 @@ public class StatisticsDetails extends Fragment {
 
                                 AppDatabase db = AppDatabase.getAppDatabase(getActivity());
 
-                                String fulldate = date.getText().toString();
+                                // join date into one string
+                                String fulldate = day.getText().toString() + "/" + month.getText().toString()
+                                        + "/" + year.getText().toString();
+
                                 String centile = null;
 
                                 // valid date string checking
@@ -333,6 +351,7 @@ public class StatisticsDetails extends Fragment {
                                     e.printStackTrace();
                                 }
 
+                                // add the new measurement to the database
                                 if (date != null) {
                                     final StatisticsEntity thisstat = getStats(type);
                                     thisstat.addValue(measurement.getText().toString(), fulldate, centile);
@@ -358,7 +377,60 @@ public class StatisticsDetails extends Fragment {
                 dialog.show();
             }
         });
-        return;
+    }
+
+    /**
+     * shiftFocus automatically shifts the fab dialog view focus from day->month and month->year
+     * when two digits have been entered for day and month, respectively.
+     * @param day is the EditText for the dialog day('DD') field
+     * @param month is the EditText for the dialog month('MM') field
+     * @param year is the EditText for the dialog year('YYYY') field
+     * @param next is the EditText for the dialog field that follows year
+     */
+    public void shiftFocus(final EditText day, final EditText month, final EditText year, final EditText next){
+
+        day.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (day.getText().toString().length() == 2) {month.requestFocus();}
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) { }
+        });
+
+        month.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (month.getText().toString().length() == 2) {year.requestFocus();}
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) { }
+        });
+
+        year.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (year.getText().toString().length() == 4) {next.requestFocus();}
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) { }
+        });
+
     }
 
 }

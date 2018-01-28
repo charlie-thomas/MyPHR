@@ -1,9 +1,8 @@
 <resources>
     
     <string name="app_name">MyPHR</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="my_medicine">My Medicine</string>
-    <string name="dose">Dose</string>
+
+    // Settings and Details strings
     <string name="settings_cog">Settings Cog</string>
     <string name="edit_icon">Edit Icon</string>
     <string name="remind_when">Remind When</string>
@@ -19,19 +18,19 @@
     <string name="_1_week_prior_">1 Week Prior</string>
     <string name="_day_before">Day before</string>
     <string name="_morning_of">Morning of</string>
-    <string name="enter_pin">Enter Your Pin:</string>
+
+    // Calendar strings
     <string name="last_date_arrow">Last Date Arrow</string>
     <string name="next_date_arrow">Next Date Arrow</string>
     <string name="calendar">Calendar</string>
-    <string name="investigations">Investigations</string>
 
     // Contact strings
     <string name="ctitle">Add a New Contact</string>
     <string name="cmessage">Enter the details for your new contact:</string>
     <string name="cname">Name</string>
-    <string name="cphone">Phone</string>
-    <string name="cemail">Email</string>
     <string name="cnotes">Notes</string>
+    <string name="cemail">Email</string>
+    <string name="cphone">Phone</string>
 
     // Medicine strings
     <string name="medtitle">Add a New Medicine</string>
@@ -45,22 +44,31 @@
     // Appointment strings
     <string name="atitle">Add a New Appointment</string>
     <string name="amessage">Enter the details for your new appointment:</string>
-    <string name="appname">Appointment Title</string>
-    <string name="applocation">Location</string>
-    <string name="appdate">Date (dd/mm/yyyy)</string>
-    <string name="apptime">Time (hh:mm)</string>
-    <string name="appnotes">Notes</string>
-    <string name="appmessage2">You can schedule reminders later.</string>
-    <string name="location_title">Location</string>
-    <string name="date_title">Date</string>
-    <string name="time_title">Time</string>
+    <string name="aname">Appointment Title</string>
+    <string name="alocation">Location</string>
+    <string name="atime">Time (HH:MM)</string>
+    <string name="apptime">Time</string>
+    <string name="adate">Date</string>
+    <string name="anotes">Notes</string>
+    <string name="amessage2">You can schedule reminders later.</string>
 
     // Measurement strings
     <string name="centile">Centile</string>
     <string name="measmessage">Enter the details for your new measurement:</string>
+
+    // Investigation strings
+    <string name="investigations">Investigations</string>
+    <string name="investigationtitle">Add an Investigation</string>
+    <string name="investigationmessage">Enter the details of your recent investigation</string>
+    <string name="invtitle">Title</string>
+    <string name="DD">DD</string>
+    <string name="MM">MM</string>
+    <string name="YYYY">YYYY</string>
+    <string name="invnotes">Notes</string>
+    <string name="dash">_</string>
+
+    // Calendar Strings
     <string name="upcoming_appointment">Upcoming Appointment</string>
-    <string name="email">Email</string>
-    <string name="phone">Phone</string>
     
     // Login strings
     <string name="fingerprint">Fingerprint Authentication</string>
@@ -78,4 +86,5 @@
     <string name="finger_perm">Please enable the fingerprint permission</string>
     <string name="finger_deconfigured">No fingerprint configured. Please register at least one fingerprint in your device\'s Settings</string>
     <string name="lockscreen_off">Please enable lockscreen security in your device\'s Settings</string>
+
 </resources>

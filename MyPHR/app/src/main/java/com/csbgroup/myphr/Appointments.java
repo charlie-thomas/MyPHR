@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -154,9 +156,14 @@ public class Appointments extends Fragment {
                 // fetch the input values
                 final EditText title = v.findViewById(R.id.appointment_name);
                 final EditText location = v.findViewById(R.id.appointment_location);
-                final EditText date = v.findViewById(R.id.appointment_date);
+                final EditText day = v.findViewById(R.id.appointment_DD);
+                final EditText month = v.findViewById(R.id.appointment_MM);
+                final EditText year = v.findViewById(R.id.appointment_YYYY);
                 final EditText time = v.findViewById(R.id.appointment_time);
                 final EditText notes = v.findViewById(R.id.appointment_notes);
+
+                // auto shift view focus when entering date
+                shiftFocus(day, month, year, time);
 
                 // add new appointment action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
@@ -166,11 +173,15 @@ public class Appointments extends Fragment {
                             @Override
                             public void run(){
 
+                                // join date into one string
+                                String date = day.getText().toString() + "/" + month.getText().toString()
+                                        + "/" + year.getText().toString();
+
                                 // add the new appointment to the database
                                 AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                 AppointmentsEntity appointment = new AppointmentsEntity(
                                         title.getText().toString(), location.getText().toString(),
-                                        date.getText().toString(), time.getText().toString(),
+                                        date, time.getText().toString(),
                                         notes.getText().toString(), false);
                                 db.appointmentsDao().insertAll(appointment);
                             }
@@ -194,6 +205,60 @@ public class Appointments extends Fragment {
                 dialog.show();
             }
         });
+    }
+
+    /**
+     * shiftFocus automatically shifts the fab dialog view focus from day->month and month->year
+     * when two digits have been entered for day and month, respectively.
+     * @param day is the EditText for the dialog day('DD') field
+     * @param month is the EditText for the dialog month('MM') field
+     * @param year is the EditText for the dialog year('YYYY') field
+     * @param next is the EditText for the dialog field that follows year
+     */
+    public void shiftFocus(final EditText day, final EditText month, final EditText year, final EditText next){
+
+        day.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (day.getText().toString().length() == 2) {month.requestFocus();}
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) { }
+        });
+
+        month.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (month.getText().toString().length() == 2) {year.requestFocus();}
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) { }
+        });
+
+        year.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (year.getText().toString().length() == 4) {next.requestFocus();}
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) { }
+        });
+
     }
 
 }
