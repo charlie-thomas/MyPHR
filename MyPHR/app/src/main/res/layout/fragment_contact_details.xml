@@ -22,7 +22,7 @@
         android:layout_below="@id/contact_title"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:text="@string/email"
+        android:text="@string/cemail"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -41,7 +41,7 @@
         android:layout_below="@id/email"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:text="@string/phone"
+        android:text="@string/cphone"
         android:textSize="18sp"
         android:textStyle="bold" />
 

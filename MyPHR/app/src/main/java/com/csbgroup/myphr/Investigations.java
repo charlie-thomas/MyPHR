@@ -1,6 +1,5 @@
 package com.csbgroup.myphr;
 
-
 import android.app.AlertDialog;
 import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;

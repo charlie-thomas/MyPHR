@@ -38,7 +38,7 @@
         <EditText
             android:id="@+id/appointment_name"
 
-            android:hint="@string/appname"
+            android:hint="@string/aname"
             android:inputType="textCapWords"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
@@ -48,7 +48,7 @@
         <EditText
             android:id="@+id/appointment_location"
 
-            android:hint="@string/applocation"
+            android:hint="@string/alocation"
             android:inputType="textCapWords"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
@@ -97,7 +97,7 @@
         <EditText
             android:id="@+id/appointment_time"
 
-            android:hint="@string/apptime"
+            android:hint="@string/atime"
             android:inputType="time"
             android:layout_height="match_parent"
             android:layout_width="165dp"
@@ -114,7 +114,7 @@
         <EditText
             android:id="@+id/appointment_notes"
 
-            android:hint="@string/appnotes"
+            android:hint="@string/anotes"
             android:inputType="textMultiLine"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -125,7 +125,7 @@
         <TextView
             android:id="@+id/app_message2"
 
-            android:text="@string/appmessage2"
+            android:text="@string/amessage2"
             android:textColor="#545454"
             android:textSize="16dp"
             android:textStyle="bold"
