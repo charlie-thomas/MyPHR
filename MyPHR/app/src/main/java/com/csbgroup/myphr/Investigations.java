@@ -110,7 +110,7 @@ public class Investigations extends Fragment {
 
                 // fetch the input values
                 final EditText title = v.findViewById(R.id.inv_title);
-                final EditText date = v.findViewById(R.id.inv_date);
+                final EditText date = v.findViewById(R.id.inv_DD); //TODO: UPDATE THIS FOR DD MM AND YY
                 final EditText notes = v.findViewById(R.id.inv_notes);
 
                 // add a new investigation action
