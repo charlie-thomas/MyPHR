@@ -9,29 +9,40 @@
         android:orientation="vertical" >
 
         <TextView
-            android:id="@+id/dialog_title"
+            android:id="@+id/investigation_title"
 
             android:background="@color/colorAccent"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:paddingLeft="10dp"
             android:paddingTop="15dp"
+            android:text="@string/investigationtitle"
             android:textColor="#FFFFFF"
             android:textSize="20dp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/dialog_message"
+            android:id="@+id/investigation_message"
 
             android:background="@color/colorAccent"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:paddingBottom="15dp"
             android:paddingLeft="10dp"
-            android:text="@string/measmessage"
+            android:text="@string/investigationmessage"
             android:textColor="#FFFFFF"
             android:textSize="16dp"
             android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/inv_title"
+
+            android:hint="@string/invtitle"
+            android:inputType="textCapWords"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:paddingLeft="8dp"
+            android:scrollbars="horizontal" />
 
     </LinearLayout>
 
@@ -41,7 +52,7 @@
         android:layout_height="wrap_content" >
 
         <EditText
-            android:id="@+id/meas_DD"
+            android:id="@+id/inv_DD"
 
             android:hint="@string/DD"
             android:inputType="number"
@@ -52,7 +63,7 @@
             android:layout_weight="1"/>
 
         <EditText
-            android:id="@+id/meas_MM"
+            android:id="@+id/inv_MM"
 
             android:hint="@string/MM"
             android:inputType="number"
@@ -63,7 +74,7 @@
             android:layout_weight="1"/>
 
         <EditText
-            android:id="@+id/meas_YYYY"
+            android:id="@+id/inv_YYYY"
 
             android:hint="@string/YYYY"
             android:inputType="number"
@@ -81,12 +92,15 @@
         android:orientation="vertical" >
 
         <EditText
-            android:id="@+id/measurement"
+            android:id="@+id/inv_notes"
 
-            android:inputType="text"
-            android:layout_height="match_parent"
+            android:hint="@string/invnotes"
+            android:inputType="textMultiLine"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:paddingLeft="8dp" />
+            android:lines="2"
+            android:paddingLeft="8dp"
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 

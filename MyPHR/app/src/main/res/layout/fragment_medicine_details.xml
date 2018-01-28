@@ -27,7 +27,7 @@
         android:layout_below="@id/medicine_info"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:text="@string/dose"
+        android:text="@string/meddose"
         android:textSize="18sp"
         android:textStyle="bold" />
 
