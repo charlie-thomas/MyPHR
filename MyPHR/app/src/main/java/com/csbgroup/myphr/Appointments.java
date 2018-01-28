@@ -154,9 +154,12 @@ public class Appointments extends Fragment {
                 // fetch the input values
                 final EditText title = v.findViewById(R.id.appointment_name);
                 final EditText location = v.findViewById(R.id.appointment_location);
-                final EditText date = v.findViewById(R.id.appointment_DD);
+                final EditText day = v.findViewById(R.id.appointment_DD);
+                final EditText month = v.findViewById(R.id.appointment_MM);
+                final EditText year = v.findViewById(R.id.appointment_YYYY);
                 final EditText time = v.findViewById(R.id.appointment_time);
                 final EditText notes = v.findViewById(R.id.appointment_notes);
+
 
                 // add new appointment action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
@@ -166,11 +169,15 @@ public class Appointments extends Fragment {
                             @Override
                             public void run(){
 
+                                // join date into one string
+                                String date = day.getText().toString() + "/" + month.getText().toString()
+                                        + "/" + year.getText().toString();
+
                                 // add the new appointment to the database
                                 AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                 AppointmentsEntity appointment = new AppointmentsEntity(
                                         title.getText().toString(), location.getText().toString(),
-                                        date.getText().toString(), time.getText().toString(),
+                                        date, time.getText().toString(),
                                         notes.getText().toString(), false);
                                 db.appointmentsDao().insertAll(appointment);
                             }

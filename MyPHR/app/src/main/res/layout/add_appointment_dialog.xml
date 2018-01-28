@@ -84,7 +84,7 @@
             />
 
         <EditText
-            android:id="@+id/appoitment_YYYY"
+            android:id="@+id/appointment_YYYY"
 
             android:hint="@string/YYYY"
             android:inputType="number"
