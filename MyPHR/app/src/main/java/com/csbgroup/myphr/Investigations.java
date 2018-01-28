@@ -123,7 +123,6 @@ public class Investigations extends Fragment {
                 // auto shift view focus when entering date
                 shiftFocus(day, month, year, notes);
 
-
                 // add a new investigation action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
@@ -172,9 +171,9 @@ public class Investigations extends Fragment {
      * @param day is the EditText for the dialog day('DD') field
      * @param month is the EditText for the dialog month('MM') field
      * @param year is the EditText for the dialog year('YYYY') field
-     * @param notes is the EditText for the dialog notes field
+     * @param next is the EditText for the dialog field that follows year
      */
-    public void shiftFocus(final EditText day, final EditText month, final EditText year, final EditText notes){
+    public void shiftFocus(final EditText day, final EditText month, final EditText year, final EditText next){
 
         day.addTextChangedListener(new TextWatcher() {
 
@@ -211,14 +210,12 @@ public class Investigations extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (year.getText().toString().length() == 4) {notes.requestFocus();}
+                if (year.getText().toString().length() == 4) {next.requestFocus();}
             }
 
             @Override
             public void afterTextChanged(Editable editable) { }
         });
-
-
 
     }
 }
