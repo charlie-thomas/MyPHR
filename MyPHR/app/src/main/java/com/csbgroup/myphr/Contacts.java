@@ -152,11 +152,14 @@ public class Contacts extends Fragment {
                             }
                         }).start();
 
-                        // update the list view
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.detach(Contacts.this).attach(Contacts.this).commit();
+                        // Move to details for new contact
+                        Fragment newdetails = ContactDetails.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("name", name.getText().toString());
+                        newdetails.setArguments(bundle);
+                        ((MainActivity)getActivity()).switchFragment(newdetails);
                     }
-                    // TODO: redirect to details fragment upon ADD
+
                 });
 
                 // cancel the add

@@ -174,9 +174,12 @@ public class Medicine extends Fragment {
                             }
                         }).start();
 
-                        // update the list view
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.detach(Medicine.this).attach(Medicine.this).commit();
+                        // Move to details for new medicine
+                        Fragment newdetails = MedicineDetails.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("title", name.getText().toString());
+                        newdetails.setArguments(bundle);
+                        ((MainActivity)getActivity()).switchFragment(newdetails);
                     }
                     // TODO: should redirect to details fragment upon ADD
                 });
