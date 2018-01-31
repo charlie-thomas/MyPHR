@@ -55,6 +55,7 @@
             android:paddingLeft="8dp"
             android:scrollbars="horizontal" />
 
+
     </LinearLayout>
 
     <LinearLayout
@@ -95,14 +96,24 @@
 
 
         <EditText
-            android:id="@+id/appointment_time"
+            android:id="@+id/appointment_hour"
 
-            android:hint="@string/atime"
-            android:inputType="time"
+            android:hint="@string/ahour"
+            android:inputType="number"
             android:layout_height="match_parent"
-            android:layout_width="165dp"
-            android:layout_marginLeft="19dp"
+            android:layout_width="64dp"
+            android:layout_marginLeft="50dp"
             android:paddingLeft="8dp"/>
+
+        <EditText
+            android:id="@+id/appointment_min"
+
+            android:hint="@string/amin"
+            android:inputType="number"
+            android:layout_width="64dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:paddingLeft="8dp" />
 
     </LinearLayout>
 

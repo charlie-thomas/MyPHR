@@ -46,7 +46,8 @@
     <string name="amessage">Enter the details for your new appointment:</string>
     <string name="aname">Appointment Title</string>
     <string name="alocation">Location</string>
-    <string name="atime">Time (HH:MM)</string>
+    <string name="ahour">HH</string>
+    <string name="amin">MM</string>
     <string name="apptime">Time</string>
     <string name="adate">Date</string>
     <string name="anotes">Notes</string>
