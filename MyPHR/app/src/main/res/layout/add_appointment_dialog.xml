@@ -93,7 +93,6 @@
             android:paddingLeft="8dp"
             android:maxLength="4" />
 
-
         <EditText
             android:id="@+id/appointment_time"
 

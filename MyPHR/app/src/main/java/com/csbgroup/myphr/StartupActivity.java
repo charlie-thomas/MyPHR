@@ -25,8 +25,8 @@ public class StartupActivity extends AppCompatActivity {
 
     public void changeButton(View view) {
         pin = editText.getText().toString();
-        if (pin.equals("0000")) {
-            Toast.makeText(this, "PIN cannot be 0000", Toast.LENGTH_SHORT).show();
+        if (pin.equals("####") || pin.length() != 4) {
+            Toast.makeText(this, "Invalid PIN", Toast.LENGTH_SHORT).show();
             editText.setText("");
             return;
         } else {
