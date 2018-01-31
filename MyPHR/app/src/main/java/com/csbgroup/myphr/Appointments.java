@@ -187,9 +187,12 @@ public class Appointments extends Fragment {
                             }
                         }).start();
 
-                        // update the list view
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.detach(Appointments.this).attach(Appointments.this).commit();
+                        // Move to details for new appointment
+                        Fragment newdetails = AppointmentsDetails.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("title", title.getText().toString());
+                        newdetails.setArguments(bundle);
+                        ((MainActivity)getActivity()).switchFragment(newdetails);
                     }
                     // TODO: should redirect to details fragment upon ADD
                 });
