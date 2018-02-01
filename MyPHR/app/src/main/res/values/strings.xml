@@ -73,7 +73,7 @@
     // Login strings
     <string name="fingerprint">Fingerprint Authentication</string>
     <string name="instructions">Use fingerprint or PIN to unlock</string>
-    <string name="change_pin">Change PIN</string>
+    <string name="change_pin">Please enter new PIN</string>
     <string name="forgot_pin">Forgot PIN?</string>
     <string name="save">Save</string>
     <string name="pin">Enter PIN</string>
