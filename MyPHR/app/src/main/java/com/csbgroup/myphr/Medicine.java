@@ -16,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.MedicineEntity;
 import java.util.ArrayList;
@@ -161,24 +163,39 @@ public class Medicine extends Fragment {
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        new Thread(new Runnable(){
-                            @Override
-                            public void run(){
 
-                                // add the new medicine to the database
-                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                MedicineEntity medicine = new MedicineEntity(name.getText().toString(),
-                                        description.getText().toString(), dose.getText().toString(),
-                                        notes.getText().toString(), false);
-                                db.medicineDao().insertAll(medicine);
-                            }
-                        }).start();
+                        // check that a name has been given
+                        Boolean validName = true;
+                        if (name.getText().toString().equals("")){
+                            validName = false;
+                        }
 
-                        // update the list view
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.detach(Medicine.this).attach(Medicine.this).commit();
+                        // format checks passed - add the new medicine to the database
+                        if (validName){
+                            new Thread(new Runnable(){
+                                @Override
+                                public void run(){
+                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                    MedicineEntity medicine = new MedicineEntity(name.getText().toString(),
+                                            description.getText().toString(), dose.getText().toString(),
+                                            notes.getText().toString(), false);
+                                    db.medicineDao().insertAll(medicine);
+
+                                    // Move to details for new medicine
+                                    Fragment newdetails = MedicineDetails.newInstance();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("title", name.getText().toString());
+                                    newdetails.setArguments(bundle);
+                                    ((MainActivity)getActivity()).switchFragment(newdetails);
+                                }
+                            }).start();
+                        }
+
+                        // format checks failed - abort and show error message
+                        else {
+                            if (!validName){errorDialog("name");} // no name
+                        }
                     }
-                    // TODO: should redirect to details fragment upon ADD
                 });
 
                 // action for cancelling activity
@@ -192,5 +209,36 @@ public class Medicine extends Fragment {
                 dialog.show();
             }
         });
+    }
+
+    /**
+     * errorDialog is called when an invalid name is part of a medicine being added, it displays
+     * an error message about the failure.
+     * @param type is the type of error reported
+     */
+    public void errorDialog(String type){
+
+        // set up the dialog
+        LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+        View v = inflater.inflate(R.layout.format_error, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(v);
+
+        // specify error type
+        final TextView errortype = v.findViewById(R.id.error_type);
+        if (type.equals("name")){errortype.setText("YOU MUST PROVIDE A NAME");}
+
+        final TextView errormessage = v.findViewById(R.id.error_message);
+        errormessage.setText("Your medicine was not added.");
+
+        // user dismiss message
+        builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

@@ -19,11 +19,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
 import com.csbgroup.myphr.database.MedicineEntity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -170,34 +175,66 @@ public class Appointments extends Fragment {
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        new Thread(new Runnable(){
-                            @Override
-                            public void run(){
 
-                                // join date into one string
-                                String date = day.getText().toString() + "/" + month.getText().toString()
-                                        + "/" + year.getText().toString();
+                        // join date into one string
+                        final String date = day.getText().toString() + "/" + month.getText().toString()
+                                + "/" + year.getText().toString();
 
-                                // join time into one string
-                                String time = hour.getText().toString() + ":" + mins.getText().toString();
+                        // join time into one string
+                        final String time = hour.getText().toString() + ":" + mins.getText().toString();
 
-                                // add the new appointment to the database
-                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                AppointmentsEntity appointment = new AppointmentsEntity(
-                                        title.getText().toString(), location.getText().toString(),
-                                        date, time, notes.getText().toString(), false);
-                                db.appointmentsDao().insertAll(appointment);
-                            }
-                        }).start();
+                        // check that a title has been given
+                        Boolean validTitle = true;
+                        if (title.getText().toString().equals("")){
+                            validTitle = false;
+                        }
 
-                        // update the list view
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.detach(Appointments.this).attach(Appointments.this).commit();
+                        // check that a valid date was given
+                        Boolean validDate = true;
+                        if (date.equals("//")) {validDate = false;} // no date given
+                        else if (date.length() != 10) {validDate = false;} // incomplete date
+                        else {
+                            try {
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                Date d = sdf.parse(date);
+                                if (!date.equals(sdf.format(d))){
+                                    validDate = false;
+                                }
+                            } catch (ParseException e) {e.printStackTrace();}
+                        }
+
+                        //TODO: VALID TIME CHECKING
+
+                        // format checks passed - add the new appointment to the database
+                        if (validTitle && validDate){
+                            new Thread(new Runnable(){
+                                @Override
+                                public void run(){
+                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                    AppointmentsEntity appointment = new AppointmentsEntity(
+                                            title.getText().toString(), location.getText().toString(),
+                                            date, time, notes.getText().toString(), false);
+                                    db.appointmentsDao().insertAll(appointment);
+
+                                    // Move to details fragment for new appointment
+                                    Fragment newdetails = AppointmentsDetails.newInstance();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("title", title.getText().toString());
+                                    newdetails.setArguments(bundle);
+                                    ((MainActivity)getActivity()).switchFragment(newdetails);
+                                }
+                            }).start();
+                        }
+
+                        // format checks failed - abort and show error message
+                        else {
+                            if (!validTitle){errorDialog("title");} // no title
+                            else {errorDialog("date");} // bad date
+                        }
                     }
-                    // TODO: should redirect to details fragment upon ADD
                 });
 
-                // action for cancelling activity
+                // action for cancelling add
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
@@ -211,8 +248,39 @@ public class Appointments extends Fragment {
     }
 
     /**
-     * shiftFocus automatically shifts the fab dialog view focus from day->month, month->year,
-     * year->hour, hour->min and min-> whatever is next.
+     * errorDialog is called when an invalid title, date or //TODO: time
+     * is part of an appointment being added, it displays an error message about the failure.
+     * @param type is the type of error reported
+     */
+    public void errorDialog(String type){
+
+        // set up the dialog
+        LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+        View v = inflater.inflate(R.layout.format_error, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(v);
+
+        // specify error type
+        final TextView errortype = v.findViewById(R.id.error_type);
+        if (type.equals("title")){errortype.setText("YOU MUST PROVIDE A TITLE");}
+        if (type.equals("date")){errortype.setText("INVALID DATE");}
+
+        final TextView errormessage = v.findViewById(R.id.error_message);
+        errormessage.setText("Your appointment was not added.");
+
+        // user dismiss message
+        builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    /**
+     * shiftFocus automatically shifts the fab dialog view focus from day->month and month->year
      * when two digits have been entered for day and month, respectively.
      * @param day is the EditText for the dialog day('DD') field
      * @param month is the EditText for the dialog month('MM') field

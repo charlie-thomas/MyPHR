@@ -21,7 +21,10 @@ import com.csbgroup.myphr.database.MedicineEntity;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -126,28 +129,56 @@ public class Investigations extends Fragment {
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
 
-                                // join date into one string
-                                String date = day.getText().toString() + "/" + month.getText().toString()
-                                        + "/" + year.getText().toString();
+                        // join date into one string
+                        final String date = day.getText().toString() + "/" + month.getText().toString()
+                                + "/" + year.getText().toString();
 
-                                // add the new investigation to the database
-                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                InvestigationsEntity investigation = new InvestigationsEntity(
-                                        title.getText().toString(), date, notes.getText().toString());
-                                db.investigationDao().insertAll(investigation);
+                        // check that a title has been given
+                        Boolean validTitle = true;
+                        if (title.getText().toString().equals("")){
+                            validTitle = false;
+                        }
 
-                            }
-                        }).start();
+                        // check that a valid date was given
+                        Boolean validDate = true;
+                        if (date.equals("//")) {validDate = false;} // no date given
+                        else if (date.length() != 10) {validDate = false;} // incomplete date
+                        else {
+                            try {
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                Date d = sdf.parse(date);
+                                if (!date.equals(sdf.format(d))){
+                                    validDate = false;
+                                }
+                            } catch (ParseException e) {e.printStackTrace();}
+                        }
 
-                        // update the list view
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.detach(Investigations.this).attach(Investigations.this).commit();
+                        // format checks passed - add the new investigation to the database
+                        if (validTitle && validDate){
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                    InvestigationsEntity investigation = new InvestigationsEntity(
+                                            title.getText().toString(), date, notes.getText().toString());
+                                    db.investigationDao().insertAll(investigation);
+
+                                    //TODO: GO TO DETAILS FRAGMENT
+                                    // (for now) update the list view
+                                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                    ft.detach(Investigations.this).attach(Investigations.this).commit();
+                                }
+                            }).start();
+                        }
+
+                        // format checks failed - abort and show error message
+                        else {
+                            if (!validTitle){errorDialog("title");} // no title
+                            else {errorDialog("date");} // bad date
+                        }
                     }
-                    // TODO: redirect to details fragment
+
                 });
 
                 // action for cancelling activity
@@ -162,6 +193,38 @@ public class Investigations extends Fragment {
             }
         });
 
+    }
+
+    /**
+     * errorDialog is called when an invalid title or date is part of an investigation
+     * being added, it displays an error message about the failure.
+     * @param type is the type of error reported
+     */
+    public void errorDialog(String type){
+
+        // set up the dialog
+        LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+        View v = inflater.inflate(R.layout.format_error, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(v);
+
+        // specify error type
+        final TextView errortype = v.findViewById(R.id.error_type);
+        if (type.equals("title")){errortype.setText("YOU MUST PROVIDE A TITLE");}
+        if (type.equals("date")){errortype.setText("INVALID DATE");}
+
+        final TextView errormessage = v.findViewById(R.id.error_message);
+        errormessage.setText("Your investigation was not added.");
+
+        // user dismiss message
+        builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     /**
