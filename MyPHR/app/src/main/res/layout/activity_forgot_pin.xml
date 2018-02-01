@@ -1,6 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context="com.csbgroup.myphr.ChangePINActivity">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/answer_1"
+        android:id="@+id/security_1_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        android:textSize="10pt"
+        android:textColor="#FFFF" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/attempt_1_answer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="250dp"
+        android:hint="@string/question_answer"
+        android:textSize="10pt"
+        android:textColorHint="#FFFF"
+        android:textColor="#FFFF"
+        android:backgroundTint="#FFFF"
+        tools:ignore="TextFields"
+        android:maxLength="25" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/answer_2"
+        android:id="@+id/security_2_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="400dp"
+        android:textSize="10pt"
+        android:textColor="#FFFF" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/attempt_2_answer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="500dp"
+        android:hint="@string/question_answer"
+        android:textSize="10pt"
+        android:textColorHint="#FFFF"
+        android:textColor="#FFFF"
+        android:backgroundTint="#FFFF"
+        tools:ignore="TextFields"
+        android:maxLength="25" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/enter"
+        android:id="@+id/saveQuestions"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="620dp"
+        android:onClick="forgotButton"
+        />
+
+
+</RelativeLayout>

@@ -6,15 +6,17 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import static com.csbgroup.myphr.R.*;
 import static com.csbgroup.myphr.R.layout.*;
 
-public class QuestionsActivity extends AppCompatActivity {
+public class QuestionsActivity extends AppCompatActivity implements OnItemSelectedListener {
     String answer1;
     String answer2;
     EditText answer1Text;
@@ -43,6 +45,15 @@ public class QuestionsActivity extends AppCompatActivity {
         answer1Text = findViewById(id.security_1_answer);
         answer2Text = findViewById(id.security_2_answer);
 
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+        String chosen = parent.getItemAtPosition(pos).toString();
+        Toast.makeText(this, "Question: " + chosen, Toast.LENGTH_SHORT).show();
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
     }
 
     @SuppressLint("ApplySharedPref")

@@ -46,7 +46,8 @@
         android:layout_marginTop="20dp"
         android:textColor="#FFFF"
         android:layout_centerHorizontal="true"
-        android:text="Forgot PIN?"
+        android:text="@string/forgot"
+        android:onClick="goToForgot"
         style="?android:attr/borderlessButtonStyle" />
 
     <ImageView

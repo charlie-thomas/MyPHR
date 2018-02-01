@@ -86,11 +86,15 @@
     <string name="finger_perm">Please enable the fingerprint permission</string>
     <string name="finger_deconfigured">No fingerprint configured. Please register at least one fingerprint in your device\'s Settings</string>
     <string name="lockscreen_off">Please enable lockscreen security in your device\'s Settings</string>
+    <string name="forgot">Forgot PIN?</string>
 
     // Security questions strings
     <string name="question_answer">Enter answer</string>
     <string name="question_1">Please pick a security question</string>
     <string name="question_2">Please pick another security question</string>
+    <string name="answer_1">Please answer first security question</string>
+    <string name="answer_2">Please answer second security question</string>
+    <string name="enter">Enter</string>
 
     <string-array name="questions_array">
         <item>Mother\'s maiden name</item>

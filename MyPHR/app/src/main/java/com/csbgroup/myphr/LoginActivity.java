@@ -20,6 +20,7 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.v4.app.ActivityCompat;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
 
     // Fingerprint variables
     private static final String KEY_NAME = "yourKey";
-    public static final String PREFS = "pin";
     private Cipher cipher;
     private KeyStore keyStore;
     KeyGenerator keyGenerator;
@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     // PIN input variables
+    public static final String PREFS = "pin";
     public static final String TAG = "PinLockView";
     PinLockView mPinLockView;
     IndicatorDots mIndicatorDots;
@@ -84,6 +85,12 @@ public class LoginActivity extends AppCompatActivity {
             Log.d(TAG, "Pin changed, new length " + pinLength + " with intermediate pin " + intermediatePin);
         }
     };
+
+
+    public void goToForgot(View view) {
+        Intent intent = new Intent(this, ForgotPINActivity.class);
+        startActivity(intent);
+    }
 
 
     @Override
