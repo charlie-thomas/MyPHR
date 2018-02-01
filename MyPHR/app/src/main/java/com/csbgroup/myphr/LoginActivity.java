@@ -63,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onComplete(String pin) {
             SharedPreferences preferences = getSharedPreferences(PREFS,0);
-            String pinn = preferences.getString("PIN", "####"); // default pin is 0000
+            String pinn = preferences.getString("PIN", "####"); // default pin is ####
 
             if (pin.equals(pinn)) {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));

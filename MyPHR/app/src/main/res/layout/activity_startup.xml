@@ -19,7 +19,7 @@
         android:contentDescription="@string/icon_desc"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="70dp"
         android:adjustViewBounds="true"
         android:layout_width="120dp"
         android:layout_height="120dp"
@@ -34,7 +34,7 @@
         android:textSize="10pt"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
-        android:layout_marginTop="280dp" />
+        android:layout_marginTop="200dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
         android:id="@+id/initialPin"
         android:inputType="number"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="370dp"
+        android:layout_marginTop="280dp"
         android:hint="@string/pin"
         android:textSize="12pt"
         android:maxLength="4"
@@ -51,13 +51,32 @@
         android:backgroundTint="#FFFF"
         tools:ignore="TextFields" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please pick a security question:"
+        android:id="@+id/security_1_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="350dp"
+        android:textSize="10pt"
+        android:textColor="#FFFF" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/security_1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="400dp"
+        android:backgroundTint="#FFFF"
+        />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save"
         android:id="@+id/saveChangePin"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="470dp"
+        android:layout_marginTop="670dp"
         android:onClick="changeButton"
         />
 

@@ -63,7 +63,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_below="@id/pin_lock_view"
         android:id="@+id/textview"
-        android:layout_marginTop="430dp"/>
+        android:textColor="#FFFF"
+        android:layout_marginTop="10dp"/>
 
 </RelativeLayout>
