@@ -179,18 +179,27 @@ public class Appointments extends Fragment {
                         final String date = day.getText().toString() + "/" + month.getText().toString()
                                 + "/" + year.getText().toString();
 
+                        // Check that a title has been given
+                        Boolean validTitle = true;
+                        if (title.getText().toString().equals("")){
+                            validTitle = false;
+                        }
+
                         // Check if date is valid
                         Boolean validDate = true;
-                        try {
-                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                            Date d = sdf.parse(date);
-                            if (!date.equals(sdf.format(d))){
-                                validDate = false;
-                            }
-                        } catch (ParseException e) {e.printStackTrace();}
+                        if (date.equals("//")) {validDate = false;} // no date given
+                        else {
+                            try {
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                Date d = sdf.parse(date);
+                                if (!date.equals(sdf.format(d))){
+                                    validDate = false;
+                                }
+                            } catch (ParseException e) {e.printStackTrace();}
+                        }
 
                         // format checks passed - add the new appointment to the database
-                        if (validDate && !date.equals("//")){
+                        if (validTitle && validDate){
                             new Thread(new Runnable(){
                                 @Override
                                 public void run(){
@@ -213,7 +222,8 @@ public class Appointments extends Fragment {
 
                         // format checks failed - abort and show error message
                         else {
-                            errorDialog();
+                            if (!validTitle){errorDialog("title");} // bad title
+                            else {errorDialog("date");} // bad date
                         }
                     }
                 });
@@ -235,7 +245,7 @@ public class Appointments extends Fragment {
      * errorDialog is called when an invalid date or //TODO: time
      * is part of an appointment being added, it displays an error message about the failure.
      */
-    public void errorDialog(){
+    public void errorDialog(String type){
 
         // set up the dialog
         LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
@@ -243,6 +253,12 @@ public class Appointments extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(v);
 
+        // specify error type
+        final TextView message = v.findViewById(R.id.error_type);
+        if (type.equals("title")){message.setText("YOU MUST PROVIDE A TITLE");}
+        if (type.equals("date")){message.setText("INVALID DATE");}
+
+        // user dismiss message
         builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {

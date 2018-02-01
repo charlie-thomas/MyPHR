@@ -21,7 +21,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/errortype"
+        android:id="@+id/error_type"
 
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
