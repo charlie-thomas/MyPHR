@@ -36,14 +36,14 @@
         android:textSize="10pt"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
-        android:layout_marginTop="250dp" />
+        android:layout_marginTop="220dp" />
 
     <com.andrognito.pinlockview.IndicatorDots
         android:id="@+id/indicator_dots_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="350dp"
+        android:layout_marginTop="320dp"
         app:dotDiameter="20dp" />
 
     <com.andrognito.pinlockview.PinLockView
@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/indicator_dots_start"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="60dp"
         app:keypadButtonSize="72dp"
         app:keypadShowDeleteButton="true"
         app:keypadTextColor="#FFFF"

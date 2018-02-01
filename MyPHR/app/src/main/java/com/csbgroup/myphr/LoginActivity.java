@@ -98,17 +98,11 @@ public class LoginActivity extends AppCompatActivity {
         // Test for first time setup
         SharedPreferences preferences = getSharedPreferences(PREFS,0);
         String pin = preferences.getString("PIN", "####");
+
         if (pin.equals("####")) {
             Intent intent = new Intent(this, StartupActivity.class);
             startActivity(intent);
         }
-
-        String answer1 = preferences.getString("answer1", "####");
-        if (answer1.equals("####")) {
-            Intent intent = new Intent(this, QuestionsActivity.class);
-            startActivity(intent);
-        }
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
