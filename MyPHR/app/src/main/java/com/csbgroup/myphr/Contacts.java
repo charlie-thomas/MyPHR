@@ -13,6 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.support.design.widget.FloatingActionButton;
+import android.widget.TextView;
+
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.ContactsEntity;
 import java.util.List;
@@ -139,24 +141,39 @@ public class Contacts extends Fragment {
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
 
-                                // add the new contact to the database
-                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                ContactsEntity contact = new ContactsEntity(name.getText().toString(),
-                                        email.getText().toString(),phone.getText().toString(),
-                                        notes.getText().toString());
-                                db.contactsDao().insertAll(contact);
-                            }
-                        }).start();
+                        // check that a name has been given
+                        Boolean validName = true;
+                        if (name.getText().toString().equals("")){
+                            validName = false;
+                        }
 
-                        // update the list view
-                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                        ft.detach(Contacts.this).attach(Contacts.this).commit();
+                        // format checks passed - add the new appointment to the database
+                        if (validName){
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                    ContactsEntity contact = new ContactsEntity(name.getText().toString(),
+                                            email.getText().toString(),phone.getText().toString(),
+                                            notes.getText().toString());
+                                    db.contactsDao().insertAll(contact);
+
+                                    // Move to details for new contact
+                                    Fragment newdetails = ContactDetails.newInstance();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("name", name.getText().toString());
+                                    newdetails.setArguments(bundle);
+                                    ((MainActivity)getActivity()).switchFragment(newdetails);
+                                }
+                            }).start();
+                        }
+
+                        // format checks failed - abort and show error message
+                        else {
+                            if (!validName){errorDialog("name");} // no name
+                        }
                     }
-                    // TODO: redirect to details fragment upon ADD
                 });
 
                 // cancel the add
@@ -170,5 +187,36 @@ public class Contacts extends Fragment {
                 dialog.show();
             }
         });
+    }
+
+    /**
+     * errorDialog is called when an invalid name is part of a contact being added, it displays
+     * an error message about the failure.
+     * @param type is the type of error reported
+     */
+    public void errorDialog(String type){
+
+        // set up the dialog
+        LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+        View v = inflater.inflate(R.layout.format_error, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(v);
+
+        // specify error type
+        final TextView errortype = v.findViewById(R.id.error_type);
+        if (type.equals("name")){errortype.setText("YOU MUST PROVIDE A NAME");}
+
+        final TextView errormessage = v.findViewById(R.id.error_message);
+        errormessage.setText("Your contact was not added.");
+
+        // user dismiss message
+        builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
