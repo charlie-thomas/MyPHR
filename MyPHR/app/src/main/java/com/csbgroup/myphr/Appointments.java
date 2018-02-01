@@ -203,10 +203,17 @@ public class Appointments extends Fragment {
                             } catch (ParseException e) {e.printStackTrace();}
                         }
 
-                        //TODO: VALID TIME CHECKING
+                        // check that a valid time was given
+                        Boolean validTime = true;
+                        if (time.equals("")) {validTime = false;} // no time given
+                        int hourint = Integer.parseInt(hour.getText().toString()); // convert to int for checks
+                        int minsint = Integer.parseInt(mins.getText().toString()); // convert to int for checks
+                        if (hourint <0 || hourint >23) {validTime = false;}
+                        if (minsint <0 || minsint >59) {validTime = false;}
+
 
                         // format checks passed - add the new appointment to the database
-                        if (validTitle && validDate){
+                        if (validTitle && validDate && validTime){
                             new Thread(new Runnable(){
                                 @Override
                                 public void run(){
@@ -229,7 +236,8 @@ public class Appointments extends Fragment {
                         // format checks failed - abort and show error message
                         else {
                             if (!validTitle){errorDialog("title");} // no title
-                            else {errorDialog("date");} // bad date
+                            else if (!validDate){errorDialog("date");} // bad date
+                            else {errorDialog("time");} // bad time
                         }
                     }
                 });
@@ -264,6 +272,7 @@ public class Appointments extends Fragment {
         final TextView errortype = v.findViewById(R.id.error_type);
         if (type.equals("title")){errortype.setText("YOU MUST PROVIDE A TITLE");}
         if (type.equals("date")){errortype.setText("INVALID DATE");}
+        if (type.equals("time")){errortype.setText("INVALID TIME");}
 
         final TextView errormessage = v.findViewById(R.id.error_message);
         errormessage.setText("Your appointment was not added.");
