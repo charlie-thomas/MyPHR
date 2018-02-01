@@ -143,7 +143,6 @@ public class Contacts extends Fragment {
                     public void onClick(DialogInterface arg0, int arg1) {
 
                         // check that a name has been given
-                        // check that a title has been given
                         Boolean validName = true;
                         if (name.getText().toString().equals("")){
                             validName = false;
@@ -154,7 +153,6 @@ public class Contacts extends Fragment {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    // add the new contact to the database
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                     ContactsEntity contact = new ContactsEntity(name.getText().toString(),
                                             email.getText().toString(),phone.getText().toString(),
@@ -175,9 +173,7 @@ public class Contacts extends Fragment {
                         else {
                             if (!validName){errorDialog("name");} // no name
                         }
-
                     }
-
                 });
 
                 // cancel the add
