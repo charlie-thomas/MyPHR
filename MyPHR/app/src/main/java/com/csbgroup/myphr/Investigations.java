@@ -174,7 +174,7 @@ public class Investigations extends Fragment {
 
                         // format checks failed - abort and show error message
                         else {
-                            if (!validTitle){errorDialog("title");} // bad title
+                            if (!validTitle){errorDialog("title");} // no title
                             else {errorDialog("date");} // bad date
                         }
                     }
