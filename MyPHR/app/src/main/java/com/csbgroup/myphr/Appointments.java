@@ -180,6 +180,9 @@ public class Appointments extends Fragment {
                         final String date = day.getText().toString() + "/" + month.getText().toString()
                                 + "/" + year.getText().toString();
 
+                        // join time into one string
+                        final String time = hour.getText().toString() + ":" + mins.getText().toString();
+
                         // check that a title has been given
                         Boolean validTitle = true;
                         if (title.getText().toString().equals("")){
@@ -210,8 +213,7 @@ public class Appointments extends Fragment {
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                     AppointmentsEntity appointment = new AppointmentsEntity(
                                             title.getText().toString(), location.getText().toString(),
-                                            date, time.getText().toString(),
-                                            notes.getText().toString(), false);
+                                            date, time, notes.getText().toString(), false);
                                     db.appointmentsDao().insertAll(appointment);
 
                                     // Move to details fragment for new appointment
