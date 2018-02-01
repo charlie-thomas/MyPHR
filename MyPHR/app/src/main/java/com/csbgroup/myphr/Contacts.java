@@ -192,6 +192,7 @@ public class Contacts extends Fragment {
     /**
      * errorDialog is called when an invalid name is part of a contact being added, it displays
      * an error message about the failure.
+     * @param type is the type of error reported
      */
     public void errorDialog(String type){
 

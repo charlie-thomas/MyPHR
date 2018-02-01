@@ -33,6 +33,14 @@
             android:textSize="16dp"
             android:textStyle="bold" />
 
+        <EditText
+            android:id="@+id/measurement"
+
+            android:inputType="text"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:paddingLeft="8dp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -79,14 +87,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
-
-        <EditText
-            android:id="@+id/measurement"
-
-            android:inputType="text"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            android:paddingLeft="8dp" />
 
         <EditText
             android:id="@+id/centile"

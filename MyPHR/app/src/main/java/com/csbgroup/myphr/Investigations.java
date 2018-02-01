@@ -198,6 +198,7 @@ public class Investigations extends Fragment {
     /**
      * errorDialog is called when an invalid title or date is part of an investigation
      * being added, it displays an error message about the failure.
+     * @param type is the type of error reported
      */
     public void errorDialog(String type){
 

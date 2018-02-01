@@ -214,6 +214,7 @@ public class Medicine extends Fragment {
     /**
      * errorDialog is called when an invalid name is part of a medicine being added, it displays
      * an error message about the failure.
+     * @param type is the type of error reported
      */
     public void errorDialog(String type){
 

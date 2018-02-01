@@ -231,7 +231,7 @@ public class Appointments extends Fragment {
                     }
                 });
 
-                // action for cancelling activity
+                // action for cancelling add
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
@@ -247,6 +247,7 @@ public class Appointments extends Fragment {
     /**
      * errorDialog is called when an invalid title, date or //TODO: time
      * is part of an appointment being added, it displays an error message about the failure.
+     * @param type is the type of error reported
      */
     public void errorDialog(String type){
 
