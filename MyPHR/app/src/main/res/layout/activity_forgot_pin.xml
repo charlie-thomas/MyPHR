@@ -9,80 +9,79 @@
 
 
     <TextView
+        android:id="@+id/security_1_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/answer_1"
-        android:id="@+id/security_1_text"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="150dp"
-        android:textSize="10pt"
-        android:textColor="#FFFF" />
+        android:text="@string/answer_1"
+        android:textColor="#FFFF"
+        android:textSize="10pt" />
 
     <TextView
+        android:id="@+id/chosen1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/chosen1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="200dp"
-        android:textSize="10pt"
-        android:textColor="#FFFF" />
+        android:textColor="#FFFF"
+        android:textSize="10pt" />
 
     <EditText
+        android:id="@+id/attempt_1_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/attempt_1_answer"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="250dp"
-        android:hint="@string/question_answer"
-        android:textSize="10pt"
-        android:textColorHint="#FFFF"
-        android:textColor="#FFFF"
         android:backgroundTint="#FFFF"
-        tools:ignore="TextFields"
-        android:maxLength="25" />
+        android:hint="@string/question_answer"
+        android:maxLength="25"
+        android:textColor="#FFFF"
+        android:textColorHint="#FFFF"
+        android:textSize="10pt"
+        tools:ignore="TextFields" />
 
     <TextView
+        android:id="@+id/security_2_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/answer_2"
-        android:id="@+id/security_2_text"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="400dp"
-        android:textSize="10pt"
-        android:textColor="#FFFF" />
+        android:text="@string/answer_2"
+        android:textColor="#FFFF"
+        android:textSize="10pt" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/chosen2"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="450dp"
-        android:textSize="10pt"
-        android:textColor="#FFFF" />
+        android:textColor="#FFFF"
+        android:textSize="10pt" />
 
     <EditText
+        android:id="@+id/attempt_2_answer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/attempt_2_answer"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="500dp"
-        android:hint="@string/question_answer"
-        android:textSize="10pt"
-        android:textColorHint="#FFFF"
-        android:textColor="#FFFF"
         android:backgroundTint="#FFFF"
-        tools:ignore="TextFields"
-        android:maxLength="25" />
+        android:hint="@string/question_answer"
+        android:maxLength="25"
+        android:textColor="#FFFF"
+        android:textColorHint="#FFFF"
+        android:textSize="10pt"
+        tools:ignore="TextFields" />
 
     <Button
+        android:id="@+id/saveQuestions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/enter"
-        android:id="@+id/saveQuestions"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="620dp"
         android:onClick="forgotButton"
-        />
+        android:text="@string/enter" />
 
 
 </RelativeLayout>

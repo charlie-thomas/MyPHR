@@ -77,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onEmpty() {
-            Log.d(TAG, "Pin empty");
+            Log.d(TAG, "PIN empty");
         }
 
         @Override
