@@ -26,11 +26,19 @@ public class StartupActivity extends AppCompatActivity {
 
         editText = findViewById(id.initialPin);
 
+        // Security question 1 spinner
         Spinner spinner = findViewById(id.security_1);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 array.questions_array, layout.spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+        // Security question 2 spinner
+        Spinner spinner2 = findViewById(id.security_2);
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
+                array.questions_array, layout.spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner2.setAdapter(adapter2);
 
     }
 

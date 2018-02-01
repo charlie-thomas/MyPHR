@@ -87,7 +87,11 @@
     <string name="finger_deconfigured">No fingerprint configured. Please register at least one fingerprint in your device\'s Settings</string>
     <string name="lockscreen_off">Please enable lockscreen security in your device\'s Settings</string>
 
-    // Security Questions Array
+    // Security questions strings
+    <string name="question_answer">Enter answer</string>
+    <string name="question_1">Please pick a security question</string>
+    <string name="question_2">Please pick another security question</string>
+
     <string-array name="questions_array">
         <item>Mother\'s maiden name</item>
         <item>Father\'s middle name</item>

@@ -19,7 +19,7 @@
         android:contentDescription="@string/icon_desc"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="50dp"
         android:adjustViewBounds="true"
         android:layout_width="120dp"
         android:layout_height="120dp"
@@ -54,10 +54,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Please pick a security question:"
+        android:text="@string/question_1"
         android:id="@+id/security_1_text"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="350dp"
+        android:layout_marginTop="400dp"
         android:textSize="10pt"
         android:textColor="#FFFF" />
 
@@ -65,12 +65,61 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/security_1"
-        android:layout_marginTop="400dp"
+        android:layout_marginTop="450dp"
         android:backgroundTint="#FFFF"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
         android:textColor="#FFFF"
         android:textSize="8pt" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/security_1_answer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="480dp"
+        android:hint="@string/question_answer"
+        android:textSize="10pt"
+        android:textColorHint="#FFFF"
+        android:textColor="#FFFF"
+        android:backgroundTint="#FFFF"
+        tools:ignore="TextFields"
+        android:maxLength="25" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/question_2"
+        android:id="@+id/security_2_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="530dp"
+        android:textSize="10pt"
+        android:textColor="#FFFF" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/security_2"
+        android:layout_marginTop="580dp"
+        android:backgroundTint="#FFFF"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:textColor="#FFFF"
+        android:textSize="8pt" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/security_2_answer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="610dp"
+        android:hint="@string/question_answer"
+        android:textSize="10pt"
+        android:textColorHint="#FFFF"
+        android:textColor="#FFFF"
+        android:backgroundTint="#FFFF"
+        tools:ignore="TextFields"
+        android:maxLength="25" />
 
     <Button
         android:layout_width="wrap_content"
