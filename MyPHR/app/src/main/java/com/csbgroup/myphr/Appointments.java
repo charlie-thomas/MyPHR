@@ -19,11 +19,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
 import com.csbgroup.myphr.database.MedicineEntity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -169,32 +174,48 @@ public class Appointments extends Fragment {
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        new Thread(new Runnable(){
-                            @Override
-                            public void run(){
 
-                                // join date into one string
-                                String date = day.getText().toString() + "/" + month.getText().toString()
-                                        + "/" + year.getText().toString();
+                        // join date into one string
+                        final String date = day.getText().toString() + "/" + month.getText().toString()
+                                + "/" + year.getText().toString();
 
-                                // add the new appointment to the database
-                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                AppointmentsEntity appointment = new AppointmentsEntity(
-                                        title.getText().toString(), location.getText().toString(),
-                                        date, time.getText().toString(),
-                                        notes.getText().toString(), false);
-                                db.appointmentsDao().insertAll(appointment);
+                        // Check if date is valid
+                        Boolean validDate = true;
+                        try {
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                            Date d = sdf.parse(date);
+                            if (!date.equals(sdf.format(d))){
+                                validDate = false;
                             }
-                        }).start();
+                        } catch (ParseException e) {e.printStackTrace();}
 
-                        // Move to details for new appointment
-                        Fragment newdetails = AppointmentsDetails.newInstance();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("title", title.getText().toString());
-                        newdetails.setArguments(bundle);
-                        ((MainActivity)getActivity()).switchFragment(newdetails);
+                        // format checks passed - add the new appointment to the database
+                        if (validDate && !date.equals("//")){
+                            new Thread(new Runnable(){
+                                @Override
+                                public void run(){
+                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                    AppointmentsEntity appointment = new AppointmentsEntity(
+                                            title.getText().toString(), location.getText().toString(),
+                                            date, time.getText().toString(),
+                                            notes.getText().toString(), false);
+                                    db.appointmentsDao().insertAll(appointment);
+
+                                    // Move to details fragment for new appointment
+                                    Fragment newdetails = AppointmentsDetails.newInstance();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("title", title.getText().toString());
+                                    newdetails.setArguments(bundle);
+                                    ((MainActivity)getActivity()).switchFragment(newdetails);
+                                        }
+                                    }).start();
+                                }
+
+                        // format checks failed - abort and show error message
+                        else {
+                            errorDialog();
+                        }
                     }
-                    // TODO: should redirect to details fragment upon ADD
                 });
 
                 // action for cancelling activity
@@ -208,6 +229,28 @@ public class Appointments extends Fragment {
                 dialog.show();
             }
         });
+    }
+
+    /**
+     * errorDialog is called when an invalid date or //TODO: time
+     * is part of an appointment being added, it displays an error message about the failure.
+     */
+    public void errorDialog(){
+
+        // set up the dialog
+        LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+        View v = inflater.inflate(R.layout.format_error, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(v);
+
+        builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     /**
