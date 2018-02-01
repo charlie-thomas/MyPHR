@@ -164,11 +164,12 @@ public class Appointments extends Fragment {
                 final EditText day = v.findViewById(R.id.appointment_DD);
                 final EditText month = v.findViewById(R.id.appointment_MM);
                 final EditText year = v.findViewById(R.id.appointment_YYYY);
-                final EditText time = v.findViewById(R.id.appointment_time);
+                final EditText hour = v.findViewById(R.id.appointment_hour);
+                final EditText mins = v.findViewById(R.id.appointment_min);
                 final EditText notes = v.findViewById(R.id.appointment_notes);
 
                 // auto shift view focus when entering date
-                shiftFocus(day, month, year, time);
+                shiftFocus(day, month, year, hour, mins, notes);
 
                 // add new appointment action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
@@ -282,9 +283,12 @@ public class Appointments extends Fragment {
      * @param day is the EditText for the dialog day('DD') field
      * @param month is the EditText for the dialog month('MM') field
      * @param year is the EditText for the dialog year('YYYY') field
-     * @param next is the EditText for the dialog field that follows year
+     * @param hour is the EditText for the dialog hour field
+     * @param mins is the EditText for the dialog mins field
+     * @param next is the EditText for the dialog field that follows mins
      */
-    public void shiftFocus(final EditText day, final EditText month, final EditText year, final EditText next){
+    public void shiftFocus(final EditText day, final EditText month, final EditText year,
+                           final EditText hour, final EditText mins, final EditText next){
 
         day.addTextChangedListener(new TextWatcher() {
 
@@ -321,12 +325,41 @@ public class Appointments extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (year.getText().toString().length() == 4) {next.requestFocus();}
+                if (year.getText().toString().length() == 4) {hour.requestFocus();}
             }
 
             @Override
             public void afterTextChanged(Editable editable) { }
         });
+
+        hour.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (hour.getText().toString().length() == 2) {mins.requestFocus();}
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) { }
+        });
+
+        mins.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (mins.getText().toString().length() == 2) {next.requestFocus();}
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) { }
+        });
+
 
     }
 

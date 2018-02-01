@@ -3,15 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary"
     tools:context="com.csbgroup.myphr.ChangePINActivity">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -19,34 +13,27 @@
         android:text="@string/change_pin"
         android:textColor="#FFFF"
         android:textSize="12pt"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="10dp"/>
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"/>
 
-    <EditText
+    <com.andrognito.pinlockview.IndicatorDots
+        android:id="@+id/indicator_dots_change"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/pinChangeEntry"
-        android:ems="10"
-        android:inputType="phone"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="300dp"
-        android:hint="@string/new_pin"
-        android:textSize="12pt"
-        android:textColorHint="#FFFF"
-        android:textColor="#FFFF"
-        android:backgroundTint="#FFFF"
-        />
+        android:layout_marginTop="230dp"
+        app:dotDiameter="20dp" />
 
-    <Button
+    <com.andrognito.pinlockview.PinLockView
+        android:id="@+id/pin_change_entry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/save"
-        android:id="@+id/saveChangePin"
+        android:layout_below="@id/indicator_dots_change"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="400dp"
-        android:onClick="changeButton"
-        />
-
-
+        android:layout_marginTop="130dp"
+        app:keypadButtonSize="72dp"
+        app:keypadShowDeleteButton="true"
+        app:keypadTextColor="#FFFF"
+        app:keypadTextSize="22dp" />
 
 </RelativeLayout>

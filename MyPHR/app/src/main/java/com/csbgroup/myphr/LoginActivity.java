@@ -20,6 +20,7 @@ import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyPermanentlyInvalidatedException;
 import android.security.keystore.KeyProperties;
 import android.support.v4.app.ActivityCompat;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
 
     // Fingerprint variables
     private static final String KEY_NAME = "yourKey";
-    public static final String PREFS = "pin";
     private Cipher cipher;
     private KeyStore keyStore;
     KeyGenerator keyGenerator;
@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     // PIN input variables
+    public static final String PREFS = "pin";
     public static final String TAG = "PinLockView";
     PinLockView mPinLockView;
     IndicatorDots mIndicatorDots;
@@ -63,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         public void onComplete(String pin) {
             SharedPreferences preferences = getSharedPreferences(PREFS,0);
-            String pinn = preferences.getString("PIN", "0000"); // default pin is 0000
+            String pinn = preferences.getString("PIN", "####"); // default pin is ####
 
             if (pin.equals(pinn)) {
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
@@ -76,7 +77,7 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onEmpty() {
-            Log.d(TAG, "Pin empty");
+            Log.d(TAG, "PIN empty");
         }
 
         @Override
@@ -86,16 +87,22 @@ public class LoginActivity extends AppCompatActivity {
     };
 
 
+    public void goToForgot(View view) {
+        Intent intent = new Intent(this, ForgotPINActivity.class);
+        startActivity(intent);
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Test for first time setup
         SharedPreferences preferences = getSharedPreferences(PREFS,0);
-        String pin = preferences.getString("PIN", "0000");
-        if (pin.equals("0000")) {
+        String pin = preferences.getString("PIN", "####");
+
+        if (pin.equals("####")) {
             Intent intent = new Intent(this, StartupActivity.class);
             startActivity(intent);
         }
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);

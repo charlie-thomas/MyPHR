@@ -50,6 +50,16 @@
             android:label="MyPHR" >
         </activity>
 
+        <activity
+            android:name=".QuestionsActivity"
+            android:label="MyPHR" >
+        </activity>
+
+        <activity
+            android:name=".ForgotPINActivity"
+            android:label="MyPHR" >
+        </activity>
+
     </application>
 
 </manifest>
