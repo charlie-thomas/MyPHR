@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import static com.csbgroup.myphr.R.*;
+import static com.csbgroup.myphr.R.layout.*;
 
 public class StartupActivity extends AppCompatActivity {
     String pin;
@@ -21,18 +22,15 @@ public class StartupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(layout.activity_startup);
+        setContentView(activity_startup);
 
         editText = findViewById(id.initialPin);
 
         Spinner spinner = findViewById(id.security_1);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                array.questions_array, android.R.layout.simple_spinner_item);
+                array.questions_array, layout.spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
-
-
 
     }
 

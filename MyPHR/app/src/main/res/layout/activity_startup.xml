@@ -65,10 +65,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/security_1"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="400dp"
         android:backgroundTint="#FFFF"
-        />
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:textColor="#FFFF"
+        android:textSize="8pt" />
 
     <Button
         android:layout_width="wrap_content"
