@@ -46,7 +46,8 @@
     <string name="amessage">Enter the details for your new appointment:</string>
     <string name="aname">Appointment Title</string>
     <string name="alocation">Location</string>
-    <string name="atime">Time (HH:MM)</string>
+    <string name="ahour">HH</string>
+    <string name="amin">MM</string>
     <string name="apptime">Time</string>
     <string name="adate">Date</string>
     <string name="anotes">Notes</string>
@@ -73,19 +74,36 @@
     // Login strings
     <string name="fingerprint">Fingerprint Authentication</string>
     <string name="instructions">Use fingerprint or PIN to unlock</string>
-    <string name="change_pin">Change PIN</string>
+    <string name="change_pin">Please set new PIN</string>
     <string name="forgot_pin">Forgot PIN?</string>
     <string name="save">Save</string>
     <string name="pin">Enter PIN</string>
-    <string name="new_pin">Enter new PIN</string>
+    <string name="new_pin">Set new PIN</string>
     <string name="icon_desc">App Icon</string>
     <string name="finger_desc">Fingerprint Icon</string>
-    <string name="welcome">Welcome to MyPHR. Please enter a PIN"</string>
+    <string name="welcome">Welcome\nPlease set a PIN"</string>
     <string name="setup">Setup</string>
     <string name="finger_unsupported">Your device does not support fingerprint authentication</string>
     <string name="finger_perm">Please enable the fingerprint permission</string>
     <string name="finger_deconfigured">No fingerprint configured. Please register at least one fingerprint in your device\'s Settings</string>
     <string name="lockscreen_off">Please enable lockscreen security in your device\'s Settings</string>
+    <string name="forgot">Forgot PIN?</string>
+
+    // Security questions strings
+    <string name="question_answer">Enter answer</string>
+    <string name="question_1">Please pick a security question</string>
+    <string name="question_2">Please pick another security question</string>
+    <string name="answer_1">Please answer first security question</string>
+    <string name="answer_2">Please answer second security question</string>
+    <string name="enter">Enter</string>
+
+    <string-array name="questions_array">
+        <item>Mother\'s maiden name</item>
+        <item>Father\'s middle name</item>
+        <item>Name of first pet</item>
+        <item>Favourite film</item>
+        <item>Favourite colour</item>
+    </string-array>
 
     // Error checking strings
     <string name="error">Format Error</string>
