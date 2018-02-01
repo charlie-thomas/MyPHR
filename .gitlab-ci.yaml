@@ -13,7 +13,6 @@ variables:
   ANDROID_BUILD_TOOLS: "26.0.2"
   ANDROID_SDK_TOOLS: "24.4.1"
   ANDROID_SDK_TOOLS_REV: "3859397"
-  ANDROID_CMAKE_REV: "3.6.3155560"
 
 before_script:
   - cd ./MyPHR
@@ -32,7 +31,6 @@ before_script:
   - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'extras;android;m2repository' > /dev/null
   - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'extras;google;google_play_services' > /dev/null
   - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'extras;google;m2repository' > /dev/null
-  - echo y | $ANDROID_HOME/tools/bin/sdkmanager 'cmake;'$ANDROID_CMAKE_REV > /dev/null
   - chmod +x ./gradlew
 
 stages:
