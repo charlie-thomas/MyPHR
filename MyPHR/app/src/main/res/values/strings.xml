@@ -51,9 +51,6 @@
     <string name="adate">Date</string>
     <string name="anotes">Notes</string>
     <string name="amessage2">You can schedule reminders later.</string>
-    <string name="error">Format Error</string>
-    <string name="baddate">INVALID DATE</string>
-    <string name="errormessage">Your appointment was not added.</string>
 
     // Measurement strings
     <string name="centile">Centile</string>
@@ -89,5 +86,8 @@
     <string name="finger_perm">Please enable the fingerprint permission</string>
     <string name="finger_deconfigured">No fingerprint configured. Please register at least one fingerprint in your device\'s Settings</string>
     <string name="lockscreen_off">Please enable lockscreen security in your device\'s Settings</string>
+
+    // Error checking strings
+    <string name="error">Format Error</string>
 
 </resources>
