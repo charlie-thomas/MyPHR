@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -6,6 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary"
     tools:context="com.csbgroup.myphr.ChangePINActivity">
+
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -34,7 +36,7 @@
         android:textSize="10pt"
         android:layout_centerHorizontal="true"
         android:textAlignment="center"
-        android:layout_marginTop="200dp" />
+        android:layout_marginTop="250dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -42,7 +44,7 @@
         android:id="@+id/initialPin"
         android:inputType="number"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="280dp"
+        android:layout_marginTop="370dp"
         android:hint="@string/pin"
         android:textSize="12pt"
         android:maxLength="4"
@@ -51,86 +53,15 @@
         android:backgroundTint="#FFFF"
         tools:ignore="TextFields" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/question_1"
-        android:id="@+id/security_1_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="400dp"
-        android:textSize="10pt"
-        android:textColor="#FFFF" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/security_1"
-        android:layout_marginTop="450dp"
-        android:backgroundTint="#FFFF"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:textColor="#FFFF"
-        android:textSize="8pt" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/security_1_answer"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="480dp"
-        android:hint="@string/question_answer"
-        android:textSize="10pt"
-        android:textColorHint="#FFFF"
-        android:textColor="#FFFF"
-        android:backgroundTint="#FFFF"
-        tools:ignore="TextFields"
-        android:maxLength="25" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/question_2"
-        android:id="@+id/security_2_text"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="530dp"
-        android:textSize="10pt"
-        android:textColor="#FFFF" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/security_2"
-        android:layout_marginTop="580dp"
-        android:backgroundTint="#FFFF"
-        android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:textColor="#FFFF"
-        android:textSize="8pt" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/security_2_answer"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="610dp"
-        android:hint="@string/question_answer"
-        android:textSize="10pt"
-        android:textColorHint="#FFFF"
-        android:textColor="#FFFF"
-        android:backgroundTint="#FFFF"
-        tools:ignore="TextFields"
-        android:maxLength="25" />
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save"
         android:id="@+id/saveChangePin"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="670dp"
+        android:layout_marginTop="500dp"
         android:onClick="changeButton"
         />
-
 
 
 </RelativeLayout>

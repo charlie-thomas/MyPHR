@@ -6,9 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import static com.csbgroup.myphr.R.*;
@@ -42,7 +40,7 @@ public class StartupActivity extends AppCompatActivity {
 
             Toast.makeText(this, "PIN changed", Toast.LENGTH_SHORT).show();
 
-            Intent intent = new Intent(this, LoginActivity.class);
+            Intent intent = new Intent(this, QuestionsActivity.class);
             startActivity(intent);
         }
     }
