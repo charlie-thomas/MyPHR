@@ -39,6 +39,17 @@
         app:keypadTextColor="#FFFF"
         app:keypadTextSize="22dp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pin_lock_view"
+        android:layout_marginTop="20dp"
+        android:textColor="#FFFF"
+        android:layout_centerHorizontal="true"
+        android:text="@string/forgot"
+        android:onClick="goToForgot"
+        style="?android:attr/borderlessButtonStyle" />
+
     <ImageView
         android:id="@+id/fingerprintIcon"
         android:contentDescription="@string/finger_desc"
@@ -46,23 +57,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/iconLogin"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="480dp"
+        android:layout_marginTop="510dp"
         app:srcCompat="@drawable/ic_fingerprint_white" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_below="@id/pin_lock_view"
         android:id="@+id/textview"
-        android:layout_marginTop="430dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView2"
-        android:text="@string/instructions"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="690dp"
-        android:textColor="#FFFF"/>
+        android:textColor="#FFFF"
+        android:layout_marginTop="10dp"/>
 
 </RelativeLayout>
