@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import static com.csbgroup.myphr.R.layout.*;
@@ -15,6 +16,9 @@ public class ForgotPINActivity extends AppCompatActivity {
     String answer2;
     EditText answer1Text;
     EditText answer2Text;
+    TextView chosen1;
+    TextView chosen2;
+
     public static final String PREFS = "answers";
 
     @Override
@@ -22,8 +26,16 @@ public class ForgotPINActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(activity_forgot_pin);
 
+        SharedPreferences preferences = getSharedPreferences(PREFS,0);
+
         answer1Text = findViewById(R.id.attempt_1_answer);
         answer2Text = findViewById(R.id.attempt_2_answer);
+
+        chosen1 = findViewById(R.id.chosen1);
+        chosen1.setText(preferences.getString("chosen1", "####"));
+
+        chosen2 = findViewById(R.id.chosen2);
+        chosen2.setText(preferences.getString("chosen2", "####"));
     }
 
     public void forgotButton(View view) {

@@ -6,21 +6,22 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemSelectedListener;
 
 import static com.csbgroup.myphr.R.*;
 import static com.csbgroup.myphr.R.layout.*;
 
-public class QuestionsActivity extends AppCompatActivity implements OnItemSelectedListener {
+public class QuestionsActivity extends AppCompatActivity {
     String answer1;
     String answer2;
     EditText answer1Text;
     EditText answer2Text;
+    static String chosen1;
+    static String chosen2;
+
     public static final String PREFS = "answers";
 
     @Override
@@ -34,6 +35,7 @@ public class QuestionsActivity extends AppCompatActivity implements OnItemSelect
                 array.questions_array, layout.spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        chosen1 = spinner.getSelectedItem().toString();
 
         // Security question 2 spinner
         Spinner spinner2 = findViewById(id.security_2);
@@ -42,30 +44,32 @@ public class QuestionsActivity extends AppCompatActivity implements OnItemSelect
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner2.setAdapter(adapter2);
 
+
         answer1Text = findViewById(id.security_1_answer);
         answer2Text = findViewById(id.security_2_answer);
 
     }
 
-    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        String chosen = parent.getItemAtPosition(pos).toString();
-        Toast.makeText(this, "Question: " + chosen, Toast.LENGTH_SHORT).show();
-    }
-
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Another interface callback
-    }
-
     @SuppressLint("ApplySharedPref")
     public void questionsButton(View view) {
+        SharedPreferences preferences = getSharedPreferences(PREFS, 0);
+        SharedPreferences.Editor editor = preferences.edit();
+
+        Spinner spinner = findViewById(id.security_1);
+        chosen1 = spinner.getSelectedItem().toString();
+        editor.putString("chosen1", chosen1);
+
+
+        Spinner spinner2 = findViewById(id.security_2);
+        chosen2 = spinner2.getSelectedItem().toString();
+        editor.putString("chosen2", chosen2);
+
         answer1 = answer1Text.getText().toString().toLowerCase();
         answer2 = answer2Text.getText().toString().toLowerCase();
 
         if (answer1.equals("") || answer2.equals("")) {
             Toast.makeText(this, "Please answer the security questions", Toast.LENGTH_SHORT).show();
         } else {
-            SharedPreferences preferences = getSharedPreferences(PREFS, 0);
-            SharedPreferences.Editor editor = preferences.edit();
 
             editor.putString("answer1", answer1);
             editor.putString("answer2", answer2);

@@ -18,6 +18,15 @@
         android:textSize="10pt"
         android:textColor="#FFFF" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chosen1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:textSize="10pt"
+        android:textColor="#FFFF" />
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,6 +48,15 @@
         android:id="@+id/security_2_text"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="400dp"
+        android:textSize="10pt"
+        android:textColor="#FFFF" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chosen2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="450dp"
         android:textSize="10pt"
         android:textColor="#FFFF" />
 
