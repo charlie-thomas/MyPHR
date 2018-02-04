@@ -197,124 +197,31 @@ public class StatisticsDetails extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public void buildDialog(FloatingActionButton fab, final String type){
+    public void buildDialog(FloatingActionButton fab, final String type) {
 
         // no fab for height velocity
-        if (type.equals("Height Velocity")){fab.setVisibility(View.GONE); return;}
-
-        // fab action for height and weight (w/centiles)
-        if (type.equals("Height") || type.equals("Weight")){
-            fab.setOnClickListener(new View.OnClickListener(){
-
-                @Override
-                public void onClick(View view){
-
-                    // set up the dialog
-                    LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-                    View v = inflater.inflate(R.layout.add_measurement_centile, null);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setView(v);
-
-                    // set measurement specific texts
-                    final TextView title = v.findViewById(R.id.dialog_title);
-                    title.setText("Add a New " + type);
-                    final EditText measurement = v.findViewById(R.id.measurement);
-                    measurement.setHint(type);
-
-                    // fetch the input values (measurement already fetched above ^)
-                    final EditText day = v.findViewById(R.id.meas_DD);
-                    final EditText month = v.findViewById(R.id.meas_MM);
-                    final EditText year = v.findViewById(R.id.meas_YYYY);
-                    final EditText cent = v.findViewById(R.id.centile);
-
-                    // auto shift view focus when entering date
-                    shiftFocus(day, month, year, cent);
-
-                    // add a new measurement action
-                    builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-
-                            // join date into one string
-                            final String fulldate = day.getText().toString() + "/" + month.getText().toString()
-                                    + "/" + year.getText().toString();
-
-                            // check that a measurement was given
-                            Boolean validMeasurement = true;
-                            final String mmnt = measurement.getText().toString();
-                            if (mmnt.equals("")) {validMeasurement = false;} // no measurement given
-
-                            // check that a valid date was given
-                            Boolean validDate = true;
-                            if (fulldate.equals("//")) {validDate = false;} // no date given
-                            else if (fulldate.length() != 10) {validDate = false;} // incomplete date
-                            else {
-                                try {
-                                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                    Date d = sdf.parse(fulldate);
-                                    if (!fulldate.equals(sdf.format(d))){
-                                        validDate = false;
-                                    }
-                                } catch (ParseException e) {e.printStackTrace();}
-                            }
-
-                            // check that a valid centile was given (providing no centile IS allowed)
-                            Boolean validCentile = true;
-                            final String centile = cent.getText().toString();
-                            if (!centile.equals("")){
-                                int centileint = Integer.parseInt(centile); // convert to an int for checks
-                                if ((centileint < 0 || centileint > 100)){validCentile = false;}
-                            }
-
-                            //format checks passed - add the new measurement to the database
-                            if (validMeasurement && validDate && validCentile){
-                                new Thread(new Runnable(){
-                                    @Override
-                                    public void run() {
-                                        AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                        final StatisticsEntity thisstat = getStats(type);
-                                        thisstat.addValue(measurement.getText().toString(), fulldate, centile);
-                                        db.statisticsDao().update(thisstat);
-
-                                        // update the list view
-                                        FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                        ft.detach(StatisticsDetails.this).attach(StatisticsDetails.this).commit();
-                                    }
-                                }).start();
-                            }
-
-                            // format checks failed - abort and show error message
-                            else{
-                                if (!validMeasurement) {errorDialog("measurement");} // no measurement
-                                else if (!validDate){errorDialog("date");} // bad date
-                                else {errorDialog("centile");} // bad centile
-                            }
-                        }
-                    });
-
-                    // action for cancelling add
-                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                        }
-                    });
-
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-            });
+        if (type.equals("Height Velocity")) {
+            fab.setVisibility(View.GONE);
             return;
         }
 
-        // fab action for all other measurement types
         fab.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
                 // set up the dialog
+                View v;
+                final EditText cent;
+
                 LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-                View v = inflater.inflate(R.layout.add_measurement_basic, null);
+                if (type.equals("Height") || type.equals("Weight")) {
+                    v = inflater.inflate(R.layout.add_measurement_centile, null);
+                    cent = v.findViewById(R.id.centile);
+                } else {
+                    v = inflater.inflate(R.layout.add_measurement_basic, null);
+                    cent = null;
+                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setView(v);
 
@@ -329,18 +236,19 @@ public class StatisticsDetails extends Fragment {
                     measurement.setHint(type);
                 }
 
-                // fetch the input values (measurement fetched above ^)
+
+                // fetch the input values (measurement already fetched above ^)
                 final EditText day = v.findViewById(R.id.meas_DD);
                 final EditText month = v.findViewById(R.id.meas_MM);
                 final EditText year = v.findViewById(R.id.meas_YYYY);
 
                 // auto shift view focus when entering date
-                shiftFocus(day, month, year, null);
+                shiftFocus(day, month, year, cent);
 
-                // add new measurement action
+                // add a new measurement action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
                         // join date into one string
                         final String fulldate = day.getText().toString() + "/" + month.getText().toString()
@@ -349,30 +257,50 @@ public class StatisticsDetails extends Fragment {
                         // check that a measurement was given
                         Boolean validMeasurement = true;
                         final String mmnt = measurement.getText().toString();
-                        if (mmnt.equals("")) {validMeasurement = false;} // no measurement given
+                        if (mmnt.equals("")) {
+                            validMeasurement = false;
+                        } // no measurement given
 
                         // check that a valid date was given
                         Boolean validDate = true;
-                        if (fulldate.equals("//")) {validDate = false;} // no date given
-                        else if (fulldate.length() != 10) {validDate = false;} // incomplete date
+                        if (fulldate.length() != 10) {
+                            validDate = false;
+                        } // incomplete date
                         else {
                             try {
                                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                                 Date d = sdf.parse(fulldate);
-                                if (!fulldate.equals(sdf.format(d))){
+                                if (!fulldate.equals(sdf.format(d))) {
                                     validDate = false;
                                 }
-                            } catch (ParseException e) {e.printStackTrace();}
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
                         }
 
-                        // format checks passed - add the new measurement to database
-                        if (validMeasurement && validDate){
+                        // check that a valid centile was given for height/weight (providing no centile IS allowed)
+                        Boolean validCentile = true;
+                        final String centile;
+                        if (type.equals("Height") || type.equals("Weight")) {
+                            centile = cent.getText().toString();
+                            if (!centile.equals("")) {
+                                int centileint = Integer.parseInt(centile); // convert to an int for checks
+                                if ((centileint < 0 || centileint > 100)) {
+                                    validCentile = false;
+                                }
+                            }
+                        } else {
+                            centile = null;
+                        }
+
+                        //format checks passed - add the new measurement to the database
+                        if (validMeasurement && validDate && validCentile) {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                     final StatisticsEntity thisstat = getStats(type);
-                                    thisstat.addValue(measurement.getText().toString(), fulldate, null);
+                                    thisstat.addValue(mmnt, fulldate, centile);
                                     db.statisticsDao().update(thisstat);
 
                                     // update the list view
@@ -383,9 +311,16 @@ public class StatisticsDetails extends Fragment {
                         }
 
                         // format checks failed - abort and show error message
-                        else{
-                            if (!validMeasurement) {errorDialog("measurement");} // no measurement
-                            else {errorDialog("date");} // bad date
+                        else {
+                            if (!validMeasurement) {
+                                errorDialog("measurement");
+                            } // no measurement
+                            else if (!validDate) {
+                                errorDialog("date");
+                            } // bad date
+                            else {
+                                errorDialog("centile");
+                            } // bad centile
                         }
                     }
                 });
