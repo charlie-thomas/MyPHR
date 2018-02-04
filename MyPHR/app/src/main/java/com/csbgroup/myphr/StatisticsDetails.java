@@ -80,11 +80,11 @@ public class StatisticsDetails extends Fragment {
         //currentstat is a the StatisticsEntity for the current statistics page (e.g weight, height etc)
         final StatisticsEntity currentstat = getStats(args.getString("title", "Statistics"));
         //valueslist is the list of all the entity's in currentstat. Each contains a date, value and centile.
-        ArrayList<StatValueEntity> valueslist =  currentstat.getValues();
+        ArrayList<StatValueEntity> valueslist = currentstat.getValues();
 
         //Sorting valueslist so it's ordered in date order, oldest first.
         //Need to do this because the graph must plot from oldest to newest.
-        Collections.sort(valueslist, new Comparator<StatValueEntity>(){
+        Collections.sort(valueslist, new Comparator<StatValueEntity>() {
             @Override
             public int compare(StatValueEntity t1, StatValueEntity t2) {
                 try {
@@ -97,27 +97,16 @@ public class StatisticsDetails extends Fragment {
         });
 
         //Iterating through the valueslist we format each string date intot a java Date and add it as a datapoint
-        for(int i=0;i<valueslist.size();i++){
+        for (int i = 0; i < valueslist.size(); i++) {
             StatValueEntity sve = valueslist.get(i);
             try {
                 d1 = formatter.parse(sve.getDate());
-                DataPoint dp = new DataPoint(d1,Double.parseDouble(sve.getValue())); //added as a datapoint here
-                series.appendData(dp,true,valueslist.size()); //adding the datapoint to the graph series here
+                DataPoint dp = new DataPoint(d1, Double.parseDouble(sve.getValue())); //added as a datapoint here
+                series.appendData(dp, true, valueslist.size()); //adding the datapoint to the graph series here
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-
-        /*Reversing the list now so its ordered newest to oldest
-          This is so the listview underneath prints from newest to oldest */
-        Collections.reverse(valueslist);
-
-        ListView listview = (ListView) rootView.findViewById(R.id.statistics_graph_list);
-        /*The listview uses a custom adapter which uses an xml to print each list item
-        Format located in stat_list_adapter.xml
-        Listview is formatted in StatValueAdpater.java */
-        StatValueAdapter adapter = new StatValueAdapter(getActivity(),R.layout.stat_list_adapter, valueslist);
-        listview.setAdapter(adapter);
 
 
         //All of these "graph." make adjustments to the graph so it displays correctly
@@ -128,15 +117,15 @@ public class StatisticsDetails extends Fragment {
         graph.getViewport().setScrollable(true);
         graph.getGridLabelRenderer().setHumanRounding(false);
         graph.getViewport().setXAxisBoundsManual(true);
-        graph.getGridLabelRenderer().setVerticalAxisTitle(args.getString("title","Statistics"));
+        graph.getGridLabelRenderer().setVerticalAxisTitle(args.getString("title", "Statistics"));
         graph.getGridLabelRenderer().setVerticalAxisTitleTextSize(35);
         graph.getGridLabelRenderer().setPadding(58);
         graph.getGridLabelRenderer().setLabelVerticalWidth(75);
 
         //this if statement allows for the graph to keep four values at a time and begin scrolling after 4 have been added.
-        if(currentstat.getValues().size() > 4){
+        if (currentstat.getValues().size() > 4) {
             try {
-                Date mindate = formatter.parse(currentstat.getValues().get(currentstat.getValues().size()-4).getDate());
+                Date mindate = formatter.parse(currentstat.getValues().get(currentstat.getValues().size() - 4).getDate());
                 graph.getViewport().setMinX(mindate.getTime());
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -146,7 +135,6 @@ public class StatisticsDetails extends Fragment {
         // fab action for adding measurement
         String type = args.getString("title");
         fab = rootView.findViewById(R.id.s_fab);
-        buildDialog(fab, type);
 
         return rootView;
 
@@ -171,7 +159,8 @@ public class StatisticsDetails extends Fragment {
         StatisticsEntity statistics = null;
         try {
             statistics = result.get();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         return statistics;
     }
@@ -183,7 +172,6 @@ public class StatisticsDetails extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.edit, menu);
     }
 
     /* Navigation from details fragment back to Statistics */
@@ -195,235 +183,6 @@ public class StatisticsDetails extends Fragment {
                 return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public void buildDialog(FloatingActionButton fab, final String type) {
-
-        // no fab for height velocity
-        if (type.equals("Height Velocity")) {
-            fab.setVisibility(View.GONE);
-            return;
-        }
-
-        fab.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-
-                // set up the dialog
-                View v;
-                final EditText cent;
-
-                LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-                if (type.equals("Height") || type.equals("Weight")) {
-                    v = inflater.inflate(R.layout.add_measurement_centile, null);
-                    cent = v.findViewById(R.id.centile);
-                } else {
-                    v = inflater.inflate(R.layout.add_measurement_basic, null);
-                    cent = null;
-                }
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setView(v);
-
-                // set measurement specific texts
-                final TextView title = v.findViewById((R.id.dialog_title));
-                final EditText measurement = v.findViewById(R.id.measurement);
-                if (type.equals("Body Mass Index (BMI)")) {
-                    title.setText("Add a New BMI");
-                    measurement.setHint("BMI");
-                } else {
-                    title.setText("Add a New " + type);
-                    measurement.setHint(type);
-                }
-
-
-                // fetch the input values (measurement already fetched above ^)
-                final EditText day = v.findViewById(R.id.meas_DD);
-                final EditText month = v.findViewById(R.id.meas_MM);
-                final EditText year = v.findViewById(R.id.meas_YYYY);
-
-                // auto shift view focus when entering date
-                shiftFocus(day, month, year, cent);
-
-                // add a new measurement action
-                builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                        // join date into one string
-                        final String fulldate = day.getText().toString() + "/" + month.getText().toString()
-                                + "/" + year.getText().toString();
-
-                        // check that a measurement was given
-                        Boolean validMeasurement = true;
-                        final String mmnt = measurement.getText().toString();
-                        if (mmnt.equals("")) {
-                            validMeasurement = false;
-                        } // no measurement given
-
-                        // check that a valid date was given
-                        Boolean validDate = true;
-                        if (fulldate.length() != 10) {
-                            validDate = false;
-                        } // incomplete date
-                        else {
-                            try {
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                Date d = sdf.parse(fulldate);
-                                if (!fulldate.equals(sdf.format(d))) {
-                                    validDate = false;
-                                }
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        // check that a valid centile was given for height/weight (providing no centile IS allowed)
-                        Boolean validCentile = true;
-                        final String centile;
-                        if (type.equals("Height") || type.equals("Weight")) {
-                            centile = cent.getText().toString();
-                            if (!centile.equals("")) {
-                                int centileint = Integer.parseInt(centile); // convert to an int for checks
-                                if ((centileint < 0 || centileint > 100)) {
-                                    validCentile = false;
-                                }
-                            }
-                        } else {
-                            centile = null;
-                        }
-
-                        //format checks passed - add the new measurement to the database
-                        if (validMeasurement && validDate && validCentile) {
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                    final StatisticsEntity thisstat = getStats(type);
-                                    thisstat.addValue(mmnt, fulldate, centile);
-                                    db.statisticsDao().update(thisstat);
-
-                                    // update the list view
-                                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                    ft.detach(StatisticsDetails.this).attach(StatisticsDetails.this).commit();
-                                }
-                            }).start();
-                        }
-
-                        // format checks failed - abort and show error message
-                        else {
-                            if (!validMeasurement) {
-                                errorDialog("measurement");
-                            } // no measurement
-                            else if (!validDate) {
-                                errorDialog("date");
-                            } // bad date
-                            else {
-                                errorDialog("centile");
-                            } // bad centile
-                        }
-                    }
-                });
-
-                // action for cancelling add
-                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                });
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-        });
-    }
-
-    /**
-     * errorDialog is called when an invalid measurement, date or centile is part of a measurement
-     * being added, it displays an error message about the failure.
-     * @param type is the type of error reported
-     */
-    public void errorDialog(String type){
-
-        // set up the dialog
-        LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-        View v = inflater.inflate(R.layout.format_error, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(v);
-
-        // specify error type
-        final TextView errortype = v.findViewById(R.id.error_type);
-        if (type.equals("measurement")){errortype.setText("YOU MUST PROVIDE A MEASUREMENT");}
-        if (type.equals("centile")){errortype.setText("INVALID CENTILE");}
-        if (type.equals("date")){errortype.setText("INVALID DATE");}
-
-        final TextView errormessage = v.findViewById(R.id.error_message);
-        errormessage.setText("Your measurement was not added.");
-
-        // user dismiss message
-        builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    /**
-     * shiftFocus automatically shifts the fab dialog view focus from day->month and month->year
-     * when two digits have been entered for day and month, respectively.
-     * @param day is the EditText for the dialog day('DD') field
-     * @param month is the EditText for the dialog month('MM') field
-     * @param year is the EditText for the dialog year('YYYY') field
-     * @param next is the EditText for the dialog field that follows year
-     */
-    public void shiftFocus(final EditText day, final EditText month, final EditText year, final EditText next){
-
-        day.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (day.getText().toString().length() == 2) {month.requestFocus();}
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
-        });
-
-        month.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (month.getText().toString().length() == 2) {year.requestFocus();}
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
-        });
-
-        if (next != null) {
-            year.addTextChangedListener(new TextWatcher() {
-
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (year.getText().toString().length() == 4) {next.requestFocus();}
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) { }
-            });
-        }
     }
 
 }
