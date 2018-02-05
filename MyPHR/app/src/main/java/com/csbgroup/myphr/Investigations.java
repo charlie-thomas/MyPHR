@@ -68,7 +68,7 @@ public class Investigations extends Fragment {
 
         if (investigations != null) {
             for (InvestigationsEntity ie : investigations)
-                events.add(new CalendarEvent(null, ie.getDate(), ie.getTitle() ,null));
+                events.add(new CalendarEvent(ie.getUid(), null, ie.getDate(), ie.getTitle() ,null));
         }
 
         return events;

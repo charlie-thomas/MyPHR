@@ -86,17 +86,19 @@ public class CalendarDay extends Fragment {
         for (int i = 0; i < 24; i++) {
             String event = null;
             String type = "Empty";
+            int uid = 0;
 
             if (daysEvents != null) {
                 for (CalendarEvent ce : daysEvents) {
                     if (String.valueOf(i).equals(ce.getTime())) {
                         event = ce.getEvent();
                         type = ce.getType();
+                        uid = ce.getUid();
                     }
                 }
             }
 
-            hours.add(new CalendarEvent(i + ":00", dateString, event, type));
+            hours.add(new CalendarEvent(uid, i + ":00", dateString, event, type));
         }
 
         CalendarAdapter adapter = new CalendarAdapter(getActivity(), hours);
@@ -162,7 +164,7 @@ public class CalendarDay extends Fragment {
         }
 
         for (AppointmentsEntity ae : appointments)
-            all_events.add(new CalendarEvent(ae.getTime(), ae.getDate(), ae.getTitle(), "Appointment"));
+            all_events.add(new CalendarEvent(ae.getUid(), ae.getTime(), ae.getDate(), ae.getTitle(), "Appointment"));
 
         return all_events;
     }

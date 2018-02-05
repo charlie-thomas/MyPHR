@@ -83,7 +83,7 @@ public class CalendarMonth extends Fragment {
             public void onClick(View v) {
                 Fragment eventFrag = AppointmentsDetails.newInstance();
                 Bundle bundle = new Bundle();
-                bundle.putString("title", upcoming_appointment.getTitle());
+                bundle.putString("uid", String.valueOf(upcoming_appointment.getUid()));
                 eventFrag.setArguments(bundle);
 
                 ((MainActivity) getContext()).switchFragment(eventFrag);

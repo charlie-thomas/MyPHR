@@ -64,7 +64,7 @@ public class Appointments extends Fragment {
 
                 // Create a bundle to pass the appointment to the details fragment
                 Bundle bundle = new Bundle();
-                bundle.putString("title", parent.getAdapter().getItem(position).toString());
+                bundle.putString("uid", view.getTag().toString());
                 details.setArguments(bundle);
 
                 ((MainActivity) getActivity()).switchFragment(details);
@@ -107,7 +107,7 @@ public class Appointments extends Fragment {
 
         if (appointments != null) {
             for (AppointmentsEntity ae : appointments)
-                events.add(new CalendarEvent(null, ae.getDate(), ae.getTitle() ,null));
+                events.add(new CalendarEvent(ae.getUid(), null, ae.getDate(), ae.getTitle() ,null));
         }
 
         return events;

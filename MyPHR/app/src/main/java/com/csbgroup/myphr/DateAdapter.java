@@ -35,6 +35,8 @@ public class DateAdapter extends ArrayAdapter<CalendarEvent> {
 
             if (date != null) date.setText(e.getDate());
             if (title != null) title.setText(e.getEvent());
+
+            convertView.setTag(e.getUid());
         }
 
         return convertView;
