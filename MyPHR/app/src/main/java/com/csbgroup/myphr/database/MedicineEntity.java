@@ -44,13 +44,16 @@ public class MedicineEntity {
     private String time;
 
     // Constructor
-    public MedicineEntity(String title, String description, String dose, String notes, boolean reminders, boolean daily, String time) {
+    public MedicineEntity(String title, String description, String dose, String notes, boolean reminders,
+                          boolean daily, boolean other_days, String date, String time) {
         this.title = title;
         this.description = description;
         this.dose = dose;
         this.notes = notes;
         this.reminders = reminders;
         this.daily = daily;
+        this.other_days = other_days;
+        this.date = date;
         this.time = time;
     }
 

@@ -126,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
                 "Take once a day.",
                 true,
                 true,
+                false,
+                null,
                 "4"),
                 new MedicineEntity(
                 "Oestrogen",
@@ -134,6 +136,8 @@ public class MainActivity extends AppCompatActivity {
                 "Tablets and patches should be taken once a day.",
                 true,
                 false,
+                false,
+                null,
                 "3"),
                 new MedicineEntity(
                 "Progesterone",
@@ -143,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
                         "every 3rd month",
                 true,
                 false,
+                true,
+                "05/02/2018",
                 "2"),
                 new MedicineEntity(
                 "Thyroxine",
@@ -151,6 +157,8 @@ public class MainActivity extends AppCompatActivity {
                 "To be taken daily",
                 true,
                 false,
+                false,
+                null,
                 "1")
                 );
     }

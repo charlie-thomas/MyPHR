@@ -169,7 +169,7 @@ public class Medicine extends Fragment {
                                 AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                 MedicineEntity medicine = new MedicineEntity(name.getText().toString(),
                                         description.getText().toString(), dose.getText().toString(),
-                                        notes.getText().toString(), false, false, null);
+                                        notes.getText().toString(), false, false, false, null,null);
                                 db.medicineDao().insertAll(medicine);
                             }
                         }).start();
