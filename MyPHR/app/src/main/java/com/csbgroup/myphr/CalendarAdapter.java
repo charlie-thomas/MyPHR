@@ -70,14 +70,14 @@ public class CalendarAdapter extends ArrayAdapter<CalendarEvent> {
                     break;
                 case "Medicine":
                     holder.event.setText(e.getEvent());
-                    holder.event.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                    holder.event.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccentDark));
 
                     holder.event.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Fragment eventFrag = MedicineDetails.newInstance();
                             Bundle bundle = new Bundle();
-                            bundle.putString("uid", String.valueOf(e.getUid()));
+                            bundle.putString("title", e.getEvent());
                             eventFrag.setArguments(bundle);
 
                             ((MainActivity) getContext()).switchFragment(eventFrag);

@@ -124,26 +124,34 @@ public class MainActivity extends AppCompatActivity {
                 "Natural Hormone to simulate growth.",
                 "5mg",
                 "Take once a day.",
-                true),
+                true,
+                true,
+                "4"),
                 new MedicineEntity(
                 "Oestrogen",
                 "Helps in the development and maintenance of sexual maturation.",
                 "2mg",
                 "Tablets and patches should be taken once a day.",
-                true),
+                true,
+                false,
+                "3"),
                 new MedicineEntity(
                 "Progesterone",
                 "Progesterone description",
                 "2mg",
                 "To be taken on 7-12 days of calendar month either monthly, every 2nd month or\n" +
                         "every 3rd month",
-                true),
+                true,
+                false,
+                "2"),
                 new MedicineEntity(
                 "Thyroxine",
                 "Thyroxine description",
                 "2mg",
                 "To be taken daily",
-                true)
+                true,
+                false,
+                "1")
                 );
     }
 
