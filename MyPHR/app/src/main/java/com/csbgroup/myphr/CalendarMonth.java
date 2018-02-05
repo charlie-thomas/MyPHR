@@ -186,5 +186,4 @@ public class CalendarMonth extends Fragment {
 
         return todays_meds;
     }
-
 }

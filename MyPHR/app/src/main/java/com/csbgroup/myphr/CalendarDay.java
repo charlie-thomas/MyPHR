@@ -96,7 +96,7 @@ public class CalendarDay extends Fragment {
 
             if (daysEvents != null) {
                 for (CalendarEvent ce : daysEvents) {
-                    if (String.valueOf(i).equals(ce.getTime())) {
+                    if (i == Integer.parseInt(ce.getTime().substring(0, 2))) {
                         event = ce.getEvent();
                         type = ce.getType();
                         uid = ce.getUid();
