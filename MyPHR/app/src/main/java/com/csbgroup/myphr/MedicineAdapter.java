@@ -1,6 +1,8 @@
 package com.csbgroup.myphr;
 
+import android.app.Fragment;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +25,7 @@ public class MedicineAdapter extends ArrayAdapter<CalendarEvent> {
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
-        CalendarEvent e = events.get(position);
+        final CalendarEvent e = events.get(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.todays_meds_list_item, parent, false);
@@ -35,6 +37,19 @@ public class MedicineAdapter extends ArrayAdapter<CalendarEvent> {
 
             if (time != null) time.setText(e.getTime());
             if (title != null) title.setText(e.getEvent());
+
+            title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MedicineDetails frag = MedicineDetails.newInstance();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", e.getEvent());
+                    frag.setArguments(bundle);
+
+                    ((MainActivity) getContext()).switchFragment(frag);
+                }
+            });
         }
 
         return convertView;
