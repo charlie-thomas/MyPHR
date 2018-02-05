@@ -258,7 +258,7 @@ public class StatisticsDetails extends Fragment {
                                 } catch (ParseException e) {e.printStackTrace();}
                             }
 
-                            // check that a valid centile was given (providing no centile IS allowed)
+                            // check that a valid centile was given (giving no centile IS allowed)
                             Boolean validCentile = true;
                             final String centile = cent.getText().toString();
                             if (!centile.equals("")){
@@ -313,8 +313,10 @@ public class StatisticsDetails extends Fragment {
             public void onClick(View view) {
 
                 // set up the dialog
-                LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-                View v = inflater.inflate(R.layout.add_measurement_basic, null);
+                final LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+                View v;
+                if (type.equals("Blood Pressure")){v = inflater.inflate(R.layout.add_measurement_bp, null);
+                }else {v = inflater.inflate(R.layout.add_measurement_basic, null);}
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setView(v);
 
@@ -326,7 +328,7 @@ public class StatisticsDetails extends Fragment {
                     measurement.setHint("BMI");
                 } else {
                     title.setText("Add a New " + type);
-                    measurement.setHint(type);
+                    if (!type.equals("Blood Pressure")){measurement.setHint(type);}
                 }
 
                 // fetch the input values (measurement fetched above ^)
@@ -348,8 +350,11 @@ public class StatisticsDetails extends Fragment {
 
                         // check that a measurement was given
                         Boolean validMeasurement = true;
-                        final String mmnt = measurement.getText().toString();
+                        String mmnt = measurement.getText().toString();
                         if (mmnt.equals("")) {validMeasurement = false;} // no measurement given
+
+                        //TODO: not concatenating (and format checking) diastolic value for BP yet
+
 
                         // check that a valid date was given
                         Boolean validDate = true;

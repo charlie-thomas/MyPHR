@@ -56,6 +56,8 @@
     // Measurement strings
     <string name="centile">Centile</string>
     <string name="measmessage">Enter the details for your new measurement:</string>
+    <string name="systolic">Systolic</string>
+    <string name="diastolic">Diastolic</string>
 
     // Investigation strings
     <string name="investigations">Investigations</string>
