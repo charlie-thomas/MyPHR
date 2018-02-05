@@ -51,6 +51,7 @@ public class CalendarAdapter extends ArrayAdapter<CalendarEvent> {
 
             switch (e.getType()) {
                 case "Empty":
+                    holder.event.setVisibility(View.INVISIBLE);
                     break;
                 case "Appointment":
                     holder.event.setText(e.getEvent());

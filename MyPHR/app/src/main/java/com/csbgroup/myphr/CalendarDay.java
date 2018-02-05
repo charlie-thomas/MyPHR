@@ -189,7 +189,7 @@ public class CalendarDay extends Fragment {
     }
 
     /* Helper function to calculate whether the start date and follow up date are correctly spaced */
-    private boolean isOtherDay(String d1, String d2) throws ParseException {
+    public static boolean isOtherDay(String d1, String d2) throws ParseException {
         DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
         long diff = f.parse(d2).getTime() - f.parse(d1).getTime();
 

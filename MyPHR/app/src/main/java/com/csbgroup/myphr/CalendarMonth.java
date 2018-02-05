@@ -9,13 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
+import com.csbgroup.myphr.database.MedicineEntity;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -69,6 +74,7 @@ public class CalendarMonth extends Fragment {
             }
         });
 
+        // Next appointment
         final AppointmentsEntity upcoming_appointment = getUpcomingAppointment();
 
         if (upcoming_appointment == null) return rootView;
@@ -89,6 +95,18 @@ public class CalendarMonth extends Fragment {
                 ((MainActivity) getContext()).switchFragment(eventFrag);
             }
         });
+
+        // Today's Medicines
+        ListView todays_meds = rootView.findViewById(R.id.todays_meds);
+        MedicineAdapter adapter = null;
+        try {
+            adapter = new MedicineAdapter(getActivity(), getTodaysMedicine());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        todays_meds.setAdapter(adapter);
+
+
 
         return rootView;
     }
@@ -133,6 +151,40 @@ public class CalendarMonth extends Fragment {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public List<CalendarEvent> getTodaysMedicine() throws ParseException {
+
+        List<CalendarEvent> todays_meds = new ArrayList<>();
+
+        // Create a callable object for database transactions
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(getActivity()).medicineDao().getAll();
+            }
+        };
+
+        // Get a Future object of all the medicine names
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<List<MedicineEntity>> result = service.submit(callable);
+
+        // Create a list of the medicine names
+        List<MedicineEntity> medicines = Collections.emptyList();
+        try {
+            medicines = result.get();
+        } catch (Exception e) {}
+
+        // Get today's date
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar today = Calendar.getInstance();
+
+        for (MedicineEntity me : medicines) {
+            if (me.isDaily() || (me.isOther_days() && CalendarDay.isOtherDay(me.getDate(), df.format(today.getTime()))))
+                todays_meds.add(new CalendarEvent(0, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
+        }
+
+        return todays_meds;
     }
 
 }
