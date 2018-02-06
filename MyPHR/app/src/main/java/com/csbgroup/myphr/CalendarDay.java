@@ -3,6 +3,9 @@ package com.csbgroup.myphr;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -88,7 +91,7 @@ public class CalendarDay extends Fragment {
             e.printStackTrace();
         }
 
-        ArrayList<CalendarEvent> hours = new ArrayList<>();
+        List<CalendarEvent> hours = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
             String event = null;
             String type = "Empty";
@@ -107,9 +110,10 @@ public class CalendarDay extends Fragment {
             hours.add(new CalendarEvent(uid, i + ":00", dateString, event, type));
         }
 
-        CalendarAdapter adapter = new CalendarAdapter(getActivity(), hours);
-
-        ListView calendarList = rootView.findViewById(R.id.calendar_list);
+        CalendarAdapter adapter = new CalendarAdapter(hours);
+        RecyclerView calendarList = rootView.findViewById(R.id.calendar_list);
+        calendarList.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+        calendarList.addItemDecoration(new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.VERTICAL));
         calendarList.setAdapter(adapter);
 
         // back button

@@ -47,10 +47,12 @@
             android:focusable="true"/>
     </LinearLayout>
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/calendar_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/date_picker"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        tools:listitem="@layout/calendar_event_item"
+        android:dividerHeight="8.0sp"/>
 </RelativeLayout>

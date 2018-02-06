@@ -67,6 +67,5 @@
         android:id="@+id/todays_meds"
         android:layout_below="@id/upcoming_med"
         android:layout_margin="10dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="8.0sp"/>
+        android:divider="@android:color/transparent" />
 </RelativeLayout>
