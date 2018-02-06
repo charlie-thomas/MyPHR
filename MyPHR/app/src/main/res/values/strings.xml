@@ -23,6 +23,9 @@
     <string name="last_date_arrow">Last Date Arrow</string>
     <string name="next_date_arrow">Next Date Arrow</string>
     <string name="calendar">Calendar</string>
+    <string name="next_appointment">Next Appointment</string>
+    <string name="next_medicine">Next Medicine</string>
+    <string name="today_s_medicine">Today\'s Medicine</string>
 
     // Contact strings
     <string name="ctitle">Add a New Contact</string>
@@ -40,6 +43,7 @@
     <string name="meddescription">Description</string>
     <string name="mednotes">Notes</string>
     <string name="meddose">Dose</string>
+    <string name="this_is_the_holiday_letter">This is the holiday letter</string>
 
     // Appointment strings
     <string name="atitle">Add a New Appointment</string>
@@ -109,5 +113,4 @@
 
     // Error checking strings
     <string name="error">Format Error</string>
-
 </resources>
