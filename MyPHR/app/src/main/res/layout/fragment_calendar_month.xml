@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="com.csbgroup.myphr.CalendarMonth">
 
     <CalendarView
@@ -49,15 +49,16 @@
             android:textColor="@color/white"/>
     </LinearLayout>
 
+
     <TextView
         android:id="@+id/upcoming_med"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/upcoming_layout"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
         android:text="@string/today_s_medicine"
         android:textSize="18sp"
+        android:layout_marginTop="15dp"
         android:textStyle="bold" />
 
     <ListView

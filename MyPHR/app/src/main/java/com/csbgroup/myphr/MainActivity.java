@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 true,
                 false,
                 null,
-                "04:00"),
+                "04:15"),
                 new MedicineEntity(
                 "Oestrogen",
                 "Helps in the development and maintenance of sexual maturation.",
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 false,
                 false,
                 null,
-                "03:00"),
+                "02:10"),
                 new MedicineEntity(
                 "Progesterone",
                 "Progesterone description",
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                 false,
                 true,
                 "05/02/2018",
-                "02:00"),
+                "02:30"),
                 new MedicineEntity(
                 "Thyroxine",
                 "Thyroxine description",
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 false,
                 false,
                 null,
-                "01:00")
+                "01:15")
                 );
     }
 

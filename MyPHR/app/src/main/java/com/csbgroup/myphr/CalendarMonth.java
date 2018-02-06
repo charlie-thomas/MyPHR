@@ -179,10 +179,18 @@ public class CalendarMonth extends Fragment {
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Calendar today = Calendar.getInstance();
 
+        // Create CalendarEvents for the days medicines, and add them to the returning array
         for (MedicineEntity me : medicines) {
             if (me.isDaily() || (me.isOther_days() && CalendarDay.isOtherDay(me.getDate(), df.format(today.getTime()))))
                 todays_meds.add(new CalendarEvent(0, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
         }
+
+        Collections.sort(todays_meds, new Comparator<CalendarEvent>() {
+            @Override
+            public int compare(CalendarEvent e1, CalendarEvent e2) {
+                return e1.getTime().replace(":", "").compareTo(e2.getTime().replace(":", ""));
+            }
+        });
 
         return todays_meds;
     }
