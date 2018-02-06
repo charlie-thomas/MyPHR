@@ -2,6 +2,7 @@ package com.csbgroup.myphr;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,7 +38,8 @@ public class AppointmentsDetails extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_appointments_details, container, false);
 
         Bundle args = getArguments();
-        AppointmentsEntity appointment = getAppointment(args.getString("title"));
+        Log.d("ID", args.getString("uid"));
+        AppointmentsEntity appointment = getAppointment(Integer.parseInt(args.getString("uid")));
 
         TextView title = rootView.findViewById(R.id.appointments_title);
         title.setText(appointment.getTitle());
@@ -63,16 +65,16 @@ public class AppointmentsDetails extends Fragment {
 
     /**
      * Fetches a single appointment from the database, found by title
-     * @param title is the title of the appointment to be retrieved
+     * @param uid is the primary key of the appointment to be retrieved
      * @return the appointment entity
      */
-    private AppointmentsEntity getAppointment(final String title) {
+    private AppointmentsEntity getAppointment(final int uid) {
 
         // Create a callable object for database transactions
         Callable callable = new Callable() {
             @Override
             public Object call() throws Exception {
-                return AppDatabase.getAppDatabase(getActivity()).appointmentsDao().getAppointment(title);
+                return AppDatabase.getAppDatabase(getActivity()).appointmentsDao().getAppointment(uid);
             }
         };
 

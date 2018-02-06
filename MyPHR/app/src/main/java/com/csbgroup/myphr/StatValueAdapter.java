@@ -21,6 +21,7 @@ import java.util.List;
 public class StatValueAdapter extends ArrayAdapter<StatValueEntity> {
     private Context mContext;
     int mResource;
+    String unit;
 
     /**
      * @param context
@@ -28,10 +29,11 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity> {
      * @param objects
      */
 
-    public StatValueAdapter(Context context, int resource, ArrayList<StatValueEntity> objects) {
+    public StatValueAdapter(Context context, int resource, ArrayList<StatValueEntity> objects, String unit) {
         super(context,resource,objects);
         mContext = context;
         mResource = resource;
+        this.unit = unit;
     }
 
     @NonNull
@@ -54,7 +56,7 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity> {
         tvValue.setText("Value: "+value);
 
         //if the centile doesn't exist then we remove the textview and double the height of the value's textview
-        if(centile==null || centile==""){
+        if(centile==null || centile=="" || (!unit.equals("Height") && !unit.equals("Weight"))){
             final float scale = getContext().getResources().getDisplayMetrics().density;
             int pixels = (int) (60 * scale + 0.5f);
             ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) tvCentile.getLayoutParams();

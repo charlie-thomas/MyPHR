@@ -116,7 +116,7 @@ public class StatisticsDetails extends Fragment {
         /*The listview uses a custom adapter which uses an xml to print each list item
         Format located in stat_list_adapter.xml
         Listview is formatted in StatValueAdpater.java */
-        StatValueAdapter adapter = new StatValueAdapter(getActivity(),R.layout.stat_list_adapter, valueslist);
+        StatValueAdapter adapter = new StatValueAdapter(getActivity(),R.layout.stat_list_adapter, valueslist,currentstat.getUnit());
         listview.setAdapter(adapter);
 
 
@@ -134,9 +134,9 @@ public class StatisticsDetails extends Fragment {
         graph.getGridLabelRenderer().setLabelVerticalWidth(75);
 
         //this if statement allows for the graph to keep four values at a time and begin scrolling after 4 have been added.
-        if(currentstat.getValues().size() > 4){
+        if(valueslist.size() > 4){
             try {
-                Date mindate = formatter.parse(currentstat.getValues().get(currentstat.getValues().size()-4).getDate());
+                Date mindate = formatter.parse(valueslist.get(4).getDate());
                 graph.getViewport().setMinX(mindate.getTime());
             } catch (ParseException e) {
                 e.printStackTrace();
