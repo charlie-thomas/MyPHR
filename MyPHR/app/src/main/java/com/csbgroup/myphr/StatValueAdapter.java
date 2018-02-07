@@ -84,7 +84,20 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
             tvValue.setLayoutParams(params);
             tvCentile.setVisibility(GONE);
         } else {
-            tvCentile.setText("Centile: "+centile);
+            switch (centile.substring(centile.length() - 1, centile.length())) {
+                case "1":
+                    tvCentile.setText("Centile: " + centile + "st");
+                    break;
+                case "2":
+                    tvCentile.setText("Centile: " + centile + "nd");
+                    break;
+                case "3":
+                    tvCentile.setText("Centile: " + centile + "rd");
+                    break;
+                default:
+                    tvCentile.setText("Centile: " + centile + "th");
+                    break;
+            }
         }
 
 

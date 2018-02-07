@@ -159,14 +159,6 @@ public class StatisticsDetailsList extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        /*for(int i=0; i<listview.getCount(); i++) {
-            View child = listview.getChildAt(i).findViewById(R.id.delete_btn);
-            if (child.getVisibility() == View.VISIBLE) {
-                child.setVisibility(View.INVISIBLE);
-            } else if(child.getVisibility() == View.INVISIBLE){
-                child.setVisibility(View.VISIBLE);
-            }
-        }*/
         if(isEditMode) {
             isEditMode = false;
             adapter.notifyDataSetChanged();
@@ -174,16 +166,7 @@ public class StatisticsDetailsList extends Fragment {
             isEditMode = true;
             adapter.notifyDataSetChanged();
         }
-
         return super.onOptionsItemSelected(item);
-    }
-
-    public static void onOptionsItemSelected2() {
-        for(int i=0; i<listview.getCount(); i++) {
-            View child = listview.getChildAt(i).findViewById(R.id.delete_btn);
-            System.out.println("save urself from this code");
-            child.setVisibility(View.VISIBLE);
-        }
     }
 
     public void buildDialog(FloatingActionButton fab, final String type, final Bundle args) {
