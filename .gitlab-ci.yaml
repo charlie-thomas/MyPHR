@@ -34,8 +34,12 @@ stages:
 dissertation:
   image: blang/latex
   stage: dissertation
+  before_script:
+    - cd /docs
   script:
-    - latexmk -pdf -cd docs/dissertation.tex
+    - latexmk -pdf dissertation.tex
+  after_script:
+    - cd ../
   artifacts:
     paths:
       - "*.pdf"
