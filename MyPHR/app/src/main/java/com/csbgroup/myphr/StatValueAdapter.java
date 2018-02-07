@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,7 +36,6 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
     int mResource;
     String mType;
     ArrayList<StatValueEntity> array;
-    static boolean datachanged = false;
 
     /**
      * @param context
@@ -100,8 +100,7 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
             }
         }
 
-
-        final Button deleteBtn = (Button)convertView.findViewById(R.id.delete_btn);
+        final ImageButton deleteBtn = (ImageButton)convertView.findViewById(R.id.delete_btn);
 
         if(StatisticsDetailsList.isEditMode)
         {
