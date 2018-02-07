@@ -1,11 +1,3 @@
-# image: blang/latex
-# build:
-#   script:
-#     - latexmk -pdf -cd docs/dissertation.tex
-#   artifacts:
-#     paths:
-#       - "*.pdf"
-
 image: openjdk:8-jdk
 
 variables:
@@ -34,9 +26,19 @@ before_script:
   - chmod +x ./gradlew
 
 stages:
+  - dissertation
   - build
   - test
 # - quality_assurance
+
+dissertation:
+  image: blang/latex
+  stage: dissertation
+  script:
+    - latexmk -pdf -cd docs/dissertation.tex
+  artifacts:
+    paths:
+      - "*.pdf"
 
 build:
   stage: build
