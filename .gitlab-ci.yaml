@@ -35,7 +35,7 @@ dissertation:
   image: blang/latex
   stage: dissertation
   before_script:
-    - cd /docs
+    - cd ./docs
   script:
     - latexmk -pdf dissertation.tex
   after_script:
