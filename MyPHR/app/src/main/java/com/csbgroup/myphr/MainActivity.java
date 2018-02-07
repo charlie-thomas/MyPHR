@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                 "5mg",
                 "Take once a day.",
                 true,
-                true,
+                false,
                 false,
                 null,
                 "04:15"),
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 "2mg",
                 "Tablets and patches should be taken once a day.",
                 true,
-                false,
+                true,
                 false,
                 null,
                 "02:10"),
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 "Progesterone",
                 "Progesterone description",
                 "2mg",
-                "To be taken on 7-12 days of calendar month either monthly, every 2nd month or\n" +
+                "To be taken on 7-12 days of calendar month either monthly, every 2nd month or" +
                         "every 3rd month",
                 true,
                 false,
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Clinic 1", "Children's Hospital",
-                df.format(c.getTime()), "08:00","Appointment Notes", true));
+                df.format(c.getTime()), "02:00","Appointment Notes", true));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Check Up 1", "Children's Hospital",
                 df.format(c.getTime()), "08:00","Appointment Notes", true));

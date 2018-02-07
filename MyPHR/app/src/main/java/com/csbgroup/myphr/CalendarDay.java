@@ -91,25 +91,23 @@ public class CalendarDay extends Fragment {
             e.printStackTrace();
         }
 
-        List<CalendarEvent> hours = new ArrayList<>();
+        List<List<CalendarEvent>> hours = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
-            String event = null;
-            String type = "Empty";
-            int uid = 0;
 
-            if (daysEvents != null) {
-                for (CalendarEvent ce : daysEvents) {
-                    if (i == Integer.parseInt(ce.getTime().substring(0, 2))) {
-                        event = ce.getEvent();
-                        type = ce.getType();
-                        uid = ce.getUid();
-                    }
+            List<CalendarEvent> hourEvents = new ArrayList<>();
+
+            for (CalendarEvent ce : daysEvents) {
+                if (i == Integer.parseInt(ce.getTime().substring(0, 2))) {
+                    hourEvents.add(new CalendarEvent(ce.getUid(), i + ":00", dateString, ce.getEvent(), ce.getType()));
                 }
             }
 
-            hours.add(new CalendarEvent(uid, i + ":00", dateString, event, type));
+            if (hourEvents.size() == 0) hourEvents.add(new CalendarEvent(0, i+":00", dateString, null, "Empty"));
+
+            hours.add(hourEvents);
         }
 
+        Log.d("Size", ""+hours.size());
         CalendarAdapter adapter = new CalendarAdapter(hours);
         RecyclerView calendarList = rootView.findViewById(R.id.calendar_list);
         calendarList.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
