@@ -14,8 +14,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
@@ -37,6 +40,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import static android.view.View.GONE;
+
 /**
  * Created by JBizzle on 04/12/2017.
  */
@@ -44,6 +49,9 @@ import java.util.concurrent.Future;
 public class StatisticsDetailsList extends Fragment {
 
     FloatingActionButton fab; // the add measurement fab
+    public static ListView listview;
+    private static StatValueAdapter adapter;
+    public static boolean isEditMode = false;
 
     public StatisticsDetailsList() {
         // Required empty public constructor
@@ -60,7 +68,7 @@ public class StatisticsDetailsList extends Fragment {
 
         // view set up
         View rootView = inflater.inflate(R.layout.fragment_statistics_details_list, container, false);
-        ((MainActivity) getActivity()).setToolbar("My Statistics", true);
+        ((MainActivity) getActivity()).setToolbar("My Measurements", true);
         setHasOptionsMenu(true);
 
         Bundle args = getArguments();
@@ -95,17 +103,18 @@ public class StatisticsDetailsList extends Fragment {
         /*Reversing the list now so its ordered newest to oldest
           This is so the listview underneath prints from newest to oldest */
         Collections.reverse(valueslist);
+        final String type = args.getString("title");
 
-        ListView listview = (ListView) rootView.findViewById(R.id.statistics_graph_list);
+        listview = (ListView) rootView.findViewById(R.id.statistics_graph_list);
         /*The listview uses a custom adapter which uses an xml to print each list item
         Format located in stat_list_adapter.xml
         Listview is formatted in StatValueAdpater.java */
-        StatValueAdapter adapter = new StatValueAdapter(getActivity(),R.layout.stat_list_adapter, valueslist);
+        adapter = new StatValueAdapter(getActivity(),R.layout.stat_list_adapter, valueslist,type);
         listview.setAdapter(adapter);
 
 
+
         // fab action for adding measurement
-        String type = args.getString("title");
         fab = rootView.findViewById(R.id.s_fab);
         buildDialog(fab, type, args);
 
@@ -147,22 +156,41 @@ public class StatisticsDetailsList extends Fragment {
         inflater.inflate(R.menu.edit, menu);
     }
 
-    /* Navigation from details fragment back to Statistics */
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                ((MainActivity) getActivity()).switchFragment(Statistics.newInstance());
-                return true;
+        /*for(int i=0; i<listview.getCount(); i++) {
+            View child = listview.getChildAt(i).findViewById(R.id.delete_btn);
+            if (child.getVisibility() == View.VISIBLE) {
+                child.setVisibility(View.INVISIBLE);
+            } else if(child.getVisibility() == View.INVISIBLE){
+                child.setVisibility(View.VISIBLE);
+            }
+        }*/
+        if(isEditMode) {
+            isEditMode = false;
+            adapter.notifyDataSetChanged();
+        } else {
+            isEditMode = true;
+            adapter.notifyDataSetChanged();
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    public static void onOptionsItemSelected2() {
+        for(int i=0; i<listview.getCount(); i++) {
+            View child = listview.getChildAt(i).findViewById(R.id.delete_btn);
+            System.out.println("save urself from this code");
+            child.setVisibility(View.VISIBLE);
+        }
     }
 
     public void buildDialog(FloatingActionButton fab, final String type, final Bundle args) {
 
         // no fab for height velocity
         if (type.equals("Height Velocity")) {
-            fab.setVisibility(View.GONE);
+            fab.setVisibility(GONE);
             return;
         }
 
@@ -264,22 +292,13 @@ public class StatisticsDetailsList extends Fragment {
                                     thisstat.addValue(mmnt, fulldate, centile);
                                     db.statisticsDao().update(thisstat);
 
-                                    // update the list view
-                                    //FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                   //Fragment graph = getFragmentManager().findFragmentById(R.id.statistics);
-                                    //ft.detach(graph).attach(graph).commit();
-
                                     Fragment details = StatisticsSection.newInstance();
 
-                                    // Create a bundle to pass the medicine name to the details fragment
                                     Bundle bundle = new Bundle();
                                     bundle.putString("title", args.getString("title", "Measurements"));
                                     details.setArguments(bundle);
 
                                     ((MainActivity) getActivity()).switchFragment(details);
-
-                                    //FragmentTransaction ft1 = getFragmentManager().beginTransaction();
-                                    //ft1.detach(StatisticsDetailsList.this).attach(StatisticsDetailsList.this).commit();
                                 }
                             }).start();
                         }

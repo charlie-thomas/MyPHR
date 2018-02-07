@@ -13,28 +13,39 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:id="@+id/textView1"
-        android:layout_weight="66.6"/>
+        android:layout_weight="100"/>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="33.3">
+        android:layout_weight="0"
+        android:orientation="vertical">
 
         <TextView
-            android:gravity="center"
-            android:text="TextView2"
-            android:layout_width="match_parent"
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
             android:layout_height="30dp"
-            android:id="@+id/textView2"/>
+            android:gravity="center"
+            android:text="TextView2" />
 
         <TextView
-            android:gravity="center"
-            android:text="TextView3"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
             android:id="@+id/textView3"
-            android:layout_below="@+id/textView2"/>
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_below="@+id/textView2"
+            android:gravity="center"
+            android:text="TextView3" />
+
     </LinearLayout>
+
+    <Button
+        android:id="@+id/delete_btn"
+        android:text="X"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="15dp"/>
 
 </LinearLayout>
