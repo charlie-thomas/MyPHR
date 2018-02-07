@@ -42,7 +42,7 @@ dissertation:
     - cd ../
   artifacts:
     paths:
-      - "*.pdf"
+      - "./docs/*.pdf"
 
 build:
   stage: build
