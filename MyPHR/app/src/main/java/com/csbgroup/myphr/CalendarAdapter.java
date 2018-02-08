@@ -5,11 +5,17 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
@@ -34,9 +40,16 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
         final List<CalendarEvent> hours_events = events.get(position);
 
+        Collections.sort(hours_events, new Comparator<CalendarEvent>() {
+            @Override
+            public int compare(CalendarEvent o1, CalendarEvent o2) {
+                return o1.getTime().replace(":", "").compareTo(o2.getTime().replace(":", ""));
+            }
+        });
+
         LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        holder.time.setText(hours_events.get(0).getTime());
+        holder.time.setText(hours_events.get(0).getHour());
 
         for (final CalendarEvent e : hours_events) {
             switch (e.getType()) {
@@ -45,12 +58,16 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
                 case "Appointment":
                     if (holder.events.getChildCount() >= hours_events.size()) break;
 
-                    TextView tv = (TextView) inflater.inflate(R.layout.calendar_event_list_item, null);
+                    LinearLayout ll_app = (LinearLayout) inflater.inflate(R.layout.todays_meds_list_item, null);
+                    ll_app.setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorAccent));
 
-                    tv.setText(e.getEvent());
-                    tv.setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorAccent));
+                    TextView time = ll_app.findViewById(R.id.upcoming_time_med);
+                    time.setText(e.getTime());
 
-                    tv.setOnClickListener(new View.OnClickListener() {
+                    TextView event = ll_app.findViewById(R.id.upcoming_med_name);
+                    event.setText(e.getEvent());
+
+                    ll_app.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Fragment eventFrag = AppointmentsDetails.newInstance();
@@ -62,17 +79,21 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
                         }
                     });
 
-                    holder.events.addView(tv);
+                    holder.events.addView(ll_app);
                     break;
                 case "Medicine":
                     if (holder.events.getChildCount() >= hours_events.size()) break;
 
-                    TextView tv_med = (TextView) inflater.inflate(R.layout.calendar_event_list_item, null);
+                    LinearLayout ll_med = (LinearLayout) inflater.inflate(R.layout.todays_meds_list_item, null);
+                    ll_med.setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorAccentDark));
 
-                    tv_med.setText(e.getEvent());
-                    tv_med.setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorAccentDark));
+                    TextView time_med = ll_med.findViewById(R.id.upcoming_time_med);
+                    time_med.setText(e.getTime());
 
-                    tv_med.setOnClickListener(new View.OnClickListener() {
+                    TextView event_med = ll_med.findViewById(R.id.upcoming_med_name);
+                    event_med.setText(e.getEvent());
+
+                    ll_med.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Fragment eventFrag = MedicineDetails.newInstance();
@@ -84,7 +105,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
                         }
                     });
 
-                    holder.events.addView(tv_med);
+                    holder.events.addView(ll_med);
                     break;
             }
         }

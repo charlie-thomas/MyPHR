@@ -38,7 +38,6 @@ public class AppointmentsDetails extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_appointments_details, container, false);
 
         Bundle args = getArguments();
-        Log.d("ID", args.getString("uid"));
         AppointmentsEntity appointment = getAppointment(Integer.parseInt(args.getString("uid")));
 
         TextView title = rootView.findViewById(R.id.appointments_title);

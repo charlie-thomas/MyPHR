@@ -3,13 +3,15 @@ package com.csbgroup.myphr;
 public class CalendarEvent {
 
     private int uid;
+    private String hour;
     private String time;
     private String date;
     private String event;
     private String type;
 
-    public CalendarEvent(int uid, String time, String date, String event, String type) {
+    public CalendarEvent(int uid, String hour, String time, String date, String event, String type) {
         this.uid = uid;
+        this.hour = hour;
         this.time = time;
         this.date = date;
         this.event = event;
@@ -34,5 +36,9 @@ public class CalendarEvent {
 
     public int getUid() {
         return uid;
+    }
+
+    public String getHour() {
+        return hour;
     }
 }

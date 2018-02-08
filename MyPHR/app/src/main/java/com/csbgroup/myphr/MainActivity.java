@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 true,
                 false,
                 null,
-                "02:10"),
+                "02:50"),
                 new MedicineEntity(
                 "Progesterone",
                 "Progesterone description",
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Clinic 1", "Children's Hospital",
-                df.format(c.getTime()), "02:00","Appointment Notes", true));
+                df.format(c.getTime()), "02:55","Appointment Notes", true));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Check Up 1", "Children's Hospital",
                 df.format(c.getTime()), "08:00","Appointment Notes", true));

@@ -21,5 +21,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_weight="0.8"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:showDividers="middle"
+        android:divider="@drawable/list_divider"/>
 </LinearLayout>

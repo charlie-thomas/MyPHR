@@ -92,7 +92,7 @@ public class Investigations extends Fragment {
         ArrayList<CalendarEvent> events = new ArrayList<>();
 
         if (investigations != null) {
-            for (InvestigationsEntity ie : investigations)events.add(new CalendarEvent(ie.getUid(), null, ie.getDate(), ie.getTitle() ,null));
+            for (InvestigationsEntity ie : investigations)events.add(new CalendarEvent(ie.getUid(), null, null,  ie.getDate(), ie.getTitle() ,null));
         }
 
         return events;

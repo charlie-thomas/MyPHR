@@ -98,11 +98,11 @@ public class CalendarDay extends Fragment {
 
             for (CalendarEvent ce : daysEvents) {
                 if (i == Integer.parseInt(ce.getTime().substring(0, 2))) {
-                    hourEvents.add(new CalendarEvent(ce.getUid(), i + ":00", dateString, ce.getEvent(), ce.getType()));
+                    hourEvents.add(new CalendarEvent(ce.getUid(), i + ":00", ce.getTime(), dateString, ce.getEvent(), ce.getType()));
                 }
             }
 
-            if (hourEvents.size() == 0) hourEvents.add(new CalendarEvent(0, i+":00", dateString, null, "Empty"));
+            if (hourEvents.size() == 0) hourEvents.add(new CalendarEvent(0, i+":00", null, dateString, null, "Empty"));
 
             hours.add(hourEvents);
         }
@@ -180,11 +180,11 @@ public class CalendarDay extends Fragment {
         } catch (Exception e) {}
 
         for (AppointmentsEntity ae : appointments)
-            all_events.add(new CalendarEvent(ae.getUid(), ae.getTime(), ae.getDate(), ae.getTitle(), "Appointment"));
+            all_events.add(new CalendarEvent(ae.getUid(), null, ae.getTime(), ae.getDate(), ae.getTitle(), "Appointment"));
 
         for (MedicineEntity me : medicines) {
             if (me.isDaily() || (me.isOther_days() && isOtherDay(me.getDate(), date)))
-                all_events.add(new CalendarEvent(0, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
+                all_events.add(new CalendarEvent(0, null, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
         }
 
         return all_events;

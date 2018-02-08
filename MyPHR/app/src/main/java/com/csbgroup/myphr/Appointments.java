@@ -113,7 +113,7 @@ public class Appointments extends Fragment {
 
         if (appointments != null) {
             for (AppointmentsEntity ae : appointments)
-                events.add(new CalendarEvent(ae.getUid(), null, ae.getDate(), ae.getTitle() ,null));
+                events.add(new CalendarEvent(ae.getUid(), null, null, ae.getDate(), ae.getTitle() ,null));
         }
 
         return events;
