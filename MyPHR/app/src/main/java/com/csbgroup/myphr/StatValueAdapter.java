@@ -67,6 +67,7 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
         final TextView tvDate = (TextView) convertView.findViewById(R.id.textView1);
         final TextView tvValue = (TextView) convertView.findViewById(R.id.textView2);
         final TextView tvCentile = (TextView) convertView.findViewById(R.id.textView3);
+        final ImageButton deleteBtn = (ImageButton)convertView.findViewById(R.id.delete_btn);
 
         tvDate.setText("Date: "+date);
         if(!mType.equals("Body Mass Index (BMI)")) {
@@ -77,12 +78,8 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
 
         //if the centile doesn't exist then we remove the textview and double the height of the value's textview
         if(centile==null || centile==""){
-            final float scale = getContext().getResources().getDisplayMetrics().density;
-            int pixels = (int) (60 * scale + 0.5f);
-            ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) tvCentile.getLayoutParams();
-            params.height = pixels;
-            tvValue.setLayoutParams(params);
             tvCentile.setVisibility(GONE);
+
         } else {
             switch (centile.substring(centile.length() - 1, centile.length())) {
                 case "1":
@@ -100,7 +97,6 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
             }
         }
 
-        final ImageButton deleteBtn = (ImageButton)convertView.findViewById(R.id.delete_btn);
 
         if(StatisticsDetailsList.isEditMode)
         {
@@ -123,6 +119,7 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
                         db.statisticsDao().update(thisstat);
                     }
                 }).start();
+
 
                 array.remove(position);
                 notifyDataSetChanged();

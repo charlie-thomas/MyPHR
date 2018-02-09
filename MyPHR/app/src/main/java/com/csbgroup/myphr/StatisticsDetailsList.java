@@ -73,9 +73,6 @@ public class StatisticsDetailsList extends Fragment {
 
         Bundle args = getArguments();
 
-        TextView medTitle = rootView.findViewById(R.id.statistics_title);
-        medTitle.setText(args.getString("title", "Measurements"));
-
         //This formatter is for changing the string entered in form "dd/MM/yyyy" into a Java Date type
         final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date d1 = null;

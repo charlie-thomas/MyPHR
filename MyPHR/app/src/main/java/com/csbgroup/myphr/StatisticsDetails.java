@@ -1,21 +1,14 @@
 package com.csbgroup.myphr;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
@@ -29,7 +22,6 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -45,6 +37,10 @@ public class StatisticsDetails extends Fragment {
 
     LineGraphSeries<DataPoint> series;
     FloatingActionButton fab; // the add measurement fab
+    ArrayList<StatValueEntity> valueslist;
+    final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+    String title;
+    GraphView graph;
 
     public StatisticsDetails() {
         // Required empty public constructor
@@ -66,21 +62,15 @@ public class StatisticsDetails extends Fragment {
 
         Bundle args = getArguments();
 
+        title = args.getString("title","Measurements");
         TextView medTitle = rootView.findViewById(R.id.statistics_title);
-        medTitle.setText(args.getString("title", "Measurements"));
-
-        // Setting up the variable for the graph/list
-        GraphView graph = rootView.findViewById(R.id.statistics_graph);
-        series = new LineGraphSeries<DataPoint>();
-
-        //This formatter is for changing the string entered in form "dd/MM/yyyy" into a Java Date type
-        final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        Date d1 = null;
+        medTitle.setText(title);
 
         //currentstat is a the StatisticsEntity for the current statistics page (e.g weight, height etc)
         final StatisticsEntity currentstat = getStats(args.getString("title", "Statistics"));
+
         //valueslist is the list of all the entity's in currentstat. Each contains a date, value and centile.
-        ArrayList<StatValueEntity> valueslist = currentstat.getValues();
+        valueslist = currentstat.getValues();
 
         //Sorting valueslist so it's ordered in date order, oldest first.
         //Need to do this because the graph must plot from oldest to newest.
@@ -96,44 +86,14 @@ public class StatisticsDetails extends Fragment {
             }
         });
 
-        //Iterating through the valueslist we format each string date intot a java Date and add it as a datapoint
-        for (int i = 0; i < valueslist.size(); i++) {
-            StatValueEntity sve = valueslist.get(i);
-            try {
-                d1 = formatter.parse(sve.getDate());
-                DataPoint dp = new DataPoint(d1, Double.parseDouble(sve.getValue())); //added as a datapoint here
-                series.appendData(dp, true, valueslist.size()); //adding the datapoint to the graph series here
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
+        // Setting up the variable for the graph/list
+        graph = rootView.findViewById(R.id.statistics_graph);
 
-
-        //All of these "graph." make adjustments to the graph so it displays correctly
-        graph.addSeries(series); //adds the datapoint series to the graph
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
-        graph.getGridLabelRenderer().setNumHorizontalLabels(4);
-        graph.getGridLabelRenderer().setTextSize(25);
-        graph.getViewport().setScrollable(true);
-        graph.getGridLabelRenderer().setHumanRounding(false);
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getGridLabelRenderer().setVerticalAxisTitle(args.getString("title", "Statistics"));
-        graph.getGridLabelRenderer().setVerticalAxisTitleTextSize(35);
-        graph.getGridLabelRenderer().setPadding(58);
-        graph.getGridLabelRenderer().setLabelVerticalWidth(75);
-
-        //this if statement allows for the graph to keep four values at a time and begin scrolling after 4 have been added.
-        if (currentstat.getValues().size() > 4) {
-            try {
-                Date mindate = formatter.parse(currentstat.getValues().get(currentstat.getValues().size() - 4).getDate());
-                graph.getViewport().setMinX(mindate.getTime());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
+        // Loading data onto the graph
+        series = createDataPoints();
+        graph = createGraph(series);
 
         // fab action for adding measurement
-        String type = args.getString("title");
         fab = rootView.findViewById(R.id.s_fab);
 
         return rootView;
@@ -185,4 +145,58 @@ public class StatisticsDetails extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    public LineGraphSeries<DataPoint> createDataPoints() {
+        series = new LineGraphSeries<DataPoint>();
+        Date d1;
+        //Iterating through the valueslist we format each string date intot a java Date and add it as a datapoint
+        for (int i = 0; i < valueslist.size(); i++) {
+            StatValueEntity sve = valueslist.get(i);
+            try {
+                d1 = formatter.parse(sve.getDate());
+                DataPoint dp = new DataPoint(d1, Double.parseDouble(sve.getValue())); //added as a datapoint here
+                series.appendData(dp, true, valueslist.size()); //adding the datapoint to the graph series here
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return series;
+    }
+
+    private GraphView createGraph(LineGraphSeries<DataPoint> series) {
+
+        //All of these "graph." make adjustments to the graph so it displays correctly
+        graph.addSeries(series); //adds the datapoint series to the graph
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+        graph.getGridLabelRenderer().setNumHorizontalLabels(4);
+        graph.getGridLabelRenderer().setTextSize(25);
+        graph.getViewport().setScrollable(true);
+        graph.getGridLabelRenderer().setHumanRounding(false);
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getGridLabelRenderer().setVerticalAxisTitle(title);
+        graph.getGridLabelRenderer().setVerticalAxisTitleTextSize(35);
+        graph.getGridLabelRenderer().setPadding(58);
+        graph.getGridLabelRenderer().setLabelVerticalWidth(75);
+        graph.getViewport().scrollToEnd();
+        checkGraphMin();
+
+        return graph;
+
+    }
+
+    private void checkGraphMin(){
+
+        //this if statement allows for the graph to keep four values at a time and begin scrolling after 4 have been added.
+        if (valueslist.size() > 4) {
+            try {
+                Date minDate = formatter.parse(valueslist.get(valueslist.size() - 4).getDate());
+                graph.getViewport().setMinX(minDate.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else try {
+            if(valueslist.size()>0) graph.getViewport().setMinX(formatter.parse(valueslist.get(0).getDate()).getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 }

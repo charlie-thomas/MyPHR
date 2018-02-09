@@ -31,10 +31,12 @@ public class StatisticsSection extends Fragment {
         final TabHost mTabHost = rootView.findViewById(R.id.tabHost);
         mTabHost.setup();
 
+        Bundle args = getArguments();
+
         // Add first tab for the calendar
-        TabHost.TabSpec mSpec = mTabHost.newTabSpec("List");
+        TabHost.TabSpec mSpec = mTabHost.newTabSpec(args.getString("title", "Measurements"));
         mSpec.setContent(R.id.list_tab);
-        mSpec.setIndicator("List");
+        mSpec.setIndicator(args.getString("title", "Measurements"));
         mTabHost.addTab(mSpec);
 
         // Add second tab for the investigations
@@ -45,7 +47,7 @@ public class StatisticsSection extends Fragment {
 
         final Fragment details = StatisticsDetails.newInstance();
         final Fragment detailsList = StatisticsDetailsList.newInstance();
-        Bundle args = getArguments();
+
         // Create a bundle to pass the statistics name to the graph/list fragment
         final Bundle bundle = new Bundle();
         bundle.putString("title", args.getString("title", "Measurements"));
@@ -63,12 +65,14 @@ public class StatisticsSection extends Fragment {
             @Override
             public void onTabChanged(String s) {
                 if(s.equals("Graph")) {
+
                     Fragment nextFrag = StatisticsDetails.newInstance();
                     nextFrag.setArguments(bundle);
                     FragmentTransaction transaction2 = getFragmentManager().beginTransaction();
                     transaction2.addToBackStack(null);
                     transaction2.replace(R.id.graph_tab, nextFrag);
                     transaction2.commit();
+
                 }
             }
         });
