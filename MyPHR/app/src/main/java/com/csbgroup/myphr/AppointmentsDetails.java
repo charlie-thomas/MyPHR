@@ -32,8 +32,8 @@ public class AppointmentsDetails extends Fragment {
     private String mode = "view";
     private View rootView;
 
-    private KeyListener locationlistener, datelistener, timelistener, noteslistener;
-    private Drawable locationbackground, datebackground, timebackground, notesbackground;
+    private KeyListener titlelistener, locationlistener, datelistener, timelistener, noteslistener;
+    private Drawable titlebackground, locationbackground, datebackground, timebackground, notesbackground;
 
     public AppointmentsDetails() {
         // Required empty public constructor
@@ -51,14 +51,20 @@ public class AppointmentsDetails extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_appointments_details, container, false);
         this.rootView = rootView;
 
+
+        // fill in the values
+        
         Bundle args = getArguments();
         Log.d("ID", args.getString("uid"));
         AppointmentsEntity appointment = getAppointment(Integer.parseInt(args.getString("uid")));
         this.thisappointment = appointment;
 
-        // TODO: make this editable once Primary Key issue is resolved
-        TextView title = rootView.findViewById(R.id.appointments_title);
+        EditText title = rootView.findViewById(R.id.appointments_title);
         title.setText(appointment.getTitle());
+        titlelistener = title.getKeyListener();
+        titlebackground = title.getBackground();
+        title.setKeyListener(null);
+        title.setBackground(null);
 
         EditText location = rootView.findViewById(R.id.app_location);
         location.setText(appointment.getLocation());
@@ -162,6 +168,11 @@ public class AppointmentsDetails extends Fragment {
         if (this.mode.equals("view")) {
             editMenu.getItem(0).setIcon(R.drawable.tick);
 
+            EditText title = rootView.findViewById(R.id.appointments_title);
+            title.setText(thisappointment.getTitle());
+            title.setBackground(titlebackground);
+            title.setKeyListener(titlelistener);
+
             EditText location = rootView.findViewById(R.id.app_location);
             location.setText(thisappointment.getLocation());
             location.setKeyListener(locationlistener);
@@ -191,6 +202,10 @@ public class AppointmentsDetails extends Fragment {
         if (this.mode.equals("edit")){
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
+            final EditText title = rootView.findViewById(R.id.appointments_title);
+            title.setKeyListener(null);
+            title.setBackground(null);
+
             final EditText location = rootView.findViewById(R.id.app_location);
             location.setKeyListener(null);
             location.setBackground(null);
@@ -212,6 +227,7 @@ public class AppointmentsDetails extends Fragment {
                 @Override
                 public void run() {
                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                    thisappointment.setTitle(title.getText().toString());
                     thisappointment.setLocation(location.getText().toString());
                     thisappointment.setTime(time.getText().toString());
                     thisappointment.setDate(date.getText().toString());
