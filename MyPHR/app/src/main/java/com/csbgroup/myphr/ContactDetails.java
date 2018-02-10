@@ -205,6 +205,22 @@ public class ContactDetails extends Fragment {
             notes.setKeyListener(null);
             notes.setBackground(null);
 
+            // update the contact in the database
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                    thiscontact.setEmail(email.getText().toString());
+                    thiscontact.setPhone(phone.getText().toString());
+                    thiscontact.setNotes(notes.getText().toString());
+                    db.contactsDao().update(thiscontact);
+
+                    // refresh to get rid of keyboard
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.detach(ContactDetails.this).attach(ContactDetails.this).commit();
+                }
+            }).start();
+
             this.mode = "view";
             return;
         }
