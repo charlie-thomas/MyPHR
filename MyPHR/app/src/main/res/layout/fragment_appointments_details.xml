@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <!-- Location -->
@@ -26,12 +26,14 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <TextView
+    <EditText
         android:id="@+id/app_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/location_title"
-        android:layout_marginStart="10dp" />
+        android:textColor="#777777"
+        android:inputType="textMultiLine"
+        android:layout_marginStart="5dp" />
 
     <!-- Date -->
     <TextView
@@ -45,12 +47,14 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <TextView
+    <EditText
         android:id="@+id/app_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/date_title"
-        android:layout_marginStart="10dp" />
+        android:textColor="#777777"
+        android:inputType="text"
+        android:layout_marginStart="5dp" />
 
     <!-- Time -->
     <TextView
@@ -64,12 +68,14 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <TextView
+    <EditText
         android:id="@+id/app_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/time_title"
-        android:layout_marginStart="10dp" />
+        android:textColor="#777777"
+        android:inputType="text"
+        android:layout_marginStart="5dp" />
 
     <!-- Reminders -->
     <TextView
@@ -104,11 +110,13 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/notes"
+    <EditText
+        android:id="@+id/app_notes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/notes_title"
-        android:layout_marginStart="10dp" />
+        android:textColor="#777777"
+        android:inputType="textMultiLine"
+        android:layout_marginStart="5dp" />
 
 </RelativeLayout>

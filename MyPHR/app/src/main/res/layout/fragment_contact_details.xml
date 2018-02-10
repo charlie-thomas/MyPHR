@@ -34,7 +34,7 @@
         android:textColor="#777777"
         android:inputType="textEmailAddress"
         android:maxLines="1"
-        android:layout_marginStart="10dp"/>
+        android:layout_marginStart="5dp"/>
 
     <!-- Phone Number -->
     <TextView
@@ -56,7 +56,7 @@
         android:textColor="#777777"
         android:inputType="phone"
         android:maxLines="1"
-        android:layout_marginStart="10dp"/>
+        android:layout_marginStart="5dp"/>
 
     <!-- Notes -->
     <TextView
@@ -77,6 +77,6 @@
         android:layout_below="@id/notes_title"
         android:textColor="#777777"
         android:inputType="textMultiLine"
-        android:layout_marginStart="10dp" />
+        android:layout_marginStart="5dp" />
 
 </RelativeLayout>

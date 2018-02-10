@@ -96,7 +96,7 @@ public class ContactDetails extends Fragment {
     }
 
     /**
-     * Fetches a single contact entity from the database, found by name
+     * Fetches a single contact entity from the database.
      *
      * @param name is the name of the contact to be retrieved
      * @return the contact entity
@@ -126,9 +126,6 @@ public class ContactDetails extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
     }
 
     @Override

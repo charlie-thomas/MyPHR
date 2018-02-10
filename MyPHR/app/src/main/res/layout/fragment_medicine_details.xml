@@ -20,7 +20,7 @@
         android:layout_below="@id/medicine_title"
         android:textColor="#777777"
         android:inputType="textMultiLine"
-        android:layout_marginStart="10dp" />
+        android:layout_marginStart="5dp" />
 
     <TextView
         android:id="@+id/dose_title"
@@ -41,7 +41,7 @@
         android:textColor="#777777"
         android:inputType="text"
         android:maxLines="1"
-        android:layout_marginStart="10dp" />
+        android:layout_marginStart="5dp" />
 
     <TextView
         android:id="@+id/reminders"
@@ -72,7 +72,7 @@
         android:layout_below="@id/notes_title"
         android:textColor="#777777"
         android:inputType="textMultiLine"
-        android:layout_marginStart="10dp" />
+        android:layout_marginStart="5dp" />
 
     <Switch
         android:id="@+id/reminder_switch"
