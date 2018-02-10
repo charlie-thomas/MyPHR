@@ -193,6 +193,22 @@ public class MedicineDetails extends Fragment {
             notes.setKeyListener(null);
             notes.setBackground(null);
 
+            // update the medicine in the database
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                    thismedicine.setDescription(description.getText().toString());
+                    thismedicine.setDose(dose.getText().toString());
+                    thismedicine.setNotes(notes.getText().toString());
+                    db.medicineDao().update(thismedicine);
+
+                    // refresh to get rid of keyboard
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.detach(MedicineDetails.this).attach(MedicineDetails.this).commit();
+                }
+            }).start();
+
             this.mode = "view";
             return;
         }
