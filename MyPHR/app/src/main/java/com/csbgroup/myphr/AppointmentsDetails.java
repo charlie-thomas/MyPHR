@@ -207,6 +207,23 @@ public class AppointmentsDetails extends Fragment {
             notes.setKeyListener(null);
             notes.setBackground(null);
 
+            // update the contact in the database
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                    thisappointment.setLocation(location.getText().toString());
+                    thisappointment.setTime(time.getText().toString());
+                    thisappointment.setDate(date.getText().toString());
+                    thisappointment.setNotes(notes.getText().toString());
+                    db.appointmentsDao().update(thisappointment);
+
+                    // refresh to get rid of keyboard
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.detach(AppointmentsDetails.this).attach(AppointmentsDetails.this).commit();
+                }
+            }).start();
+
             this.mode = "view";
             return;
         }
