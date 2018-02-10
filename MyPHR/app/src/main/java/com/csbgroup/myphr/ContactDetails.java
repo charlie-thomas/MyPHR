@@ -30,16 +30,14 @@ import java.util.concurrent.Future;
 
 public class ContactDetails extends Fragment {
 
+    private ContactsEntity thiscontact; // the contact we're viewing now
+
     private Menu editMenu;
     private String mode = "view";
     private View rootView;
-    private ContactsEntity thiscontact;
-    private KeyListener emaillistener;
-    private Drawable emailbackground;
-    private KeyListener phonelistener;
-    private Drawable phonebackground;
-    private KeyListener noteslistener;
-    private Drawable notesbackground;
+
+    private KeyListener emaillistener, phonelistener, noteslistener;
+    private Drawable emailbackground, phonebackground, notesbackground;
 
     public ContactDetails() {
         // Required empty public constructor
@@ -63,6 +61,7 @@ public class ContactDetails extends Fragment {
         ContactsEntity contact = getContact(args.getString("name"));
         this.thiscontact = contact;
 
+        // TODO: make this editable once Primary Key issue is resolved
         TextView contactTitle = rootView.findViewById(R.id.contact_title);
         contactTitle.setText(contact.getName());
 
@@ -139,9 +138,7 @@ public class ContactDetails extends Fragment {
     }
 
     /**
-     * Provides navigation for menu items; currenty only needed for navigation back to the
-     * main contacts fragment.
-     *
+     * Provides navigation/actions for menu items.
      * @param item the clicked menu item
      * @return
      */

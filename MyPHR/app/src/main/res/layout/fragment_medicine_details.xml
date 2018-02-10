@@ -10,14 +10,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
-    <TextView
+    <EditText
         android:id="@+id/medicine_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/medicine_title"
+        android:textColor="#777777"
+        android:inputType="textMultiLine"
         android:layout_marginStart="10dp" />
 
     <TextView
@@ -31,11 +33,14 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <TextView
+    <EditText
         android:id="@+id/medicine_dose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/dose_title"
+        android:textColor="#777777"
+        android:inputType="text"
+        android:maxLines="1"
         android:layout_marginStart="10dp" />
 
     <TextView
@@ -60,11 +65,13 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/notes"
+    <EditText
+        android:id="@+id/medicine_notes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/notes_title"
+        android:textColor="#777777"
+        android:inputType="textMultiLine"
         android:layout_marginStart="10dp" />
 
     <Switch
