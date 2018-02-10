@@ -26,11 +26,14 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <TextView
+    <EditText
         android:id="@+id/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/email_title"
+        android:textColor="#777777"
+        android:inputType="textEmailAddress"
+        android:maxLines="1"
         android:layout_marginStart="10dp"/>
 
     <!-- Phone Number -->
@@ -45,11 +48,14 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <TextView
+    <EditText
         android:id="@+id/phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/phone_title"
+        android:textColor="#777777"
+        android:inputType="phone"
+        android:maxLines="1"
         android:layout_marginStart="10dp"/>
 
     <!-- Notes -->
@@ -64,11 +70,13 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <TextView
+    <EditText
         android:id="@+id/notes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/notes_title"
+        android:textColor="#777777"
+        android:inputType="textMultiLine"
         android:layout_marginStart="10dp" />
-    
+
 </RelativeLayout>
