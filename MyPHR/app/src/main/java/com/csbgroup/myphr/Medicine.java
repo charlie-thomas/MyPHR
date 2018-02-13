@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -60,6 +61,7 @@ public class Medicine extends Fragment {
         List<Map.Entry<Integer, String>> medicine_map = new ArrayList<>();
         for (MedicineEntity me : medicines)
             medicine_map.add(new AbstractMap.SimpleEntry<>(me.getUid(), me.getTitle()));
+
 
         // display the medicines in list
         SimpleAdapter medicineAdapter = new SimpleAdapter(getActivity(), medicine_map);

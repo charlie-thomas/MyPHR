@@ -72,6 +72,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
                         public void onClick(View v) {
                             Fragment eventFrag = AppointmentsDetails.newInstance();
                             Bundle bundle = new Bundle();
+                            Log.d("HERE NOW", String.valueOf(e.getUid()));
                             bundle.putString("uid", String.valueOf(e.getUid()));
                             eventFrag.setArguments(bundle);
 
@@ -98,7 +99,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
                         public void onClick(View v) {
                             Fragment eventFrag = MedicineDetails.newInstance();
                             Bundle bundle = new Bundle();
-                            bundle.putString("title", e.getEvent());
+                            bundle.putString("uid", String.valueOf(e.getUid()));
                             eventFrag.setArguments(bundle);
 
                             ((MainActivity) ctx).switchFragment(eventFrag);

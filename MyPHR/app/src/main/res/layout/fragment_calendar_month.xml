@@ -1,72 +1,76 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.csbgroup.myphr.CalendarMonth">
+    android:fillViewport="true">
 
-    <CalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/upcoming_app"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/calendarView"
-        android:layout_marginStart="10dp"
-        android:text="@string/next_appointment"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <LinearLayout
-        android:id="@+id/upcoming_layout"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="1"
-        android:layout_below="@id/upcoming_app"
-        android:background="@color/colorAccent"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="10dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        tools:context="com.csbgroup.myphr.CalendarMonth">
+
+        <CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/upcoming_date"
+            android:id="@+id/upcoming_med"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:paddingStart="5dp"/>
+            android:layout_below="@id/calendarView"
+            android:layout_marginStart="10dp"
+            android:text="@string/today_s_medicine"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/todays_meds"
+            android:layout_below="@id/upcoming_med"
+            android:layout_margin="10dp"
+            android:showDividers="middle"
+            android:divider="@drawable/list_divider"
+            android:orientation="vertical" />
 
         <TextView
-            android:id="@+id/upcoming_app_name"
+            android:id="@+id/upcoming_app"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:textColor="@color/white"/>
-    </LinearLayout>
+            android:layout_below="@id/todays_meds"
+            android:layout_marginStart="10dp"
+            android:text="@string/next_appointment"
+            android:textSize="18sp"
+            android:layout_marginTop="15dp"
+            android:textStyle="bold" />
 
+        <LinearLayout
+            android:id="@+id/upcoming_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1"
+            android:layout_below="@id/upcoming_app"
+            android:background="@color/colorAccent"
+            android:layout_margin="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
 
-    <TextView
-        android:id="@+id/upcoming_med"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/upcoming_layout"
-        android:layout_marginStart="10dp"
-        android:text="@string/today_s_medicine"
-        android:textSize="18sp"
-        android:layout_marginTop="15dp"
-        android:textStyle="bold" />
+            <TextView
+                android:id="@+id/upcoming_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:paddingStart="5dp"/>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/todays_meds"
-        android:layout_below="@id/upcoming_med"
-        android:layout_margin="10dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="3dp"/>
-</RelativeLayout>
+            <TextView
+                android:id="@+id/upcoming_app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

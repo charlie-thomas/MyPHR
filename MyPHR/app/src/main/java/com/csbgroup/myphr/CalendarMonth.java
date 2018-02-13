@@ -3,6 +3,7 @@ package com.csbgroup.myphr;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,12 +80,13 @@ public class CalendarMonth extends Fragment {
 
         if (upcoming_appointment == null) return rootView;
 
+        LinearLayout upcoming_ll = rootView.findViewById(R.id.upcoming_layout);
         TextView upcomingDate = rootView.findViewById(R.id.upcoming_date);
-        final TextView upcomingApp = rootView.findViewById(R.id.upcoming_app_name);
+        TextView upcomingApp = rootView.findViewById(R.id.upcoming_app_name);
         upcomingDate.setText(upcoming_appointment.getDate());
         upcomingApp.setText(upcoming_appointment.getTitle());
 
-        upcomingApp.setOnClickListener(new View.OnClickListener() {
+        upcoming_ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Fragment eventFrag = AppointmentsDetails.newInstance();
@@ -97,17 +99,38 @@ public class CalendarMonth extends Fragment {
         });
 
         // Today's Medicines
-        ListView todays_meds = rootView.findViewById(R.id.todays_meds);
-        MedicineAdapter adapter = null;
+        LinearLayout todays_meds = rootView.findViewById(R.id.todays_meds);
         try {
-            adapter = new MedicineAdapter(getActivity(), getTodaysMedicine());
+            for (CalendarEvent med : getTodaysMedicine()) {
+                final CalendarEvent _med = med;
+
+                LinearLayout ll_med = (LinearLayout) inflater.inflate(R.layout.todays_meds_list_item, null);
+                ll_med.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccentDark));
+
+                TextView time_med = ll_med.findViewById(R.id.upcoming_time_med);
+                time_med.setText(med.getTime());
+
+                TextView event_med = ll_med.findViewById(R.id.upcoming_med_name);
+                event_med.setText(med.getEvent());
+
+                Log.d("MED", ""+_med.getUid());
+                ll_med.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Fragment eventFrag = MedicineDetails.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("uid", String.valueOf(_med.getUid()));
+                        eventFrag.setArguments(bundle);
+
+                        ((MainActivity) getContext()).switchFragment(eventFrag);
+                    }
+                });
+
+                todays_meds.addView(ll_med);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        todays_meds.setAdapter(adapter);
-
-
-
         return rootView;
     }
 
@@ -182,7 +205,7 @@ public class CalendarMonth extends Fragment {
         // Create CalendarEvents for the days medicines, and add them to the returning array
         for (MedicineEntity me : medicines) {
             if (me.isDaily() || (me.isOther_days() && CalendarDay.isOtherDay(me.getDate(), df.format(today.getTime()))))
-                todays_meds.add(new CalendarEvent(0, null, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
+                todays_meds.add(new CalendarEvent(me.getUid(), null, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
         }
 
         Collections.sort(todays_meds, new Comparator<CalendarEvent>() {
