@@ -39,26 +39,28 @@ public class MedicineEntityTest {
     @Test
     public void createMedicineTest() throws Exception {
         MedicineEntity medicineEntity = new MedicineEntity("Test Medicine",
-                "Description", "Dose", "Notes", true);
+                "Description", "Dose", "Notes", true,
+                true, true, "03/12/2017", "15:00");
         medicineDao.insertAll(medicineEntity);
 
-        MedicineEntity me = medicineDao.getMedicine("Test Medicine");
+        MedicineEntity me = medicineDao.getMedicineByTitle("Test Medicine");
         assertEquals(medicineEntity.getTitle(), me.getTitle());
     }
 
     @Test
     public void deleteMedicineTest() throws Exception {
-        MedicineEntity medicineEntity = new MedicineEntity("Medicine",
-                "Description", "Dose","Notes", true);
+        MedicineEntity medicineEntity = new MedicineEntity("Test Medicine",
+                "Description", "Dose", "Notes", true,
+                true, true, "03/12/2017", "15:00");
         medicineDao.insertAll(medicineEntity);
 
         // Ensure that the medicine was added to the database before deleting it
-        assertEquals(medicineEntity.getTitle(), medicineDao.getMedicine("Medicine").getTitle());
+        assertEquals(medicineEntity.getTitle(), medicineDao.getMedicineByTitle("Test Medicine").getTitle());
 
         // Delete the medicine from the database, and ensure that subsequent queries for the medicine
         // return null
-        medicineDao.delete(medicineDao.getMedicine("Medicine"));
-        assertEquals(null, medicineDao.getMedicine("Medicine"));
+        medicineDao.delete(medicineDao.getMedicineByTitle("Test Medicine"));
+        assertEquals(null, medicineDao.getMedicineByTitle("Test Medicine"));
     }
 
     @Test
@@ -67,7 +69,7 @@ public class MedicineEntityTest {
 
         List<MedicineEntity> medicines = new ArrayList<>();
         for (int i = 1; i < 5; i++)
-            medicines.add(new MedicineEntity("Med " + i, null, null,null, false));
+            medicines.add(new MedicineEntity("Med " + i, null, null,null, false, false, false, null, null ));
         medicineDao.insertAll(medicines.toArray(new MedicineEntity[medicines.size()]));
 
         assertEquals(titles, medicineDao.getAllTitles());
@@ -76,7 +78,7 @@ public class MedicineEntityTest {
     @Test
     public void deleteAllMedicinesTest() throws Exception {
         for (int i = 1; i < 5; i++)
-            medicineDao.insertAll(new MedicineEntity("Med " + i, null, null, null, false));
+            medicineDao.insertAll(new MedicineEntity("Med " + i, null, null, null, false, false, false, null, null));
 
         // Ensure there are currently 4 medicines in the database
         assertEquals(4, medicineDao.getAll().size());
