@@ -9,8 +9,10 @@ import android.support.annotation.NonNull;
 public class MedicineEntity {
 
     // Columns
-    @NonNull
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int uid;
+
+    @ColumnInfo(name = "title")
     private String title;
 
     @ColumnInfo(name = "description")

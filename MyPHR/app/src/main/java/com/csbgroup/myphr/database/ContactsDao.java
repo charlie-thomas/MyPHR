@@ -17,8 +17,11 @@ public interface ContactsDao {
     @Query("SELECT name FROM contactsentity")
     List<String> getAllNames();
 
+    @Query("SELECT * from contactsentity WHERE uid LIKE :uid")
+    ContactsEntity getContact(int uid);
+
     @Query("SELECT * FROM contactsentity WHERE name LIKE :name")
-    ContactsEntity getContact(String name);
+    ContactsEntity getContactByName(String name);
 
     @Insert
     void insertAll(ContactsEntity... contactsEntities);
