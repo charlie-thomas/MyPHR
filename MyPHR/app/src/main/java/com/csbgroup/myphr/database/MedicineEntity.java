@@ -147,4 +147,12 @@ public class MedicineEntity {
     public void setTime(String time) {
         this.time = time;
     }
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
 }

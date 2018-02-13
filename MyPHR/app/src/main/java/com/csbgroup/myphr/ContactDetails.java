@@ -70,7 +70,7 @@ public class ContactDetails extends Fragment {
         Callable callable = new Callable() {
             @Override
             public Object call() throws Exception {
-                return AppDatabase.getAppDatabase(getActivity()).contactsDao().getContact(name);
+                return AppDatabase.getAppDatabase(getActivity()).contactsDao().getContact(1);
             }
         };
 
