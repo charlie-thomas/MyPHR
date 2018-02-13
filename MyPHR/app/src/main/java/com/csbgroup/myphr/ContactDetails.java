@@ -38,7 +38,7 @@ public class ContactDetails extends Fragment {
         // fill in the values
 
         Bundle args = getArguments();
-        ContactsEntity contact = getContact(args.getString("name"));
+        ContactsEntity contact = getContact(Integer.valueOf(args.getString("uid")));
 
         TextView contactTitle = rootView.findViewById(R.id.contact_title);
         contactTitle.setText(contact.getName());
@@ -61,16 +61,16 @@ public class ContactDetails extends Fragment {
 
     /**
      * Fetches a single contact entity from the database, found by name
-     * @param name is the name of the contact to be retrieved
+     * @param uid is the primary key of the contact to be retrieved
      * @return the contact entity
      */
-    private ContactsEntity getContact(final String name) {
+    private ContactsEntity getContact(final int uid) {
 
         // Create a callable object for database transactions
         Callable callable = new Callable() {
             @Override
             public Object call() throws Exception {
-                return AppDatabase.getAppDatabase(getActivity()).contactsDao().getContact(1);
+                return AppDatabase.getAppDatabase(getActivity()).contactsDao().getContact(uid);
             }
         };
 

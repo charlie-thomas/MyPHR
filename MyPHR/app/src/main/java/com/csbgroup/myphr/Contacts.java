@@ -17,8 +17,11 @@ import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.ContactsEntity;
+
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -49,16 +52,14 @@ public class Contacts extends Fragment {
         // fetch contacts entities from database
         List<ContactsEntity> conts = getContacts();
         if (conts == null) return rootView;
-        List<String> contacts = new ArrayList<>();
-        for (ContactsEntity ct : conts) {
-            contacts.add(ct.getName());
-        }
+
+        // Convert ContactEntities into a map of their uid and names
+        List<Map.Entry<Integer, String>> contacts_map = new ArrayList<>();
+        for (ContactsEntity ce : conts)
+            contacts_map.add(new AbstractMap.SimpleEntry<>(ce.getUid(), ce.getName()));
 
         // display the contacts in list
-        ArrayAdapter<String> contactsAdapter = new ArrayAdapter<>(
-                getActivity(),
-                R.layout.simple_list_item,
-                contacts);
+        SimpleAdapter contactsAdapter = new SimpleAdapter(getActivity(), contacts_map);
         ListView listView = rootView.findViewById(R.id.contacts_list);
         listView.setAdapter(contactsAdapter);
 
@@ -69,7 +70,7 @@ public class Contacts extends Fragment {
 
                 // Create a bundle to pass the contact to the details fragment
                 Bundle bundle = new Bundle();
-                bundle.putString("name", parent.getAdapter().getItem(position).toString());
+                bundle.putString("uid", view.getTag().toString());
                 details.setArguments(bundle);
 
                 ((MainActivity) getActivity()).switchFragment(details);
