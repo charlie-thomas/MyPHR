@@ -24,6 +24,9 @@ public interface MedicineDao {
     List<String> getAllTitles();
 
     @Insert
+    long insert(MedicineEntity medicineEntity);
+
+    @Insert
     void insertAll(MedicineEntity... medicineEntities);
 
     @Update

@@ -24,6 +24,9 @@ public interface ContactsDao {
     ContactsEntity getContactByName(String name);
 
     @Insert
+    long insert(ContactsEntity contactsEntity);
+
+    @Insert
     void insertAll(ContactsEntity... contactsEntities);
 
     @Update

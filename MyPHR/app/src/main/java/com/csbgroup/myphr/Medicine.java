@@ -181,12 +181,12 @@ public class Medicine extends Fragment {
                                     MedicineEntity medicine = new MedicineEntity(name.getText().toString(),
                                             description.getText().toString(), dose.getText().toString(),
                                             notes.getText().toString(), false, false, false, null, null);
-                                    db.medicineDao().insertAll(medicine);
+                                    long uid = db.medicineDao().insert(medicine);
 
                                     // Move to details for new medicine
                                     Fragment newdetails = MedicineDetails.newInstance();
                                     Bundle bundle = new Bundle();
-                                    bundle.putString("title", name.getText().toString());
+                                    bundle.putString("uid", String.valueOf(uid));
                                     newdetails.setArguments(bundle);
                                     ((MainActivity)getActivity()).switchFragment(newdetails);
                                 }

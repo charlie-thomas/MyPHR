@@ -158,12 +158,12 @@ public class Contacts extends Fragment {
                                     ContactsEntity contact = new ContactsEntity(name.getText().toString(),
                                             email.getText().toString(),phone.getText().toString(),
                                             notes.getText().toString());
-                                    db.contactsDao().insertAll(contact);
+                                    long uid = db.contactsDao().insert(contact);
 
                                     // Move to details for new contact
                                     Fragment newdetails = ContactDetails.newInstance();
                                     Bundle bundle = new Bundle();
-                                    bundle.putString("name", name.getText().toString());
+                                    bundle.putString("uid", String.valueOf(uid));
                                     newdetails.setArguments(bundle);
                                     ((MainActivity)getActivity()).switchFragment(newdetails);
                                 }
