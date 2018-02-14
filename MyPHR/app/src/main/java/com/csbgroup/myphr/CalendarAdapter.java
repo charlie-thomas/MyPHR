@@ -5,17 +5,25 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
-    private final List<CalendarEvent> events;
+    private final List<List<CalendarEvent>> events;
     private Context ctx;
 
-    public CalendarAdapter(List<CalendarEvent> events) {
+    public CalendarAdapter(List<List<CalendarEvent>> events) {
         setHasStableIds(true);
         this.events = events;
     }
@@ -28,48 +36,81 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(CalendarViewHolder holder, int position) {
+    public void onBindViewHolder(final CalendarViewHolder holder, int position) {
 
-        final CalendarEvent e = events.get(position);
-        holder.time.setText(e.getTime());
+        final List<CalendarEvent> hours_events = events.get(position);
 
-        switch (e.getType()) {
-            case "Empty":
-                break;
-            case "Appointment":
-                holder.event.setText(e.getEvent());
-                holder.event.setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorAccent));
+        Collections.sort(hours_events, new Comparator<CalendarEvent>() {
+            @Override
+            public int compare(CalendarEvent o1, CalendarEvent o2) {
+                return o1.getTime().replace(":", "").compareTo(o2.getTime().replace(":", ""));
+            }
+        });
 
-                holder.event.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Fragment eventFrag = AppointmentsDetails.newInstance();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("uid", String.valueOf(e.getUid()));
-                        eventFrag.setArguments(bundle);
+        LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                        ((MainActivity) ctx).switchFragment(eventFrag);
-                    }
-                });
-                break;
-            case "Medicine":
-                holder.event.setText(e.getEvent());
-                holder.event.setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorAccentDark));
+        holder.time.setText(hours_events.get(0).getHour());
 
-                holder.event.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Fragment eventFrag = MedicineDetails.newInstance();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("title", e.getEvent());
-                    eventFrag.setArguments(bundle);
+        for (final CalendarEvent e : hours_events) {
+            switch (e.getType()) {
+                case "Empty":
+                    break;
+                case "Appointment":
+                    if (holder.events.getChildCount() >= hours_events.size()) break;
 
-                    ((MainActivity) ctx).switchFragment(eventFrag);
-                    }
-                });
-                break;
+                    LinearLayout ll_app = (LinearLayout) inflater.inflate(R.layout.todays_meds_list_item, null);
+                    ll_app.setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorAccent));
+
+                    TextView time = ll_app.findViewById(R.id.upcoming_time_med);
+                    time.setText(e.getTime());
+
+                    TextView event = ll_app.findViewById(R.id.upcoming_med_name);
+                    event.setText(e.getEvent());
+
+                    ll_app.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Fragment eventFrag = AppointmentsDetails.newInstance();
+                            Bundle bundle = new Bundle();
+                            Log.d("HERE NOW", String.valueOf(e.getUid()));
+                            bundle.putString("uid", String.valueOf(e.getUid()));
+                            eventFrag.setArguments(bundle);
+
+                            ((MainActivity) ctx).switchFragment(eventFrag);
+                        }
+                    });
+
+                    holder.events.addView(ll_app);
+                    break;
+                case "Medicine":
+                    if (holder.events.getChildCount() >= hours_events.size()) break;
+
+                    LinearLayout ll_med = (LinearLayout) inflater.inflate(R.layout.todays_meds_list_item, null);
+                    ll_med.setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorAccentDark));
+
+                    TextView time_med = ll_med.findViewById(R.id.upcoming_time_med);
+                    time_med.setText(e.getTime());
+
+                    TextView event_med = ll_med.findViewById(R.id.upcoming_med_name);
+                    event_med.setText(e.getEvent());
+
+                    ll_med.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Fragment eventFrag = MedicineDetails.newInstance();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("uid", String.valueOf(e.getUid()));
+                            eventFrag.setArguments(bundle);
+
+                            ((MainActivity) ctx).switchFragment(eventFrag);
+                        }
+                    });
+
+                    holder.events.addView(ll_med);
+                    break;
             }
         }
+    }
 
     @Override
     public long getItemId(int position) {

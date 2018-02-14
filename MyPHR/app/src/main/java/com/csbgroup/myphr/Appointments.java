@@ -113,7 +113,7 @@ public class Appointments extends Fragment {
 
         if (appointments != null) {
             for (AppointmentsEntity ae : appointments)
-                events.add(new CalendarEvent(ae.getUid(), null, ae.getDate(), ae.getTitle() ,null));
+                events.add(new CalendarEvent(ae.getUid(), null, null, ae.getDate(), ae.getTitle() ,null));
         }
 
         return events;
@@ -221,12 +221,12 @@ public class Appointments extends Fragment {
                                     AppointmentsEntity appointment = new AppointmentsEntity(
                                             title.getText().toString(), location.getText().toString(),
                                             date, time, notes.getText().toString(), false);
-                                    db.appointmentsDao().insertAll(appointment);
+                                    long uid = db.appointmentsDao().insert(appointment);
 
                                     // Move to details fragment for new appointment
                                     Fragment newdetails = AppointmentsDetails.newInstance();
                                     Bundle bundle = new Bundle();
-                                    bundle.putString("title", title.getText().toString());
+                                    bundle.putString("uid", String.valueOf(uid));
                                     newdetails.setArguments(bundle);
                                     ((MainActivity)getActivity()).switchFragment(newdetails);
                                 }
