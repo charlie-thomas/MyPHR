@@ -43,4 +43,13 @@ public class StatisticsEntity {
         StatValueEntity sve = new StatValueEntity(value,date,centile);
         this.values.add(sve);}
 
+    public void deleteValue(String date){
+        for(int i=0;i<values.size();i++){
+            if(values.get(i).getDate().equals(date)){
+                values.remove(i);
+                return;
+            }
+        }
+    }
+
 }
