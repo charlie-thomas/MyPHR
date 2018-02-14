@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.csbgroup.myphr">
+    package="com.csbgroup.myphr"
+    >
 
     <!-- Tells Google Play Store that fingerprint scanners are preferred but *not* required -->
     <uses-feature android:name="android.hardware.fingerprint"
@@ -24,12 +25,14 @@
         <activity
             android:name=".MainActivity"
             android:label="Main"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait" >
         </activity>
 
         <activity
             android:name=".LoginActivity"
-            android:label="MyPHR" >
+            android:label="MyPHR"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -38,27 +41,32 @@
 
         <activity
             android:name=".FingerprintHandler"
-            android:label="MyPHR" >
+            android:label="MyPHR"
+            android:screenOrientation="portrait" >
         </activity>
 
         <activity
             android:name=".ChangePINActivity"
-            android:label="MyPHR" >
+            android:label="MyPHR"
+            android:screenOrientation="portrait" >
         </activity>
 
         <activity
             android:name=".StartupActivity"
-            android:label="MyPHR" >
+            android:label="MyPHR"
+            android:screenOrientation="portrait" >
         </activity>
 
         <activity
             android:name=".QuestionsActivity"
-            android:label="MyPHR" >
+            android:label="MyPHR"
+            android:screenOrientation="portrait" >
         </activity>
 
         <activity
             android:name=".ForgotPINActivity"
-            android:label="MyPHR" >
+            android:label="MyPHR"
+            android:screenOrientation="portrait" >
         </activity>
 
     </application>
