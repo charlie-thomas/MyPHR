@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             } else {
                 Toast.makeText(LoginActivity.this, "PIN Incorrect", Toast.LENGTH_SHORT).show();
+                mPinLockView.resetPinLockView();
             }
             Log.d(TAG, "Pin complete: " + pin);
         }
