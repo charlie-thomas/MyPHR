@@ -82,7 +82,7 @@ public class AppointmentsEntity {
     }
 
     public void setDate(String date) {
-        this.date = title;
+        this.date = date;
     }
 
 
@@ -91,7 +91,7 @@ public class AppointmentsEntity {
     }
 
     public void setTime(String time) {
-        this.time = title;
+        this.time = time;
     }
 
 
