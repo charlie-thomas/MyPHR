@@ -18,11 +18,14 @@ public interface AppointmentsDao {
     @Query("SELECT title FROM appointmentsentity")
     List<String> getAllTitles();
 
-    @Query("SELECT * FROM appointmentsentity WHERE title LIKE :title")
-    AppointmentsEntity getAppointment(String title);
+    @Query("SELECT * FROM appointmentsentity WHERE uid LIKE :uid")
+    AppointmentsEntity getAppointment(int uid);
 
     @Query("SELECT * FROM appointmentsentity WHERE date LIKE :date")
     List<AppointmentsEntity> getAppointmentByDate(String date);
+
+    @Insert
+    long insert(AppointmentsEntity appointmentsEntity);
 
     @Insert
     void insertAll(AppointmentsEntity... appointmentsEntities);

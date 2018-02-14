@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                         selectedPage = Contacts.newInstance();
                         break;
                     case R.id.medicine:
-                        selectedPage = Medicine.newInstance();
+                        selectedPage = MedicineSection.newInstance();
                         break;
                     case R.id.calendar:
                         selectedPage = CalendarMonth.newInstance();
@@ -100,51 +100,92 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static void populateContacts(ContactsDao dao) {
-
         dao.deleteAll();
 
         // TODO: get contact details for main staff and load in
-
-        ContactsEntity c1 = new ContactsEntity("Dr. Doctor", "drdoctor@hospital.com",
-                "012334567890", "My main doctor at hospital.");
-
-        ContactsEntity c2 = new ContactsEntity("Mr. Nurse", "mrnurse@hospital.com",
-                "015567892343", "My main nurse at hospital.");
-
-        dao.insertAll(c1,c2);
-
+        dao.insertAll(new ContactsEntity(
+                "Dr. Jones",
+                "james.jones@hospital.com",
+                "012334567890",
+                "My main doctor at hospital."),
+                new ContactsEntity(
+                "Nurse Williams",
+                "amy.williams@hospital.com",
+                "012334567890",
+                "My main nurse at hospital."
+                ));
     }
 
     private static void populateMedicine(MedicineDao dao) {
         dao.deleteAll();
 
-        String[] meds = {"Growth Hormone", "Oestrogen", "Progesterone", "Thyroxine"};
-
-        for (String med : meds) {
-            MedicineEntity me = new MedicineEntity(
-                    med,
-                    med + " Description",
-                    med + "Dose",
-                    med + " Notes",
-                    true);
-            dao.insertAll(me);
-        }
+        dao.insertAll(new MedicineEntity(
+                "Growth Hormone",
+                "Natural Hormone to simulate growth.",
+                "5mg",
+                "Take once a day.",
+                true,
+                false,
+                false,
+                null,
+                "04:15"),
+                new MedicineEntity(
+                "Oestrogen",
+                "Helps in the development and maintenance of sexual maturation.",
+                "2mg",
+                "Tablets and patches should be taken once a day.",
+                true,
+                true,
+                false,
+                null,
+                "02:50"),
+                new MedicineEntity(
+                "Progesterone",
+                "Progesterone description",
+                "2mg",
+                "To be taken on 7-12 days of calendar month either monthly, every 2nd month or" +
+                        "every 3rd month",
+                true,
+                false,
+                true,
+                "05/02/2018",
+                "02:30"),
+                new MedicineEntity(
+                "Thyroxine",
+                "Thyroxine description",
+                "2mg",
+                "To be taken daily",
+                true,
+                false,
+                false,
+                null,
+                "01:15")
+                );
     }
 
 
     private static void populateAppointments(AppointmentsDao dao)  {
         dao.deleteAll();
 
-        for (int i = 1; i < 6; i++) {
-            Calendar c = Calendar.getInstance();
-            c.set(Calendar.HOUR_OF_DAY, 0);
-            c.add(Calendar.DATE, i);
-            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 
-            AppointmentsEntity ae = new AppointmentsEntity("Appointment " + i, "Appointment location " + i,
-                    df.format(c.getTime()), "8","Appointment notes " + i, false);
-            dao.insertAll(ae);
-        }
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Clinic 1", "Children's Hospital",
+                df.format(c.getTime()), "02:55","Appointment Notes", true));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Check Up 1", "Children's Hospital",
+                df.format(c.getTime()), "08:00","Appointment Notes", true));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Check Up 2", "Children's Hospital",
+                df.format(c.getTime()), "08:00","Appointment Notes", true));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Clinic 2", "Children's Hospital",
+                df.format(c.getTime()), "08:00","Appointment Notes", true));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Check Up 3", "Children's Hospital",
+                df.format(c.getTime()), "08:00","Appointment Notes", true));
     }
 
     private static void populateInvestigations(InvestigationsDao dao)  {
@@ -164,6 +205,21 @@ public class MainActivity extends AppCompatActivity {
         String[] stats = {"Blood Pressure", "Body Mass Index (BMI)", "Head Circumference", "Height",
                 "Height Velocity", "Weight"};
         ArrayList<StatValueEntity> list = new ArrayList<StatValueEntity>();
+
+        list.add(new StatValueEntity("50.09","24/01/2018","49"));
+        list.add(new StatValueEntity("51.98","20/01/2018","53"));
+        list.add(new StatValueEntity("50.67","16/01/2018","54"));
+        list.add(new StatValueEntity("49.3","12/01/2018","47"));
+        list.add(new StatValueEntity("52.9","08/01/2018",null));
+        list.add(new StatValueEntity("52.3","03/01/2018","51"));
+        list.add(new StatValueEntity("52.3","01/01/2018","55"));
+        list.add(new StatValueEntity("50.09","24/12/2017","49"));
+        list.add(new StatValueEntity("51.98","20/12/2017","53"));
+        list.add(new StatValueEntity("50.67","16/12/2017","54"));
+        list.add(new StatValueEntity("49.3","12/12/2017","47"));
+        list.add(new StatValueEntity("52.9","08/12/2017",null));
+        list.add(new StatValueEntity("52.3","03/12/2017","51"));
+        list.add(new StatValueEntity("52.3","01/12/2017","55"));
 
         for (String stat : stats) {
             StatisticsEntity st = new StatisticsEntity(stat, list);

@@ -44,6 +44,7 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
      * @param type
      */
 
+
     public StatValueAdapter(Context context, int resource, ArrayList<StatValueEntity> objects, String type) {
         super(context,resource,objects);
         mContext = context;
@@ -51,6 +52,7 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
         mType = type;
         array = objects;
     }
+    pls break this code 
 
     @NonNull
     @Override
@@ -77,9 +79,9 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
         }
 
         //if the centile doesn't exist then we remove the textview and double the height of the value's textview
+        
         if(centile==null || centile==""){
             tvCentile.setVisibility(GONE);
-
         } else {
             switch (centile.substring(centile.length() - 1, centile.length())) {
                 case "1":

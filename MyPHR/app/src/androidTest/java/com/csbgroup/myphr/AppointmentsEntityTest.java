@@ -39,9 +39,10 @@ public class AppointmentsEntityTest {
     public void createAppointmentTest() throws Exception {
         AppointmentsEntity appointmentsEntity = new AppointmentsEntity("Appointment",
                 "Location", "Date", "Time", "Notes", false);
+        appointmentsEntity.setUid(15);
         appointmentsDao.insertAll(appointmentsEntity);
 
-        AppointmentsEntity ae = appointmentsDao.getAppointment("Appointment");
+        AppointmentsEntity ae = appointmentsDao.getAppointment(15);
         assertEquals(appointmentsEntity.getTitle(), ae.getTitle());
     }
 
@@ -49,14 +50,15 @@ public class AppointmentsEntityTest {
     public void deleteAppointmentTest() throws Exception {
         AppointmentsEntity appointmentsEntity = new AppointmentsEntity("Appointment",
                 "Location", "Date", "Time", "Notes", false);
+        appointmentsEntity.setUid(16);
         appointmentsDao.insertAll(appointmentsEntity);
 
         // Ensure the database contains the appointment to be deleted
-        assertEquals(appointmentsEntity.getTitle(), appointmentsDao.getAppointment("Appointment").getTitle());
+        assertEquals(appointmentsEntity.getTitle(), appointmentsDao.getAppointment(16).getTitle());
 
         // Delete the appointment from the database and ensure the getAppointment query returns null
-        appointmentsDao.delete(appointmentsDao.getAppointment("Appointment"));
-        assertEquals(null, appointmentsDao.getAppointment("Appointment"));
+        appointmentsDao.delete(appointmentsDao.getAppointment(16));
+        assertEquals(null, appointmentsDao.getAppointment(16));
     }
 
     @Test

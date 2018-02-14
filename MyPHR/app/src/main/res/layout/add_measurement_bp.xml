@@ -1,0 +1,105 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/dialog_title"
+
+            android:background="@color/colorAccent"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingTop="15dp"
+            android:textColor="#FFFFFF"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/dialog_message"
+
+            android:background="@color/colorAccent"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:text="@string/measmessage"
+            android:textColor="#FFFFFF"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <EditText
+                android:id="@+id/measurement"
+
+                android:hint="@string/systolic"
+                android:inputType="number"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:paddingLeft="8dp"
+                android:layout_weight="1"/>
+
+            <EditText
+                android:id="@+id/bp_diastolic"
+
+                android:hint="@string/diastolic"
+                android:inputType="number"
+                android:layout_height="match_parent"
+                android:layout_width="0dp"
+                android:paddingLeft="8dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <EditText
+            android:id="@+id/meas_DD"
+
+            android:hint="@string/DD"
+            android:inputType="number"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:paddingLeft="8dp"
+            android:maxLength="2"
+            android:layout_weight="1"/>
+
+        <EditText
+            android:id="@+id/meas_MM"
+
+            android:hint="@string/MM"
+            android:inputType="number"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:paddingLeft="8dp"
+            android:maxLength="2"
+            android:layout_weight="1"/>
+
+        <EditText
+            android:id="@+id/meas_YYYY"
+
+            android:hint="@string/YYYY"
+            android:inputType="number"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:paddingLeft="8dp"
+            android:maxLength="4"
+            android:layout_weight="2"/>
+
+    </LinearLayout>
+
+</LinearLayout>

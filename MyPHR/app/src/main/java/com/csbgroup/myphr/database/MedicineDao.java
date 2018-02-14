@@ -14,11 +14,17 @@ public interface MedicineDao {
     @Query("SELECT * FROM medicineentity")
     List<MedicineEntity> getAll();
 
+    @Query("SELECT * FROM medicineentity WHERE uid LIKE :uid")
+    MedicineEntity getMedicine(int uid);
+
     @Query("SELECT * FROM medicineentity WHERE title LIKE :title")
-    MedicineEntity getMedicine(String title);
+    MedicineEntity getMedicineByTitle(String title);
 
     @Query("SELECT title FROM medicineentity")
     List<String> getAllTitles();
+
+    @Insert
+    long insert(MedicineEntity medicineEntity);
 
     @Insert
     void insertAll(MedicineEntity... medicineEntities);

@@ -9,8 +9,10 @@ import android.support.annotation.NonNull;
 public class MedicineEntity {
 
     // Columns
-    @NonNull
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int uid;
+
+    @ColumnInfo(name = "title")
     private String title;
 
     @ColumnInfo(name = "description")
@@ -31,13 +33,30 @@ public class MedicineEntity {
     @ColumnInfo(name = "remind_when")
     private int remind_when;
 
+    @ColumnInfo(name = "date")
+    private String date;
+
+    @ColumnInfo(name = "daily")
+    private boolean daily;
+
+    @ColumnInfo(name = "other_days")
+    private boolean other_days;
+
+    @ColumnInfo(name = "time")
+    private String time;
+
     // Constructor
-    public MedicineEntity(String title, String description, String dose, String notes, boolean reminders) {
+    public MedicineEntity(String title, String description, String dose, String notes, boolean reminders,
+                          boolean daily, boolean other_days, String date, String time) {
         this.title = title;
         this.description = description;
         this.dose = dose;
         this.notes = notes;
         this.reminders = reminders;
+        this.daily = daily;
+        this.other_days = other_days;
+        this.date = date;
+        this.time = time;
     }
 
     // Getters and Setters
@@ -95,5 +114,45 @@ public class MedicineEntity {
 
     public void setRemind_when(int remind_when) {
         this.remind_when = remind_when;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public boolean isDaily() {
+        return daily;
+    }
+
+    public void setDaily(boolean daily) {
+        this.daily = daily;
+    }
+
+    public boolean isOther_days() {
+        return other_days;
+    }
+
+    public void setOther_days(boolean other_days) {
+        this.other_days = other_days;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
     }
 }

@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
+import com.csbgroup.myphr.database.InvestigationsEntity;
 import com.csbgroup.myphr.database.MedicineEntity;
 
 import java.text.ParseException;
@@ -57,19 +58,8 @@ public class Appointments extends Fragment {
         ((MainActivity) getActivity()).setToolbar("My Appointments", false);
         setHasOptionsMenu(true);
 
-        // fetch appointments entities from database
-        List<AppointmentsEntity> apps = getAppointments();
-        if (apps == null) return rootView;
-        List<String> appointments = new ArrayList<>();
-        for (AppointmentsEntity ap : apps) {
-            appointments.add(ap.getTitle());
-        }
-
         // display the appointments in list
-        ArrayAdapter<String> appointmentsAdapter = new ArrayAdapter<>(
-                getActivity(),
-                R.layout.simple_list_item,
-                appointments);
+        DateAdapter appointmentsAdapter = new DateAdapter(getActivity(), getAppointments());
         ListView listView = rootView.findViewById(R.id.appointments_list);
         listView.setAdapter(appointmentsAdapter);
 
@@ -80,7 +70,7 @@ public class Appointments extends Fragment {
 
                 // Create a bundle to pass the appointment to the details fragment
                 Bundle bundle = new Bundle();
-                bundle.putString("title", parent.getAdapter().getItem(position).toString());
+                bundle.putString("uid", view.getTag().toString());
                 details.setArguments(bundle);
 
                 ((MainActivity) getActivity()).switchFragment(details);
@@ -98,7 +88,7 @@ public class Appointments extends Fragment {
      * getAppointments fetches the list of appointments from the database
      * @return the list of appointment entities
      */
-    private List<AppointmentsEntity> getAppointments() {
+    private List<CalendarEvent> getAppointments() {
 
         // Create a callable object for database transactions
         Callable callable = new Callable() {
@@ -118,7 +108,15 @@ public class Appointments extends Fragment {
             appointments = result.get();
         } catch (Exception e) {}
 
-        return appointments;
+        // Convert into CalendarEvent objects
+        ArrayList<CalendarEvent> events = new ArrayList<>();
+
+        if (appointments != null) {
+            for (AppointmentsEntity ae : appointments)
+                events.add(new CalendarEvent(ae.getUid(), null, null, ae.getDate(), ae.getTitle() ,null));
+        }
+
+        return events;
     }
 
 
@@ -221,12 +219,12 @@ public class Appointments extends Fragment {
                                     AppointmentsEntity appointment = new AppointmentsEntity(
                                             title.getText().toString(), location.getText().toString(),
                                             date, time, notes.getText().toString(), false);
-                                    db.appointmentsDao().insertAll(appointment);
+                                    long uid = db.appointmentsDao().insert(appointment);
 
                                     // Move to details fragment for new appointment
                                     Fragment newdetails = AppointmentsDetails.newInstance();
                                     Bundle bundle = new Bundle();
-                                    bundle.putString("title", title.getText().toString());
+                                    bundle.putString("uid", String.valueOf(uid));
                                     newdetails.setArguments(bundle);
                                     ((MainActivity)getActivity()).switchFragment(newdetails);
                                 }

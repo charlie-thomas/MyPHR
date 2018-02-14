@@ -3,19 +3,25 @@ package com.csbgroup.myphr;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
+import com.csbgroup.myphr.database.MedicineEntity;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -69,27 +75,62 @@ public class CalendarMonth extends Fragment {
             }
         });
 
+        // Next appointment
         final AppointmentsEntity upcoming_appointment = getUpcomingAppointment();
 
         if (upcoming_appointment == null) return rootView;
 
+        LinearLayout upcoming_ll = rootView.findViewById(R.id.upcoming_layout);
         TextView upcomingDate = rootView.findViewById(R.id.upcoming_date);
-        final TextView upcomingApp = rootView.findViewById(R.id.upcoming_app_name);
+        TextView upcomingApp = rootView.findViewById(R.id.upcoming_app_name);
         upcomingDate.setText(upcoming_appointment.getDate());
         upcomingApp.setText(upcoming_appointment.getTitle());
 
-        upcomingApp.setOnClickListener(new View.OnClickListener() {
+        upcoming_ll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Fragment eventFrag = AppointmentsDetails.newInstance();
                 Bundle bundle = new Bundle();
-                bundle.putString("title", upcoming_appointment.getTitle());
+                bundle.putString("uid", String.valueOf(upcoming_appointment.getUid()));
                 eventFrag.setArguments(bundle);
 
                 ((MainActivity) getContext()).switchFragment(eventFrag);
             }
         });
 
+        // Today's Medicines
+        LinearLayout todays_meds = rootView.findViewById(R.id.todays_meds);
+        try {
+            for (CalendarEvent med : getTodaysMedicine()) {
+                final CalendarEvent _med = med;
+
+                LinearLayout ll_med = (LinearLayout) inflater.inflate(R.layout.todays_meds_list_item, null);
+                ll_med.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccentDark));
+
+                TextView time_med = ll_med.findViewById(R.id.upcoming_time_med);
+                time_med.setText(med.getTime());
+
+                TextView event_med = ll_med.findViewById(R.id.upcoming_med_name);
+                event_med.setText(med.getEvent());
+
+                Log.d("MED", ""+_med.getUid());
+                ll_med.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Fragment eventFrag = MedicineDetails.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("uid", String.valueOf(_med.getUid()));
+                        eventFrag.setArguments(bundle);
+
+                        ((MainActivity) getContext()).switchFragment(eventFrag);
+                    }
+                });
+
+                todays_meds.addView(ll_med);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return rootView;
     }
 
@@ -135,4 +176,45 @@ public class CalendarMonth extends Fragment {
         }
     }
 
+    public List<CalendarEvent> getTodaysMedicine() throws ParseException {
+
+        List<CalendarEvent> todays_meds = new ArrayList<>();
+
+        // Create a callable object for database transactions
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(getActivity()).medicineDao().getAll();
+            }
+        };
+
+        // Get a Future object of all the medicine names
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<List<MedicineEntity>> result = service.submit(callable);
+
+        // Create a list of the medicine names
+        List<MedicineEntity> medicines = Collections.emptyList();
+        try {
+            medicines = result.get();
+        } catch (Exception e) {}
+
+        // Get today's date
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar today = Calendar.getInstance();
+
+        // Create CalendarEvents for the days medicines, and add them to the returning array
+        for (MedicineEntity me : medicines) {
+            if (me.isDaily() || (me.isOther_days() && CalendarDay.isOtherDay(me.getDate(), df.format(today.getTime()))))
+                todays_meds.add(new CalendarEvent(me.getUid(), null, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
+        }
+
+        Collections.sort(todays_meds, new Comparator<CalendarEvent>() {
+            @Override
+            public int compare(CalendarEvent e1, CalendarEvent e2) {
+                return e1.getTime().replace(":", "").compareTo(e2.getTime().replace(":", ""));
+            }
+        });
+
+        return todays_meds;
+    }
 }

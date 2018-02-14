@@ -37,12 +37,12 @@ public class ContactsEntityTest {
 
     @Test
     public void createContactTest() throws Exception {
-        ContactsEntity appointmentsEntity = new ContactsEntity("Contact Name",
+        ContactsEntity contactsEntity = new ContactsEntity("Contact Name",
                 "email@email.com", "12345678910", "Notes");
-        contactsDao.insertAll(appointmentsEntity);
+        contactsDao.insertAll(contactsEntity);
 
-        ContactsEntity ae = contactsDao.getContact("Contact Name");
-        assertEquals(appointmentsEntity.getName(), ae.getName());
+        ContactsEntity ce = contactsDao.getContactByName("Contact Name");
+        assertEquals(contactsEntity.getName(), ce.getName());
     }
 
     @Test
@@ -52,11 +52,11 @@ public class ContactsEntityTest {
         contactsDao.insertAll(contactsEntity);
 
         // Ensure the database contains the contact to be deleted
-        assertEquals(contactsEntity.getName(), contactsDao.getContact("Contact Name").getName());
+        assertEquals(contactsEntity.getName(), contactsDao.getContactByName("Contact Name").getName());
 
         // Delete the contact from the database and ensure the getContact query returns null
-        contactsDao.delete(contactsDao.getContact("Contact Name"));
-        assertEquals(null, contactsDao.getContact("Contact Name"));
+        contactsDao.delete(contactsDao.getContactByName("Contact Name"));
+        assertEquals(null, contactsDao.getContactByName("Contact Name"));
     }
 
     @Test
