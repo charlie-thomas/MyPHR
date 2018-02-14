@@ -1,13 +1,17 @@
 package com.csbgroup.myphr;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.text.method.KeyListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -20,6 +24,15 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class MedicineDetails extends Fragment {
+
+    private MedicineEntity thismedicine; // the medicine we're viewing now
+
+    private Menu editMenu;
+    private String mode = "view";
+    private View rootView;
+
+    private KeyListener descriptionlistener, doselistener, noteslistener;
+    private Drawable descriptionbackground, dosebackground, notesbackground;
 
     public MedicineDetails() {
         // Required empty public constructor
@@ -35,26 +48,40 @@ public class MedicineDetails extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_medicine_details, container, false);
+        this.rootView = rootView;
 
         // fill in the values
-
         Bundle args = getArguments();
         MedicineEntity medicine = getMedicine(Integer.valueOf(args.getString("uid")));
+        this.thismedicine = medicine;
 
-        TextView medTitle = rootView.findViewById(R.id.medicine_title);
-        medTitle.setText(medicine.getTitle());
+        // TODO: make this editable once Primary Key issue is resolved
+        TextView name = rootView.findViewById(R.id.medicine_title);
+        name.setText(medicine.getTitle());
 
-        TextView medInfo = rootView.findViewById(R.id.medicine_info);
-        medInfo.setText(medicine.getDescription());
+        EditText description = rootView.findViewById(R.id.medicine_info);
+        description.setText(medicine.getDescription());
+        descriptionlistener = description.getKeyListener();
+        descriptionbackground = description.getBackground();
+        description.setBackground(null);
+        description.setKeyListener(null);
 
-        TextView medDose = rootView.findViewById(R.id.medicine_dose);
-        medDose.setText(medicine.getDose());
+        EditText dose = rootView.findViewById(R.id.medicine_dose);
+        dose.setText(medicine.getDose());
+        doselistener = dose.getKeyListener();
+        dosebackground = dose.getBackground();
+        dose.setBackground(null);
+        dose.setKeyListener(null);
 
         Switch reminders = rootView.findViewById(R.id.reminder_switch);
         reminders.setChecked(medicine.getReminders());
 
-        TextView notes = rootView.findViewById(R.id.notes);
+        EditText notes = rootView.findViewById(R.id.medicine_notes);
         notes.setText(medicine.getNotes());
+        noteslistener = notes.getKeyListener();
+        notesbackground = notes.getBackground();
+        notes.setKeyListener(null);
+        notes.setBackground(null);
 
         // back button
         ((MainActivity) getActivity()).setToolbar("My Medicine", true);
@@ -97,21 +124,92 @@ public class MedicineDetails extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit, menu);
+        editMenu = menu;
     }
 
     /**
-     * Provides navigation for menu items; currently only needed for navigation back to the
-     * main medicine fragment.
+     * Provides navigation/actions for menu items.
      * @param item the clicked menu item
      * @return
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home: // back button
+            case android.R.id.home: // back button - go back
                 ((MainActivity) getActivity()).switchFragment(Medicine.newInstance());
                 return true;
+
+            case R.id.details_edit: // edit button - edit medicine details
+                switchMode();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * switchMode toggles between viewing and editing the medicine details.
+     */
+    public void switchMode() {
+
+        if (this.mode.equals("view")) {
+            editMenu.getItem(0).setIcon(R.drawable.tick);
+
+            EditText description = rootView.findViewById(R.id.medicine_info);
+            description.setText(thismedicine.getDescription());
+            description.setKeyListener(descriptionlistener);
+            description.setBackground(descriptionbackground);
+
+            EditText dose = rootView.findViewById(R.id.medicine_dose);
+            dose.setText(thismedicine.getDose());
+            dose.setKeyListener(doselistener);
+            dose.setBackground(dosebackground);
+
+            EditText notes = rootView.findViewById(R.id.medicine_notes);
+            notes.setText(thismedicine.getNotes());
+            notes.setKeyListener(noteslistener);
+            notes.setBackground(notesbackground);
+
+            //TODO: make delete button appear
+
+            this.mode = "edit";
+            return;
+        }
+
+        if (this.mode.equals("edit")) {
+            editMenu.getItem(0).setIcon(R.drawable.edit);
+
+            final EditText description = rootView.findViewById(R.id.medicine_info);
+            description.setKeyListener(null);
+            description.setBackground(null);
+
+            final EditText dose = rootView.findViewById(R.id.medicine_dose);
+            dose.setKeyListener(null);
+            dose.setBackground(null);
+
+            final EditText notes = rootView.findViewById(R.id.medicine_notes);
+            notes.setKeyListener(null);
+            notes.setBackground(null);
+
+            // update the medicine in the database
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                    thismedicine.setDescription(description.getText().toString());
+                    thismedicine.setDose(dose.getText().toString());
+                    thismedicine.setNotes(notes.getText().toString());
+                    db.medicineDao().update(thismedicine);
+
+                    // refresh to get rid of keyboard
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.detach(MedicineDetails.this).attach(MedicineDetails.this).commit();
+                }
+            }).start();
+
+            this.mode = "view";
+            return;
+        }
     }
 }

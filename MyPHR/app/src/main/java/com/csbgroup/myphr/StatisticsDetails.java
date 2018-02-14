@@ -306,6 +306,104 @@ public class StatisticsDetails extends Fragment {
             return;
         }
 
+        // fab action for Blood Pressure
+        if (type.equals("Blood Pressure")){
+            fab.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+
+                    // set up the dialog
+                    final LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+                    View v = inflater.inflate(R.layout.add_measurement_bp, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setView(v);
+
+                    // set measurement specific texts
+                    final TextView title = v.findViewById((R.id.dialog_title));
+                    title.setText("Add a New " + type);
+
+                    // fetch the input values (measurement fetched above ^)
+                    final EditText systolic = v.findViewById(R.id.measurement);
+                    final EditText diastolic = v.findViewById(R.id.bp_diastolic);
+                    final EditText day = v.findViewById(R.id.meas_DD);
+                    final EditText month = v.findViewById(R.id.meas_MM);
+                    final EditText year = v.findViewById(R.id.meas_YYYY);
+
+                    // auto shift view focus when entering date
+                    shiftFocus(day, month, year, null);
+
+                    // add new measurement action
+                    builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+
+                            // join date into one string
+                            final String fulldate = day.getText().toString() + "/" + month.getText().toString()
+                                    + "/" + year.getText().toString();
+
+                            // check that a valid measurement was given
+                            Boolean validMeasurement = true;
+                            String sys = systolic.getText().toString();
+                            String dias = diastolic.getText().toString();
+                            if (sys.equals("") || dias.equals("")) {validMeasurement = false;} // incomplete
+
+                            final String measurement = sys + dias; //TODO: BP measurements don't contain "/"
+
+                            // check that a valid date was given
+                            Boolean validDate = true;
+                            if (fulldate.equals("//")) {validDate = false;} // no date given
+                            else if (fulldate.length() != 10) {validDate = false;} // incomplete date
+                            else {
+                                try {
+                                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                                    Date d = sdf.parse(fulldate);
+                                    if (!fulldate.equals(sdf.format(d))){
+                                        validDate = false;
+                                    }
+                                } catch (ParseException e) {e.printStackTrace();}
+                            }
+
+                            // format checks passed - add the new measurement to database
+                            if (validMeasurement && validDate){
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                        final StatisticsEntity thisstat = getStats(type);
+                                        thisstat.addValue(measurement, fulldate, null);
+                                        db.statisticsDao().update(thisstat);
+
+                                        // update the list view
+                                        FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                        ft.detach(StatisticsDetails.this).attach(StatisticsDetails.this).commit();
+                                    }
+                                }).start();
+                            }
+
+                            // format checks failed - abort and show error message
+                            else{
+                                if (!validMeasurement) {errorDialog("measurement");} // bad measurement
+                                else {errorDialog("date");} // bad date
+                            }
+                        }
+                    });
+
+                    // action for cancelling add
+                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                }
+            });
+
+            return;
+        }
+
         // fab action for all other measurement types
         fab.setOnClickListener(new View.OnClickListener() {
 
@@ -314,9 +412,7 @@ public class StatisticsDetails extends Fragment {
 
                 // set up the dialog
                 final LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-                View v;
-                if (type.equals("Blood Pressure")){v = inflater.inflate(R.layout.add_measurement_bp, null);
-                }else {v = inflater.inflate(R.layout.add_measurement_basic, null);}
+                View v = inflater.inflate(R.layout.add_measurement_basic, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setView(v);
 
@@ -328,7 +424,7 @@ public class StatisticsDetails extends Fragment {
                     measurement.setHint("BMI");
                 } else {
                     title.setText("Add a New " + type);
-                    if (!type.equals("Blood Pressure")){measurement.setHint(type);}
+                    measurement.setHint(type);
                 }
 
                 // fetch the input values (measurement fetched above ^)
@@ -352,9 +448,6 @@ public class StatisticsDetails extends Fragment {
                         Boolean validMeasurement = true;
                         String mmnt = measurement.getText().toString();
                         if (mmnt.equals("")) {validMeasurement = false;} // no measurement given
-
-                        //TODO: not concatenating (and format checking) diastolic value for BP yet
-
 
                         // check that a valid date was given
                         Boolean validDate = true;
@@ -423,7 +516,7 @@ public class StatisticsDetails extends Fragment {
 
         // specify error type
         final TextView errortype = v.findViewById(R.id.error_type);
-        if (type.equals("measurement")){errortype.setText("YOU MUST PROVIDE A MEASUREMENT");}
+        if (type.equals("measurement")){errortype.setText("EMPTY/INVALID MEASUREMENT");}
         if (type.equals("centile")){errortype.setText("INVALID CENTILE");}
         if (type.equals("date")){errortype.setText("INVALID DATE");}
 
