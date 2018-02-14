@@ -52,7 +52,6 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
         mType = type;
         array = objects;
     }
-    pls break this code 
 
     @NonNull
     @Override

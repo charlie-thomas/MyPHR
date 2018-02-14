@@ -182,13 +182,20 @@ public class StatisticsDetailsList extends Fragment {
                 // set up the dialog
                 View v;
                 final EditText cent;
+                final EditText diastolic;
 
                 LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
                 if (type.equals("Height") || type.equals("Weight")) {
                     v = inflater.inflate(R.layout.add_measurement_centile, null);
+                    diastolic = null;
                     cent = v.findViewById(R.id.centile);
+                } else if (type.equals("Blood Pressure")) {
+                    v = inflater.inflate(R.layout.add_measurement_bp, null);
+                    diastolic = v.findViewById(R.id.bp_diastolic);
+                    cent = null;
                 } else {
                     v = inflater.inflate(R.layout.add_measurement_basic, null);
+                    diastolic = null;
                     cent = null;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -197,14 +204,14 @@ public class StatisticsDetailsList extends Fragment {
                 // set measurement specific texts
                 final TextView title = v.findViewById((R.id.dialog_title));
                 final EditText measurement = v.findViewById(R.id.measurement);
+
                 if (type.equals("Body Mass Index (BMI)")) {
                     title.setText("Add a New BMI");
                     measurement.setHint("BMI");
-                } else {
+                } else if (!type.equals("Blood Pressure")){
                     title.setText("Add a New " + type);
                     measurement.setHint(type);
                 }
-
 
                 // fetch the input values (measurement already fetched above ^)
                 final EditText day = v.findViewById(R.id.meas_DD);
@@ -225,7 +232,16 @@ public class StatisticsDetailsList extends Fragment {
 
                         // check that a measurement was given
                         Boolean validMeasurement = true;
-                        final String mmnt = measurement.getText().toString();
+                        final String mmnt;
+                        if(type.equals("Blood Pressure")){
+                            String sys = measurement.getText().toString();
+                            String dias = diastolic.getText().toString();
+                            if (sys.equals("") || dias.equals("")) {validMeasurement = false;} // incomplete
+                            mmnt = sys + dias; //TODO: BP measurements don't contain "/"
+                        } else {
+                            mmnt = measurement.getText().toString();
+                        }
+
                         if (mmnt.equals("")) {
                             validMeasurement = false;
                         } // no measurement given
