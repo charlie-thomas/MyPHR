@@ -1,5 +1,6 @@
 package com.csbgroup.myphr;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -230,5 +231,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // stops user going back to login screen
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // closes app when home button is pressed
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 }
