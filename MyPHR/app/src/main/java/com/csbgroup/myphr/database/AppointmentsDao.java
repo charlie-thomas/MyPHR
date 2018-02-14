@@ -25,6 +25,9 @@ public interface AppointmentsDao {
     List<AppointmentsEntity> getAppointmentByDate(String date);
 
     @Insert
+    long insert(AppointmentsEntity appointmentsEntity);
+
+    @Insert
     void insertAll(AppointmentsEntity... appointmentsEntities);
 
     @Update

@@ -55,7 +55,6 @@ public class AppointmentsDetails extends Fragment {
         // fill in the values
         
         Bundle args = getArguments();
-        Log.d("ID", args.getString("uid"));
         AppointmentsEntity appointment = getAppointment(Integer.parseInt(args.getString("uid")));
         this.thisappointment = appointment;
 
