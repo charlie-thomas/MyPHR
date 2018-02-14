@@ -52,7 +52,7 @@ public class Investigations extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_investigations, container, false);
 
         // display the investigations in list
-        InvestigationsAdapter adapter = new InvestigationsAdapter(getActivity(), getInvestigations());
+        DateAdapter adapter = new DateAdapter(getActivity(), getInvestigations());
         ListView listView = rootView.findViewById(R.id.investigations_list);
         listView.setAdapter(adapter);
 
@@ -67,7 +67,7 @@ public class Investigations extends Fragment {
      * getInvestigations fetches the list of investigations from the database
      * @return the list of investigations
      */
-    public ArrayList<InvestigationEvent> getInvestigations() {
+    public List<CalendarEvent> getInvestigations() {
 
         // Create a callable object for database transactions
         Callable callable = new Callable() {
@@ -88,12 +88,11 @@ public class Investigations extends Fragment {
         } catch (Exception e) {}
 
 
-        // Convert into InvestigationEvent objects
-        ArrayList<InvestigationEvent> events = new ArrayList<>();
+        // Convert into CalendarEvent objects
+        ArrayList<CalendarEvent> events = new ArrayList<>();
 
         if (investigations != null) {
-            for (InvestigationsEntity ie : investigations)
-                events.add(new InvestigationEvent(ie.getTitle(), ie.getDate(), ie.getNotes()));
+            for (InvestigationsEntity ie : investigations)events.add(new CalendarEvent(ie.getUid(), null, ie.getDate(), ie.getTitle() ,null));
         }
 
         return events;

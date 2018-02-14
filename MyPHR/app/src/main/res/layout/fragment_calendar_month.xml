@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context="com.csbgroup.myphr.CalendarMonth">
 
     <CalendarView
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/calendarView"
         android:layout_marginStart="10dp"
-        android:text="@string/upcoming_appointment"
+        android:text="@string/next_appointment"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -48,4 +48,24 @@
             android:layout_weight="0.8"
             android:textColor="@color/white"/>
     </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/upcoming_med"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/upcoming_layout"
+        android:layout_marginStart="10dp"
+        android:text="@string/today_s_medicine"
+        android:textSize="18sp"
+        android:layout_marginTop="15dp"
+        android:textStyle="bold" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/todays_meds"
+        android:layout_below="@id/upcoming_med"
+        android:layout_margin="10dp"
+        android:divider="@android:color/transparent" />
 </RelativeLayout>

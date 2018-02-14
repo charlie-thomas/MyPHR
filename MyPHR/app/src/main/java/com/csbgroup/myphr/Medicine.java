@@ -163,7 +163,6 @@ public class Medicine extends Fragment {
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-
                         // check that a name has been given
                         Boolean validName = true;
                         if (name.getText().toString().equals("")){
@@ -178,7 +177,7 @@ public class Medicine extends Fragment {
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                     MedicineEntity medicine = new MedicineEntity(name.getText().toString(),
                                             description.getText().toString(), dose.getText().toString(),
-                                            notes.getText().toString(), false);
+                                            notes.getText().toString(), false, false, false, null, null);
                                     db.medicineDao().insertAll(medicine);
 
                                     // Move to details for new medicine

@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
+import com.csbgroup.myphr.database.InvestigationsEntity;
 import com.csbgroup.myphr.database.MedicineEntity;
 
 import java.text.ParseException;
@@ -57,19 +58,8 @@ public class Appointments extends Fragment {
         ((MainActivity) getActivity()).setToolbar("My Appointments", false);
         setHasOptionsMenu(true);
 
-        // fetch appointments entities from database
-        List<AppointmentsEntity> apps = getAppointments();
-        if (apps == null) return rootView;
-        List<String> appointments = new ArrayList<>();
-        for (AppointmentsEntity ap : apps) {
-            appointments.add(ap.getTitle());
-        }
-
         // display the appointments in list
-        ArrayAdapter<String> appointmentsAdapter = new ArrayAdapter<>(
-                getActivity(),
-                R.layout.simple_list_item,
-                appointments);
+        DateAdapter appointmentsAdapter = new DateAdapter(getActivity(), getAppointments());
         ListView listView = rootView.findViewById(R.id.appointments_list);
         listView.setAdapter(appointmentsAdapter);
 
@@ -80,7 +70,7 @@ public class Appointments extends Fragment {
 
                 // Create a bundle to pass the appointment to the details fragment
                 Bundle bundle = new Bundle();
-                bundle.putString("title", parent.getAdapter().getItem(position).toString());
+                bundle.putString("uid", view.getTag().toString());
                 details.setArguments(bundle);
 
                 ((MainActivity) getActivity()).switchFragment(details);
@@ -98,7 +88,7 @@ public class Appointments extends Fragment {
      * getAppointments fetches the list of appointments from the database
      * @return the list of appointment entities
      */
-    private List<AppointmentsEntity> getAppointments() {
+    private List<CalendarEvent> getAppointments() {
 
         // Create a callable object for database transactions
         Callable callable = new Callable() {
@@ -118,7 +108,15 @@ public class Appointments extends Fragment {
             appointments = result.get();
         } catch (Exception e) {}
 
-        return appointments;
+        // Convert into CalendarEvent objects
+        ArrayList<CalendarEvent> events = new ArrayList<>();
+
+        if (appointments != null) {
+            for (AppointmentsEntity ae : appointments)
+                events.add(new CalendarEvent(ae.getUid(), null, ae.getDate(), ae.getTitle() ,null));
+        }
+
+        return events;
     }
 
 
@@ -205,11 +203,13 @@ public class Appointments extends Fragment {
 
                         // check that a valid time was given
                         Boolean validTime = true;
-                        if (time.equals("")) {validTime = false;} // no time given
-                        int hourint = Integer.parseInt(hour.getText().toString()); // convert to int for checks
-                        int minsint = Integer.parseInt(mins.getText().toString()); // convert to int for checks
-                        if (hourint <0 || hourint >23) {validTime = false;}
-                        if (minsint <0 || minsint >59) {validTime = false;}
+                        if (time.equals(":")) {validTime = false;}// no time given
+                        else{
+                            int hourint = Integer.parseInt(hour.getText().toString()); // convert to int for checks
+                            int minsint = Integer.parseInt(mins.getText().toString()); // convert to int for checks
+                            if (hourint <0 || hourint >23) {validTime = false;}
+                            if (minsint <0 || minsint >59) {validTime = false;}
+                        }
 
 
                         // format checks passed - add the new appointment to the database
@@ -256,7 +256,7 @@ public class Appointments extends Fragment {
     }
 
     /**
-     * errorDialog is called when an invalid title, date or //TODO: time
+     * errorDialog is called when an invalid title, date or time
      * is part of an appointment being added, it displays an error message about the failure.
      * @param type is the type of error reported
      */

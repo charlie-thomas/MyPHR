@@ -2,96 +2,87 @@ package com.csbgroup.myphr;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import java.util.List;
 
-import java.util.ArrayList;
+public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
-public class CalendarAdapter extends ArrayAdapter<CalendarEvent> {
+    private final List<CalendarEvent> events;
+    private Context ctx;
 
-    private final ArrayList<CalendarEvent> events;
-
-    public CalendarAdapter(Context context, ArrayList<CalendarEvent> events) {
-        super(context, 0, events);
+    public CalendarAdapter(List<CalendarEvent> events) {
+        setHasStableIds(true);
         this.events = events;
     }
 
-    @NonNull
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+    public CalendarViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        ctx = parent.getContext();
+        return new CalendarViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.calendar_event_item, parent, false));
+    }
 
-        final ViewHolder holder;
-
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.calendar_event_item, parent, false);
-
-            holder = new ViewHolder();
-
-            holder.time = convertView.findViewById(R.id.time);
-            holder.event = convertView.findViewById(R.id.event);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-
+    @Override
+    public void onBindViewHolder(CalendarViewHolder holder, int position) {
 
         final CalendarEvent e = events.get(position);
+        holder.time.setText(e.getTime());
 
-        if (e != null) {
+        switch (e.getType()) {
+            case "Empty":
+                break;
+            case "Appointment":
+                holder.event.setText(e.getEvent());
+                holder.event.setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorAccent));
 
-            holder.time.setText(e.getTime());
+                holder.event.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Fragment eventFrag = AppointmentsDetails.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("uid", String.valueOf(e.getUid()));
+                        eventFrag.setArguments(bundle);
 
-            switch (e.getType()) {
-                case "Empty":
-                    break;
-                case "Appointment":
-                    holder.event.setText(e.getEvent());
-                    holder.event.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                        ((MainActivity) ctx).switchFragment(eventFrag);
+                    }
+                });
+                break;
+            case "Medicine":
+                holder.event.setText(e.getEvent());
+                holder.event.setBackgroundColor(ContextCompat.getColor(ctx, R.color.colorAccentDark));
 
-                    holder.event.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Fragment eventFrag = AppointmentsDetails.newInstance();
-                            Bundle bundle = new Bundle();
-                            bundle.putString("title", e.getEvent());
-                            eventFrag.setArguments(bundle);
+                holder.event.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Fragment eventFrag = MedicineDetails.newInstance();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("title", e.getEvent());
+                    eventFrag.setArguments(bundle);
 
-                            ((MainActivity) getContext()).switchFragment(eventFrag);
-                        }
-                    });
-                    break;
-                case "Medicine":
-                    holder.event.setText(e.getEvent());
-                    holder.event.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
-
-                    holder.event.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Fragment eventFrag = MedicineDetails.newInstance();
-                            Bundle bundle = new Bundle();
-                            bundle.putString("title", e.getEvent());
-                            eventFrag.setArguments(bundle);
-
-                            ((MainActivity) getContext()).switchFragment(eventFrag);
-                        }
-                    });
-                    break;
+                    ((MainActivity) ctx).switchFragment(eventFrag);
+                    }
+                });
+                break;
             }
         }
 
-        return convertView;
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
-    private class ViewHolder {
-        private TextView time;
-        private TextView event;
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemCount() {
+        return events != null ? events.size() : 0;
     }
 }
