@@ -44,6 +44,8 @@
     <string name="mednotes">Notes</string>
     <string name="meddose">Dose</string>
     <string name="this_is_the_holiday_letter">This is the holiday letter</string>
+    <string name="daily">Every Day</string>
+    <string name="otherdays">Every Other Day</string>
 
     // Appointment strings
     <string name="atitle">Add a New Appointment</string>
