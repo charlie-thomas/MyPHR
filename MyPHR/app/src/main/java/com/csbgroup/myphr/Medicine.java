@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,8 +21,11 @@ import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.MedicineEntity;
+
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -52,16 +56,15 @@ public class Medicine extends Fragment {
         // fetch medicines entities from database
         List<MedicineEntity> medicines = getMedicines();
         if (medicines == null) return rootView;
-        List<String> medicineTitles = new ArrayList<>();
-        for (MedicineEntity me : medicines) {
-            medicineTitles.add(me.getTitle());
-        }
+
+        // Convert MedicineEntities into a map of their uid and titles
+        List<Map.Entry<Integer, String>> medicine_map = new ArrayList<>();
+        for (MedicineEntity me : medicines)
+            medicine_map.add(new AbstractMap.SimpleEntry<>(me.getUid(), me.getTitle()));
+
 
         // display the medicines in list
-        ArrayAdapter<String> medicineAdapter = new ArrayAdapter<>(
-                getActivity(),
-                R.layout.simple_list_item,
-                medicineTitles);
+        SimpleAdapter medicineAdapter = new SimpleAdapter(getActivity(), medicine_map);
         ListView listView = rootView.findViewById(R.id.medicine_list);
         listView.setAdapter(medicineAdapter);
 
@@ -72,7 +75,7 @@ public class Medicine extends Fragment {
 
                 // Create a bundle to pass the medicine to the details fragment
                 Bundle bundle = new Bundle();
-                bundle.putString("title", parent.getAdapter().getItem(position).toString());
+                bundle.putString("uid", view.getTag().toString());
                 details.setArguments(bundle);
 
                 ((MainActivity) getActivity()).switchFragment(details);
@@ -178,12 +181,12 @@ public class Medicine extends Fragment {
                                     MedicineEntity medicine = new MedicineEntity(name.getText().toString(),
                                             description.getText().toString(), dose.getText().toString(),
                                             notes.getText().toString(), false, false, false, null, null);
-                                    db.medicineDao().insertAll(medicine);
+                                    long uid = db.medicineDao().insert(medicine);
 
                                     // Move to details for new medicine
                                     Fragment newdetails = MedicineDetails.newInstance();
                                     Bundle bundle = new Bundle();
-                                    bundle.putString("title", name.getText().toString());
+                                    bundle.putString("uid", String.valueOf(uid));
                                     newdetails.setArguments(bundle);
                                     ((MainActivity)getActivity()).switchFragment(newdetails);
                                 }

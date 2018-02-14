@@ -58,7 +58,7 @@ public class ContactDetails extends Fragment {
         // fill in the values
 
         Bundle args = getArguments();
-        ContactsEntity contact = getContact(args.getString("name"));
+        ContactsEntity contact = getContact(Integer.valueOf(args.getString("uid")));
         this.thiscontact = contact;
 
         // TODO: make this editable once Primary Key issue is resolved
@@ -96,18 +96,17 @@ public class ContactDetails extends Fragment {
     }
 
     /**
-     * Fetches a single contact entity from the database.
-     *
-     * @param name is the name of the contact to be retrieved
+     * Fetches a single contact entity from the database, found by name
+     * @param uid is the primary key of the contact to be retrieved
      * @return the contact entity
      */
-    private ContactsEntity getContact(final String name) {
+    private ContactsEntity getContact(final int uid) {
 
         // Create a callable object for database transactions
         Callable callable = new Callable() {
             @Override
             public Object call() throws Exception {
-                return AppDatabase.getAppDatabase(getActivity()).contactsDao().getContact(name);
+                return AppDatabase.getAppDatabase(getActivity()).contactsDao().getContact(uid);
             }
         };
 

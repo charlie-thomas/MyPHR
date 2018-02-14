@@ -51,9 +51,8 @@ public class MedicineDetails extends Fragment {
         this.rootView = rootView;
 
         // fill in the values
-
         Bundle args = getArguments();
-        MedicineEntity medicine = getMedicine(args.getString("title"));
+        MedicineEntity medicine = getMedicine(Integer.valueOf(args.getString("uid")));
         this.thismedicine = medicine;
 
         // TODO: make this editable once Primary Key issue is resolved
@@ -93,16 +92,16 @@ public class MedicineDetails extends Fragment {
 
     /**
      * Fetches a single medicine entity from the database, found by the title
-     * @param medTitle is the title of the medicine to be retrieved
+     * @param uid is the primary key of the medicine to be retrieved
      * @return the medicine entity
      */
-    private MedicineEntity getMedicine(final String medTitle) {
+    private MedicineEntity getMedicine(final int uid) {
 
         // Create a callable object for database transactions
         Callable callable = new Callable() {
             @Override
             public Object call() throws Exception {
-                return AppDatabase.getAppDatabase(getActivity()).medicineDao().getMedicine(medTitle);
+                return AppDatabase.getAppDatabase(getActivity()).medicineDao().getMedicine(uid);
             }
         };
 
