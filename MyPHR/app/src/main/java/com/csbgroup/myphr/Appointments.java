@@ -203,11 +203,13 @@ public class Appointments extends Fragment {
 
                         // check that a valid time was given
                         Boolean validTime = true;
-                        if (time.equals("")) {validTime = false;} // no time given
-                        int hourint = Integer.parseInt(hour.getText().toString()); // convert to int for checks
-                        int minsint = Integer.parseInt(mins.getText().toString()); // convert to int for checks
-                        if (hourint <0 || hourint >23) {validTime = false;}
-                        if (minsint <0 || minsint >59) {validTime = false;}
+                        if (time.equals(":")) {validTime = false;}// no time given
+                        else{
+                            int hourint = Integer.parseInt(hour.getText().toString()); // convert to int for checks
+                            int minsint = Integer.parseInt(mins.getText().toString()); // convert to int for checks
+                            if (hourint <0 || hourint >23) {validTime = false;}
+                            if (minsint <0 || minsint >59) {validTime = false;}
+                        }
 
 
                         // format checks passed - add the new appointment to the database
@@ -254,7 +256,7 @@ public class Appointments extends Fragment {
     }
 
     /**
-     * errorDialog is called when an invalid title, date or //TODO: time
+     * errorDialog is called when an invalid title, date or time
      * is part of an appointment being added, it displays an error message about the failure.
      * @param type is the type of error reported
      */
