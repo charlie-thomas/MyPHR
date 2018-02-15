@@ -234,8 +234,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onRestart() {
+        super.onRestart();
         // closes app when home button is pressed
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
