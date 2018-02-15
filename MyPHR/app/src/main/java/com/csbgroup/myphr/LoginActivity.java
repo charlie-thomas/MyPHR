@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
         mPinLockView.setTextColor(ContextCompat.getColor(this, R.color.white));
         mIndicatorDots.setIndicatorType(IndicatorDots.IndicatorType.FIXED);
 
-        // If you’ve set your app’s minSdkVersion to anything lower than 23, then you’ll need to verify that the device is running Marshmallow
+        // minSDK = 21, so need to verify that the device is running Marshmallow
         // or higher before executing any fingerprint-related code
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //Get an instance of KeyguardManager and FingerprintManager//
