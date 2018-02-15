@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,6 +90,7 @@ public class Contacts extends Fragment {
 
     /**
      * getContacts fetches the list of contacts from the database
+     *
      * @return the list of contact entities
      */
     private List<ContactsEntity> getContacts() {
@@ -111,16 +111,18 @@ public class Contacts extends Fragment {
         List<ContactsEntity> contacts = null;
         try {
             contacts = result.get();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         return contacts;
     }
 
     /**
      * buildDialog builds the pop-up dialog for adding a new contact
+     *
      * @param fab the floating action button which pulls up the dialog
      */
-    public void buildDialog(FloatingActionButton fab){
+    public void buildDialog(FloatingActionButton fab) {
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,7 +130,7 @@ public class Contacts extends Fragment {
 
                 // set up the dialog
                 LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-                View v = inflater.inflate(R.layout.add_contact_dialog,null);
+                View v = inflater.inflate(R.layout.add_contact_dialog, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setView(v);
 
@@ -145,18 +147,18 @@ public class Contacts extends Fragment {
 
                         // check that a name has been given
                         Boolean validName = true;
-                        if (name.getText().toString().equals("")){
+                        if (name.getText().toString().equals("")) {
                             validName = false;
                         }
 
                         // format checks passed - add the new appointment to the database
-                        if (validName){
+                        if (validName) {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                     ContactsEntity contact = new ContactsEntity(name.getText().toString(),
-                                            email.getText().toString(),phone.getText().toString(),
+                                            email.getText().toString(), phone.getText().toString(),
                                             notes.getText().toString());
                                     long uid = db.contactsDao().insert(contact);
 
@@ -165,14 +167,16 @@ public class Contacts extends Fragment {
                                     Bundle bundle = new Bundle();
                                     bundle.putString("uid", String.valueOf(uid));
                                     newdetails.setArguments(bundle);
-                                    ((MainActivity)getActivity()).switchFragment(newdetails);
+                                    ((MainActivity) getActivity()).switchFragment(newdetails);
                                 }
                             }).start();
                         }
 
                         // format checks failed - abort and show error message
                         else {
-                            if (!validName){errorDialog("name");} // no name
+                            if (!validName) {
+                                errorDialog("name");
+                            } // no name
                         }
                     }
                 });
@@ -193,9 +197,10 @@ public class Contacts extends Fragment {
     /**
      * errorDialog is called when an invalid name is part of a contact being added, it displays
      * an error message about the failure.
+     *
      * @param type is the type of error reported
      */
-    public void errorDialog(String type){
+    public void errorDialog(String type) {
 
         // set up the dialog
         LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
@@ -205,7 +210,9 @@ public class Contacts extends Fragment {
 
         // specify error type
         final TextView errortype = v.findViewById(R.id.error_type);
-        if (type.equals("name")){errortype.setText("YOU MUST PROVIDE A NAME");}
+        if (type.equals("name")) {
+            errortype.setText("YOU MUST PROVIDE A NAME");
+        }
 
         final TextView errormessage = v.findViewById(R.id.error_message);
         errormessage.setText("Your contact was not added.");
@@ -221,3 +228,4 @@ public class Contacts extends Fragment {
         dialog.show();
     }
 }
+
