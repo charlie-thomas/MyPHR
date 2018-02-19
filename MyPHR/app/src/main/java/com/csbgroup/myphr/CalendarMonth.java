@@ -205,7 +205,7 @@ public class CalendarMonth extends Fragment {
         // Create CalendarEvents for the days medicines, and add them to the returning array
         for (MedicineEntity me : medicines) {
             if (me.isDaily() || (me.isOther_days() && CalendarDay.isOtherDay(me.getDate(), df.format(today.getTime()))))
-                todays_meds.add(new CalendarEvent(me.getUid(), null, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
+                todays_meds.add(new CalendarEvent(me.getUid(), 0, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
         }
 
         Collections.sort(todays_meds, new Comparator<CalendarEvent>() {

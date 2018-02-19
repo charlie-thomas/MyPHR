@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -49,7 +50,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
         LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        holder.time.setText(hours_events.get(0).getHour());
+        String hourString = hours_events.get(0).getHour() + ":00";
+        holder.time.setText(hourString);
 
         for (final CalendarEvent e : hours_events) {
             switch (e.getType()) {

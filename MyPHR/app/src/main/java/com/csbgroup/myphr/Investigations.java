@@ -95,7 +95,7 @@ public class Investigations extends Fragment {
         List<CalendarEvent> events = new ArrayList<>();
 
         if (investigations != null) {
-            for (InvestigationsEntity ie : investigations)events.add(new CalendarEvent(ie.getUid(), null, null,  ie.getDate(), ie.getTitle() ,null));
+            for (InvestigationsEntity ie : investigations)events.add(new CalendarEvent(ie.getUid(), 0, null,  ie.getDate(), ie.getTitle() ,null));
         }
 
         Collections.sort(events, new Comparator<CalendarEvent>() {

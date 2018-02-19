@@ -117,7 +117,7 @@ public class Appointments extends Fragment {
 
         if (appointments != null) {
             for (AppointmentsEntity ae : appointments)
-                events.add(new CalendarEvent(ae.getUid(), null, ae.getTime(), ae.getDate(), ae.getTitle() ,null));
+                events.add(new CalendarEvent(ae.getUid(), 0, ae.getTime(), ae.getDate(), ae.getTitle() ,null));
         }
 
         Collections.sort(events, new Comparator<CalendarEvent>() {
