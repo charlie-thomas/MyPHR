@@ -21,9 +21,12 @@ import com.csbgroup.myphr.database.MedicineEntity;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -89,11 +92,25 @@ public class Investigations extends Fragment {
 
 
         // Convert into CalendarEvent objects
-        ArrayList<CalendarEvent> events = new ArrayList<>();
+        List<CalendarEvent> events = new ArrayList<>();
 
         if (investigations != null) {
             for (InvestigationsEntity ie : investigations)events.add(new CalendarEvent(ie.getUid(), null, null,  ie.getDate(), ie.getTitle() ,null));
         }
+
+        Collections.sort(events, new Comparator<CalendarEvent>() {
+            @Override
+            public int compare(CalendarEvent e1, CalendarEvent e2) {
+
+                DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    return f.parse(e2.getDate()).compareTo(f.parse(e1.getDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        });
 
         return events;
     }

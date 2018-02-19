@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,9 +27,12 @@ import com.csbgroup.myphr.database.AppointmentsEntity;
 import com.csbgroup.myphr.database.InvestigationsEntity;
 import com.csbgroup.myphr.database.MedicineEntity;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -113,8 +117,30 @@ public class Appointments extends Fragment {
 
         if (appointments != null) {
             for (AppointmentsEntity ae : appointments)
-                events.add(new CalendarEvent(ae.getUid(), null, null, ae.getDate(), ae.getTitle() ,null));
+                events.add(new CalendarEvent(ae.getUid(), null, ae.getTime(), ae.getDate(), ae.getTitle() ,null));
         }
+
+        Collections.sort(events, new Comparator<CalendarEvent>() {
+            @Override
+            public int compare(CalendarEvent e1, CalendarEvent e2) {
+
+                DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+
+                Log.d("E1", e1.getDate());
+                Log.d("E2", e2.getDate());
+
+                int dateComp = 0;
+                try {
+                    dateComp = f.parse(e2.getDate()).compareTo(f.parse(e1.getDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                if (dateComp != 0) return dateComp;
+
+                return e2.getTime().replace(":", "").compareTo(e1.getTime().replace(":", ""));
+            }
+        });
 
         return events;
     }
