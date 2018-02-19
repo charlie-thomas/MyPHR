@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -58,6 +59,20 @@ public class Investigations extends Fragment {
         DateAdapter adapter = new DateAdapter(getActivity(), getInvestigations());
         ListView listView = rootView.findViewById(R.id.investigations_list);
         listView.setAdapter(adapter);
+
+        // switching to details fragment
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Fragment details = InvestigationDetails.newInstance();
+
+                // Create a bundle to pass the appointment to the details fragment
+                Bundle bundle = new Bundle();
+                bundle.putString("uid", view.getTag().toString());
+                details.setArguments(bundle);
+
+                ((MainActivity) getActivity()).switchFragment(details);
+            }
+        });
 
         // fab action for adding investigation
         fab = rootView.findViewById(R.id.investigation_fab);
