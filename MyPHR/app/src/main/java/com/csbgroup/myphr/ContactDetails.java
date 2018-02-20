@@ -36,8 +36,8 @@ public class ContactDetails extends Fragment {
     private String mode = "view";
     private View rootView;
 
-    private KeyListener emaillistener, phonelistener, noteslistener;
-    private Drawable emailbackground, phonebackground, notesbackground;
+    private KeyListener titlelistener, emaillistener, phonelistener, noteslistener;
+    private Drawable titlebackground, emailbackground, phonebackground, notesbackground;
 
     public ContactDetails() {
         // Required empty public constructor
@@ -61,9 +61,12 @@ public class ContactDetails extends Fragment {
         ContactsEntity contact = getContact(Integer.valueOf(args.getString("uid")));
         this.thiscontact = contact;
 
-        // TODO: make this editable once Primary Key issue is resolved
-        TextView contactTitle = rootView.findViewById(R.id.contact_title);
+        EditText contactTitle = rootView.findViewById(R.id.contact_title);
         contactTitle.setText(contact.getName());
+        titlelistener = contactTitle.getKeyListener();
+        titlebackground = contactTitle.getBackground();
+        contactTitle.setBackground(null);
+        contactTitle.setKeyListener(null);
 
         EditText email = rootView.findViewById(R.id.email);
         email.setText(contact.getEmail());
@@ -162,6 +165,11 @@ public class ContactDetails extends Fragment {
         if (this.mode.equals("view")) {
             editMenu.getItem(0).setIcon(R.drawable.tick);
 
+            EditText title = rootView.findViewById(R.id.contact_title);
+            title.setText(thiscontact.getName());
+            title.setBackground(titlebackground);
+            title.setKeyListener(titlelistener);
+
             EditText email = rootView.findViewById(R.id.email);
             email.setText(thiscontact.getEmail());
             email.setKeyListener(emaillistener);
@@ -186,6 +194,10 @@ public class ContactDetails extends Fragment {
         if (this.mode.equals("edit")){
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
+            final EditText title = rootView.findViewById(R.id.contact_title);
+            title.setKeyListener(null);
+            title.setBackground(null);
+
             final EditText email = rootView.findViewById(R.id.email);
             email.setKeyListener(null);
             email.setBackground(null);
@@ -203,6 +215,7 @@ public class ContactDetails extends Fragment {
                 @Override
                 public void run() {
                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                    thiscontact.setName(title.getText().toString());
                     thiscontact.setEmail(email.getText().toString());
                     thiscontact.setPhone(phone.getText().toString());
                     thiscontact.setNotes(notes.getText().toString());

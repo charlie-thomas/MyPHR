@@ -32,8 +32,8 @@ public class MedicineDetails extends Fragment {
     private String mode = "view";
     private View rootView;
 
-    private KeyListener descriptionlistener, doselistener, noteslistener;
-    private Drawable descriptionbackground, dosebackground, notesbackground;
+    private KeyListener namelistener, descriptionlistener, doselistener, noteslistener;
+    private Drawable namebackground, descriptionbackground, dosebackground, notesbackground;
 
     public MedicineDetails() {
         // Required empty public constructor
@@ -56,9 +56,12 @@ public class MedicineDetails extends Fragment {
         MedicineEntity medicine = getMedicine(Integer.valueOf(args.getString("uid")));
         this.thismedicine = medicine;
 
-        // TODO: make this editable once Primary Key issue is resolved
-        TextView name = rootView.findViewById(R.id.medicine_title);
+        EditText name = rootView.findViewById(R.id.medicine_title);
         name.setText(medicine.getTitle());
+        namebackground = name.getBackground();
+        namelistener = name.getKeyListener();
+        name.setKeyListener(null);
+        name.setBackground(null);
 
         EditText description = rootView.findViewById(R.id.medicine_info);
         description.setText(medicine.getDescription());
@@ -157,6 +160,11 @@ public class MedicineDetails extends Fragment {
         if (this.mode.equals("view")) {
             editMenu.getItem(0).setIcon(R.drawable.tick);
 
+            EditText title = rootView.findViewById(R.id.medicine_title);
+            title.setText(thismedicine.getTitle());
+            title.setBackground(namebackground);
+            title.setKeyListener(namelistener);
+
             EditText description = rootView.findViewById(R.id.medicine_info);
             description.setText(thismedicine.getDescription());
             description.setKeyListener(descriptionlistener);
@@ -181,6 +189,10 @@ public class MedicineDetails extends Fragment {
         if (this.mode.equals("edit")) {
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
+            final EditText title = rootView.findViewById(R.id.medicine_title);
+            title.setKeyListener(null);
+            title.setBackground(null);
+
             final EditText description = rootView.findViewById(R.id.medicine_info);
             description.setKeyListener(null);
             description.setBackground(null);
@@ -198,6 +210,7 @@ public class MedicineDetails extends Fragment {
                 @Override
                 public void run() {
                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                    thismedicine.setTitle(title.getText().toString());
                     thismedicine.setDescription(description.getText().toString());
                     thismedicine.setDose(dose.getText().toString());
                     thismedicine.setNotes(notes.getText().toString());
