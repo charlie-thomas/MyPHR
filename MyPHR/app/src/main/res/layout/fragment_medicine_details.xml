@@ -64,7 +64,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/reminders"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp">
 
             <RadioButton
                 android:id="@+id/daily"
@@ -103,7 +104,30 @@
             android:layout_below="@+id/radios"
             android:layout_marginStart="30dp"
             android:layout_toEndOf="@+id/reminder_time_title"
-            android:hint="00:00"
+            android:hint="HH:MM"
+            android:visibility="gone"
+            android:inputType="text"
+            android:textColor="#777777" />
+
+        <EditText
+            android:id="@+id/reminder_date_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/reminder_time_title"
+            android:layout_marginStart="5dp"
+            android:visibility="gone"
+            android:text="@string/reminderdate"
+            android:textColor="#777777"
+            android:textSize="18dp" />
+
+        <EditText
+            android:id="@+id/reminder_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/reminder_time"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@+id/reminder_date_title"
+            android:hint="DD/MM/YYYY"
             android:visibility="gone"
             android:inputType="text"
             android:textColor="#777777" />
@@ -112,7 +136,7 @@
             android:id="@+id/notes_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/reminder_time"
+            android:layout_below="@id/reminder_date"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:text="@string/notes"

@@ -34,8 +34,8 @@ public class MedicineDetails extends Fragment {
     private String mode = "view";
     private View rootView;
 
-    private KeyListener namelistener, descriptionlistener, doselistener, noteslistener, timelistener;
-    private Drawable namebackground, descriptionbackground, dosebackground, notesbackground, timebackground;
+    private KeyListener namelistener, descriptionlistener, doselistener, noteslistener, timelistener, datelistener;
+    private Drawable namebackground, descriptionbackground, dosebackground, notesbackground, timebackground, datebackground;
 
     public MedicineDetails() {
         // Required empty public constructor
@@ -89,6 +89,16 @@ public class MedicineDetails extends Fragment {
         remtime.setKeyListener(null);
         remtime.setBackground(null);
 
+        EditText datetext = rootView.findViewById(R.id.reminder_date_title);
+        datetext.setKeyListener(null);
+        datetext.setBackground(null);
+
+        EditText remdate = rootView.findViewById(R.id.reminder_date);
+        datebackground = remdate.getBackground();
+        datelistener = remdate.getKeyListener();
+        remdate.setKeyListener(null);
+        remdate.setBackground(null);
+
         Switch reminders = rootView.findViewById(R.id.reminder_switch);
         reminders.setChecked(medicine.getReminders());
 
@@ -139,8 +149,11 @@ public class MedicineDetails extends Fragment {
             otherdays.setVisibility(View.VISIBLE);
             remtext.setVisibility(View.VISIBLE);
             remtime.setVisibility(View.VISIBLE);
+            datetext.setVisibility(View.VISIBLE);
+            remdate.setVisibility(View.VISIBLE);
 
             remtime.setText(thismedicine.getTime());
+            remdate.setText(thismedicine.getDate());
         }
 
         reminders.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -159,19 +172,26 @@ public class MedicineDetails extends Fragment {
                 RadioButton otherdays = rootView.findViewById(R.id.everyotherday);
                 EditText remtime = rootView.findViewById(R.id.reminder_time);
                 EditText remtext = rootView.findViewById(R.id.reminder_time_title);
+                EditText remdate = rootView.findViewById(R.id.reminder_date);
+                EditText datetext = rootView.findViewById(R.id.reminder_date_title);
 
                 if (isChecked) {
                     daily.setVisibility(View.VISIBLE);
                     otherdays.setVisibility(View.VISIBLE);
                     remtext.setVisibility(View.VISIBLE);
+                    datetext.setVisibility(View.VISIBLE);
                     remtime.setVisibility(View.VISIBLE);
                     remtime.setText(thismedicine.getTime());
+                    remdate.setVisibility(View.VISIBLE);
+                    remdate.setText(thismedicine.getDate());
                 }
                 else {
                     daily.setVisibility(View.GONE);
                     otherdays.setVisibility(View.GONE);
                     remtext.setVisibility(View.GONE);
+                    datetext.setVisibility(View.GONE);
                     remtime.setVisibility(View.GONE);
+                    remdate.setVisibility(View.GONE);
                }
             }
         });
@@ -281,6 +301,11 @@ public class MedicineDetails extends Fragment {
             remtime.setKeyListener(timelistener);
             remtime.setBackground(timebackground);
 
+            EditText remdate = rootView.findViewById(R.id.reminder_date);
+            remdate.setText(thismedicine.getDate());
+            remdate.setKeyListener(datelistener);
+            remdate.setBackground(datebackground);
+
             //TODO: make delete button appear
 
             this.mode = "edit";
@@ -310,6 +335,10 @@ public class MedicineDetails extends Fragment {
             remtime.setKeyListener(null);
             remtime.setBackground(null);
 
+            final EditText remdate = rootView.findViewById(R.id.reminder_date);
+            remdate.setKeyListener(null);
+            remdate.setBackground(null);
+
             // update the medicine in the database
             new Thread(new Runnable() {
                 @Override
@@ -320,6 +349,7 @@ public class MedicineDetails extends Fragment {
                     thismedicine.setDose(dose.getText().toString());
                     thismedicine.setNotes(notes.getText().toString());
                     thismedicine.setTime(remtime.getText().toString());
+                    thismedicine.setDate(remdate.getText().toString());
                     db.medicineDao().update(thismedicine);
 
                     // refresh to get rid of keyboard
