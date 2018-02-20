@@ -4,13 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
@@ -62,7 +60,6 @@ public class CalendarMonth extends Fragment {
                 String day = String.valueOf(dayOfMonth);
                 if (dayOfMonth < 10) day = "0" + dayOfMonth;
 
-                Log.d("month", String.valueOf(month + 1));
                 String month_ = String.valueOf(month + 1);
                 if ((month + 1) < 10) month_ = "0" + month_;
 
@@ -113,7 +110,6 @@ public class CalendarMonth extends Fragment {
                 TextView event_med = ll_med.findViewById(R.id.upcoming_med_name);
                 event_med.setText(med.getEvent());
 
-                Log.d("MED", ""+_med.getUid());
                 ll_med.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -205,7 +201,7 @@ public class CalendarMonth extends Fragment {
         // Create CalendarEvents for the days medicines, and add them to the returning array
         for (MedicineEntity me : medicines) {
             if (me.isDaily() || (me.isOther_days() && CalendarDay.isOtherDay(me.getDate(), df.format(today.getTime()))))
-                todays_meds.add(new CalendarEvent(me.getUid(), null, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
+                todays_meds.add(new CalendarEvent(me.getUid(), 0, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
         }
 
         Collections.sort(todays_meds, new Comparator<CalendarEvent>() {

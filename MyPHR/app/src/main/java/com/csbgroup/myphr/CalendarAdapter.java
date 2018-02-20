@@ -5,14 +5,11 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -49,7 +46,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
         LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        holder.time.setText(hours_events.get(0).getHour());
+        String hourString = hours_events.get(0).getHour() + ":00";
+        holder.time.setText(hourString);
 
         for (final CalendarEvent e : hours_events) {
             switch (e.getType()) {
@@ -72,7 +70,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
                         public void onClick(View v) {
                             Fragment eventFrag = AppointmentsDetails.newInstance();
                             Bundle bundle = new Bundle();
-                            Log.d("HERE NOW", String.valueOf(e.getUid()));
                             bundle.putString("uid", String.valueOf(e.getUid()));
                             eventFrag.setArguments(bundle);
 
