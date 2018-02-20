@@ -5,16 +5,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -74,7 +70,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
                         public void onClick(View v) {
                             Fragment eventFrag = AppointmentsDetails.newInstance();
                             Bundle bundle = new Bundle();
-                            Log.d("HERE NOW", String.valueOf(e.getUid()));
                             bundle.putString("uid", String.valueOf(e.getUid()));
                             eventFrag.setArguments(bundle);
 

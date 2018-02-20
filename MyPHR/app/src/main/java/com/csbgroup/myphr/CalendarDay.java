@@ -6,13 +6,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
@@ -22,10 +20,8 @@ import com.csbgroup.myphr.database.MedicineEntity;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -107,7 +103,6 @@ public class CalendarDay extends Fragment {
             hours.add(hourEvents);
         }
 
-        Log.d("Size", ""+hours.size());
         CalendarAdapter adapter = new CalendarAdapter(hours);
         RecyclerView calendarList = rootView.findViewById(R.id.calendar_list);
         calendarList.setLayoutManager(new LinearLayoutManager(rootView.getContext()));

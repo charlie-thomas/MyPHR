@@ -4,13 +4,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
@@ -62,7 +60,6 @@ public class CalendarMonth extends Fragment {
                 String day = String.valueOf(dayOfMonth);
                 if (dayOfMonth < 10) day = "0" + dayOfMonth;
 
-                Log.d("month", String.valueOf(month + 1));
                 String month_ = String.valueOf(month + 1);
                 if ((month + 1) < 10) month_ = "0" + month_;
 
@@ -113,7 +110,6 @@ public class CalendarMonth extends Fragment {
                 TextView event_med = ll_med.findViewById(R.id.upcoming_med_name);
                 event_med.setText(med.getEvent());
 
-                Log.d("MED", ""+_med.getUid());
                 ll_med.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
