@@ -72,7 +72,7 @@ public class Statistics extends Fragment {
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Fragment details = StatisticsDetails.newInstance();
+                Fragment details = StatisticsSection.newInstance();
 
                 // Create a bundle to pass the medicine name to the details fragment
                 Bundle bundle = new Bundle();
