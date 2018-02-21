@@ -7,10 +7,10 @@
     android:weightSum="100">
 
     <LinearLayout
+        android:id="@+id/linearlay"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/linearlay">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/textView1"
@@ -18,21 +18,24 @@
             android:layout_height="30dp"
             android:layout_weight="100"
             android:gravity="left"
-            android:textStyle="bold"
-            android:text="TextView1" />
+            android:paddingLeft="10dp"
+            android:text="TextView1"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:gravity="left"
             android:layout_below="@id/textView1"
+            android:gravity="left"
+            android:paddingLeft="10dp"
             android:text="TextView2" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="match_parent"
             android:layout_height="30dp"
+            android:paddingLeft="10dp"
             android:layout_below="@+id/textView2"
             android:gravity="left"
             android:text="TextView3" />
