@@ -1,15 +1,10 @@
 package com.csbgroup.myphr;
 
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.text.InputType;
 import android.text.method.KeyListener;
-import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;

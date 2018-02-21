@@ -43,11 +43,48 @@
     <string name="meddescription">Description</string>
     <string name="mednotes">Notes</string>
     <string name="meddose">Dose</string>
+
     <string name="this_is_the_holiday_letter">This is the holiday letter</string>
     <string name="remindertime">Reminder Time: </string>
     <string name="reminderdate">Start Reminders On: </string>
     <string name="daily">Every Day</string>
     <string name="otherdays">Every Other Day</string>
+
+    <string name="hospital_address">
+        Royal Hospital for Children\n
+        Endocrine/Metabolic Service\n
+        1345 Govan Road\n
+        GLASGOW UK\n
+        G51 4TF\n\n
+        Direct Line +44 141 451 6548\n
+        Hospital Switchboard (out of hours)\n
+        +44 141 201 0000\n
+        Ref: FA/KH\n
+    </string>
+    <string name="holiday_letter">
+        To Whom It May Concern\n\n
+
+        Dear Sir/Madam\n\n
+
+        The patient using this application has an Endocrine condition, and requires a number of items to be available at all times.\n\n
+        These items therefore need to be taken as carry-on luggage, and may include the following:\n
+         - Needles and syringes\n
+         - Medication- oral and/or injectable\n
+         - Blood sugar monitors\n
+         - Blood sugar testing strips\n
+         - Feeding pump/feed sets\n\n
+
+        If you require any further information please contact us on the above number.\n\n
+
+        Yours faithfully\n\n
+
+        Endocrine Service\n
+        Royal Hospital for Sick Children, Glasgow,\n\n
+        Prof SF Ahmed\n
+        Dr M G Shaikh\n
+        Dr A Mason\n
+        Dr J Wong
+    </string>
 
     // Appointment strings
     <string name="atitle">Add a New Appointment</string>

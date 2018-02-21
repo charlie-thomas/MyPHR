@@ -106,12 +106,12 @@ public class MainActivity extends AppCompatActivity {
         // TODO: get contact details for main staff and load in
         dao.insertAll(new ContactsEntity(
                 "Dr. Jones",
-                "james.jones@hospital.com",
+                "jane.jones@hospital.com",
                 "012334567890",
                 "My main doctor at hospital."),
                 new ContactsEntity(
                 "Nurse Williams",
-                "amy.williams@hospital.com",
+                "george.williams@hospital.com",
                 "012334567890",
                 "My main nurse at hospital."
                 ));
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 false,
                 false,
                 null,
-                "04:15"),
+                "21:15"),
                 new MedicineEntity(
                 "Oestrogen",
                 "Helps in the development and maintenance of sexual maturation.",
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
                 true,
                 false,
                 null,
-                "02:50"),
+                "15:50"),
                 new MedicineEntity(
                 "Progesterone",
                 "Progesterone description",
@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 false,
                 true,
                 "05/02/2018",
-                "02:30"),
+                "13:30"),
                 new MedicineEntity(
                 "Thyroxine",
                 "Thyroxine description",
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
                 false,
                 false,
                 null,
-                "01:15")
+                "13:15")
                 );
     }
 
@@ -174,19 +174,19 @@ public class MainActivity extends AppCompatActivity {
 
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Clinic 1", "Children's Hospital",
-                df.format(c.getTime()), "02:55","Appointment Notes", true));
+                df.format(c.getTime()), "15:55","Appointment Notes", true));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Check Up 1", "Children's Hospital",
-                df.format(c.getTime()), "08:00","Appointment Notes", true));
+                df.format(c.getTime()), "16:00","Appointment Notes", true));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Check Up 2", "Children's Hospital",
-                df.format(c.getTime()), "08:00","Appointment Notes", true));
+                df.format(c.getTime()), "16:00","Appointment Notes", true));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Clinic 2", "Children's Hospital",
-                df.format(c.getTime()), "08:00","Appointment Notes", true));
+                df.format(c.getTime()), "17:00","Appointment Notes", true));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Check Up 3", "Children's Hospital",
-                df.format(c.getTime()), "08:00","Appointment Notes", true));
+                df.format(c.getTime()), "14:00","Appointment Notes", true));
     }
 
     private static void populateInvestigations(InvestigationsDao dao)  {

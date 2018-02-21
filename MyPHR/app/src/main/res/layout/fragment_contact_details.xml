@@ -30,58 +30,61 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/email_title"
-        android:textColor="#777777"
-        android:inputType="textEmailAddress"
-        android:maxLines="1"
-        android:layout_marginStart="5dp"/>
+        <!-- Email -->
+        <TextView
+            android:id="@+id/email_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contact_title"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/cemail"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-    <!-- Phone Number -->
-    <TextView
-        android:id="@+id/phone_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/email"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/cphone"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/email_title"
+            android:textColor="#777777"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:layout_marginStart="5dp"/>
 
-    <EditText
-        android:id="@+id/phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/phone_title"
-        android:textColor="#777777"
-        android:inputType="phone"
-        android:maxLines="1"
-        android:layout_marginStart="5dp"/>
+        <!-- Phone Number -->
+        <TextView
+            android:id="@+id/phone_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/email"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/cphone"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-    <!-- Notes -->
-    <TextView
-        android:id="@+id/notes_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/phone"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/notes"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/phone_title"
+            android:textColor="#777777"
+            android:inputType="phone"
+            android:maxLines="1"
+            android:layout_marginStart="5dp"/>
 
-    <EditText
-        android:id="@+id/notes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/notes_title"
-        android:textColor="#777777"
-        android:inputType="textMultiLine"
-        android:layout_marginStart="5dp" />
+        <!-- Notes -->
+        <TextView
+            android:id="@+id/notes_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/phone"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/notes"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
     <Button
         android:id="@+id/delete"
