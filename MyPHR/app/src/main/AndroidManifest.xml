@@ -22,6 +22,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
 
+        <!-- Define AlarmReceiver for reminder notifications -->
+        <receiver android:name=".AlarmReceiver" />
+
         <activity
             android:name=".MainActivity"
             android:label="Main"
