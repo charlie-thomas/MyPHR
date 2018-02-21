@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import static com.csbgroup.myphr.R.color.colorAccent;
 
@@ -20,14 +19,9 @@ public class AlarmReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        String TAG = "AlarmActivity";
-        Log.d(TAG, "opened");
-
 //        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
 //            // Re-set any alarms after reboot here
 //        }
-
-        Log.d(TAG, "Activated AlarmReceiver");
 
         // Sets action that notification should perform when clicked on
         NotificationCompat.Builder mBuilder =
