@@ -310,6 +310,20 @@ public class MedicineDetails extends Fragment {
             Button delete = rootView.findViewById(R.id.delete);
             delete.setVisibility(View.VISIBLE);
 
+            // deleting a medicine
+            delete.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                            db.medicineDao().delete(thismedicine);
+                            ((MainActivity) getActivity()).switchFragment(MedicineSection.newInstance());
+                        }
+                    }).start();
+                }
+            });
+
             this.mode = "edit";
             return;
         }

@@ -196,6 +196,20 @@ public class AppointmentsDetails extends Fragment {
             Button delete = rootView.findViewById(R.id.delete);
             delete.setVisibility(View.VISIBLE);
 
+            // deleting an appointment
+            delete.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                            db.appointmentsDao().delete(thisappointment);
+                            ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance());
+                        }
+                    }).start();
+                }
+            });
+
             this.mode = "edit";
             return;
         }

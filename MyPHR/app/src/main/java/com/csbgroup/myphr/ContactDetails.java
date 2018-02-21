@@ -189,6 +189,20 @@ public class ContactDetails extends Fragment {
             Button delete = rootView.findViewById(R.id.delete);
             delete.setVisibility(View.VISIBLE);
 
+            // deleting a contact
+            delete.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                            db.contactsDao().delete(thiscontact);
+                            ((MainActivity) getActivity()).switchFragment(Contacts.newInstance());
+                        }
+                    }).start();
+                }
+            });
+
             this.mode = "edit";
             return;
         }
