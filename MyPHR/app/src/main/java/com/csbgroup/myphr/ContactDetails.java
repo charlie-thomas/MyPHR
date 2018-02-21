@@ -37,8 +37,9 @@ public class ContactDetails extends Fragment {
     private String mode = "view";
     private View rootView;
 
-    private KeyListener titlelistener, emaillistener, phonelistener, noteslistener;
-    private Drawable titlebackground, emailbackground, phonebackground, notesbackground;
+    // key listeners and backgrounds for toggling field editability
+    private KeyListener titleKL, emailKL, phoneKL, notesKL;
+    private Drawable titleBG, emailBG, phoneBG, notesBG;
 
     public ContactDetails() {
         // Required empty public constructor
@@ -56,47 +57,42 @@ public class ContactDetails extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_contact_details, container, false);
         this.rootView = rootView;
 
-        // fill in the values
-
         Bundle args = getArguments();
         ContactsEntity contact = getContact(Integer.valueOf(args.getString("uid")));
-        this.thiscontact = contact;
+        thiscontact = contact;
 
         EditText contactTitle = rootView.findViewById(R.id.contact_title);
-        contactTitle.setText(contact.getName());
-        titlelistener = contactTitle.getKeyListener();
-        titlebackground = contactTitle.getBackground();
-        contactTitle.setBackground(null);
-        contactTitle.setKeyListener(null);
-
         EditText email = rootView.findViewById(R.id.email);
-        email.setText(contact.getEmail());
-        emaillistener = email.getKeyListener();
-        emailbackground = email.getBackground();
-        email.setBackground(null);
-        email.setKeyListener(null);
-
         EditText phone = rootView.findViewById(R.id.phone);
-        phone.setText(contact.getPhone());
-        phonelistener = phone.getKeyListener();
-        phonebackground = phone.getBackground();
-        phone.setKeyListener(null);
-        phone.setBackground(null);
-
         EditText notes = rootView.findViewById(R.id.notes);
-        notes.setText(contact.getNotes());
-        noteslistener = notes.getKeyListener();
-        notesbackground = notes.getBackground();
-        notes.setKeyListener(null);
-        notes.setBackground(null);
 
+        // fill in the values
+        contactTitle.setText(contact.getName());
+        email.setText(contact.getEmail());
+        phone.setText(contact.getPhone());
+        notes.setText(contact.getNotes());
+
+        // save listeners and backgrounds
+        titleKL = contactTitle.getKeyListener();
+        titleBG = contactTitle.getBackground();
+        emailKL = email.getKeyListener();
+        emailBG = email.getBackground();
+        phoneKL = phone.getKeyListener();
+        phoneBG = phone.getBackground();
+        notesKL = notes.getKeyListener();
+        notesBG = notes.getBackground();
+
+        //disable editability
+        disableEditing(contactTitle);
+        disableEditing(email);
+        disableEditing(phone);
+        disableEditing(notes);
 
         // back button
         ((MainActivity) getActivity()).setToolbar("My Contacts", true);
         setHasOptionsMenu(true);
 
         return rootView;
-
     }
 
     /**
@@ -163,33 +159,29 @@ public class ContactDetails extends Fragment {
      */
     public void switchMode() {
 
+        final EditText title = rootView.findViewById(R.id.contact_title);
+        final EditText email = rootView.findViewById(R.id.email);
+        final EditText phone = rootView.findViewById(R.id.phone);
+        final EditText notes = rootView.findViewById(R.id.notes);
+        final Button delete = rootView.findViewById(R.id.delete);
+
         if (this.mode.equals("view")) {
             editMenu.getItem(0).setIcon(R.drawable.tick);
 
-            EditText title = rootView.findViewById(R.id.contact_title);
-            title.setText(thiscontact.getName());
-            title.setBackground(titlebackground);
-            title.setKeyListener(titlelistener);
-
-            EditText email = rootView.findViewById(R.id.email);
-            email.setText(thiscontact.getEmail());
-            email.setKeyListener(emaillistener);
-            email.setBackground(emailbackground);
-
-            EditText phone = rootView.findViewById(R.id.phone);
-            phone.setText(thiscontact.getPhone());
-            phone.setKeyListener(phonelistener);
-            phone.setBackground(phonebackground);
-
-            EditText notes = rootView.findViewById(R.id.notes);
-            notes.setText(thiscontact.getNotes());
-            notes.setKeyListener(noteslistener);
-            notes.setBackground(notesbackground);
-
-            Button delete = rootView.findViewById(R.id.delete);
+            // show the delete button
             delete.setVisibility(View.VISIBLE);
 
-            // deleting a contact
+            // restore bg and kl to make editable
+            title.setBackground(titleBG);
+            title.setKeyListener(titleKL);
+            email.setKeyListener(emailKL);
+            email.setBackground(emailBG);
+            phone.setKeyListener(phoneKL);
+            phone.setBackground(phoneBG);
+            notes.setKeyListener(notesKL);
+            notes.setBackground(notesBG);
+
+            // delete the contact
             delete.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v){
                     new Thread(new Runnable() {
@@ -210,24 +202,14 @@ public class ContactDetails extends Fragment {
         if (this.mode.equals("edit")){
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
-            Button delete = rootView.findViewById(R.id.delete);
+            // hide the delete button
             delete.setVisibility(View.GONE);
 
-            final EditText title = rootView.findViewById(R.id.contact_title);
-            title.setKeyListener(null);
-            title.setBackground(null);
-
-            final EditText email = rootView.findViewById(R.id.email);
-            email.setKeyListener(null);
-            email.setBackground(null);
-
-            final EditText phone = rootView.findViewById(R.id.phone);
-            phone.setKeyListener(null);
-            phone.setBackground(null);
-
-            final EditText notes = rootView.findViewById(R.id.notes);
-            notes.setKeyListener(null);
-            notes.setBackground(null);
+            // disable editing of all fields
+            disableEditing(title);
+            disableEditing(email);
+            disableEditing(phone);
+            disableEditing(notes);
 
             // update the contact in the database
             new Thread(new Runnable() {
@@ -249,6 +231,15 @@ public class ContactDetails extends Fragment {
             this.mode = "view";
             return;
         }
+    }
+
+    /**
+     * disableEditing sets background and keylistener to null to stop user editing
+     * @param field is the editText field to be disabled
+     */
+    public void disableEditing(EditText field){
+        field.setBackground(null);
+        field.setKeyListener(null);
     }
 
 }
