@@ -12,6 +12,10 @@
     <uses-permission
         android:name="android.permission.USE_FINGERPRINT" />
 
+    <!-- Lets app ask for permissions to check if phone has recently booted up -->
+    <uses-permission
+        android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:resizeableActivity="false"
         android:allowBackup="true"
