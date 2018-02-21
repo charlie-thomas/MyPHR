@@ -11,7 +11,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -31,8 +35,9 @@ public class MedicineDetails extends Fragment {
     private String mode = "view";
     private View rootView;
 
-    private KeyListener descriptionlistener, doselistener, noteslistener;
-    private Drawable descriptionbackground, dosebackground, notesbackground;
+    // key listeners and backgrounds for toggling field editability
+    private KeyListener nameKL, descriptionKL, doseKL, notesKL, timeKL, dateKL;
+    private Drawable nameBG, descriptionBG, doseBG, notesBG, timeBG, dateBG;
 
     public MedicineDetails() {
         // Required empty public constructor
@@ -47,41 +52,148 @@ public class MedicineDetails extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_medicine_details, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_medicine_details, container, false);
         this.rootView = rootView;
 
-        // fill in the values
         Bundle args = getArguments();
         MedicineEntity medicine = getMedicine(Integer.valueOf(args.getString("uid")));
-        this.thismedicine = medicine;
+        thismedicine = medicine;
 
-        // TODO: make this editable once Primary Key issue is resolved
-        TextView name = rootView.findViewById(R.id.medicine_title);
-        name.setText(medicine.getTitle());
-
+        EditText name = rootView.findViewById(R.id.medicine_title);
         EditText description = rootView.findViewById(R.id.medicine_info);
-        description.setText(medicine.getDescription());
-        descriptionlistener = description.getKeyListener();
-        descriptionbackground = description.getBackground();
-        description.setBackground(null);
-        description.setKeyListener(null);
-
         EditText dose = rootView.findViewById(R.id.medicine_dose);
+        EditText remtext = rootView.findViewById(R.id.reminder_time_title);
+        EditText remtime = rootView.findViewById(R.id.reminder_time);
+        EditText datetext = rootView.findViewById(R.id.reminder_date_title);
+        EditText remdate = rootView.findViewById(R.id.reminder_date);
+        EditText notes = rootView.findViewById(R.id.medicine_notes);
+
+        // fill in the values
+        name.setText(medicine.getTitle());
+        description.setText(medicine.getDescription());
         dose.setText(medicine.getDose());
-        doselistener = dose.getKeyListener();
-        dosebackground = dose.getBackground();
-        dose.setBackground(null);
-        dose.setKeyListener(null);
+        notes.setText(medicine.getNotes());
+        remtime.setText(medicine.getTime());
+        remdate.setText(medicine.getDate());
+
+        // save listeners and backgrounds
+        nameBG = name.getBackground();
+        nameKL = name.getKeyListener();
+        descriptionKL = description.getKeyListener();
+        descriptionBG = description.getBackground();
+        doseKL = dose.getKeyListener();
+        doseBG = dose.getBackground();
+        timeBG = remtime.getBackground();
+        timeKL = remtime.getKeyListener();
+        dateBG = remdate.getBackground();
+        dateKL = remdate.getKeyListener();
+        notesKL = notes.getKeyListener();
+        notesBG = notes.getBackground();
+
+        // disable editability
+        disableEditing(name);
+        disableEditing(description);
+        disableEditing(dose);
+        disableEditing(remtext);
+        disableEditing(remtime);
+        disableEditing(datetext);
+        disableEditing(remdate);
+        disableEditing(notes);
 
         Switch reminders = rootView.findViewById(R.id.reminder_switch);
         reminders.setChecked(medicine.getReminders());
 
-        EditText notes = rootView.findViewById(R.id.medicine_notes);
-        notes.setText(medicine.getNotes());
-        noteslistener = notes.getKeyListener();
-        notesbackground = notes.getBackground();
-        notes.setKeyListener(null);
-        notes.setBackground(null);
+        RadioButton daily = rootView.findViewById(R.id.daily);
+        RadioButton otherdays = rootView.findViewById(R.id.everyotherday);
+
+        if (!thismedicine.isDaily()){
+            daily.setChecked(false);
+            otherdays.setChecked(true);
+        }
+        else{
+            otherdays.setChecked(false);
+            daily.setChecked(true);
+        }
+
+        // update the database when radio buttons are changed
+        RadioGroup radioGroup = rootView.findViewById(R.id.radios);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                switch (checkedId){
+
+                    case R.id.daily:
+                        thismedicine.setOther_days(false);
+                        thismedicine.setDaily(true);
+                        break;
+
+                    case R.id.everyotherday:
+                        thismedicine.setDaily(false);
+                        thismedicine.setOther_days(true);
+                        break;
+                }
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                        db.medicineDao().update(thismedicine);
+                    }
+                }).start();
+
+            }
+        });
+
+        // show the reminders options if reminders are on
+        if (medicine.getReminders()) {
+            daily.setVisibility(View.VISIBLE);
+            otherdays.setVisibility(View.VISIBLE);
+            remtext.setVisibility(View.VISIBLE);
+            remtime.setVisibility(View.VISIBLE);
+            datetext.setVisibility(View.VISIBLE);
+            remdate.setVisibility(View.VISIBLE);
+        }
+
+        // hide/show reminders options as switch is toggled
+        reminders.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                        thismedicine.setReminders(isChecked);
+                        db.medicineDao().update(thismedicine);
+                    }
+                }).start();
+
+                RadioButton daily = rootView.findViewById(R.id.daily);
+                RadioButton otherdays = rootView.findViewById(R.id.everyotherday);
+                EditText remtime = rootView.findViewById(R.id.reminder_time);
+                EditText remtext = rootView.findViewById(R.id.reminder_time_title);
+                EditText remdate = rootView.findViewById(R.id.reminder_date);
+                EditText datetext = rootView.findViewById(R.id.reminder_date_title);
+
+                if (isChecked) { // reminders are on
+                    daily.setVisibility(View.VISIBLE);
+                    otherdays.setVisibility(View.VISIBLE);
+                    remtext.setVisibility(View.VISIBLE);
+                    datetext.setVisibility(View.VISIBLE);
+                    remtime.setVisibility(View.VISIBLE);
+                    remdate.setVisibility(View.VISIBLE);
+                }
+                else { // reminders are off
+                    daily.setVisibility(View.GONE);
+                    otherdays.setVisibility(View.GONE);
+                    remtext.setVisibility(View.GONE);
+                    datetext.setVisibility(View.GONE);
+                    remtime.setVisibility(View.GONE);
+                    remdate.setVisibility(View.GONE);
+               }
+            }
+        });
 
         // back button
         ((MainActivity) getActivity()).setToolbar("My Medicine", true);
@@ -153,53 +265,77 @@ public class MedicineDetails extends Fragment {
      */
     public void switchMode() {
 
-        if (this.mode.equals("view")) {
+        final EditText title = rootView.findViewById(R.id.medicine_title);
+        final EditText description = rootView.findViewById(R.id.medicine_info);
+        final EditText dose = rootView.findViewById(R.id.medicine_dose);
+        final EditText notes = rootView.findViewById(R.id.medicine_notes);
+        final EditText remtime = rootView.findViewById(R.id.reminder_time);
+        final EditText remdate = rootView.findViewById(R.id.reminder_date);
+        final Button delete = rootView.findViewById(R.id.delete);
+
+        if (this.mode.equals("view")) { // entering edit mode
             editMenu.getItem(0).setIcon(R.drawable.tick);
 
-            EditText description = rootView.findViewById(R.id.medicine_info);
-            description.setText(thismedicine.getDescription());
-            description.setKeyListener(descriptionlistener);
-            description.setBackground(descriptionbackground);
+            // show the delete button
+            delete.setVisibility(View.VISIBLE);
 
-            EditText dose = rootView.findViewById(R.id.medicine_dose);
-            dose.setText(thismedicine.getDose());
-            dose.setKeyListener(doselistener);
-            dose.setBackground(dosebackground);
+            // restore bg and kl to make editable
+            title.setBackground(nameBG);
+            title.setKeyListener(nameKL);
+            description.setKeyListener(descriptionKL);
+            description.setBackground(descriptionBG);
+            dose.setKeyListener(doseKL);
+            dose.setBackground(doseBG);
+            notes.setKeyListener(notesKL);
+            notes.setBackground(notesBG);
+            remtime.setKeyListener(timeKL);
+            remtime.setBackground(timeBG);
+            remdate.setKeyListener(dateKL);
+            remdate.setBackground(dateBG);
 
-            EditText notes = rootView.findViewById(R.id.medicine_notes);
-            notes.setText(thismedicine.getNotes());
-            notes.setKeyListener(noteslistener);
-            notes.setBackground(notesbackground);
-
-            //TODO: make delete button appear
+            // delete the medicine
+            delete.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                            db.medicineDao().delete(thismedicine);
+                            ((MainActivity) getActivity()).switchFragment(MedicineSection.newInstance());
+                        }
+                    }).start();
+                }
+            });
 
             this.mode = "edit";
             return;
         }
 
-        if (this.mode.equals("edit")) {
+        if (this.mode.equals("edit")) { // exiting edit mode
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
-            final EditText description = rootView.findViewById(R.id.medicine_info);
-            description.setKeyListener(null);
-            description.setBackground(null);
+            // hide the delete button
+            delete.setVisibility(View.GONE);
 
-            final EditText dose = rootView.findViewById(R.id.medicine_dose);
-            dose.setKeyListener(null);
-            dose.setBackground(null);
-
-            final EditText notes = rootView.findViewById(R.id.medicine_notes);
-            notes.setKeyListener(null);
-            notes.setBackground(null);
+            // disable editing of all fields
+            disableEditing(title);
+            disableEditing(description);
+            disableEditing(dose);
+            disableEditing(notes);
+            disableEditing(remtime);
+            disableEditing(remdate);
 
             // update the medicine in the database
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                    thismedicine.setTitle(title.getText().toString());
                     thismedicine.setDescription(description.getText().toString());
                     thismedicine.setDose(dose.getText().toString());
                     thismedicine.setNotes(notes.getText().toString());
+                    thismedicine.setTime(remtime.getText().toString());
+                    thismedicine.setDate(remdate.getText().toString());
                     db.medicineDao().update(thismedicine);
 
                     // refresh to get rid of keyboard
@@ -212,4 +348,15 @@ public class MedicineDetails extends Fragment {
             return;
         }
     }
+
+    /**
+     * disableEditing sets background and keylistener to null to stop user editing
+     * @param field is the editText field to be disabled
+     */
+    public void disableEditing(EditText field){
+        field.setBackground(null);
+        field.setKeyListener(null);
+    }
+
+
 }

@@ -177,7 +177,7 @@ public class Medicine extends Fragment {
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                     MedicineEntity medicine = new MedicineEntity(name.getText().toString(),
                                             description.getText().toString(), dose.getText().toString(),
-                                            notes.getText().toString(), false, false, false, null, null);
+                                            notes.getText().toString(), false, true, false, null, "00:00");
                                     long uid = db.medicineDao().insert(medicine);
 
                                     // Move to details for new medicine

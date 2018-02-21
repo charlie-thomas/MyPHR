@@ -1,11 +1,12 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
     <RelativeLayout
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context="com.csbgroup.myphr.AppointmentsDetails">
 
         <!-- Appointment Title -->
@@ -14,9 +15,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="20dp"
-            android:textSize="20sp"
             android:textColor="#777777"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <!-- Location -->
@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/appointments_title"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
             android:text="@string/alocation"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -36,9 +36,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/location_title"
-            android:textColor="#777777"
+            android:layout_marginStart="5dp"
             android:inputType="textMultiLine"
-            android:layout_marginStart="5dp" />
+            android:textColor="#777777" />
 
         <!-- Date -->
         <TextView
@@ -57,18 +57,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/date_title"
-            android:textColor="#777777"
+            android:layout_marginStart="5dp"
             android:inputType="text"
-            android:layout_marginStart="5dp" />
+            android:textColor="#777777" />
 
         <!-- Time -->
         <TextView
             android:id="@+id/time_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/app_date"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_alignBaseline="@+id/date_title"
+            android:layout_alignBottom="@+id/date_title"
+            android:layout_marginStart="104dp"
+            android:layout_toEndOf="@+id/reminders"
             android:text="@string/apptime"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -77,10 +78,10 @@
             android:id="@+id/app_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/time_title"
-            android:textColor="#777777"
+            android:layout_alignStart="@+id/time_title"
+            android:layout_below="@+id/time_title"
             android:inputType="text"
-            android:layout_marginStart="5dp" />
+            android:textColor="#777777" />
 
         <!-- Reminders -->
         <TextView
@@ -101,7 +102,7 @@
             android:layout_alignBaseline="@+id/reminders"
             android:layout_alignBottom="@+id/reminders"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp" />
 
         <!-- Notes -->
         <TextView
@@ -120,9 +121,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/notes_title"
-            android:textColor="#777777"
+            android:layout_marginStart="5dp"
             android:inputType="textMultiLine"
-            android:layout_marginStart="5dp" />
+            android:textColor="#777777" />
+
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete"
+            android:layout_below="@id/app_notes"
+            android:layout_marginLeft="6dp"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 </ScrollView>

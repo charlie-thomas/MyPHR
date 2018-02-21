@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.csbgroup.myphr.database.AppDatabase;
@@ -29,8 +30,9 @@ public class AppointmentsDetails extends Fragment {
     private String mode = "view";
     private View rootView;
 
-    private KeyListener titlelistener, locationlistener, datelistener, timelistener, noteslistener;
-    private Drawable titlebackground, locationbackground, datebackground, timebackground, notesbackground;
+    // key listeners and backgrounds for toggling field editability
+    private KeyListener titleKL, locationKL, dateKL, timeKL, notesKL;
+    private Drawable titleBG, locationBG, dateBG, timeBG, notesBG;
 
     public AppointmentsDetails() {
         // Required empty public constructor
@@ -47,48 +49,42 @@ public class AppointmentsDetails extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_appointments_details, container, false);
         this.rootView = rootView;
-
-
-        // fill in the values
         
         Bundle args = getArguments();
         AppointmentsEntity appointment = getAppointment(Integer.parseInt(args.getString("uid")));
-        this.thisappointment = appointment;
+        thisappointment = appointment;
 
         EditText title = rootView.findViewById(R.id.appointments_title);
-        title.setText(appointment.getTitle());
-        titlelistener = title.getKeyListener();
-        titlebackground = title.getBackground();
-        title.setKeyListener(null);
-        title.setBackground(null);
-
         EditText location = rootView.findViewById(R.id.app_location);
-        location.setText(appointment.getLocation());
-        locationlistener = location.getKeyListener();
-        locationbackground = location.getBackground();
-        location.setKeyListener(null);
-        location.setBackground(null);
-
         EditText date = rootView.findViewById(R.id.app_date);
-        date.setText(appointment.getDate());
-        datelistener = date.getKeyListener();
-        datebackground = date.getBackground();
-        date.setBackground(null);
-        date.setKeyListener(null);
-
         EditText time = rootView.findViewById(R.id.app_time);
-        time.setText(appointment.getTime());
-        timelistener = time.getKeyListener();
-        timebackground = time.getBackground();
-        time.setKeyListener(null);
-        time.setBackground(null);
-
         EditText notes = rootView.findViewById(R.id.app_notes);
+
+        //fill in the values
+        title.setText(appointment.getTitle());
+        location.setText(appointment.getLocation());
+        date.setText(appointment.getDate());
+        time.setText(appointment.getTime());
         notes.setText(appointment.getNotes());
-        noteslistener = notes.getKeyListener();
-        notesbackground = notes.getBackground();
-        notes.setBackground(null);
-        notes.setKeyListener(null);
+
+        // save listeners and backgrounds
+        titleKL = title.getKeyListener();
+        titleBG = title.getBackground();
+        locationKL = location.getKeyListener();
+        locationBG = location.getBackground();
+        dateKL = date.getKeyListener();
+        dateBG = date.getBackground();
+        timeKL = time.getKeyListener();
+        timeBG = time.getBackground();
+        notesKL = notes.getKeyListener();
+        notesBG = notes.getBackground();
+
+        //disable editability
+        disableEditing(title);
+        disableEditing(location);
+        disableEditing(date);
+        disableEditing(time);
+        disableEditing(notes);
 
         // back button
         ((MainActivity) getActivity()).setToolbar("My Appointments", true);
@@ -161,35 +157,44 @@ public class AppointmentsDetails extends Fragment {
      */
     public void switchMode() {
 
+        final EditText title = rootView.findViewById(R.id.appointments_title);
+        final EditText location = rootView.findViewById(R.id.app_location);
+        final EditText date = rootView.findViewById(R.id.app_date);
+        final EditText time = rootView.findViewById(R.id.app_time);
+        final EditText notes = rootView.findViewById(R.id.app_notes);
+        final Button delete = rootView.findViewById(R.id.delete);
+
         if (this.mode.equals("view")) {
             editMenu.getItem(0).setIcon(R.drawable.tick);
 
-            EditText title = rootView.findViewById(R.id.appointments_title);
-            title.setText(thisappointment.getTitle());
-            title.setBackground(titlebackground);
-            title.setKeyListener(titlelistener);
+            // show the delete button
+            delete.setVisibility(View.VISIBLE);
 
-            EditText location = rootView.findViewById(R.id.app_location);
-            location.setText(thisappointment.getLocation());
-            location.setKeyListener(locationlistener);
-            location.setBackground(locationbackground);
+            // restore bg and kl to make editable
+            title.setBackground(titleBG);
+            title.setKeyListener(titleKL);
+            location.setKeyListener(locationKL);
+            location.setBackground(locationBG);
+            date.setKeyListener(dateKL);
+            date.setBackground(dateBG);
+            time.setKeyListener(timeKL);
+            time.setBackground(timeBG);
+            notes.setKeyListener(notesKL);
+            notes.setBackground(notesBG);
 
-            EditText date = rootView.findViewById(R.id.app_date);
-            date.setText(thisappointment.getDate());
-            date.setKeyListener(datelistener);
-            date.setBackground(datebackground);
-
-            EditText time = rootView.findViewById(R.id.app_time);
-            time.setText(thisappointment.getTime());
-            time.setKeyListener(timelistener);
-            time.setBackground(timebackground);
-
-            EditText notes = rootView.findViewById(R.id.app_notes);
-            notes.setText(thisappointment.getNotes());
-            notes.setKeyListener(noteslistener);
-            notes.setBackground(notesbackground);
-
-            //TODO: make delete button appear
+            // deleting an appointment
+            delete.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v){
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                            db.appointmentsDao().delete(thisappointment);
+                            ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance());
+                        }
+                    }).start();
+                }
+            });
 
             this.mode = "edit";
             return;
@@ -198,25 +203,15 @@ public class AppointmentsDetails extends Fragment {
         if (this.mode.equals("edit")){
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
-            final EditText title = rootView.findViewById(R.id.appointments_title);
-            title.setKeyListener(null);
-            title.setBackground(null);
+            // hide the delete button
+            delete.setVisibility(View.GONE);
 
-            final EditText location = rootView.findViewById(R.id.app_location);
-            location.setKeyListener(null);
-            location.setBackground(null);
-
-            final EditText date = rootView.findViewById(R.id.app_date);
-            date.setKeyListener(null);
-            date.setBackground(null);
-
-            final EditText time = rootView.findViewById(R.id.app_time);
-            time.setKeyListener(null);
-            time.setBackground(null);
-
-            final EditText notes = rootView.findViewById(R.id.app_notes);
-            notes.setKeyListener(null);
-            notes.setBackground(null);
+            // disable editing of all fields
+            disableEditing(title);
+            disableEditing(location);
+            disableEditing(date);
+            disableEditing(time);
+            disableEditing(notes);
 
             // update the contact in the database
             new Thread(new Runnable() {
@@ -239,6 +234,15 @@ public class AppointmentsDetails extends Fragment {
             this.mode = "view";
             return;
         }
+    }
+
+    /**
+     * disableEditing sets background and keylistener to null to stop user editing
+     * @param field is the editText field to be disabled
+     */
+    public void disableEditing(EditText field){
+        field.setBackground(null);
+        field.setKeyListener(null);
     }
 
 }

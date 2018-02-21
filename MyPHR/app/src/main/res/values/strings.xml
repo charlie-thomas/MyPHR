@@ -43,6 +43,13 @@
     <string name="meddescription">Description</string>
     <string name="mednotes">Notes</string>
     <string name="meddose">Dose</string>
+
+    <string name="this_is_the_holiday_letter">This is the holiday letter</string>
+    <string name="remindertime">Reminder Time: </string>
+    <string name="reminderdate">Start Reminders On: </string>
+    <string name="daily">Every Day</string>
+    <string name="otherdays">Every Other Day</string>
+
     <string name="hospital_address">
         Royal Hospital for Children\n
         Endocrine/Metabolic Service\n
@@ -90,6 +97,7 @@
     <string name="adate">Date</string>
     <string name="anotes">Notes</string>
     <string name="amessage2">You can schedule reminders later.</string>
+    <string name="delete">Delete</string>
 
     // Measurement strings
     <string name="centile">Centile</string>

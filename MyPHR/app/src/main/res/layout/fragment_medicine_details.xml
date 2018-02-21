@@ -1,19 +1,20 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
     <RelativeLayout
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context="com.csbgroup.myphr.MedicineDetails">
 
-        <TextView
+        <EditText
             android:id="@+id/medicine_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginStart="5dp"
+            android:textColor="#777777"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -22,9 +23,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/medicine_title"
-            android:textColor="#777777"
+            android:layout_marginStart="5dp"
             android:inputType="textMultiLine"
-            android:layout_marginStart="5dp" />
+            android:textColor="#777777" />
 
         <TextView
             android:id="@+id/dose_title"
@@ -42,10 +43,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/dose_title"
-            android:textColor="#777777"
+            android:layout_marginStart="5dp"
             android:inputType="text"
             android:maxLines="1"
-            android:layout_marginStart="5dp" />
+            android:textColor="#777777" />
 
         <TextView
             android:id="@+id/reminders"
@@ -58,11 +59,84 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+        <RadioGroup
+            android:id="@+id/radios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/reminders"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp">
+
+            <RadioButton
+                android:id="@+id/daily"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/daily"
+                android:layout_marginStart="6dp"
+                android:visibility="gone" />
+
+            <RadioButton
+                android:id="@+id/everyotherday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="@string/otherdays"
+                android:visibility="gone" />
+
+        </RadioGroup>
+
+
+        <EditText
+            android:id="@+id/reminder_time_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/radios"
+            android:layout_marginStart="5dp"
+            android:visibility="gone"
+            android:text="@string/remindertime"
+            android:textColor="#777777"
+            android:textSize="18dp" />
+
+        <EditText
+            android:id="@+id/reminder_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/radios"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@+id/reminder_time_title"
+            android:hint="HH:MM"
+            android:visibility="gone"
+            android:inputType="text"
+            android:textColor="#777777" />
+
+        <EditText
+            android:id="@+id/reminder_date_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/reminder_time_title"
+            android:layout_marginStart="5dp"
+            android:visibility="gone"
+            android:text="@string/reminderdate"
+            android:textColor="#777777"
+            android:textSize="18dp" />
+
+        <EditText
+            android:id="@+id/reminder_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/reminder_time"
+            android:layout_marginStart="30dp"
+            android:layout_toEndOf="@+id/reminder_date_title"
+            android:hint="DD/MM/YYYY"
+            android:visibility="gone"
+            android:inputType="text"
+            android:textColor="#777777" />
+
         <TextView
             android:id="@+id/notes_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/reminders"
+            android:layout_below="@id/reminder_date"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:text="@string/notes"
@@ -74,9 +148,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/notes_title"
-            android:textColor="#777777"
+            android:layout_marginStart="5dp"
             android:inputType="textMultiLine"
-            android:layout_marginStart="5dp" />
+            android:textColor="#777777" />
 
         <Switch
             android:id="@+id/reminder_switch"
@@ -85,7 +159,16 @@
             android:layout_alignBaseline="@+id/reminders"
             android:layout_alignBottom="@+id/reminders"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp" />
+
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete"
+            android:layout_below="@id/medicine_notes"
+            android:layout_marginLeft="6dp"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 </ScrollView>
