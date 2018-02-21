@@ -12,7 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
@@ -85,6 +87,22 @@ public class AppointmentsDetails extends Fragment {
         disableEditing(date);
         disableEditing(time);
         disableEditing(notes);
+
+        Switch reminders = rootView.findViewById(R.id.reminder_switch);
+        reminders.setChecked(appointment.getReminders());
+
+        reminders.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                        thisappointment.setReminders(isChecked);
+                        db.appointmentsDao().update(thisappointment);
+                    }
+                }).start();
+            }
+        });
 
         // back button
         ((MainActivity) getActivity()).setToolbar("My Appointments", true);

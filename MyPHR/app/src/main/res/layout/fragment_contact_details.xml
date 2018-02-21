@@ -30,18 +30,6 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-        <!-- Email -->
-        <TextView
-            android:id="@+id/email_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/contact_title"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:text="@string/cemail"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
         <EditText
             android:id="@+id/email"
             android:layout_width="wrap_content"
@@ -85,6 +73,15 @@
             android:text="@string/notes"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/notes_title"
+            android:layout_marginStart="5dp"
+            android:inputType="textMultiLine"
+            android:textColor="#777777" />
 
     <Button
         android:id="@+id/delete"
