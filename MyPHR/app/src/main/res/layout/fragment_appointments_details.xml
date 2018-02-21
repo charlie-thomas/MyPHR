@@ -125,5 +125,14 @@
             android:inputType="textMultiLine"
             android:textColor="#777777" />
 
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete"
+            android:layout_below="@id/app_notes"
+            android:layout_marginLeft="6dp"
+            android:visibility="gone"/>
+
     </RelativeLayout>
 </ScrollView>

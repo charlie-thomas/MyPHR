@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -192,7 +193,8 @@ public class AppointmentsDetails extends Fragment {
             notes.setKeyListener(noteslistener);
             notes.setBackground(notesbackground);
 
-            //TODO: make delete button appear
+            Button delete = rootView.findViewById(R.id.delete);
+            delete.setVisibility(View.VISIBLE);
 
             this.mode = "edit";
             return;
@@ -200,6 +202,9 @@ public class AppointmentsDetails extends Fragment {
 
         if (this.mode.equals("edit")){
             editMenu.getItem(0).setIcon(R.drawable.edit);
+
+            Button delete = rootView.findViewById(R.id.delete);
+            delete.setVisibility(View.GONE);
 
             final EditText title = rootView.findViewById(R.id.appointments_title);
             title.setKeyListener(null);

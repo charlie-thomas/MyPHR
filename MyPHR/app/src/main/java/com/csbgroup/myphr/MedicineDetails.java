@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -306,7 +307,8 @@ public class MedicineDetails extends Fragment {
             remdate.setKeyListener(datelistener);
             remdate.setBackground(datebackground);
 
-            //TODO: make delete button appear
+            Button delete = rootView.findViewById(R.id.delete);
+            delete.setVisibility(View.VISIBLE);
 
             this.mode = "edit";
             return;
@@ -314,6 +316,9 @@ public class MedicineDetails extends Fragment {
 
         if (this.mode.equals("edit")) {
             editMenu.getItem(0).setIcon(R.drawable.edit);
+
+            Button delete = rootView.findViewById(R.id.delete);
+            delete.setVisibility(View.GONE);
 
             final EditText title = rootView.findViewById(R.id.medicine_title);
             title.setKeyListener(null);
@@ -362,5 +367,6 @@ public class MedicineDetails extends Fragment {
             return;
         }
     }
+
 
 }
