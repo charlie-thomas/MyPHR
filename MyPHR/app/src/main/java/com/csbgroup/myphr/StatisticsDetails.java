@@ -141,11 +141,6 @@ public class StatisticsDetails extends Fragment {
     /* Navigation from details fragment back to Statistics */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                ((MainActivity) getActivity()).switchFragment(Statistics.newInstance());
-                return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 

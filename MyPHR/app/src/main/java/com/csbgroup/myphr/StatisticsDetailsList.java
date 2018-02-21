@@ -161,26 +161,33 @@ public class StatisticsDetailsList extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        TabHost tabhost = (TabHost) getActivity().findViewById(R.id.tabHost);
-        View thisfab = rootView.findViewById(R.id.s_fab);
-        if(tabhost.getCurrentTab() == 0) {
-            if (isEditMode) {
-                isEditMode = false;
-                adapter.notifyDataSetChanged();
-                if(!type.equals("Height Velocity")) {
-                    thisfab.setVisibility(View.VISIBLE);
-                }
+        switch(item.getItemId()){
+            case(R.id.details_edit):
+                TabHost tabhost = (TabHost) getActivity().findViewById(R.id.tabHost);
+                View thisfab = rootView.findViewById(R.id.s_fab);
+                if(tabhost.getCurrentTab() == 0) {
+                    if (isEditMode) {
+                        isEditMode = false;
+                        adapter.notifyDataSetChanged();
+                        if(!type.equals("Height Velocity")) {
+                            thisfab.setVisibility(View.VISIBLE);
+                        }
 
-            } else {
-                isEditMode = true;
-                adapter.notifyDataSetChanged();
-                thisfab.setVisibility(View.GONE);
-            }
-        } else {
-            tabhost.setCurrentTab(0);
-            isEditMode = true;
-            adapter.notifyDataSetChanged();
-            thisfab.setVisibility(View.GONE);
+                    } else {
+                        isEditMode = true;
+                        adapter.notifyDataSetChanged();
+                        thisfab.setVisibility(View.GONE);
+                    }
+                } else {
+                    tabhost.setCurrentTab(0);
+                    isEditMode = true;
+                    adapter.notifyDataSetChanged();
+                    thisfab.setVisibility(View.GONE);
+                }
+                break;
+            case android.R.id.home:
+                ((MainActivity) getActivity()).switchFragment(Statistics.newInstance());
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
