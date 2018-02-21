@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
@@ -50,8 +52,10 @@ public class StatisticsDetailsList extends Fragment {
 
     FloatingActionButton fab; // the add measurement fab
     public static ListView listview;
-    private static StatValueAdapter adapter;
+    public static StatValueAdapter adapter;
     public static boolean isEditMode = false;
+    public static View rootView;
+    public static String type;
 
     public StatisticsDetailsList() {
         // Required empty public constructor
@@ -67,9 +71,10 @@ public class StatisticsDetailsList extends Fragment {
                              Bundle savedInstanceState) {
 
         // view set up
-        View rootView = inflater.inflate(R.layout.fragment_statistics_details_list, container, false);
+        rootView = inflater.inflate(R.layout.fragment_statistics_details_list, container, false);
         ((MainActivity) getActivity()).setToolbar("My Measurements", true);
         setHasOptionsMenu(true);
+        isEditMode = false;
 
         Bundle args = getArguments();
 
@@ -100,7 +105,7 @@ public class StatisticsDetailsList extends Fragment {
         /*Reversing the list now so its ordered newest to oldest
           This is so the listview underneath prints from newest to oldest */
         Collections.reverse(valueslist);
-        final String type = args.getString("title");
+        type = args.getString("title");
 
         listview = (ListView) rootView.findViewById(R.id.statistics_graph_list);
         /*The listview uses a custom adapter which uses an xml to print each list item
@@ -156,12 +161,26 @@ public class StatisticsDetailsList extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(isEditMode) {
-            isEditMode = false;
-            adapter.notifyDataSetChanged();
+        TabHost tabhost = (TabHost) getActivity().findViewById(R.id.tabHost);
+        View thisfab = rootView.findViewById(R.id.s_fab);
+        if(tabhost.getCurrentTab() == 0) {
+            if (isEditMode) {
+                isEditMode = false;
+                adapter.notifyDataSetChanged();
+                if(!type.equals("Height Velocity")) {
+                    thisfab.setVisibility(View.VISIBLE);
+                }
+
+            } else {
+                isEditMode = true;
+                adapter.notifyDataSetChanged();
+                thisfab.setVisibility(View.GONE);
+            }
         } else {
+            tabhost.setCurrentTab(0);
             isEditMode = true;
             adapter.notifyDataSetChanged();
+            thisfab.setVisibility(View.GONE);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -237,7 +256,7 @@ public class StatisticsDetailsList extends Fragment {
                             String sys = measurement.getText().toString();
                             String dias = diastolic.getText().toString();
                             if (sys.equals("") || dias.equals("")) {validMeasurement = false;} // incomplete
-                            mmnt = sys + dias; //TODO: BP measurements don't contain "/"
+                            mmnt = sys +"/"+ dias; //TODO: BP measurements don't contain "/"
                         } else {
                             mmnt = measurement.getText().toString();
                         }

@@ -202,9 +202,20 @@ public class MainActivity extends AppCompatActivity {
     private static void populateStatistics(StatisticsDao dao) {
         dao.deleteAll();
 
-        String[] stats = {"Blood Pressure", "Body Mass Index (BMI)", "Head Circumference", "Height",
+        String[] stats = {"Body Mass Index (BMI)", "Head Circumference", "Height",
                 "Height Velocity", "Weight"};
         ArrayList<StatValueEntity> list = new ArrayList<StatValueEntity>();
+
+        list = new ArrayList<StatValueEntity>();
+        list.add(new StatValueEntity("60.67/30.43","16/12/2017","54"));
+        list.add(new StatValueEntity("69.3/29.43","12/12/2017","47"));
+        list.add(new StatValueEntity("52.9/33.43","08/12/2017",null));
+        list.add(new StatValueEntity("58/31.45","03/12/2017","51"));
+        list.add(new StatValueEntity("52.3/29.78","01/12/2017","55"));
+        StatisticsEntity st = new StatisticsEntity("Blood Pressure", list);
+        dao.insertAll(st);
+
+        list = new ArrayList<StatValueEntity>();
 
         list.add(new StatValueEntity("50.09","24/01/2018","49"));
         list.add(new StatValueEntity("51.98","20/01/2018","53"));
@@ -222,9 +233,10 @@ public class MainActivity extends AppCompatActivity {
         list.add(new StatValueEntity("52.3","01/12/2017","55"));
 
         for (String stat : stats) {
-            StatisticsEntity st = new StatisticsEntity(stat, list);
+            st = new StatisticsEntity(stat, list);
             dao.insertAll(st);
         }
+
     }
 
     @Override

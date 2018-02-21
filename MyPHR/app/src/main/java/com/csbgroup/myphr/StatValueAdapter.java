@@ -79,7 +79,7 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
 
         //if the centile doesn't exist then we remove the textview and double the height of the value's textview
         
-        if(centile==null || centile==""){
+        if(centile==null || centile=="" || (!mType.equals("Weight") && !(mType.equals("Height")))){
             tvCentile.setVisibility(GONE);
         } else {
             switch (centile.substring(centile.length() - 1, centile.length())) {
