@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,9 +22,12 @@ import com.csbgroup.myphr.database.MedicineEntity;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -55,6 +59,20 @@ public class Investigations extends Fragment {
         DateAdapter adapter = new DateAdapter(getActivity(), getInvestigations());
         ListView listView = rootView.findViewById(R.id.investigations_list);
         listView.setAdapter(adapter);
+
+        // switching to details fragment
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Fragment details = InvestigationDetails.newInstance();
+
+                // Create a bundle to pass the appointment to the details fragment
+                Bundle bundle = new Bundle();
+                bundle.putString("uid", view.getTag().toString());
+                details.setArguments(bundle);
+
+                ((MainActivity) getActivity()).switchFragment(details);
+            }
+        });
 
         // fab action for adding investigation
         fab = rootView.findViewById(R.id.investigation_fab);
@@ -89,11 +107,25 @@ public class Investigations extends Fragment {
 
 
         // Convert into CalendarEvent objects
-        ArrayList<CalendarEvent> events = new ArrayList<>();
+        List<CalendarEvent> events = new ArrayList<>();
 
         if (investigations != null) {
-            for (InvestigationsEntity ie : investigations)events.add(new CalendarEvent(ie.getUid(), null, null,  ie.getDate(), ie.getTitle() ,null));
+            for (InvestigationsEntity ie : investigations)events.add(new CalendarEvent(ie.getUid(), 0, null,  ie.getDate(), ie.getTitle() ,null));
         }
+
+        Collections.sort(events, new Comparator<CalendarEvent>() {
+            @Override
+            public int compare(CalendarEvent e1, CalendarEvent e2) {
+
+                DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    return f.parse(e2.getDate()).compareTo(f.parse(e1.getDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        });
 
         return events;
     }

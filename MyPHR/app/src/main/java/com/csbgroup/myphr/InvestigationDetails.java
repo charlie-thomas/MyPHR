@@ -14,30 +14,30 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.csbgroup.myphr.database.AppDatabase;
-import com.csbgroup.myphr.database.AppointmentsEntity;
+import com.csbgroup.myphr.database.InvestigationsEntity;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class AppointmentsDetails extends Fragment {
+public class InvestigationDetails extends Fragment {
 
-    private AppointmentsEntity thisappointment; // the appointment we're viewing now
+    private InvestigationsEntity thisinvestigation; // the appointment we're viewing now
 
     private Menu editMenu;
     private String mode = "view";
     private View rootView;
 
-    private KeyListener titlelistener, locationlistener, datelistener, timelistener, noteslistener;
-    private Drawable titlebackground, locationbackground, datebackground, timebackground, notesbackground;
+    private KeyListener titlelistener, datelistener, noteslistener;
+    private Drawable titlebackground, datebackground, notesbackground;
 
-    public AppointmentsDetails() {
+    public InvestigationDetails() {
         // Required empty public constructor
     }
 
-    public static AppointmentsDetails newInstance() {
-        AppointmentsDetails fragment = new AppointmentsDetails();
+    public static InvestigationDetails newInstance() {
+        InvestigationDetails fragment = new InvestigationDetails();
         return fragment;
     }
 
@@ -45,46 +45,30 @@ public class AppointmentsDetails extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_appointments_details, container, false);
-        this.rootView = rootView;
-
+        rootView = inflater.inflate(R.layout.fragment_investigation_details, container, false);
 
         // fill in the values
-        
-        Bundle args = getArguments();
-        AppointmentsEntity appointment = getAppointment(Integer.parseInt(args.getString("uid")));
-        this.thisappointment = appointment;
 
-        EditText title = rootView.findViewById(R.id.appointments_title);
-        title.setText(appointment.getTitle());
+        Bundle args = getArguments();
+        InvestigationsEntity investigation = getInvestigation(Integer.parseInt(args.getString("uid")));
+        this.thisinvestigation = investigation;
+
+        EditText title = rootView.findViewById(R.id.investigation_name);
+        title.setText(investigation.getTitle());
         titlelistener = title.getKeyListener();
         titlebackground = title.getBackground();
         title.setKeyListener(null);
         title.setBackground(null);
 
-        EditText location = rootView.findViewById(R.id.app_location);
-        location.setText(appointment.getLocation());
-        locationlistener = location.getKeyListener();
-        locationbackground = location.getBackground();
-        location.setKeyListener(null);
-        location.setBackground(null);
-
-        EditText date = rootView.findViewById(R.id.app_date);
-        date.setText(appointment.getDate());
+        EditText date = rootView.findViewById(R.id.investigation_date);
+        date.setText(investigation.getDate());
         datelistener = date.getKeyListener();
         datebackground = date.getBackground();
         date.setBackground(null);
         date.setKeyListener(null);
 
-        EditText time = rootView.findViewById(R.id.app_time);
-        time.setText(appointment.getTime());
-        timelistener = time.getKeyListener();
-        timebackground = time.getBackground();
-        time.setKeyListener(null);
-        time.setBackground(null);
-
-        EditText notes = rootView.findViewById(R.id.app_notes);
-        notes.setText(appointment.getNotes());
+        EditText notes = rootView.findViewById(R.id.notes);
+        notes.setText(investigation.getNotes());
         noteslistener = notes.getKeyListener();
         notesbackground = notes.getBackground();
         notes.setBackground(null);
@@ -102,25 +86,25 @@ public class AppointmentsDetails extends Fragment {
      * @param uid is the primary key of the appointment to be retrieved
      * @return the appointment entity
      */
-    private AppointmentsEntity getAppointment(final int uid) {
+    private InvestigationsEntity getInvestigation(final int uid) {
 
         // Create a callable object for database transactions
         Callable callable = new Callable() {
             @Override
             public Object call() throws Exception {
-                return AppDatabase.getAppDatabase(getActivity()).appointmentsDao().getAppointment(uid);
+                return AppDatabase.getAppDatabase(getActivity()).investigationDao().getInvestigation(uid);
             }
         };
 
         ExecutorService service = Executors.newFixedThreadPool(2);
-        Future<AppointmentsEntity> result = service.submit(callable);
+        Future<InvestigationsEntity> result = service.submit(callable);
 
-        AppointmentsEntity appointment = null;
+        InvestigationsEntity investigation = null;
         try {
-            appointment = result.get();
+            investigation = result.get();
         } catch (Exception e) {}
 
-        return appointment;
+        return investigation;
 
     }
 
@@ -164,28 +148,18 @@ public class AppointmentsDetails extends Fragment {
         if (this.mode.equals("view")) {
             editMenu.getItem(0).setIcon(R.drawable.tick);
 
-            EditText title = rootView.findViewById(R.id.appointments_title);
-            title.setText(thisappointment.getTitle());
+            EditText title = rootView.findViewById(R.id.investigation_name);
+            title.setText(thisinvestigation.getTitle());
             title.setBackground(titlebackground);
             title.setKeyListener(titlelistener);
 
-            EditText location = rootView.findViewById(R.id.app_location);
-            location.setText(thisappointment.getLocation());
-            location.setKeyListener(locationlistener);
-            location.setBackground(locationbackground);
-
-            EditText date = rootView.findViewById(R.id.app_date);
-            date.setText(thisappointment.getDate());
+            EditText date = rootView.findViewById(R.id.investigation_date);
+            date.setText(thisinvestigation.getDate());
             date.setKeyListener(datelistener);
             date.setBackground(datebackground);
 
-            EditText time = rootView.findViewById(R.id.app_time);
-            time.setText(thisappointment.getTime());
-            time.setKeyListener(timelistener);
-            time.setBackground(timebackground);
-
-            EditText notes = rootView.findViewById(R.id.app_notes);
-            notes.setText(thisappointment.getNotes());
+            EditText notes = rootView.findViewById(R.id.notes);
+            notes.setText(thisinvestigation.getNotes());
             notes.setKeyListener(noteslistener);
             notes.setBackground(notesbackground);
 
@@ -198,23 +172,15 @@ public class AppointmentsDetails extends Fragment {
         if (this.mode.equals("edit")){
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
-            final EditText title = rootView.findViewById(R.id.appointments_title);
+            final EditText title = rootView.findViewById(R.id.investigation_name);
             title.setKeyListener(null);
             title.setBackground(null);
 
-            final EditText location = rootView.findViewById(R.id.app_location);
-            location.setKeyListener(null);
-            location.setBackground(null);
-
-            final EditText date = rootView.findViewById(R.id.app_date);
+            final EditText date = rootView.findViewById(R.id.investigation_date);
             date.setKeyListener(null);
             date.setBackground(null);
 
-            final EditText time = rootView.findViewById(R.id.app_time);
-            time.setKeyListener(null);
-            time.setBackground(null);
-
-            final EditText notes = rootView.findViewById(R.id.app_notes);
+            final EditText notes = rootView.findViewById(R.id.notes);
             notes.setKeyListener(null);
             notes.setBackground(null);
 
@@ -223,21 +189,18 @@ public class AppointmentsDetails extends Fragment {
                 @Override
                 public void run() {
                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                    thisappointment.setTitle(title.getText().toString());
-                    thisappointment.setLocation(location.getText().toString());
-                    thisappointment.setTime(time.getText().toString());
-                    thisappointment.setDate(date.getText().toString());
-                    thisappointment.setNotes(notes.getText().toString());
-                    db.appointmentsDao().update(thisappointment);
+                    thisinvestigation.setTitle(title.getText().toString());
+                    thisinvestigation.setDate(date.getText().toString());
+                    thisinvestigation.setNotes(notes.getText().toString());
+                    db.investigationDao().update(thisinvestigation);
 
                     // refresh to get rid of keyboard
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.detach(AppointmentsDetails.this).attach(AppointmentsDetails.this).commit();
+                    ft.detach(InvestigationDetails.this).attach(InvestigationDetails.this).commit();
                 }
             }).start();
 
             this.mode = "view";
-            return;
         }
     }
 

@@ -6,13 +6,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
@@ -22,10 +20,8 @@ import com.csbgroup.myphr.database.MedicineEntity;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -98,21 +94,22 @@ public class CalendarDay extends Fragment {
 
             for (CalendarEvent ce : daysEvents) {
                 if (i == Integer.parseInt(ce.getTime().substring(0, 2))) {
-                    hourEvents.add(new CalendarEvent(ce.getUid(), i + ":00", ce.getTime(), dateString, ce.getEvent(), ce.getType()));
+                    hourEvents.add(new CalendarEvent(ce.getUid(), i, ce.getTime(), dateString, ce.getEvent(), ce.getType()));
                 }
             }
 
-            if (hourEvents.size() == 0) hourEvents.add(new CalendarEvent(0, i+":00", null, dateString, null, "Empty"));
+            if (hourEvents.size() == 0) hourEvents.add(new CalendarEvent(0, i, null, dateString, null, "Empty"));
 
             hours.add(hourEvents);
         }
 
-        Log.d("Size", ""+hours.size());
         CalendarAdapter adapter = new CalendarAdapter(hours);
         RecyclerView calendarList = rootView.findViewById(R.id.calendar_list);
         calendarList.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
         calendarList.addItemDecoration(new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.VERTICAL));
         calendarList.setAdapter(adapter);
+
+        calendarList.scrollToPosition(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
 
         // back button
         ((MainActivity) getActivity()).setToolbar("My Calendar", true);
@@ -180,11 +177,11 @@ public class CalendarDay extends Fragment {
         } catch (Exception e) {}
 
         for (AppointmentsEntity ae : appointments)
-            all_events.add(new CalendarEvent(ae.getUid(), null, ae.getTime(), ae.getDate(), ae.getTitle(), "Appointment"));
+            all_events.add(new CalendarEvent(ae.getUid(), 0, ae.getTime(), ae.getDate(), ae.getTitle(), "Appointment"));
 
         for (MedicineEntity me : medicines) {
             if (me.isDaily() || (me.isOther_days() && isOtherDay(me.getDate(), date)))
-                all_events.add(new CalendarEvent(me.getUid(), null, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
+                all_events.add(new CalendarEvent(me.getUid(), 0, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
         }
 
         return all_events;

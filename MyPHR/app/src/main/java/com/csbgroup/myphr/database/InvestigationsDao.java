@@ -14,6 +14,9 @@ public interface InvestigationsDao {
     @Query("SELECT * FROM investigationsentity")
     List<InvestigationsEntity> getAll();
 
+    @Query("SELECT * FROM investigationsentity WHERE uid LIKE :uid")
+    InvestigationsEntity getInvestigation(int uid);
+
     @Insert
     void insertAll(InvestigationsEntity... investigationsEntities);
 
