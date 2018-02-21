@@ -1,5 +1,9 @@
 package com.csbgroup.myphr;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,6 +37,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent intentAlarm = new Intent(this.getApplicationContext(), AlarmReceiver.class);
+        PendingIntent notifySender = PendingIntent.getBroadcast(this, 123, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.add(Calendar.SECOND, 30);
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 86400000, notifySender);
+
 
         // Populate database with data for debug purposes
         new Thread(new Runnable() {
@@ -170,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
 
         Calendar c = Calendar.getInstance();
         c.set(Calendar.HOUR_OF_DAY, 0);
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Clinic 1", "Children's Hospital",
@@ -205,9 +221,9 @@ public class MainActivity extends AppCompatActivity {
 
         String[] stats = {"Body Mass Index (BMI)", "Head Circumference", "Height",
                 "Height Velocity", "Weight"};
-        ArrayList<StatValueEntity> list = new ArrayList<StatValueEntity>();
+        ArrayList<StatValueEntity> list;
 
-        list = new ArrayList<StatValueEntity>();
+        list = new ArrayList<>();
         list.add(new StatValueEntity("60.67/30.43","16/12/2017","54"));
         list.add(new StatValueEntity("69.3/29.43","12/12/2017","47"));
         list.add(new StatValueEntity("52.9/33.43","08/12/2017",null));
@@ -216,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
         StatisticsEntity st = new StatisticsEntity("Blood Pressure", list);
         dao.insertAll(st);
 
-        list = new ArrayList<StatValueEntity>();
+        list = new ArrayList<>();
 
         list.add(new StatValueEntity("50.09","24/01/2018","49"));
         list.add(new StatValueEntity("51.98","20/01/2018","53"));

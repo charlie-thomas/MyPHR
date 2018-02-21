@@ -1,5 +1,7 @@
 package com.csbgroup.myphr;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -169,6 +171,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //Create the generateKey method that we’ll use to gain access to the Android keystore and generate the encryption key//
+    @TargetApi(Build.VERSION_CODES.M)
     private void generateKey() throws FingerprintException {
         try {
             // Obtain a reference to the Keystore using the standard Android keystore container identifier (“AndroidKeystore”)//
@@ -210,6 +213,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //Create a new method that we’ll use to initialize our cipher//
+    @TargetApi(Build.VERSION_CODES.M)
     public boolean initCipher() {
         try {
             //Obtain a cipher instance and configure it with the properties required for fingerprint authentication//
@@ -229,7 +233,7 @@ public class LoginActivity extends AppCompatActivity {
             cipher.init(Cipher.ENCRYPT_MODE, key);
             //Return true if the cipher has been initialized successfully//
             return true;
-        } catch (KeyPermanentlyInvalidatedException e) {
+        } catch (@SuppressLint("NewApi") KeyPermanentlyInvalidatedException e) {
 
             //Return false if cipher initialization failed//
             return false;
