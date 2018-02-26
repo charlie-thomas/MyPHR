@@ -256,7 +256,7 @@ public class StatisticsDetailsList extends Fragment {
                             String sys = measurement.getText().toString();
                             String dias = diastolic.getText().toString();
                             if (sys.equals("") || dias.equals("")) {validMeasurement = false;} // incomplete
-                            mmnt = sys +"/"+ dias; //TODO: BP measurements don't contain "/"
+                            mmnt = sys +"/"+ dias;
                         } else {
                             mmnt = measurement.getText().toString();
                         }

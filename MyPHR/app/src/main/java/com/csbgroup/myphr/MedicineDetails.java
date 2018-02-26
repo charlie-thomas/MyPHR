@@ -44,6 +44,11 @@ public class MedicineDetails extends Fragment {
     private KeyListener nameKL, descriptionKL, doseKL, notesKL, timeKL, dateKL;
     private Drawable nameBG, descriptionBG, doseBG, notesBG, timeBG, dateBG;
 
+    // error checking booleans
+    private Boolean validName = true;
+    private Boolean validTime = true;
+    private Boolean validDate = true;
+
     public MedicineDetails() {
         // Required empty public constructor
     }
@@ -382,14 +387,15 @@ public class MedicineDetails extends Fragment {
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (name.getText().length() == 0){ // empty name
-                    name.setError("Name cannot be empty"); // show error message
-                    editMenu.getItem(0).setEnabled(false); // disable save button
-                }
-                else { // valid name
-                    editMenu.getItem(0).setEnabled(true); // enable save button
-                }
+
+                if (name.getText().length() != 0){validName = true;} // valid name
+                else {validName = false; name.setError("Name cannot be empty");} // empty name
+
+                // disable/enable save button following format checks
+                if (validName && validTime && validDate) {editMenu.getItem(0).setEnabled(true);}
+                else {editMenu.getItem(0).setEnabled(false);}
             }
+
             // not needed for our purposes
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override public void afterTextChanged(Editable editable) {}
@@ -399,23 +405,24 @@ public class MedicineDetails extends Fragment {
         time.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (time.getText().toString().length() != 5 ||
-                        time.getText().toString().charAt(2) != ':'){ // invalid format
-                    time.setError("Invalid time (HH:MM)"); // show error message
-                    editMenu.getItem(0).setEnabled(false); // disable save button
-                }
-                else {
-                    String[] parts = time.getText().toString().split(":");
-                    int hr = Integer.parseInt(parts[0]);
-                    int min = Integer.parseInt(parts[1]);
 
-                    if (parts[0].length() != 2 || hr < 0 || hr > 23 || min < 0 || min > 59) { // invalid time
-                        time.setError("Invalid time (HH:MM)"); // show error message
-                        editMenu.getItem(0).setEnabled(false); // disable save button
-                    } else {
-                        editMenu.getItem(0).setEnabled(true); // enable save button
+                String t = time.getText().toString();
+                if (t.length() == 5 && t.charAt(2) == ':') { // valid format
+                    validTime = true;
+                    String[] spl = t.split(":");
+                    int hr = Integer.parseInt(spl[0]);
+                    int min = Integer.parseInt(spl[1]);
+                    if (spl[0].length() != 2 || spl[1].length() != 2 || hr < 0 || hr > 23 || min < 0 || min > 59) { // invalid value
+                        validTime = false;
+                        time.setError("Invalid time (HH:MM)");
                     }
-                }
+                    else {validTime = true;} // valid value
+                } else {validTime = false; time.setError("Invalid time (HH:MM)");} // invalid format
+
+
+                // disable/enable save button following format checks
+                if (validName && validTime && validDate) {editMenu.getItem(0).setEnabled(true);}
+                else {editMenu.getItem(0).setEnabled(false);}
             }
 
             // not needed for our purposes
@@ -427,23 +434,25 @@ public class MedicineDetails extends Fragment {
         date.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (date.getText().toString().length() != 10) { // invalid format
-                    date.setError("Invalid date (DD/MM/YYYY)"); // show error message
-                    editMenu.getItem(0).setEnabled(false); // disable save button
+
+                String d = date.getText().toString();
+                if (d.length() != 10) {validDate = false; date.setError("Invalid date (DD/MM/YYYY");} // invalid format
+                else {
+                    try { // valid format
+                        validDate = true;
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        if (!d.equals(sdf.format(sdf.parse(d)))) { // invalid value
+                            validDate = false;
+                            date.setError("Invalid date (DD/MM/YYYY)");
+                        }
+                        else {validDate = true;} // valid value
+                    } catch (ParseException e) {e.printStackTrace();
+                    }
                 }
-                else try {
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                    Date d = sdf.parse(date.getText().toString());
-                    if (!date.getText().toString().equals(sdf.format(d))){ // invalid date
-                        date.setError("Invalid date (DD/MM/YYYY)"); // show error message
-                        editMenu.getItem(0).setEnabled(false); // disable save button
-                    }
-                    else {
-                        editMenu.getItem(0).setEnabled(true); // enable save button
-                    }
-                } catch (ParseException e) {e.printStackTrace();}
 
-
+                // disable/enable save button following format checks
+                if (validName && validTime && validDate) {editMenu.getItem(0).setEnabled(true);}
+                else {editMenu.getItem(0).setEnabled(false);}
             }
 
             // not needed for our purposes
