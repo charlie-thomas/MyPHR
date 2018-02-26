@@ -4,6 +4,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -163,6 +165,9 @@ public class ContactDetails extends Fragment {
         if (this.mode.equals("view")) {
             editMenu.getItem(0).setIcon(R.drawable.tick);
 
+            // activate error checking
+            errorChecking(title);
+
             // show the delete button
             delete.setVisibility(View.VISIBLE);
 
@@ -235,6 +240,39 @@ public class ContactDetails extends Fragment {
     public void disableEditing(EditText field){
         field.setBackground(null);
         field.setKeyListener(null);
+    }
+
+    /**
+     * errorChecking live checks the formatting of fields for errors and reports them.
+     * TODO: disable save unless no errors
+     * @param et the contact title, the only contact field with format restrictions
+     */
+    public void errorChecking(EditText et){
+
+        final EditText title = et;
+
+        title.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                // empty contact name
+                if (title.getText().length() == 0){
+                    title.setError("Name cannot be empty"); // show error message
+                    editMenu.getItem(0).setEnabled(false); // disable save button
+                }
+                // non-empty contact name
+                if (title.getText().length() != 0) {
+                    editMenu.getItem(0).setEnabled(true); // enable save button
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {}
+        });
+
     }
 
 }
