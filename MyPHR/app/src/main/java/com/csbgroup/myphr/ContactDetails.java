@@ -243,36 +243,30 @@ public class ContactDetails extends Fragment {
     }
 
     /**
-     * errorChecking live checks the formatting of fields for errors and reports them.
-     * TODO: disable save unless no errors
-     * @param et the contact title, the only contact field with format restrictions
+     * errorChecking live checks the formatting of fields; errors are highlighted to the user
+     * and saving is disabled until they are corrected.
+     * @param et the contact name, which cannot be empty
      */
     public void errorChecking(EditText et){
 
-        final EditText title = et;
+        final EditText name = et;
 
-        title.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
+        // name format checking
+        name.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                // empty contact name
-                if (title.getText().length() == 0){
-                    title.setError("Name cannot be empty"); // show error message
+                if (name.getText().length() == 0){ // empty name
+                    name.setError("Name cannot be empty"); // show error message
                     editMenu.getItem(0).setEnabled(false); // disable save button
                 }
-                // non-empty contact name
-                if (title.getText().length() != 0) {
+                else { // valid name
                     editMenu.getItem(0).setEnabled(true); // enable save button
                 }
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) {}
+            // not needed for our purposes
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
-
     }
 
 }

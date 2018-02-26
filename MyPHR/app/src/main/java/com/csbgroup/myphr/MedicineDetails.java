@@ -4,6 +4,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +24,9 @@ import android.widget.TextView;
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.MedicineEntity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -275,6 +280,9 @@ public class MedicineDetails extends Fragment {
         if (this.mode.equals("view")) { // entering edit mode
             editMenu.getItem(0).setIcon(R.drawable.tick);
 
+            // activate error checking
+            errorChecking(title, remtime, remdate);
+
             // show the delete button
             delete.setVisibility(View.VISIBLE);
 
@@ -357,5 +365,91 @@ public class MedicineDetails extends Fragment {
         field.setKeyListener(null);
     }
 
+    /**
+     * errorChecking live checks the formatting of fields; errors are highlighted to the user
+     * and saving is disabled until they are corrected.
+     * @param et1 is the medicine name, which cannot be empty
+     * @param et2 is the reminder time, which must be a valid time
+     * @param et3 is the reminder date, which must be a valid date
+     */
+    public void errorChecking(EditText et1, EditText et2, EditText et3){
+
+        final EditText name = et1;
+        final EditText time = et2;
+        final EditText date = et3;
+
+        // name format checking
+        name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (name.getText().length() == 0){ // empty name
+                    name.setError("Name cannot be empty"); // show error message
+                    editMenu.getItem(0).setEnabled(false); // disable save button
+                }
+                else { // valid name
+                    editMenu.getItem(0).setEnabled(true); // enable save button
+                }
+            }
+            // not needed for our purposes
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
+        });
+
+        // time error checking
+        time.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (time.getText().toString().length() != 5 ||
+                        time.getText().toString().charAt(2) != ':'){ // invalid format
+                    time.setError("Invalid time (HH:MM)"); // show error message
+                    editMenu.getItem(0).setEnabled(false); // disable save button
+                }
+                else {
+                    String[] parts = time.getText().toString().split(":");
+                    int hr = Integer.parseInt(parts[0]);
+                    int min = Integer.parseInt(parts[1]);
+
+                    if (parts[0].length() != 2 || hr < 0 || hr > 23 || min < 0 || min > 59) { // invalid time
+                        time.setError("Invalid time (HH:MM)"); // show error message
+                        editMenu.getItem(0).setEnabled(false); // disable save button
+                    } else {
+                        editMenu.getItem(0).setEnabled(true); // enable save button
+                    }
+                }
+            }
+
+            // not needed for our purposes
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
+        });
+
+        // date error checking
+        date.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (date.getText().toString().length() != 10) { // invalid format
+                    date.setError("Invalid date (DD/MM/YYYY)"); // show error message
+                    editMenu.getItem(0).setEnabled(false); // disable save button
+                }
+                else try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                    Date d = sdf.parse(date.getText().toString());
+                    if (!date.getText().toString().equals(sdf.format(d))){ // invalid date
+                        date.setError("Invalid date (DD/MM/YYYY)"); // show error message
+                        editMenu.getItem(0).setEnabled(false); // disable save button
+                    }
+                    else {
+                        editMenu.getItem(0).setEnabled(true); // enable save button
+                    }
+                } catch (ParseException e) {e.printStackTrace();}
+
+
+            }
+
+            // not needed for our purposes
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
+        });
+    }
 
 }

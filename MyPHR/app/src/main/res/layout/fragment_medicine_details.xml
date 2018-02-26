@@ -11,25 +11,27 @@
 
         <EditText
             android:id="@+id/medicine_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:textColor="#777777"
             android:textSize="20sp"
+            android:hint="Name"
             android:textStyle="bold" />
 
         <EditText
             android:id="@+id/medicine_info"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/medicine_title"
             android:layout_marginStart="5dp"
+            android:hint="Description"
             android:inputType="textMultiLine"
             android:textColor="#777777" />
 
         <TextView
             android:id="@+id/dose_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/medicine_info"
             android:layout_marginStart="10dp"
@@ -40,10 +42,11 @@
 
         <EditText
             android:id="@+id/medicine_dose"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/dose_title"
             android:layout_marginStart="5dp"
+            android:hint="Dose"
             android:inputType="text"
             android:maxLines="1"
             android:textColor="#777777" />
@@ -99,7 +102,7 @@
 
         <EditText
             android:id="@+id/reminder_time"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/radios"
             android:layout_marginStart="30dp"
@@ -122,7 +125,7 @@
 
         <EditText
             android:id="@+id/reminder_date"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/reminder_time"
             android:layout_marginStart="30dp"
@@ -145,10 +148,11 @@
 
         <EditText
             android:id="@+id/medicine_notes"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/notes_title"
             android:layout_marginStart="5dp"
+            android:hint="Notes"
             android:inputType="textMultiLine"
             android:textColor="#777777" />
 
