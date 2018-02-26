@@ -159,7 +159,6 @@ public class MedicineDetails extends Fragment {
         // hide/show reminders options as switch is toggled
         reminders.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

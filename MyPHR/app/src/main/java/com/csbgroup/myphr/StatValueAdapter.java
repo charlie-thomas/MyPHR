@@ -66,14 +66,35 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
 
         tvDate.setText("Date: "+date);
         if(!mType.equals("Body Mass Index (BMI)")) {
-            tvValue.setText(mType + ": " + value);
+            String ending;
+            switch(mType){
+                case "Blood Pressure":
+                    ending = " mmHg";
+                    break;
+                case "Head Circumference":
+                    ending = "cm";
+                    break;
+                case "Height":
+                    ending = "cm";
+                    break;
+                case "Weight":
+                    ending = "kg";
+                    break;
+                case "Height Velocity":
+                    ending = "cm per year";
+                    break;
+                default:
+                    ending = "";
+                    break;
+            }
+            tvValue.setText(mType + ": " + value + ending);
         } else{
             tvValue.setText("BMI: "+value);
         }
 
         //if the centile doesn't exist then we remove the textview and double the height of the value's textview
         
-        if(centile==null || centile==""){
+        if(centile==null || centile=="" || (!mType.equals("Weight") && !(mType.equals("Height")))){
             tvCentile.setVisibility(GONE);
         } else {
             switch (centile.substring(centile.length() - 1, centile.length())) {

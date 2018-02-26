@@ -1,7 +1,9 @@
 package com.csbgroup.myphr;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +17,7 @@ import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.StatValueEntity;
 import com.csbgroup.myphr.database.StatisticsEntity;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -36,7 +39,6 @@ import java.util.concurrent.Future;
 public class StatisticsDetails extends Fragment {
 
     LineGraphSeries<DataPoint> series;
-    FloatingActionButton fab; // the add measurement fab
     ArrayList<StatValueEntity> valueslist;
     final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
     String title;
@@ -90,11 +92,13 @@ public class StatisticsDetails extends Fragment {
         graph = rootView.findViewById(R.id.statistics_graph);
 
         // Loading data onto the graph
-        series = createDataPoints();
-        graph = createGraph(series);
-
-        // fab action for adding measurement
-        fab = rootView.findViewById(R.id.s_fab);
+        ArrayList<LineGraphSeries<DataPoint>> serieslist = createDataPoints();
+        graph = createGraph(serieslist.get(0));
+        if(title.equals("Blood Pressure")){
+            graph.addSeries(serieslist.get(1));
+            graph.getLegendRenderer().setVisible(true);
+            graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        }
 
         return rootView;
 
@@ -137,29 +141,45 @@ public class StatisticsDetails extends Fragment {
     /* Navigation from details fragment back to Statistics */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                ((MainActivity) getActivity()).switchFragment(Statistics.newInstance());
-                return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
-    public LineGraphSeries<DataPoint> createDataPoints() {
+
+    public ArrayList<LineGraphSeries<DataPoint>> createDataPoints() {
+        ArrayList<LineGraphSeries<DataPoint>> seriesList = new ArrayList<LineGraphSeries<DataPoint>>();
         series = new LineGraphSeries<DataPoint>();
+        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<DataPoint>();
         Date d1;
         //Iterating through the valueslist we format each string date intot a java Date and add it as a datapoint
         for (int i = 0; i < valueslist.size(); i++) {
             StatValueEntity sve = valueslist.get(i);
             try {
                 d1 = formatter.parse(sve.getDate());
-                DataPoint dp = new DataPoint(d1, Double.parseDouble(sve.getValue())); //added as a datapoint here
-                series.appendData(dp, true, valueslist.size()); //adding the datapoint to the graph series here
+
+                if(title.equals("Blood Pressure")){
+                    DataPoint dp = new DataPoint(d1, Double.parseDouble(sve.getValue().substring(0,sve.getValue().indexOf("/"))));
+                    DataPoint dp2 = new DataPoint(d1, Double.parseDouble(sve.getValue().substring(sve.getValue().indexOf("/")+1,sve.getValue().length())));
+                    series.appendData(dp, true, valueslist.size()); //adding the datapoint to the graph series here
+                    series2.appendData(dp2, true, valueslist.size()); //adding the datapoint to the graph series here
+
+                } else {
+                    DataPoint dp = new DataPoint(d1, Double.parseDouble(sve.getValue())); //added as a datapoint here]
+                    series.appendData(dp, true, valueslist.size()); //adding the datapoint to the graph series here
+                }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        return series;
+        series2.setColor(Color.RED);
+        if(title.equals("Blood Pressure")){
+            series.setTitle("Systolic");
+            series2.setTitle("Diastolic");
+            seriesList.add(series);
+            seriesList.add(series2);
+        } else {
+            seriesList.add(series);
+        }
+        return seriesList;
     }
 
     private GraphView createGraph(LineGraphSeries<DataPoint> series) {

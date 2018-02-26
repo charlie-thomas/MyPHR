@@ -64,6 +64,11 @@ public class StatisticsSection extends Fragment {
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String s) {
+                StatisticsDetailsList.isEditMode = false;
+                StatisticsDetailsList.adapter.notifyDataSetChanged();
+                if(!StatisticsDetailsList.type.equals("Height Velocity")) {
+                    StatisticsDetailsList.rootView.findViewById(R.id.s_fab).setVisibility(View.VISIBLE);
+                }
                 if(s.equals("Graph")) {
 
                     Fragment nextFrag = StatisticsDetails.newInstance();
