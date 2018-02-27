@@ -11,12 +11,18 @@ import android.widget.ListView;
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.MedicineDao;
 
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
+
 public class MedicineTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private MainActivity mainActivity;
 
     private ListView medicineList;
-    private FloatingActionButton fab;
 
     public MedicineTest() {
         super(MainActivity.class);
@@ -35,20 +41,19 @@ public class MedicineTest extends ActivityInstrumentationTestCase2<MainActivity>
         getInstrumentation().waitForIdleSync();
 
         medicineList = getActivity().findViewById(R.id.medicine_list);
-        fab = getActivity().findViewById(R.id.med_fab);
     }
 
     public void testPreconditions() {
         assertNotNull(mainActivity);
         assertNotNull(medicineList);
-        assertNotNull(fab);
     }
 
     public void testMedicineList() {
-        Context context = InstrumentationRegistry.getTargetContext();
-        AppDatabase appDatabase = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).build();
-        MedicineDao dao = appDatabase.medicineDao();
+        assertEquals(medicineList.getChildCount(), 4);
+    }
 
-        assertEquals(medicineList.getChildCount(), dao.getAll().size());
+    public void testFabOnClick() {
+        onView(withId(R.id.med_fab)).perform(click());
+        onView(withText("Add a New Medicine")).check(matches(isDisplayed()));
     }
 }

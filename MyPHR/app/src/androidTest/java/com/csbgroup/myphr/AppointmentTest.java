@@ -1,22 +1,19 @@
 package com.csbgroup.myphr;
 
-import android.arch.persistence.room.Room;
-import android.content.Context;
-import android.support.design.widget.FloatingActionButton;
-import android.support.test.InstrumentationRegistry;
 import android.support.v4.app.FragmentTransaction;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 
-import com.csbgroup.myphr.database.AppDatabase;
-import com.csbgroup.myphr.database.AppointmentsDao;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.*;
+import static android.support.test.espresso.Espresso.*;
 
 public class AppointmentTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private MainActivity mainActivity;
 
     private ListView appointmentsList;
-    private FloatingActionButton fab;
 
     public AppointmentTest() {
         super(MainActivity.class);
@@ -35,20 +32,19 @@ public class AppointmentTest extends ActivityInstrumentationTestCase2<MainActivi
         getInstrumentation().waitForIdleSync();
 
         appointmentsList = getActivity().findViewById(R.id.appointments_list);
-        fab = getActivity().findViewById(R.id.app_fab);
     }
 
     public void testPreconditions() {
         assertNotNull(mainActivity);
         assertNotNull(appointmentsList);
-        assertNotNull(fab);
     }
 
     public void testAppointmentsList() {
-        Context context = InstrumentationRegistry.getTargetContext();
-        AppDatabase appDatabase = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).build();
-        AppointmentsDao dao = appDatabase.appointmentsDao();
+        assertEquals(appointmentsList.getChildCount(), 5);
+    }
 
-        assertEquals(appointmentsList.getChildCount(), dao.getAll().size());
+    public void testFabOnClick() {
+        onView(withId(R.id.app_fab)).perform(click());
+        onView(withText("Add a New Appointment")).check(matches(isDisplayed()));
     }
 }

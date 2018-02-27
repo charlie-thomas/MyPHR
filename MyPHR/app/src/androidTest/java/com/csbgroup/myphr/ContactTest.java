@@ -1,22 +1,21 @@
 package com.csbgroup.myphr;
 
-import android.arch.persistence.room.Room;
-import android.content.Context;
-import android.support.design.widget.FloatingActionButton;
-import android.support.test.InstrumentationRegistry;
 import android.support.v4.app.FragmentTransaction;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 
-import com.csbgroup.myphr.database.AppDatabase;
-import com.csbgroup.myphr.database.ContactsDao;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 public class ContactTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private MainActivity mainActivity;
 
     private ListView contactsList;
-    private FloatingActionButton fab;
 
     public ContactTest() {
         super(MainActivity.class);
@@ -35,20 +34,19 @@ public class ContactTest extends ActivityInstrumentationTestCase2<MainActivity> 
         getInstrumentation().waitForIdleSync();
 
         contactsList = getActivity().findViewById(R.id.contacts_list);
-        fab = getActivity().findViewById(R.id.contact_fab);
     }
 
     public void testPreconditions() {
         assertNotNull(mainActivity);
         assertNotNull(contactsList);
-        assertNotNull(fab);
     }
 
     public void testContactList() {
-        Context context = InstrumentationRegistry.getTargetContext();
-        AppDatabase appDatabase = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).build();
-        ContactsDao dao = appDatabase.contactsDao();
+        assertEquals(contactsList.getChildCount(), 2);
+    }
 
-        assertEquals(contactsList.getChildCount(), dao.getAll().size());
+    public void testFabOnClick() {
+        onView(withId(R.id.contact_fab)).perform(click());
+        onView(withText("Add a New Contact")).check(matches(isDisplayed()));
     }
 }
