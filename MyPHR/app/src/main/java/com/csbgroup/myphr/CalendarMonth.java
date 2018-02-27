@@ -160,7 +160,8 @@ public class CalendarMonth extends Fragment {
             appointments = result.get();
         } catch (Exception e) {}
 
-        if (appointments == null) return null;
+        AppointmentsEntity placeholder = new AppointmentsEntity("No Upcoming Appointments", null, "", null, null, false);
+        if (appointments == null) return placeholder;
 
         // Sort the appointments by date and then time
         final DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
@@ -188,7 +189,7 @@ public class CalendarMonth extends Fragment {
                 return app;
         }
 
-        return new AppointmentsEntity("No Upcoming Appointments", null, "", null, null, false);
+        return placeholder;
     }
 
     public List<CalendarEvent> getTodaysMedicine() throws ParseException {

@@ -74,6 +74,14 @@ public class AppointmentsEntityTest {
     }
 
     @Test
+    public void getAllAppointmentsTest() throws Exception {
+        for (int i = 1; i < 5; i++)
+            appointmentsDao.insert(new AppointmentsEntity("App " + i, null, null,null, null, false));
+
+        assertEquals(4, appointmentsDao.getAll().size());
+    }
+
+    @Test
     public void deleteAllAppointmentsTest() throws Exception {
         for (int i = 1; i < 5; i++)
             appointmentsDao.insert(new AppointmentsEntity("App " + i, null, null,null, null, false));
@@ -84,5 +92,22 @@ public class AppointmentsEntityTest {
         // Delete all appointments and ensure there are 0 left
         appointmentsDao.deleteAll();
         assertEquals(0, appointmentsDao.getAll().size());
+    }
+
+    @Test
+    public void updateAppointmentTest() throws Exception {
+        AppointmentsEntity appointmentsEntity = new AppointmentsEntity("Appointment",
+                "Location", "Date", "Time", "Notes", false);
+        appointmentsEntity.setUid(16);
+        appointmentsDao.insert(appointmentsEntity);
+
+        // Ensure the database contains the appointment to be updated
+        assertEquals(appointmentsEntity.getTitle(), appointmentsDao.getAppointment(16).getTitle());
+
+        // Update the appointment from the database and ensure the getAppointment query returns the updated version
+        AppointmentsEntity updated = appointmentsDao.getAppointment(16);
+        updated.setTitle("New Appointment");
+        appointmentsDao.update(updated);
+        assertEquals("New Appointment", appointmentsDao.getAppointment(16).getTitle());
     }
 }

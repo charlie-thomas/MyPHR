@@ -74,6 +74,14 @@ public class InvestigationsEntityTest {
     }
 
     @Test
+    public void getAllInvestigationsTest() throws Exception {
+        for (int i = 1; i < 5; i++)
+            investigationsDao.insert((new InvestigationsEntity("Invest " + i, null, null)));
+
+        assertEquals(4, investigationsDao.getAll().size());
+    }
+
+    @Test
     public void deleteAllInvestigationsTest() throws Exception {
         for (int i = 1; i < 5; i++)
             investigationsDao.insert(new InvestigationsEntity("Invest " + i, null, null));
@@ -84,5 +92,23 @@ public class InvestigationsEntityTest {
         // Delete all investigations and ensure there are 0 left
         investigationsDao.deleteAll();
         assertEquals(0, investigationsDao.getAll().size());
+    }
+
+    @Test
+    public void updateInvestigationTest() throws Exception {
+        InvestigationsEntity investigationsEntity = new InvestigationsEntity("Investigation",
+                "03/12/1997", "Notes");
+        investigationsEntity.setUid(160);
+        investigationsDao.insert(investigationsEntity);
+
+        // Ensure that the investigation was added to the database before updating it
+        assertEquals(investigationsEntity.getTitle(), investigationsDao.getInvestigation(160).getTitle());
+
+        // Update the investigation from the database and ensure the getInvestigation query returns the new version
+        InvestigationsEntity updated = investigationsDao.getInvestigation(160);
+        updated.setTitle("Updated Name");
+        investigationsDao.update(updated);
+
+        assertEquals("Updated Name", investigationsDao.getInvestigation(160).getTitle());
     }
 }

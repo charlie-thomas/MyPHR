@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.CalendarView;
-import android.widget.ListView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -57,5 +56,16 @@ public class CalendarTest extends ActivityInstrumentationTestCase2<MainActivity>
         getActivity().switchFragment(cd);
 
         onView(withText(df.format(d))).check(matches(isDisplayed()));
+    }
+
+    public void testUpcomingAppointment() {
+        onView(withText("Clinic 1")).check(matches(isDisplayed()));
+
+        onView(withId(R.id.upcoming_layout)).perform(click());
+        onView(withText("15:55")).check(matches(isDisplayed()));
+    }
+
+    public void testTodaysMedicine() {
+        onView(withText("Oestrogen")).check(matches(isDisplayed()));
     }
 }
