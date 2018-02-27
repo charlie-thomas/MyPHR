@@ -11,11 +11,12 @@
         <!-- Investigation Title -->
         <EditText
             android:id="@+id/investigation_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginTop="20dp"
             android:textSize="20sp"
+            android:hint="Title"
             android:textColor="#777777"
             android:textStyle="bold"  />
 
@@ -33,10 +34,11 @@
 
         <EditText
             android:id="@+id/investigation_date"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/investigation_date_name"
             android:textColor="#777777"
+            android:hint="DD/MM/YYYY"
             android:inputType="text"
             android:layout_marginStart="5dp" />
 
@@ -54,12 +56,22 @@
 
         <EditText
             android:id="@+id/notes"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/investigation_notes"
             android:textColor="#777777"
+            android:hint="@string/notes"
             android:inputType="textMultiLine"
             android:layout_marginStart="5dp" />
+
+        <Button
+            android:id="@+id/delete"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/delete"
+            android:layout_below="@id/notes"
+            android:layout_marginLeft="6dp"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 </ScrollView>

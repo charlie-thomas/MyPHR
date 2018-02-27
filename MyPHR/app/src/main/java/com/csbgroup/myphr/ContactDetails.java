@@ -4,6 +4,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+
+import javax.microedition.khronos.egl.EGLDisplay;
 
 public class ContactDetails extends Fragment {
 
@@ -56,20 +59,20 @@ public class ContactDetails extends Fragment {
         ContactsEntity contact = getContact(Integer.valueOf(args.getString("uid")));
         thiscontact = contact;
 
-        EditText contactTitle = rootView.findViewById(R.id.contact_title);
+        EditText title = rootView.findViewById(R.id.title_et);
         EditText email = rootView.findViewById(R.id.email);
         EditText phone = rootView.findViewById(R.id.phone);
         EditText notes = rootView.findViewById(R.id.notes);
 
         // fill in the values
-        contactTitle.setText(contact.getName());
+        title.setText(contact.getName());
         email.setText(contact.getEmail());
         phone.setText(contact.getPhone());
         notes.setText(contact.getNotes());
 
         // save listeners and backgrounds
-        titleKL = contactTitle.getKeyListener();
-        titleBG = contactTitle.getBackground();
+        titleKL = title.getKeyListener();
+        titleBG = title.getBackground();
         emailKL = email.getKeyListener();
         emailBG = email.getBackground();
         phoneKL = phone.getKeyListener();
@@ -78,13 +81,13 @@ public class ContactDetails extends Fragment {
         notesBG = notes.getBackground();
 
         //disable editability
-        disableEditing(contactTitle);
+        disableEditing(title);
         disableEditing(email);
         disableEditing(phone);
         disableEditing(notes);
 
         // back button
-        ((MainActivity) getActivity()).setToolbar("My Contacts", true);
+        ((MainActivity) getActivity()).setToolbar("", true);
         setHasOptionsMenu(true);
 
         return rootView;
@@ -154,14 +157,17 @@ public class ContactDetails extends Fragment {
      */
     public void switchMode() {
 
-        final EditText title = rootView.findViewById(R.id.contact_title);
+        final EditText title = rootView.findViewById(R.id.title_et);
         final EditText email = rootView.findViewById(R.id.email);
         final EditText phone = rootView.findViewById(R.id.phone);
         final EditText notes = rootView.findViewById(R.id.notes);
         final Button delete = rootView.findViewById(R.id.delete);
 
-        if (this.mode.equals("view")) {
+        if (this.mode.equals("view")) { // entering edit mode
             editMenu.getItem(0).setIcon(R.drawable.tick);
+
+            // activate error checking
+            errorChecking(title);
 
             // show the delete button
             delete.setVisibility(View.VISIBLE);
@@ -194,7 +200,7 @@ public class ContactDetails extends Fragment {
             return;
         }
 
-        if (this.mode.equals("edit")){
+        if (this.mode.equals("edit")){ // exiting edit mode
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
             // hide the delete button
@@ -235,6 +241,33 @@ public class ContactDetails extends Fragment {
     public void disableEditing(EditText field){
         field.setBackground(null);
         field.setKeyListener(null);
+    }
+
+    /**
+     * errorChecking live checks the formatting of fields; errors are highlighted to the user
+     * and saving is disabled until they are corrected.
+     * @param et the contact name, which cannot be empty
+     */
+    public void errorChecking(EditText et){
+
+        final EditText name = et;
+
+        // name format checking
+        name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (name.getText().length() == 0){ // empty name
+                    name.setError("Name cannot be empty"); // show error message
+                    editMenu.getItem(0).setEnabled(false); // disable save button
+                }
+                else { // valid name
+                    editMenu.getItem(0).setEnabled(true); // enable save button
+                }
+            }
+            // not needed for our purposes
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
+        });
     }
 
 }
