@@ -112,7 +112,7 @@ public class CalendarDay extends Fragment {
         calendarList.scrollToPosition(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
 
         // back button
-        ((MainActivity) getActivity()).setToolbar("My Calendar", true);
+        ((MainActivity) getActivity()).setToolbar("", true);
         setHasOptionsMenu(true);
 
         return rootView;
