@@ -13,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -25,6 +24,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+
+import javax.microedition.khronos.egl.EGLDisplay;
 
 public class ContactDetails extends Fragment {
 
@@ -58,22 +59,20 @@ public class ContactDetails extends Fragment {
         ContactsEntity contact = getContact(Integer.valueOf(args.getString("uid")));
         thiscontact = contact;
 
-        EditText contactTitle = rootView.findViewById(R.id.contact_title);
-        TextView titleTV = rootView.findViewById(R.id.title_textview);
+        EditText title = rootView.findViewById(R.id.title_et);
         EditText email = rootView.findViewById(R.id.email);
         EditText phone = rootView.findViewById(R.id.phone);
         EditText notes = rootView.findViewById(R.id.notes);
 
         // fill in the values
-        contactTitle.setText(contact.getName());
-        titleTV.setText(contact.getName());
+        title.setText(contact.getName());
         email.setText(contact.getEmail());
         phone.setText(contact.getPhone());
         notes.setText(contact.getNotes());
 
         // save listeners and backgrounds
-        titleKL = contactTitle.getKeyListener();
-        titleBG = contactTitle.getBackground();
+        titleKL = title.getKeyListener();
+        titleBG = title.getBackground();
         emailKL = email.getKeyListener();
         emailBG = email.getBackground();
         phoneKL = phone.getKeyListener();
@@ -82,13 +81,13 @@ public class ContactDetails extends Fragment {
         notesBG = notes.getBackground();
 
         //disable editability
-        disableEditing(contactTitle);
+        disableEditing(title);
         disableEditing(email);
         disableEditing(phone);
         disableEditing(notes);
 
         // back button
-        ((MainActivity) getActivity()).setToolbar("My Contacts", true);
+        ((MainActivity) getActivity()).setToolbar("", true);
         setHasOptionsMenu(true);
 
         return rootView;
@@ -158,12 +157,11 @@ public class ContactDetails extends Fragment {
      */
     public void switchMode() {
 
-        final EditText title = rootView.findViewById(R.id.contact_title);
+        final EditText title = rootView.findViewById(R.id.title_et);
         final EditText email = rootView.findViewById(R.id.email);
         final EditText phone = rootView.findViewById(R.id.phone);
         final EditText notes = rootView.findViewById(R.id.notes);
         final Button delete = rootView.findViewById(R.id.delete);
-        final TextView titleTV = rootView.findViewById(R.id.title_textview);
 
         if (this.mode.equals("view")) { // entering edit mode
             editMenu.getItem(0).setIcon(R.drawable.tick);

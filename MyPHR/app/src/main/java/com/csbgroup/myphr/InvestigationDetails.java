@@ -86,7 +86,7 @@ public class InvestigationDetails extends Fragment {
         disableEditing(notes);
 
         // back button
-        ((MainActivity) getActivity()).setToolbar("My Appointments", true);
+        ((MainActivity) getActivity()).setToolbar("", true);
         setHasOptionsMenu(true);
 
         return rootView;

@@ -205,7 +205,7 @@ public class MedicineDetails extends Fragment {
         });
 
         // back button
-        ((MainActivity) getActivity()).setToolbar("My Medicine", true);
+        ((MainActivity) getActivity()).setToolbar("", true);
         setHasOptionsMenu(true);
 
         return rootView;

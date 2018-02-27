@@ -115,7 +115,7 @@ public class AppointmentsDetails extends Fragment {
         });
 
         // back button
-        ((MainActivity) getActivity()).setToolbar("My Appointments", true);
+        ((MainActivity) getActivity()).setToolbar("", true);
         setHasOptionsMenu(true);
 
         return rootView;
