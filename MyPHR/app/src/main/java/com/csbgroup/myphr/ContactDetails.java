@@ -59,12 +59,14 @@ public class ContactDetails extends Fragment {
         thiscontact = contact;
 
         EditText contactTitle = rootView.findViewById(R.id.contact_title);
+        TextView titleTV = rootView.findViewById(R.id.title_textview);
         EditText email = rootView.findViewById(R.id.email);
         EditText phone = rootView.findViewById(R.id.phone);
         EditText notes = rootView.findViewById(R.id.notes);
 
         // fill in the values
         contactTitle.setText(contact.getName());
+        titleTV.setText(contact.getName());
         email.setText(contact.getEmail());
         phone.setText(contact.getPhone());
         notes.setText(contact.getNotes());
@@ -161,8 +163,9 @@ public class ContactDetails extends Fragment {
         final EditText phone = rootView.findViewById(R.id.phone);
         final EditText notes = rootView.findViewById(R.id.notes);
         final Button delete = rootView.findViewById(R.id.delete);
+        final TextView titleTV = rootView.findViewById(R.id.title_textview);
 
-        if (this.mode.equals("view")) {
+        if (this.mode.equals("view")) { // entering edit mode
             editMenu.getItem(0).setIcon(R.drawable.tick);
 
             // activate error checking
@@ -199,7 +202,7 @@ public class ContactDetails extends Fragment {
             return;
         }
 
-        if (this.mode.equals("edit")){
+        if (this.mode.equals("edit")){ // exiting edit mode
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
             // hide the delete button

@@ -34,6 +34,7 @@
     <string name="cnotes">Notes</string>
     <string name="cemail">Email</string>
     <string name="cphone">Phone</string>
+    <string name="icon">contact icon</string>
 
     // Medicine strings
     <string name="medtitle">Add a New Medicine</string>

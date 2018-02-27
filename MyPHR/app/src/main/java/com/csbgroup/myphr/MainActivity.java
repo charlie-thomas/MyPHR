@@ -120,17 +120,25 @@ public class MainActivity extends AppCompatActivity {
         dao.deleteAll();
 
         // TODO: get contact details for main staff and load in
-        dao.insertAll(new ContactsEntity(
-                "Dr. Jones",
-                "jane.jones@hospital.com",
-                "012334567890",
-                "My main doctor at hospital."),
+        dao.insertAll(
                 new ContactsEntity(
-                "Nurse Williams",
-                "george.williams@hospital.com",
-                "012334567890",
-                "My main nurse at hospital."
-                ));
+                "Dr Avril Mason",
+                "avrilmason@nhs.net",
+                "01412010000",
+                "Phone will go through to mobile.\n\nGround Floor, Zone 2, Office Block,\nRoyal Hospital for Children,\n" +
+                        "QEUH,\nGovan Road,\nGlasgow G51 4TF"),
+
+                new ContactsEntity(
+                        "Ms Kerri Marshall",
+                        "",
+                        "01414516548(ext), 86548(int)",
+                        "Endocrine/Metabolic Secretary"),
+
+                new ContactsEntity(
+                  "Ms Teresa McBride",
+                  "teresa.mcbride@ggc.scot.nhs.uk",
+                  "07904881485",
+                  "Paediatric Endocrine Nurse"));
     }
 
     private static void populateMedicine(MedicineDao dao) {
