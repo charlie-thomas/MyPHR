@@ -1,4 +1,4 @@
-package com.csbgroup.myphr;
+package com.csbgroup.myphr.DatabaseTests;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
@@ -41,7 +41,7 @@ public class MedicineEntityTest {
         MedicineEntity medicineEntity = new MedicineEntity("Test Medicine",
                 "Description", "Dose", "Notes", true,
                 true, true, "03/12/2017", "15:00");
-        medicineDao.insertAll(medicineEntity);
+        medicineDao.insert(medicineEntity);
 
         MedicineEntity me = medicineDao.getMedicineByTitle("Test Medicine");
         assertEquals(medicineEntity.getTitle(), me.getTitle());
@@ -52,7 +52,7 @@ public class MedicineEntityTest {
         MedicineEntity medicineEntity = new MedicineEntity("Test Medicine",
                 "Description", "Dose", "Notes", true,
                 true, true, "03/12/2017", "15:00");
-        medicineDao.insertAll(medicineEntity);
+        medicineDao.insert(medicineEntity);
 
         // Ensure that the medicine was added to the database before deleting it
         assertEquals(medicineEntity.getTitle(), medicineDao.getMedicineByTitle("Test Medicine").getTitle());
@@ -78,7 +78,7 @@ public class MedicineEntityTest {
     @Test
     public void deleteAllMedicinesTest() throws Exception {
         for (int i = 1; i < 5; i++)
-            medicineDao.insertAll(new MedicineEntity("Med " + i, null, null, null, false, false, false, null, null));
+            medicineDao.insert(new MedicineEntity("Med " + i, null, null, null, false, false, false, null, null));
 
         // Ensure there are currently 4 medicines in the database
         assertEquals(4, medicineDao.getAll().size());

@@ -1,4 +1,4 @@
-package com.csbgroup.myphr;
+package com.csbgroup.myphr.DatabaseTests;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
@@ -39,7 +39,7 @@ public class ContactsEntityTest {
     public void createContactTest() throws Exception {
         ContactsEntity contactsEntity = new ContactsEntity("Contact Name",
                 "email@email.com", "12345678910", "Notes");
-        contactsDao.insertAll(contactsEntity);
+        contactsDao.insert(contactsEntity);
 
         ContactsEntity ce = contactsDao.getContactByName("Contact Name");
         assertEquals(contactsEntity.getName(), ce.getName());
@@ -49,7 +49,7 @@ public class ContactsEntityTest {
     public void deleteContactTest() throws Exception {
         ContactsEntity contactsEntity = new ContactsEntity("Contact Name",
                 "email@email.com", "12345678910", "Notes");
-        contactsDao.insertAll(contactsEntity);
+        contactsDao.insert(contactsEntity);
 
         // Ensure the database contains the contact to be deleted
         assertEquals(contactsEntity.getName(), contactsDao.getContactByName("Contact Name").getName());
@@ -74,7 +74,7 @@ public class ContactsEntityTest {
     @Test
     public void deleteAllContactsTest() throws Exception {
         for (int i = 1; i < 5; i++)
-            contactsDao.insertAll(new ContactsEntity("Contact " + i, null, null, null));
+            contactsDao.insert(new ContactsEntity("Contact " + i, null, null, null));
 
         // Ensure there are currently 4 contacts in the database
         assertEquals(4, contactsDao.getAll().size());

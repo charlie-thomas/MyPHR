@@ -9,16 +9,16 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 
 import com.csbgroup.myphr.database.AppDatabase;
-import com.csbgroup.myphr.database.AppointmentsDao;
+import com.csbgroup.myphr.database.MedicineDao;
 
-public class AppointmentTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class MedicineTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private MainActivity mainActivity;
 
-    private ListView appointmentsList;
+    private ListView medicineList;
     private FloatingActionButton fab;
 
-    public AppointmentTest() {
+    public MedicineTest() {
         super(MainActivity.class);
     }
 
@@ -26,29 +26,29 @@ public class AppointmentTest extends ActivityInstrumentationTestCase2<MainActivi
     protected void setUp() throws Exception {
         mainActivity = getActivity();
 
-        Appointments appointmentsFrag = Appointments.newInstance();
+        Medicine medicine  = Medicine.newInstance();
 
         FragmentTransaction transaction = mainActivity.getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, appointmentsFrag);
+        transaction.replace(R.id.frame_layout, medicine);
         transaction.commitAllowingStateLoss();
 
         getInstrumentation().waitForIdleSync();
 
-        appointmentsList = getActivity().findViewById(R.id.appointments_list);
-        fab = getActivity().findViewById(R.id.app_fab);
+        medicineList = getActivity().findViewById(R.id.medicine_list);
+        fab = getActivity().findViewById(R.id.med_fab);
     }
 
     public void testPreconditions() {
         assertNotNull(mainActivity);
-        assertNotNull(appointmentsList);
+        assertNotNull(medicineList);
         assertNotNull(fab);
     }
 
-    public void testAppointmentsList() {
+    public void testMedicineList() {
         Context context = InstrumentationRegistry.getTargetContext();
         AppDatabase appDatabase = Room.inMemoryDatabaseBuilder(context, AppDatabase.class).build();
-        AppointmentsDao dao = appDatabase.appointmentsDao();
+        MedicineDao dao = appDatabase.medicineDao();
 
-        assertEquals(appointmentsList.getChildCount(), dao.getAll().size());
+        assertEquals(medicineList.getChildCount(), dao.getAll().size());
     }
 }

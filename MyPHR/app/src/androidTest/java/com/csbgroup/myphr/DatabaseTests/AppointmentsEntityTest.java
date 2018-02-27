@@ -1,4 +1,4 @@
-package com.csbgroup.myphr;
+package com.csbgroup.myphr.DatabaseTests;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
@@ -40,7 +40,7 @@ public class AppointmentsEntityTest {
         AppointmentsEntity appointmentsEntity = new AppointmentsEntity("Appointment",
                 "Location", "Date", "Time", "Notes", false);
         appointmentsEntity.setUid(15);
-        appointmentsDao.insertAll(appointmentsEntity);
+        appointmentsDao.insert(appointmentsEntity);
 
         AppointmentsEntity ae = appointmentsDao.getAppointment(15);
         assertEquals(appointmentsEntity.getTitle(), ae.getTitle());
@@ -51,7 +51,7 @@ public class AppointmentsEntityTest {
         AppointmentsEntity appointmentsEntity = new AppointmentsEntity("Appointment",
                 "Location", "Date", "Time", "Notes", false);
         appointmentsEntity.setUid(16);
-        appointmentsDao.insertAll(appointmentsEntity);
+        appointmentsDao.insert(appointmentsEntity);
 
         // Ensure the database contains the appointment to be deleted
         assertEquals(appointmentsEntity.getTitle(), appointmentsDao.getAppointment(16).getTitle());
@@ -76,7 +76,7 @@ public class AppointmentsEntityTest {
     @Test
     public void deleteAllAppointmentsTest() throws Exception {
         for (int i = 1; i < 5; i++)
-            appointmentsDao.insertAll(new AppointmentsEntity("App " + i, null, null,null, null, false));
+            appointmentsDao.insert(new AppointmentsEntity("App " + i, null, null,null, null, false));
 
         // Ensure there are currently 4 appointments in the database
         assertEquals(4, appointmentsDao.getAll().size());
