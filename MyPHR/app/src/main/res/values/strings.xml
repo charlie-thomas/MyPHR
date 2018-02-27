@@ -47,7 +47,8 @@
 
     <string name="this_is_the_holiday_letter">This is the holiday letter</string>
     <string name="remindertime">Reminder Time: </string>
-    <string name="reminderdate">Start Reminders On: </string>
+    <string name="reminderdate">Starting On: </string>
+    <string name="on">On: </string>
     <string name="daily">Every Day</string>
     <string name="otherdays">Every Other Day</string>
 

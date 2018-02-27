@@ -17,7 +17,6 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/imageView2"
             android:layout_toEndOf="@+id/phone_title"
-            android:textColor="#777777"
             android:textSize="26dp"
             android:textStyle="bold" />
 

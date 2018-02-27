@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true">
 
     <RelativeLayout
@@ -13,10 +14,12 @@
             android:id="@+id/medicine_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:textColor="#777777"
-            android:textSize="20sp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="16dp"
+            android:layout_toEndOf="@+id/notes_title"
             android:hint="Name"
+            android:textColor="#777777"
+            android:textSize="26dp"
             android:textStyle="bold" />
 
         <EditText
@@ -24,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/medicine_title"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="10dp"
             android:hint="Description"
             android:inputType="textMultiLine"
             android:textColor="#777777" />
@@ -44,8 +47,9 @@
             android:id="@+id/medicine_dose"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/dose_title"
-            android:layout_marginStart="5dp"
+            android:layout_alignBaseline="@+id/dose_title"
+            android:layout_alignBottom="@+id/dose_title"
+            android:layout_alignStart="@+id/medicine_title"
             android:hint="Dose"
             android:inputType="text"
             android:maxLines="1"
@@ -66,8 +70,10 @@
             android:id="@+id/radios"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_below="@id/reminders"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="30dp"
             android:layout_marginBottom="5dp">
 
             <RadioButton
@@ -75,14 +81,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/daily"
-                android:layout_marginStart="6dp"
+                android:textSize="17dp"
+                android:textColor="#777777"
                 android:visibility="gone" />
 
             <RadioButton
                 android:id="@+id/everyotherday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
+                android:textSize="17dp"
+                android:textColor="#777777"
+                android:layout_marginStart="12dp"
                 android:text="@string/otherdays"
                 android:visibility="gone" />
 
@@ -94,7 +103,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/radios"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="30dp"
+            android:textStyle="bold"
             android:visibility="gone"
             android:text="@string/remindertime"
             android:textColor="#777777"
@@ -105,7 +115,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/radios"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="35dp"
             android:layout_toEndOf="@+id/reminder_time_title"
             android:hint="HH:MM"
             android:visibility="gone"
@@ -117,7 +127,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/reminder_time_title"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="30dp"
+            android:textStyle="bold"
             android:visibility="gone"
             android:text="@string/reminderdate"
             android:textColor="#777777"
@@ -127,9 +138,10 @@
             android:id="@+id/reminder_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/reminder_time"
-            android:layout_marginStart="30dp"
-            android:layout_toEndOf="@+id/reminder_date_title"
+            android:layout_below="@id/reminder_date_title"
+            android:layout_alignBaseline="@+id/reminder_date_title"
+            android:layout_alignBottom="@+id/reminder_date_title"
+            android:layout_alignStart="@+id/reminder_time"
             android:hint="DD/MM/YYYY"
             android:visibility="gone"
             android:inputType="text"
@@ -173,6 +185,15 @@
             android:layout_below="@id/medicine_notes"
             android:layout_marginLeft="6dp"
             android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/dose_title"
+            android:layout_marginTop="27dp"
+            app:srcCompat="@drawable/ic_med_temp" />
 
     </RelativeLayout>
 </ScrollView>
