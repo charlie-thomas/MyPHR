@@ -24,8 +24,8 @@
     <string name="next_date_arrow">Next Date Arrow</string>
     <string name="calendar">Calendar</string>
     <string name="next_appointment">Next Appointment</string>
-    <string name="next_medicine">Next Medicine</string>
-    <string name="today_s_medicine">Today\'s Medicine</string>
+    <string name="next_medicine">Next Medication</string>
+    <string name="today_s_medicine">Today\'s Medication</string>
 
     // Contact strings
     <string name="ctitle">Add a New Contact</string>
@@ -37,8 +37,8 @@
     <string name="icon">contact icon</string>
 
     // Medicine strings
-    <string name="medtitle">Add a New Medicine</string>
-    <string name="medmessage">Enter the details for your new medicine:</string>
+    <string name="medtitle">Add a New Medication</string>
+    <string name="medmessage">Enter the details for your new medication:</string>
     <string name="medmessage2">You can schedule reminders later.</string>
     <string name="medname">Name</string>
     <string name="meddescription">Description</string>

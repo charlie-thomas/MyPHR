@@ -13,7 +13,7 @@
         android:id="@+id/medicine"
         android:enabled="true"
         android:icon="@drawable/ic_medicine"
-        android:title="Medicine"
+        android:title="Medication"
         app:showAsAction="ifRoom"/>
 
     <item

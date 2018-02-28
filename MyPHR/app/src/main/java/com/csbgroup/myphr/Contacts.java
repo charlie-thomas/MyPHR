@@ -120,7 +120,7 @@ public class Contacts extends Fragment {
     }
 
     /**
-     * buildDialog builds the pop-up dialog for adding a new contact
+     * buildDialog builds the pop-up dialog for adding a new contact, with input format checking.
      *
      * @param fab the floating action button which pulls up the dialog
      */
@@ -180,7 +180,7 @@ public class Contacts extends Fragment {
                 // disable the add button until input conditions are met
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
-                // input checking
+                // ensure input name is valid
                 name.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -191,7 +191,6 @@ public class Contacts extends Fragment {
                             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                         }
                     }
-
                     @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
                     @Override public void afterTextChanged(Editable editable) {}
                 });
