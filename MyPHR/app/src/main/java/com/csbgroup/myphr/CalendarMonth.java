@@ -1,5 +1,6 @@
 package com.csbgroup.myphr;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -25,9 +26,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Callable;
@@ -78,11 +81,43 @@ public class CalendarMonth extends Fragment {
             }
         });
 
+        List<CalendarEvent> all_events = Collections.emptyList();
         try {
-            List<CalendarEvent> all_events = getAllEvents();
+            all_events = getAllEvents();
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+
+        HashSet<com.prolificinteractive.materialcalendarview.CalendarDay> apps = new HashSet<>();
+        HashSet<com.prolificinteractive.materialcalendarview.CalendarDay> invest = new HashSet<>();
+        HashSet<com.prolificinteractive.materialcalendarview.CalendarDay> sickdays = new HashSet<>();
+
+        for(CalendarEvent ce : all_events) {
+            com.prolificinteractive.materialcalendarview.CalendarDay calendarDay = null;
+            try {
+                 calendarDay = com.prolificinteractive.materialcalendarview.CalendarDay.from(f.parse(ce.getDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            switch (ce.getType()) {
+                case "Appointment":
+                    apps.add(calendarDay);
+                    break;
+                case "Investigation":
+                    invest.add(calendarDay);
+                    break;
+                case "Sick":
+                    sickdays.add(calendarDay);
+                    break;
+            }
+        }
+
+        calendarView.addDecorator(new EventDecorator(Color.rgb(233,30,99), apps));
+        calendarView.addDecorator(new EventDecorator(Color.rgb(173,20,87), invest));
+        calendarView.addDecorator(new EventDecorator(Color.GREEN, sickdays));
 
         LinearLayout upcoming_ll = rootView.findViewById(R.id.upcoming_layout);
         TextView upcomingDate = rootView.findViewById(R.id.upcoming_date);
