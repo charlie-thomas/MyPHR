@@ -257,7 +257,7 @@ public class MedicineDetails extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: // back button - go back
-                ((MainActivity) getActivity()).switchFragment(Medicine.newInstance());
+                ((MainActivity) getActivity()).switchFragment(MedicineSection.newInstance());
                 return true;
 
             case R.id.details_edit: // edit button - edit medicine details
