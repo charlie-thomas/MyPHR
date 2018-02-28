@@ -1,4 +1,4 @@
-package com.csbgroup.myphr;
+package com.csbgroup.myphr.DatabaseTests;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
@@ -39,7 +39,7 @@ public class ContactsEntityTest {
     public void createContactTest() throws Exception {
         ContactsEntity contactsEntity = new ContactsEntity("Contact Name",
                 "email@email.com", "12345678910", "Notes");
-        contactsDao.insertAll(contactsEntity);
+        contactsDao.insert(contactsEntity);
 
         ContactsEntity ce = contactsDao.getContactByName("Contact Name");
         assertEquals(contactsEntity.getName(), ce.getName());
@@ -49,7 +49,7 @@ public class ContactsEntityTest {
     public void deleteContactTest() throws Exception {
         ContactsEntity contactsEntity = new ContactsEntity("Contact Name",
                 "email@email.com", "12345678910", "Notes");
-        contactsDao.insertAll(contactsEntity);
+        contactsDao.insert(contactsEntity);
 
         // Ensure the database contains the contact to be deleted
         assertEquals(contactsEntity.getName(), contactsDao.getContactByName("Contact Name").getName());
@@ -72,9 +72,17 @@ public class ContactsEntityTest {
     }
 
     @Test
+    public void getAllContactsTest() throws Exception {
+        for (int i = 1; i < 5; i++)
+            contactsDao.insert((new ContactsEntity("Contact " + i, null, null, null)));
+
+        assertEquals(4, contactsDao.getAll().size());
+    }
+
+    @Test
     public void deleteAllContactsTest() throws Exception {
         for (int i = 1; i < 5; i++)
-            contactsDao.insertAll(new ContactsEntity("Contact " + i, null, null, null));
+            contactsDao.insert(new ContactsEntity("Contact " + i, null, null, null));
 
         // Ensure there are currently 4 contacts in the database
         assertEquals(4, contactsDao.getAll().size());
@@ -82,5 +90,23 @@ public class ContactsEntityTest {
         // Delete all contacts and ensure there are 0 left
         contactsDao.deleteAll();
         assertEquals(0, contactsDao.getAll().size());
+    }
+
+    @Test
+    public void updateContactTest() throws Exception {
+        ContactsEntity contactsEntity = new ContactsEntity("Contact Name",
+                "email@email.com", "12345678910", "Notes");
+        contactsEntity.setUid(112);
+        contactsDao.insert(contactsEntity);
+
+        // Ensure the database contains the contact to be updated
+        assertEquals(contactsEntity.getName(), contactsDao.getContact(112).getName());
+
+        // Update the contact from the database and ensure the getContact query returns the new version
+        ContactsEntity updated = contactsDao.getContact(112);
+        updated.setName("Updated Name");
+        contactsDao.update(updated);
+
+        assertEquals("Updated Name", contactsDao.getContact(112).getName());
     }
 }

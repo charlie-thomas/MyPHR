@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -73,9 +75,15 @@ public class CalendarMonth extends Fragment {
         });
 
         // Next appointment
-        final AppointmentsEntity upcoming_appointment = getUpcomingAppointment();
+        AppointmentsEntity upcoming_appointment = null;
+        try {
+            upcoming_appointment = getUpcomingAppointment();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         if (upcoming_appointment == null) return rootView;
+        final AppointmentsEntity upcoming_appointment_ = upcoming_appointment;
 
         LinearLayout upcoming_ll = rootView.findViewById(R.id.upcoming_layout);
         TextView upcomingDate = rootView.findViewById(R.id.upcoming_date);
@@ -83,17 +91,19 @@ public class CalendarMonth extends Fragment {
         upcomingDate.setText(upcoming_appointment.getDate());
         upcomingApp.setText(upcoming_appointment.getTitle());
 
-        upcoming_ll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Fragment eventFrag = AppointmentsDetails.newInstance();
-                Bundle bundle = new Bundle();
-                bundle.putString("uid", String.valueOf(upcoming_appointment.getUid()));
-                eventFrag.setArguments(bundle);
+        if (!Objects.equals(upcoming_appointment.getTitle(), "No Upcoming Appointments")) {
+            upcoming_ll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Fragment eventFrag = AppointmentsDetails.newInstance();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("uid", String.valueOf(upcoming_appointment_.getUid()));
+                    eventFrag.setArguments(bundle);
 
-                ((MainActivity) getContext()).switchFragment(eventFrag);
-            }
-        });
+                    ((MainActivity) getContext()).switchFragment(eventFrag);
+                }
+            });
+        }
 
         // Today's Medicines
         LinearLayout todays_meds = rootView.findViewById(R.id.todays_meds);
@@ -130,7 +140,7 @@ public class CalendarMonth extends Fragment {
         return rootView;
     }
 
-    public AppointmentsEntity getUpcomingAppointment() {
+    public AppointmentsEntity getUpcomingAppointment() throws ParseException {
 
         // Create a callable object for database transactions
         Callable callable = new Callable() {
@@ -150,26 +160,36 @@ public class CalendarMonth extends Fragment {
             appointments = result.get();
         } catch (Exception e) {}
 
-        if (appointments == null) return null;
+        AppointmentsEntity placeholder = new AppointmentsEntity("No Upcoming Appointments", null, "", null, null, false);
+        if (appointments == null) return placeholder;
 
+        // Sort the appointments by date and then time
+        final DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
         Collections.sort(appointments, new Comparator<AppointmentsEntity>() {
-            DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-
             @Override
-            public int compare(AppointmentsEntity d1, AppointmentsEntity d2) {
+            public int compare(AppointmentsEntity e1, AppointmentsEntity e2) {
+                int dateComp = 0;
                 try {
-                    return f.parse(d1.getDate()).compareTo(f.parse(d2.getDate()));
-                } catch (Exception e) {
+                    dateComp = f.parse(e1.getDate()).compareTo(f.parse(e2.getDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-                return 0;
+
+                if (dateComp != 0) return dateComp;
+                return e1.getTime().replace(":", "").compareTo(e2.getTime().replace(":", ""));
             }
         });
 
-        try {
-            return appointments.get(0);
-        } catch (Exception e) {
-            return null;
+        // Pick the next upcoming appointment
+        DateFormat f2 = new SimpleDateFormat("HHmm");
+        Date today = Calendar.getInstance().getTime();
+        for (AppointmentsEntity app : appointments) {
+            int comp = f.parse(app.getDate()).compareTo(today);
+            if (comp > 0 || (comp == 0 && Integer.parseInt(app.getTime().replace(":", "")) > Integer.parseInt(f2.format(today))))
+                return app;
         }
+
+        return placeholder;
     }
 
     public List<CalendarEvent> getTodaysMedicine() throws ParseException {
