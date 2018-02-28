@@ -220,7 +220,7 @@ public class Medicine extends Fragment {
         final EditText name = et;
         final AlertDialog dialog = d;
 
-        // ensure input name is valid
+        // ensure medication name is valid
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {

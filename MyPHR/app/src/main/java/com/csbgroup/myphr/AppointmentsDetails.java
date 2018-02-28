@@ -41,7 +41,7 @@ public class AppointmentsDetails extends Fragment {
     private KeyListener titleKL, locationKL, dateKL, timeKL, notesKL;
     private Drawable titleBG, locationBG, dateBG, timeBG, notesBG;
 
-    // error checking booleans
+    // format error checking booleans
     private Boolean validTitle = true;
     private Boolean validTime = true;
     private Boolean validDate = true;
