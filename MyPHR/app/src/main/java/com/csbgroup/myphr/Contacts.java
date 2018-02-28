@@ -10,11 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.support.design.widget.FloatingActionButton;
-import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.ContactsEntity;
@@ -180,22 +178,38 @@ public class Contacts extends Fragment {
                 // disable the add button until input conditions are met
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
-                // ensure input name is valid
-                name.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        if (name.getText().length() == 0) { // empty name
-                            name.setError("Name cannot be empty"); // show error message
-                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-                        } else { // valid name
-                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-                        }
-                    }
-                    @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-                    @Override public void afterTextChanged(Editable editable) {}
-                });
+                // check user input
+                inputChecking(name, dialog);
             }
         });
     }
+
+    /**
+     * inputChecking checks the user input when adding a new contact, the add button is disabled
+     * until all format conditions are met.
+     * @param et is the contact name, which must not be empty.
+     * @param d is the new contact alertdialog.
+     */
+    public void inputChecking(EditText et, AlertDialog d){
+
+        final EditText name = et;
+        final AlertDialog dialog = d;
+
+        // ensure input name is valid
+        name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (name.getText().length() == 0) { // empty name
+                    name.setError("Name cannot be empty"); // show error message
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                } else { // valid name
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                }
+            }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
+        });
+    }
+
 }
 
