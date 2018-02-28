@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true">
 
     <RelativeLayout
@@ -14,10 +15,12 @@
             android:id="@+id/appointments_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:textColor="#777777"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="16dp"
+            android:layout_toEndOf="@+id/notes_title"
             android:hint="Title"
-            android:textSize="20sp"
+            android:textColor="#777777"
+            android:textSize="26dp"
             android:textStyle="bold" />
 
         <!-- Location -->
@@ -27,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/appointments_title"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="20dp"
             android:text="@string/alocation"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -138,6 +141,15 @@
             android:layout_below="@id/app_notes"
             android:layout_marginLeft="6dp"
             android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/date_title"
+            android:layout_alignTop="@+id/appointments_title"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/ic_appointment" />
 
     </RelativeLayout>
 </ScrollView>

@@ -199,17 +199,17 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 
         c.add(Calendar.DATE, 1);
-        dao.insertAll(new AppointmentsEntity("Clinic 1", "Children's Hospital",
-                df.format(c.getTime()), "15:55","Appointment Notes", true));
+        dao.insertAll(new AppointmentsEntity("Clinic 1", "Royal Hospital for Children, Glasgow",
+                df.format(c.getTime()), "15:55","Go to desk on ground floor ward 2.", true));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Check Up 1", "Children's Hospital",
-                df.format(c.getTime()), "16:00","Appointment Notes", true));
+                df.format(c.getTime()), "16:00","Appointment Notes", false));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Check Up 2", "Children's Hospital",
                 df.format(c.getTime()), "16:00","Appointment Notes", true));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Clinic 2", "Children's Hospital",
-                df.format(c.getTime()), "17:00","Appointment Notes", true));
+                df.format(c.getTime()), "17:00","Appointment Notes", false));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Check Up 3", "Children's Hospital",
                 df.format(c.getTime()), "14:00","Appointment Notes", true));
@@ -218,10 +218,10 @@ public class MainActivity extends AppCompatActivity {
     private static void populateInvestigations(InvestigationsDao dao)  {
         dao.deleteAll();
 
-        InvestigationsEntity ie = new InvestigationsEntity("Blood Test", "03/01/2018", "due in 6 months");
-        InvestigationsEntity ie1 = new InvestigationsEntity("Hearing Test", "29/12/2017", "due in 12 months");
-        InvestigationsEntity ie2 = new InvestigationsEntity("Blood Test", "04/06/2017", "due in 6 months");
-        InvestigationsEntity ie3 = new InvestigationsEntity("Hearing Test", "30/06/2017", "due in 12 months");
+        InvestigationsEntity ie = new InvestigationsEntity("Blood Test", "03/01/2018", "Due again in 6 months time (03/07/2018)");
+        InvestigationsEntity ie1 = new InvestigationsEntity("Hearing Test", "29/12/2017", "Due again in 12 months (29/12/2018)");
+        InvestigationsEntity ie2 = new InvestigationsEntity("Blood Test", "04/06/2017", "Due again in 6 months (04/12/2017)");
+        InvestigationsEntity ie3 = new InvestigationsEntity("Hearing Test", "30/06/2017", "Due again in 12 months (30/06/2018)");
 
         dao.insertAll(ie, ie1, ie2, ie3);
     }

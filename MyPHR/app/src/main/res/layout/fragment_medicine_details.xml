@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         tools:context="com.csbgroup.myphr.MedicineDetails">
 
+        <!-- Medicine Name -->
         <EditText
             android:id="@+id/medicine_title"
             android:layout_width="match_parent"
@@ -22,6 +23,7 @@
             android:textSize="26dp"
             android:textStyle="bold" />
 
+        <!-- Medicine Description -->
         <EditText
             android:id="@+id/medicine_info"
             android:layout_width="match_parent"
@@ -32,6 +34,7 @@
             android:inputType="textMultiLine"
             android:textColor="#777777" />
 
+        <!-- Dose -->
         <TextView
             android:id="@+id/dose_title"
             android:layout_width="match_parent"
@@ -55,6 +58,7 @@
             android:maxLines="1"
             android:textColor="#777777" />
 
+        <!-- Reminders -->
         <TextView
             android:id="@+id/reminders"
             android:layout_width="wrap_content"
@@ -147,6 +151,7 @@
             android:inputType="text"
             android:textColor="#777777" />
 
+        <!-- Notes -->
         <TextView
             android:id="@+id/notes_title"
             android:layout_width="wrap_content"
