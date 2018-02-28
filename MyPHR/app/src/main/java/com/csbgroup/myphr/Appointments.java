@@ -196,17 +196,17 @@ public class Appointments extends Fragment {
                 time_error.setKeyListener(null);
                 time_error.setBackground(null);
 
-                // join date into one string
-                final String date = day.getText().toString() + "/" + month.getText().toString()
-                        + "/" + year.getText().toString();
-
-                // join time into one string
-                final String time = hour.getText().toString() + ":" + mins.getText().toString();
-
                 // add new appointment action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
+
+                        // join date into one string
+                        final String date = day.getText().toString() + "/" + month.getText().toString()
+                                + "/" + year.getText().toString();
+
+                        // join time into one string
+                        final String time = hour.getText().toString() + ":" + mins.getText().toString();
 
                         // Add the new appointment to the database
                         new Thread(new Runnable(){
@@ -238,7 +238,7 @@ public class Appointments extends Fragment {
                 final AlertDialog dialog = builder.create();
                 dialog.show();
 
-                // diable the add button until input conditions are met
+                // disable the add button until input conditions are met
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
                 // check user input
@@ -248,10 +248,11 @@ public class Appointments extends Fragment {
     }
 
     /**
-     *
-     * @param v
-     * @param ad
-     * @param n
+     * inputChecking checks the user input when adding a new appointment, the add button is disabled
+     * until all format conditions are met.
+     * @param v is the view for the add appointment dialog.
+     * @param ad is the new contact alertdialog.
+     * @param n is the next textview following hour.
      */
     public void inputChecking(View v, AlertDialog ad, EditText n){
 
