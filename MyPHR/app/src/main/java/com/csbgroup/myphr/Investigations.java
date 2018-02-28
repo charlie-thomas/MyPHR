@@ -193,12 +193,17 @@ public class Investigations extends Fragment {
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                     InvestigationsEntity investigation = new InvestigationsEntity(
                                             title.getText().toString(), date, notes.getText().toString());
-                                    db.investigationDao().insertAll(investigation);
+                                    long uid = db.investigationDao().insert(investigation);
 
-                                    //TODO: GO TO DETAILS FRAGMENT
-                                    // (for now) update the list view
-                                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                    ft.detach(Investigations.this).attach(Investigations.this).commit();
+                                    // Move to details fragment for new appointment
+                                    Fragment newdetails = InvestigationDetails.newInstance();
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("uid", String.valueOf(uid));
+                                    newdetails.setArguments(bundle);
+                                    ((MainActivity)getActivity()).switchFragment(newdetails);
+
+                                    //FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                    //ft.detach(Investigations.this).attach(Investigations.this).commit();
                                 }
                             }).start();
                         }

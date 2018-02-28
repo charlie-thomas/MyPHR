@@ -6,6 +6,8 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import com.csbgroup.myphr.InvestigationDetails;
+
 import java.util.List;
 
 @Dao
@@ -16,6 +18,9 @@ public interface InvestigationsDao {
 
     @Query("SELECT * FROM investigationsentity WHERE uid LIKE :uid")
     InvestigationsEntity getInvestigation(int uid);
+
+    @Insert
+    long insert(InvestigationsEntity investigationsEntity);
 
     @Insert
     void insertAll(InvestigationsEntity... investigationsEntities);
