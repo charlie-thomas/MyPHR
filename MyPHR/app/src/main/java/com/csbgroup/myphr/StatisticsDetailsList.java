@@ -317,19 +317,6 @@ public class StatisticsDetailsList extends Fragment {
                                 }
                             }).start();
                         }
-
-                        // format checks failed - abort and show error message
-                        else {
-                            if (!validMeasurement) {
-                                errorDialog("measurement");
-                            } // no measurement
-                            else if (!validDate) {
-                                errorDialog("date");
-                            } // bad date
-                            else {
-                                errorDialog("centile");
-                            } // bad centile
-                        }
                     }
                 });
 

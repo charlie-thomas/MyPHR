@@ -162,9 +162,6 @@ public class Investigations extends Fragment {
                 date_error.setKeyListener(null);
                 date_error.setBackground(null);
 
-                // auto shift view focus when entering date
-                shiftFocus(day, month, year, notes);
-
                 // add a new investigation action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
@@ -180,42 +177,23 @@ public class Investigations extends Fragment {
                             validTitle = false;
                         }
 
-                        // check that a valid date was given
-                        Boolean validDate = true;
-                        if (date.equals("//")) {validDate = false;} // no date given
-                        else if (date.length() != 10) {validDate = false;} // incomplete date
-                        else {
-                            try {
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                Date d = sdf.parse(date);
-                                if (!date.equals(sdf.format(d))){
-                                    validDate = false;
-                                }
-                            } catch (ParseException e) {e.printStackTrace();}
-                        }
-
-                        // format checks passed - add the new investigation to the database
-                        if (validTitle && validDate){
-                            new Thread(new Runnable() {
+                        new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                    InvestigationsEntity investigation = new InvestigationsEntity(
-                                            title.getText().toString(), date, notes.getText().toString());
-                                    long uid = db.investigationDao().insert(investigation);
+                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                InvestigationsEntity investigation = new InvestigationsEntity(
+                                        title.getText().toString(), date, notes.getText().toString());
+                                long uid = db.investigationDao().insert(investigation);
 
-                                    // Move to details fragment for new appointment
-                                    Fragment newdetails = InvestigationDetails.newInstance();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("uid", String.valueOf(uid));
-                                    newdetails.setArguments(bundle);
-                                    ((MainActivity)getActivity()).switchFragment(newdetails);
+                                // Move to details fragment for new appointment
+                                Fragment newdetails = InvestigationDetails.newInstance();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("uid", String.valueOf(uid));
+                                newdetails.setArguments(bundle);
+                                ((MainActivity)getActivity()).switchFragment(newdetails);
 
-                                    //FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                    //ft.detach(Investigations.this).attach(Investigations.this).commit();
                                 }
                             }).start();
-                        }
                     }
 
                 });
@@ -325,63 +303,6 @@ public class Investigations extends Fragment {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override public void afterTextChanged(Editable editable) {}
         });
-
-
-
-    }
-
-    /**
-     * shiftFocus automatically shifts the fab dialog view focus from day->month and month->year
-     * when two digits have been entered for day and month, respectively.
-     * @param day is the EditText for the dialog day('DD') field
-     * @param month is the EditText for the dialog month('MM') field
-     * @param year is the EditText for the dialog year('YYYY') field
-     * @param next is the EditText for the dialog field that follows year
-     */
-    public void shiftFocus(final EditText day, final EditText month, final EditText year, final EditText next){
-
-        day.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (day.getText().toString().length() == 2) {month.requestFocus();}
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
-        });
-
-        month.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (month.getText().toString().length() == 2) {year.requestFocus();}
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
-        });
-
-        year.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (year.getText().toString().length() == 4) {next.requestFocus();}
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
-        });
-
     }
 
     /**

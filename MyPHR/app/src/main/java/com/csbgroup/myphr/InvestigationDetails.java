@@ -2,6 +2,7 @@ package com.csbgroup.myphr;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
@@ -186,7 +187,7 @@ public class InvestigationDetails extends Fragment {
                         public void run() {
                             AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                             db.investigationDao().delete(thisinvestigation);
-                            ((MainActivity) getActivity()).switchFragment(Investigations.newInstance());
+                            ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance());
                         }
                     }).start();
                 }
