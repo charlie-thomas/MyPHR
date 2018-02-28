@@ -390,46 +390,31 @@ public class StatisticsDetailsList extends Fragment {
     public void shiftFocus(final EditText day, final EditText month, final EditText year, final EditText next){
 
         day.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (day.getText().toString().length() == 2) {month.requestFocus();}
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
 
         month.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (month.getText().toString().length() == 2) {year.requestFocus();}
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
 
         if (next != null) {
             year.addTextChangedListener(new TextWatcher() {
-
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                     if (year.getText().toString().length() == 4) {next.requestFocus();}
                 }
-
-                @Override
-                public void afterTextChanged(Editable editable) { }
+                @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+                @Override public void afterTextChanged(Editable editable) {}
             });
         }
     }

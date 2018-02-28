@@ -271,6 +271,13 @@ public class Appointments extends Fragment {
     }
 
     /**
+     * inputChecking checks the user input when adding a new appointment, the add button is disabled
+     * until all format conditions are met.
+     * @param et is the medication name, which must not be empty.
+     * @param d is the new medication alertdialog.
+     */
+
+    /**
      * errorDialog is called when an invalid title, date or time
      * is part of an appointment being added, it displays an error message about the failure.
      * @param type is the type of error reported
@@ -317,75 +324,49 @@ public class Appointments extends Fragment {
                            final EditText hour, final EditText mins, final EditText next){
 
         day.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (day.getText().toString().length() == 2) {month.requestFocus();}
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
 
         month.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (month.getText().toString().length() == 2) {year.requestFocus();}
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
 
         year.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (year.getText().toString().length() == 4) {hour.requestFocus();}
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
 
         hour.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (hour.getText().toString().length() == 2) {mins.requestFocus();}
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
 
         mins.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (mins.getText().toString().length() == 2) {next.requestFocus();}
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
-
 
     }
 

@@ -235,5 +235,5 @@ public class Medicine extends Fragment {
             @Override public void afterTextChanged(Editable editable) {}
         });
     }
-    
+
 }
