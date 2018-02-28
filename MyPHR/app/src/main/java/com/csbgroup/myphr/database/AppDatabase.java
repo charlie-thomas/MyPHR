@@ -25,8 +25,4 @@ public abstract class AppDatabase extends RoomDatabase {
                     AppDatabase.class, "database").fallbackToDestructiveMigration().build();
         return INSTANCE;
     }
-
-    public static void destroyInstance() {
-        INSTANCE = null;
-    }
 }
