@@ -17,6 +17,7 @@ import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
 import com.csbgroup.myphr.database.InvestigationsEntity;
 import com.csbgroup.myphr.database.MedicineEntity;
+import com.csbgroup.myphr.database.SickDaysEntity;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
@@ -115,9 +116,9 @@ public class CalendarMonth extends Fragment {
             }
         }
 
-        calendarView.addDecorator(new EventDecorator(Color.rgb(233,30,99), apps));
-        calendarView.addDecorator(new EventDecorator(Color.rgb(173,20,87), invest));
-        calendarView.addDecorator(new EventDecorator(Color.GREEN, sickdays));
+        calendarView.addDecorator(new EventDecorator(ContextCompat.getColor(rootView.getContext(), R.color.colorAccent), apps));
+        calendarView.addDecorator(new EventDecorator(ContextCompat.getColor(rootView.getContext(), R.color.colorAccentDark), invest));
+        calendarView.addDecorator(new EventDecorator(ContextCompat.getColor(rootView.getContext(), R.color.colorTeal), sickdays));
 
         LinearLayout upcoming_ll = rootView.findViewById(R.id.upcoming_layout);
         TextView upcomingDate = rootView.findViewById(R.id.upcoming_date);
@@ -270,17 +271,28 @@ public class CalendarMonth extends Fragment {
             }
         };
 
+        // Create a callable object to get sick days from database
+        Callable callable_sick = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(getActivity()).sickDaysDao().getAll();
+            }
+        };
+
         // Get a Future object of all the appointment names
         ExecutorService service = Executors.newFixedThreadPool(2);
         Future<List<AppointmentsEntity>> result_app = service.submit(callable_app);
         Future<List<InvestigationsEntity>> result_inv = service.submit(callable_inv);
+        Future<List<SickDaysEntity>> result_sick = service.submit(callable_sick);
 
-        // Create lists of the appointment and medicine names
+        // Create lists of the events
         List<AppointmentsEntity> appointments = Collections.emptyList();
         List<InvestigationsEntity> investigations = Collections.emptyList();
+        List<SickDaysEntity> sickdays = Collections.emptyList();
         try {
             appointments = result_app.get();
             investigations = result_inv.get();
+            sickdays = result_sick.get();
         } catch (Exception e) {}
 
         for (AppointmentsEntity ae : appointments)
@@ -290,6 +302,9 @@ public class CalendarMonth extends Fragment {
 
         for (InvestigationsEntity ie : investigations)
             all_events.add(new CalendarEvent(ie.getUid(), 0, null, ie.getDate(), ie.getTitle(), "Investigation"));
+
+        for(SickDaysEntity sd : sickdays)
+            all_events.add(new CalendarEvent(sd.getUid(), 0, null, sd.getDate(), null, "Sick"));
 
         return all_events;
     }
