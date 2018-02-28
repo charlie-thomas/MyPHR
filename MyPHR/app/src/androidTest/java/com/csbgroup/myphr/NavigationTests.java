@@ -101,7 +101,7 @@ public class NavigationTests extends ActivityInstrumentationTestCase2<MainActivi
 
     public void testStatisticsTab() {
         onView(withId(R.id.statistics)).perform(click());
-        onView(withText("Weight")).perform(click());
+        onView(withText("Height")).perform(click());
 
         ViewInteraction tab1 = onView(allOf(
                 childAtPosition(allOf(withId(android.R.id.tabs),

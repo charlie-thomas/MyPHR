@@ -45,7 +45,7 @@ public class ContactTest extends ActivityInstrumentationTestCase2<MainActivity> 
     }
 
     public void testContactList() {
-        assertEquals(contactsList.getChildCount(), 2);
+        assertEquals(contactsList.getChildCount(), 3);
     }
 
     public void testFabOnClick() {
@@ -76,20 +76,20 @@ public class ContactTest extends ActivityInstrumentationTestCase2<MainActivity> 
     }
 
     public void testBackButton() {
-        onView(withText("Dr. Jones")).perform(click());
+        onView(withText("Dr Avril Mason")).perform(click());
 
         onView(withContentDescription("Navigate up")).perform(click());
-        onView(withText("Nurse Williams")).check(matches(isDisplayed()));
+        onView(withText("Ms Kerri Marshall")).check(matches(isDisplayed()));
     }
 
     public void testEditButton() {
-        onView(withText("Dr. Jones")).perform(click());
+        onView(withText("Dr Avril Mason")).perform(click());
 
         onView(withContentDescription("Edit Icon")).perform(click());
-        onView(withId(R.id.contact_title)).check(matches(isDisplayed()));
+        onView(withId(R.id.title_et)).check(matches(isDisplayed()));
 
-        onView(withId(R.id.contact_title)).perform(clearText());
-        onView(withId(R.id.contact_title)).perform(typeText("New Title"));
+        onView(withId(R.id.title_et)).perform(clearText());
+        onView(withId(R.id.title_et)).perform(typeText("New Title"));
         onView(withContentDescription("Edit Icon")).perform(click());
 
         onView(withText("New Title")).check(matches(isDisplayed()));

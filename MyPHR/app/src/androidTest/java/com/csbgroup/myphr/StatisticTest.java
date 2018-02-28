@@ -49,10 +49,10 @@ public class StatisticTest extends ActivityInstrumentationTestCase2<MainActivity
     }
 
     public void testFormatError() {
-        onView(withText("Weight")).perform(click());
+        onView(withText("Height")).perform(click());
 
         onView(withId(R.id.s_fab)).perform(click());
-        onView(withText("Add a New Weight")).check(matches(isDisplayed()));
+        onView(withText("Add a New Height")).check(matches(isDisplayed()));
 
         onView(withText("ADD")).perform(click());
         onView(withText("Format Error")).check(matches(isDisplayed()));

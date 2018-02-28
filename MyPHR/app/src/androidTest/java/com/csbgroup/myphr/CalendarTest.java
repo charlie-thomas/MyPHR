@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static android.support.test.espresso.Espresso.*;
@@ -56,9 +57,7 @@ public class CalendarTest extends ActivityInstrumentationTestCase2<MainActivity>
     }
 
     public void testUpcomingAppointment() {
-        onView(withText("Clinic 1")).check(matches(isDisplayed()));
-
-        onView(withId(R.id.upcoming_layout)).perform(click());
+        onView(withId(R.id.upcoming_layout)).perform(scrollTo(), click());
         onView(withText("15:55")).check(matches(isDisplayed()));
     }
 
@@ -99,7 +98,7 @@ public class CalendarTest extends ActivityInstrumentationTestCase2<MainActivity>
         getActivity().switchFragment(cd);
 
         onView(withContentDescription("Navigate up")).perform(click());
-        onView(withText("Clinic 1")).check(matches(isDisplayed()));
+        onView(withText("Thyroxine")).check(matches(isDisplayed()));
     }
 
     private String getDateString(Date d) {
