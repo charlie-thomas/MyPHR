@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,10 @@ import android.widget.TextView;
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
 import com.csbgroup.myphr.database.MedicineEntity;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
+import java.security.acl.LastOwnerException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,25 +53,21 @@ public class CalendarMonth extends Fragment {
         ((MainActivity) getActivity()).setToolbar("My Calendar", false);
         setHasOptionsMenu(false);
 
-        CalendarView calendarView = rootView.findViewById(R.id.calendarView);
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-
-            /* Creates a bundle containing the date selected from the CalendarView, and passes this
-             * date through to the new day view fragment, which the app switches to */
+        MaterialCalendarView calendarView = rootView.findViewById(R.id.calendarView);
+        calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull com.prolificinteractive.materialcalendarview.CalendarDay date, boolean selected) {
                 Fragment dayFragment = CalendarDay.newInstance();
 
-                String day = String.valueOf(dayOfMonth);
-                if (dayOfMonth < 10) day = "0" + dayOfMonth;
+                String day = String.valueOf(date.getDay());
+                if (date.getMonth() < 10) day = "0" + date.getMonth();
 
-                String month_ = String.valueOf(month + 1);
-                if ((month + 1) < 10) month_ = "0" + month_;
+                String month_ = String.valueOf(date.getMonth() + 1);
+                if ((date.getMonth() + 1) < 10) month_ = "0" + month_;
 
                 // Create a bundle to pass the selected date to the day view fragment
                 Bundle bundle = new Bundle();
-                bundle.putString("date", day + "/" + month_ + "/" + year);
+                bundle.putString("date", date.getDay() + "/" + month_ + "/" + date.getYear());
                 dayFragment.setArguments(bundle);
 
                 ((MainActivity) getActivity()).switchFragment(dayFragment);
