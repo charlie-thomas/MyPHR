@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
+import com.csbgroup.myphr.database.InvestigationsEntity;
 import com.csbgroup.myphr.database.MedicineEntity;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -36,6 +37,8 @@ import java.util.concurrent.Future;
 
 public class CalendarMonth extends Fragment {
 
+    private CalendarEvent upcomingAppointment;
+
     public CalendarMonth() {
         // Required empty public constructor
     }
@@ -54,50 +57,46 @@ public class CalendarMonth extends Fragment {
         setHasOptionsMenu(false);
 
         MaterialCalendarView calendarView = rootView.findViewById(R.id.calendarView);
+        calendarView.setDateSelected(Calendar.getInstance(), true);
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull com.prolificinteractive.materialcalendarview.CalendarDay date, boolean selected) {
                 Fragment dayFragment = CalendarDay.newInstance();
 
-                String day = String.valueOf(date.getDay());
-                if (date.getMonth() < 10) day = "0" + date.getMonth();
+                String day = ""+date.getDay();
+                if (date.getDay() < 10) day = "0" + day;
 
-                String month_ = String.valueOf(date.getMonth() + 1);
-                if ((date.getMonth() + 1) < 10) month_ = "0" + month_;
+                String month = String.valueOf(date.getMonth() + 1);
+                if ((date.getMonth() + 1) < 10) month = "0" + month;
 
                 // Create a bundle to pass the selected date to the day view fragment
                 Bundle bundle = new Bundle();
-                bundle.putString("date", date.getDay() + "/" + month_ + "/" + date.getYear());
+                bundle.putString("date", day + "/" + month + "/" + date.getYear());
                 dayFragment.setArguments(bundle);
 
                 ((MainActivity) getActivity()).switchFragment(dayFragment);
             }
         });
 
-        // Next appointment
-        AppointmentsEntity upcoming_appointment = null;
         try {
-            upcoming_appointment = getUpcomingAppointment();
+            List<CalendarEvent> all_events = getAllEvents();
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        if (upcoming_appointment == null) return rootView;
-        final AppointmentsEntity upcoming_appointment_ = upcoming_appointment;
-
         LinearLayout upcoming_ll = rootView.findViewById(R.id.upcoming_layout);
         TextView upcomingDate = rootView.findViewById(R.id.upcoming_date);
         TextView upcomingApp = rootView.findViewById(R.id.upcoming_app_name);
-        upcomingDate.setText(upcoming_appointment.getDate());
-        upcomingApp.setText(upcoming_appointment.getTitle());
+        upcomingDate.setText(upcomingAppointment.getDate());
+        upcomingApp.setText(upcomingAppointment.getEvent());
 
-        if (!Objects.equals(upcoming_appointment.getTitle(), "No Upcoming Appointments")) {
+        if (!Objects.equals(upcomingAppointment.getEvent(), "No Upcoming Appointments")) {
             upcoming_ll.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Fragment eventFrag = AppointmentsDetails.newInstance();
                     Bundle bundle = new Bundle();
-                    bundle.putString("uid", String.valueOf(upcoming_appointment_.getUid()));
+                    bundle.putString("uid", String.valueOf(upcomingAppointment.getUid()));
                     eventFrag.setArguments(bundle);
 
                     ((MainActivity) getContext()).switchFragment(eventFrag);
@@ -140,34 +139,16 @@ public class CalendarMonth extends Fragment {
         return rootView;
     }
 
-    public AppointmentsEntity getUpcomingAppointment() throws ParseException {
+    public CalendarEvent getUpcomingAppointment(List<CalendarEvent> appointments) throws ParseException {
 
-        // Create a callable object for database transactions
-        Callable callable = new Callable() {
-            @Override
-            public Object call() throws Exception {
-                return AppDatabase.getAppDatabase(getActivity()).appointmentsDao().getAll();
-            }
-        };
-
-        // Get a Future object of all the appointment names
-        ExecutorService service = Executors.newFixedThreadPool(2);
-        Future<List<AppointmentsEntity>> result = service.submit(callable);
-
-        // Create a list of the appointment names
-        List<AppointmentsEntity> appointments = null;
-        try {
-            appointments = result.get();
-        } catch (Exception e) {}
-
-        AppointmentsEntity placeholder = new AppointmentsEntity("No Upcoming Appointments", null, "", null, null, false);
+        CalendarEvent placeholder = new CalendarEvent(0, 0,null, "", "No Upcoming Appointments", null);
         if (appointments == null) return placeholder;
 
         // Sort the appointments by date and then time
         final DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-        Collections.sort(appointments, new Comparator<AppointmentsEntity>() {
+        Collections.sort(appointments, new Comparator<CalendarEvent>() {
             @Override
-            public int compare(AppointmentsEntity e1, AppointmentsEntity e2) {
+            public int compare(CalendarEvent e1, CalendarEvent e2) {
                 int dateComp = 0;
                 try {
                     dateComp = f.parse(e1.getDate()).compareTo(f.parse(e2.getDate()));
@@ -183,7 +164,7 @@ public class CalendarMonth extends Fragment {
         // Pick the next upcoming appointment
         DateFormat f2 = new SimpleDateFormat("HHmm");
         Date today = Calendar.getInstance().getTime();
-        for (AppointmentsEntity app : appointments) {
+        for (CalendarEvent app : appointments) {
             int comp = f.parse(app.getDate()).compareTo(today);
             if (comp > 0 || (comp == 0 && Integer.parseInt(app.getTime().replace(":", "")) > Integer.parseInt(f2.format(today))))
                 return app;
@@ -220,7 +201,7 @@ public class CalendarMonth extends Fragment {
 
         // Create CalendarEvents for the days medicines, and add them to the returning array
         for (MedicineEntity me : medicines) {
-            if (me.isDaily() || (me.isOther_days() && CalendarDay.isOtherDay(me.getDate(), df.format(today.getTime()))))
+            if (me.getReminders() && (me.isDaily() || (me.isOther_days() && CalendarDay.isOtherDay(me.getDate(), df.format(today.getTime())))))
                 todays_meds.add(new CalendarEvent(me.getUid(), 0, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
         }
 
@@ -232,5 +213,49 @@ public class CalendarMonth extends Fragment {
         });
 
         return todays_meds;
+    }
+
+    public List<CalendarEvent> getAllEvents() throws ParseException {
+
+        List<CalendarEvent> all_events = new ArrayList<>();
+
+        // Create a callable object to get appointments from database
+        Callable callable_app = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(getActivity()).appointmentsDao().getAll();
+            }
+        };
+
+        // Create a callable object to get investigations from database
+        Callable callable_inv = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(getActivity()).investigationDao().getAll();
+            }
+        };
+
+        // Get a Future object of all the appointment names
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<List<AppointmentsEntity>> result_app = service.submit(callable_app);
+        Future<List<InvestigationsEntity>> result_inv = service.submit(callable_inv);
+
+        // Create lists of the appointment and medicine names
+        List<AppointmentsEntity> appointments = Collections.emptyList();
+        List<InvestigationsEntity> investigations = Collections.emptyList();
+        try {
+            appointments = result_app.get();
+            investigations = result_inv.get();
+        } catch (Exception e) {}
+
+        for (AppointmentsEntity ae : appointments)
+            all_events.add(new CalendarEvent(ae.getUid(), 0, ae.getTime(), ae.getDate(), ae.getTitle(), "Appointment"));
+
+        upcomingAppointment = getUpcomingAppointment(all_events);
+
+        for (InvestigationsEntity ie : investigations)
+            all_events.add(new CalendarEvent(ie.getUid(), 0, null, ie.getDate(), ie.getTitle(), "Investigation"));
+
+        return all_events;
     }
 }
