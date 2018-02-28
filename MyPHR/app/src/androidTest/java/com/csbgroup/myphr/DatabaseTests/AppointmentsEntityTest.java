@@ -82,6 +82,14 @@ public class AppointmentsEntityTest {
     }
 
     @Test
+    public void getAppointmentByDate() throws Exception {
+        appointmentsDao.insert(new AppointmentsEntity("App 1", null, "03/12/1997",null, null, false));
+        appointmentsDao.insert(new AppointmentsEntity("App 2", null, "03/12/1997",null, null, false));
+
+        assertEquals(2, appointmentsDao.getAppointmentByDate("03/12/1997").size());
+    }
+
+    @Test
     public void deleteAllAppointmentsTest() throws Exception {
         for (int i = 1; i < 5; i++)
             appointmentsDao.insert(new AppointmentsEntity("App " + i, null, null,null, null, false));

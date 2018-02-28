@@ -11,9 +11,11 @@ import android.widget.TabWidget;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.core.IsInstanceOf;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
@@ -21,6 +23,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 public class NavigationTests extends ActivityInstrumentationTestCase2<MainActivity> {
 
@@ -94,6 +97,22 @@ public class NavigationTests extends ActivityInstrumentationTestCase2<MainActivi
                         childAtPosition(withClassName(is("android.widget.LinearLayout")), 0)), 0), isDisplayed()));
         tab0.perform(click());
         onView(withText("Check Up 3")).check(matches(isDisplayed()));
+    }
+
+    public void testStatisticsTab() {
+        onView(withId(R.id.statistics)).perform(click());
+        onView(withText("Weight")).perform(click());
+
+        ViewInteraction tab1 = onView(allOf(
+                childAtPosition(allOf(withId(android.R.id.tabs),
+                        childAtPosition(withClassName(is("android.widget.LinearLayout")), 0)), 1), isDisplayed()));
+        tab1.perform(click());
+
+        ViewInteraction tab0 = onView(allOf(
+                childAtPosition(allOf(withId(android.R.id.tabs),
+                        childAtPosition(withClassName(is("android.widget.LinearLayout")), 0)), 0), isDisplayed()));
+        tab0.perform(click());
+        onView(withId(R.id.statistics_graph_list)).check(matches(isDisplayed()));
     }
 
     private static Matcher<View> childAtPosition(

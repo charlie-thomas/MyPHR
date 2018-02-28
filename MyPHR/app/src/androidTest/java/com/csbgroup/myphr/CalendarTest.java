@@ -44,18 +44,15 @@ public class CalendarTest extends ActivityInstrumentationTestCase2<MainActivity>
     }
 
     public void testSelectCalendarDate() {
-        Date d = Calendar.getInstance().getTime();
-        cv.setDate(d.getTime());
-
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String d = getDateString(Calendar.getInstance().getTime());
 
         CalendarDay cd = CalendarDay.newInstance();
         Bundle bundle = new Bundle();
-        bundle.putString("date", df.format(d));
+        bundle.putString("date", d);
         cd.setArguments(bundle);
         getActivity().switchFragment(cd);
 
-        onView(withText(df.format(d))).check(matches(isDisplayed()));
+        onView(withText(d)).check(matches(isDisplayed()));
     }
 
     public void testUpcomingAppointment() {
@@ -67,5 +64,46 @@ public class CalendarTest extends ActivityInstrumentationTestCase2<MainActivity>
 
     public void testTodaysMedicine() {
         onView(withText("Oestrogen")).check(matches(isDisplayed()));
+        onView(withText("Oestrogen")).perform(click());
+        onView(withText("15:50")).check(matches(isDisplayed()));
+    }
+
+    public void testSwitchingDates() {
+        Calendar c = Calendar.getInstance();
+        String d = getDateString(c.getTime());
+
+        CalendarDay cd = CalendarDay.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString("date", d);
+        cd.setArguments(bundle);
+        getActivity().switchFragment(cd);
+
+        onView(withId(R.id.previous_date)).perform(click());
+        c.add(Calendar.DATE, -1);
+        onView(withText(getDateString(c.getTime()))).check(matches(isDisplayed()));
+
+        onView(withId(R.id.next_date)).perform(click());
+        onView(withId(R.id.next_date)).perform(click());
+        c.add(Calendar.DATE, 2);
+        onView(withText(getDateString(c.getTime()))).check(matches(isDisplayed()));
+    }
+
+    public void testBackButton() {
+        Calendar c = Calendar.getInstance();
+        String d = getDateString(c.getTime());
+
+        CalendarDay cd = CalendarDay.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putString("date", d);
+        cd.setArguments(bundle);
+        getActivity().switchFragment(cd);
+
+        onView(withContentDescription("Navigate up")).perform(click());
+        onView(withText("Clinic 1")).check(matches(isDisplayed()));
+    }
+
+    private String getDateString(Date d) {
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        return df.format(d);
     }
 }

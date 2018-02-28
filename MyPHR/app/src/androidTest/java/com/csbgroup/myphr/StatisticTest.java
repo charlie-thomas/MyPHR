@@ -20,13 +20,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-public class MedicineTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class StatisticTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private MainActivity mainActivity;
 
-    private ListView medicineList;
-
-    public MedicineTest() {
+    public StatisticTest() {
         super(MainActivity.class);
     }
 
@@ -34,54 +32,29 @@ public class MedicineTest extends ActivityInstrumentationTestCase2<MainActivity>
     protected void setUp() throws Exception {
         mainActivity = getActivity();
 
-        Medicine medicine  = Medicine.newInstance();
+        Statistics statistics  = Statistics.newInstance();
 
         FragmentTransaction transaction = mainActivity.getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, medicine);
+        transaction.replace(R.id.frame_layout, statistics);
         transaction.commitAllowingStateLoss();
 
         getInstrumentation().waitForIdleSync();
-
-        medicineList = getActivity().findViewById(R.id.medicine_list);
     }
 
     public void testPreconditions() {
         assertNotNull(mainActivity);
-        assertNotNull(medicineList);
-    }
-
-    public void testMedicineList() {
-        assertEquals(medicineList.getChildCount(), 4);
-    }
-
-    public void testFabOnClick() {
-        onView(withId(R.id.med_fab)).perform(click());
-        onView(withText("Add a New Medicine")).check(matches(isDisplayed()));
+        onView(withText("My Measurements")).check(matches(isDisplayed()));
     }
 
     public void testSettings() {
         onView(withContentDescription("Settings Cog")).perform(click());
-        onView(withText("Descriptive")).check(matches(isDisplayed()));
+        onView(withText("Weight Metric")).check(matches(isDisplayed()));
     }
 
-    public void testErrorDialog() {
-        onView(withId(R.id.med_fab)).perform(click());
-        onView(withText("Add a New Medicine")).check(matches(isDisplayed()));
-
-        onView(withText("ADD")).perform(click());
-        onView(withText("Format Error")).check(matches(isDisplayed()));
+    public void testMeasurementsList() {
+        onView(withText("Blood Pressure")).perform(click());
+        onView(withId(R.id.statistics_graph_list)).check(matches(isDisplayed()));
     }
 
-    public void testCorrectFormat() {
-        onView(withId(R.id.med_fab)).perform(click());
-        onView(withText("Add a New Medicine")).check(matches(isDisplayed()));
 
-        onView(withId(R.id.med_name)).perform(typeText("Med Name"));
-        onView(withId(R.id.med_description)).perform(typeText("Med"));
-        onView(withId(R.id.med_dose)).perform(typeText("Med"));
-        onView(withId(R.id.med_notes)).perform(typeText("Med"));
-
-        onView(withText("ADD")).perform(click());
-        onView(withText("Med Name")).check(matches(isDisplayed()));
-    }
 }

@@ -6,6 +6,7 @@ import android.widget.ListView;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -48,5 +49,27 @@ public class ContactTest extends ActivityInstrumentationTestCase2<MainActivity> 
     public void testFabOnClick() {
         onView(withId(R.id.contact_fab)).perform(click());
         onView(withText("Add a New Contact")).check(matches(isDisplayed()));
+    }
+
+    public void testErrorDialog() {
+        onView(withId(R.id.contact_fab)).perform(click());
+        onView(withText("Add a New Contact")).check(matches(isDisplayed()));
+
+        onView(withText("ADD")).perform(click());
+        onView(withText("Format Error")).check(matches(isDisplayed()));
+    }
+
+    public void testCorrectFormat() {
+        onView(withId(R.id.contact_fab)).perform(click());
+        onView(withText("Add a New Contact")).check(matches(isDisplayed()));
+
+        onView(withId(R.id.contact_name)).perform(typeText("Contact Name"));
+        onView(withId(R.id.contact_phone)).perform(typeText("Contact Phone"));
+        onView(withId(R.id.contact_email)).perform(typeText("Contact Email"));
+        onView(withId(R.id.contact_notes)).perform(typeText("Contact Notes"));
+
+
+        onView(withText("ADD")).perform(click());
+        onView(withText("Contact Name")).check(matches(isDisplayed()));
     }
 }
