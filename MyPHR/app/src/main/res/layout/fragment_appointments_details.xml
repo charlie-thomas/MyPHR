@@ -12,10 +12,11 @@
         <!-- Appointment Title -->
         <EditText
             android:id="@+id/appointments_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:textColor="#777777"
+            android:hint="Title"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -33,10 +34,11 @@
 
         <EditText
             android:id="@+id/app_location"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/location_title"
             android:layout_marginStart="5dp"
+            android:hint="Location"
             android:inputType="textMultiLine"
             android:textColor="#777777" />
 
@@ -54,10 +56,11 @@
 
         <EditText
             android:id="@+id/app_date"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/date_title"
             android:layout_marginStart="5dp"
+            android:hint="DD/MM/YYYY"
             android:inputType="text"
             android:textColor="#777777" />
 
@@ -76,10 +79,11 @@
 
         <EditText
             android:id="@+id/app_time"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/time_title"
             android:layout_below="@+id/time_title"
+            android:hint="HH:MM"
             android:inputType="text"
             android:textColor="#777777" />
 
@@ -118,16 +122,17 @@
 
         <EditText
             android:id="@+id/app_notes"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/notes_title"
             android:layout_marginStart="5dp"
+            android:hint="Notes"
             android:inputType="textMultiLine"
             android:textColor="#777777" />
 
         <Button
             android:id="@+id/delete"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/delete"
             android:layout_below="@id/app_notes"

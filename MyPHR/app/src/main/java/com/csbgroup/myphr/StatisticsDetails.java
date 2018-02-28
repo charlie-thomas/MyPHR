@@ -59,7 +59,7 @@ public class StatisticsDetails extends Fragment {
 
         // view set up
         View rootView = inflater.inflate(R.layout.fragment_statistics_details, container, false);
-        ((MainActivity) getActivity()).setToolbar("My Measurements", true);
+        ((MainActivity) getActivity()).setToolbar("", true);
         setHasOptionsMenu(true);
 
         Bundle args = getArguments();

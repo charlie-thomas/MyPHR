@@ -119,64 +119,74 @@ public class MainActivity extends AppCompatActivity {
     private static void populateContacts(ContactsDao dao) {
         dao.deleteAll();
 
-        // TODO: get contact details for main staff and load in
-        dao.insertAll(new ContactsEntity(
-                "Dr. Jones",
-                "jane.jones@hospital.com",
-                "012334567890",
-                "My main doctor at hospital."),
+        // Key medical staff at Royal Childrens Hospital, Glasgow are pre-loaded
+        dao.insertAll(
                 new ContactsEntity(
-                "Nurse Williams",
-                "george.williams@hospital.com",
-                "012334567890",
-                "My main nurse at hospital."
-                ));
+                "Dr Avril Mason",
+                "avrilmason@nhs.net",
+                "01412010000",
+                "Phone will go through to mobile.\n\nGround Floor, Zone 2, Office Block,\nRoyal Hospital for Children,\n" +
+                        "QEUH,\nGovan Road,\nGlasgow G51 4TF"),
+
+                new ContactsEntity(
+                        "Ms Kerri Marshall",
+                        "",
+                        "01414516548(ext), 86548(int)",
+                        "Endocrine/Metabolic Secretary"),
+
+                new ContactsEntity(
+                  "Ms Teresa McBride",
+                  "teresa.mcbride@ggc.scot.nhs.uk",
+                  "07904881485",
+                  "Paediatric Endocrine Nurse"));
     }
 
     private static void populateMedicine(MedicineDao dao) {
         dao.deleteAll();
 
-        dao.insertAll(new MedicineEntity(
-                "Growth Hormone",
-                "Natural Hormone to simulate growth.",
-                "5mg",
-                "Take once a day.",
-                false,
-                false,
-                false,
-                null,
-                "21:15"),
+        dao.insertAll(
                 new MedicineEntity(
                 "Oestrogen",
                 "Helps in the development and maintenance of sexual maturation.",
                 "2mg",
-                "Tablets and patches should be taken once a day.",
+                "Tablets/patches should be taken once a day, every day.",
                 true,
                 true,
                 false,
-                null,
+                "26/02/2018",
                 "15:50"),
                 new MedicineEntity(
                 "Progesterone",
-                "Progesterone description",
-                "2mg",
+                "Sex hormone involved in the menstrual cycle, pregnancy and embryogenesis",
+                "5mg",
                 "To be taken on 7-12 days of calendar month either monthly, every 2nd month or" +
-                        "every 3rd month",
+                        "every 3rd month.",
                 false,
-                false,
+                true,
                 true,
                 "05/02/2018",
                 "13:30"),
                 new MedicineEntity(
                 "Thyroxine",
-                "Thyroxine description",
+                "Main thyroid hormone",
                 "2mg",
-                "To be taken daily",
+                "Vital roles in regulating the body’s metabolic rate, heart and digestive " +
+                        "functions, muscle control, brain development and maintenance of bones.\nTo be taken daily.",
+                true,
                 false,
+                true,
+                "01/01/2010",
+                "13:15"),
+        new MedicineEntity(
+                "Growth Hormone",
+                "Natural hormone to simulate growth.",
+                "5mg",
+                "To be taken once a day, every day.",
                 false,
+                true,
                 false,
-                null,
-                "13:15")
+                "26/02/2018",
+                "21:15")
                 );
     }
 

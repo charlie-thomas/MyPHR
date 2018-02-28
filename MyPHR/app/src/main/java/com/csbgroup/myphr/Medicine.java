@@ -19,8 +19,10 @@ import android.widget.TextView;
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.MedicineEntity;
 
+import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -177,7 +179,9 @@ public class Medicine extends Fragment {
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                     MedicineEntity medicine = new MedicineEntity(name.getText().toString(),
                                             description.getText().toString(), dose.getText().toString(),
-                                            notes.getText().toString(), false, true, false, null, "00:00");
+                                            notes.getText().toString(), false, true, false,
+                                            new SimpleDateFormat("dd/MM/yyyy").format(new Date()), //today's date
+                                            "00:00");
                                     long uid = db.medicineDao().insert(medicine);
 
                                     // Move to details for new medicine
