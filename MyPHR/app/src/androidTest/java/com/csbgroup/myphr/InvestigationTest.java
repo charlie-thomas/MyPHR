@@ -14,13 +14,11 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-public class ContactTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class InvestigationTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private MainActivity mainActivity;
 
-    private ListView contactsList;
-
-    public ContactTest() {
+    public InvestigationTest() {
         super(MainActivity.class);
     }
 
@@ -28,68 +26,63 @@ public class ContactTest extends ActivityInstrumentationTestCase2<MainActivity> 
     protected void setUp() throws Exception {
         mainActivity = getActivity();
 
-        Contacts contacts = Contacts.newInstance();
+        Investigations investigations  = Investigations.newInstance();
 
         FragmentTransaction transaction = mainActivity.getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, contacts);
+        transaction.replace(R.id.frame_layout, investigations);
         transaction.commitAllowingStateLoss();
 
         getInstrumentation().waitForIdleSync();
-
-        contactsList = getActivity().findViewById(R.id.contacts_list);
     }
 
     public void testPreconditions() {
         assertNotNull(mainActivity);
-        assertNotNull(contactsList);
+        onView(withId(R.id.investigations_list)).check(matches(isDisplayed()));
     }
 
-    public void testContactList() {
-        assertEquals(contactsList.getChildCount(), 2);
+    public void testInvestigationsList() {
+        ListView lv = mainActivity.findViewById(R.id.investigations_list);
+        assertEquals(4, lv.getChildCount());
+        onView(withId(R.id.investigations_list)).check(matches(isDisplayed()));
     }
 
-    public void testFabOnClick() {
-        onView(withId(R.id.contact_fab)).perform(click());
-        onView(withText("Add a New Contact")).check(matches(isDisplayed()));
-    }
-
-    public void testErrorDialog() {
-        onView(withId(R.id.contact_fab)).perform(click());
-        onView(withText("Add a New Contact")).check(matches(isDisplayed()));
+    public void testFormatError() {
+        onView(withId(R.id.investigation_fab)).perform(click());
+        onView(withText(R.string.investigationmessage)).check(matches(isDisplayed()));
 
         onView(withText("ADD")).perform(click());
         onView(withText("Format Error")).check(matches(isDisplayed()));
     }
 
-    public void testCorrectFormat() {
-        onView(withId(R.id.contact_fab)).perform(click());
-        onView(withText("Add a New Contact")).check(matches(isDisplayed()));
+    public void testAddNewInvestigation() {
+        onView(withId(R.id.investigation_fab)).perform(click());
+        onView(withText(R.string.investigationmessage)).check(matches(isDisplayed()));
 
-        onView(withId(R.id.contact_name)).perform(typeText("Contact Name"));
-        onView(withId(R.id.contact_phone)).perform(typeText("Contact Phone"));
-        onView(withId(R.id.contact_email)).perform(typeText("Contact Email"));
-        onView(withId(R.id.contact_notes)).perform(typeText("Contact Notes"));
-
+        onView(withId(R.id.inv_title)).perform(typeText("Invest Title"));
+        onView(withId(R.id.inv_DD)).perform(typeText("02"));
+        onView(withId(R.id.inv_MM)).perform(typeText("02"));
+        onView(withId(R.id.inv_YYYY)).perform(typeText("2018"));
+        onView(withId(R.id.inv_notes)).perform(typeText("Notes"));
 
         onView(withText("ADD")).perform(click());
-        onView(withText("Contact Name")).check(matches(isDisplayed()));
+        onView(withText("Invest Title")).check(matches(isDisplayed()));
     }
 
     public void testBackButton() {
-        onView(withText("Dr. Jones")).perform(click());
+        onView(withText("03/01/2018")).perform(click());
 
         onView(withContentDescription("Navigate up")).perform(click());
-        onView(withText("Nurse Williams")).check(matches(isDisplayed()));
+        onView(withText("Check Up 3")).check(matches(isDisplayed()));
     }
 
     public void testEditButton() {
-        onView(withText("Dr. Jones")).perform(click());
+        onView(withText("03/01/2018")).perform(click());
 
         onView(withContentDescription("Edit Icon")).perform(click());
-        onView(withId(R.id.contact_title)).check(matches(isDisplayed()));
+        onView(withId(R.id.investigation_name)).check(matches(isDisplayed()));
 
-        onView(withId(R.id.contact_title)).perform(clearText());
-        onView(withId(R.id.contact_title)).perform(typeText("New Title"));
+        onView(withId(R.id.investigation_name)).perform(clearText());
+        onView(withId(R.id.investigation_name)).perform(typeText("New Title"));
         onView(withContentDescription("Edit Icon")).perform(click());
 
         onView(withText("New Title")).check(matches(isDisplayed()));

@@ -12,6 +12,7 @@ import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.MedicineDao;
 
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -84,4 +85,35 @@ public class MedicineTest extends ActivityInstrumentationTestCase2<MainActivity>
         onView(withText("ADD")).perform(click());
         onView(withText("Med Name")).check(matches(isDisplayed()));
     }
+
+    public void testBackButton() {
+        onView(withText("Growth Hormone")).perform(click());
+
+        onView(withContentDescription("Navigate up")).perform(click());
+        onView(withText("Thyroxine")).check(matches(isDisplayed()));
+    }
+
+    public void testEditButton() {
+        onView(withText("Growth Hormone")).perform(click());
+
+        onView(withContentDescription("Edit Icon")).perform(click());
+        onView(withId(R.id.medicine_title)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.medicine_title)).perform(clearText());
+        onView(withId(R.id.medicine_title)).perform(typeText("New Title"));
+        onView(withContentDescription("Edit Icon")).perform(click());
+
+        onView(withText("New Title")).check(matches(isDisplayed()));
+    }
+
+    public void testRemindersSwitch() {
+        onView(withText("Growth Hormone")).perform(click());
+
+        onView(withId(R.id.reminder_switch)).perform(click());
+        onView(withId(R.id.everyotherday)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.everyotherday)).perform(click());
+    }
+
+
 }

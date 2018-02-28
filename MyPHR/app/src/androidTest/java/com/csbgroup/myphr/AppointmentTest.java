@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 
+import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -72,5 +73,25 @@ public class AppointmentTest extends ActivityInstrumentationTestCase2<MainActivi
 
         onView(withText("ADD")).perform(click());
         onView(withText("App Name")).check(matches(isDisplayed()));
+    }
+
+    public void testBackButton() {
+        onView(withText("Check Up 3")).perform(click());
+
+        onView(withContentDescription("Navigate up")).perform(click());
+        onView(withText("Clinic 2")).check(matches(isDisplayed()));
+    }
+
+    public void testEditButton() {
+        onView(withText("Check Up 3")).perform(click());
+
+        onView(withContentDescription("Edit Icon")).perform(click());
+        onView(withId(R.id.appointments_title)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.appointments_title)).perform(clearText());
+        onView(withId(R.id.appointments_title)).perform(typeText("New Title"));
+        onView(withContentDescription("Edit Icon")).perform(click());
+
+        onView(withText("New Title")).check(matches(isDisplayed()));
     }
 }
