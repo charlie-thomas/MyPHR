@@ -105,17 +105,4 @@ public class Statistics extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.settings, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.settings) {
-            ((MainActivity) getActivity()).switchFragment(StatisticsSettings.newInstance());
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }
