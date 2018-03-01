@@ -343,6 +343,7 @@ public class MedicineDetails extends Fragment {
 
                     final AlertDialog dialog = builder.create();
 
+                    // set button colours
                     dialog.setOnShowListener( new DialogInterface.OnShowListener() {
                         @Override
                         public void onShow(DialogInterface arg0) {

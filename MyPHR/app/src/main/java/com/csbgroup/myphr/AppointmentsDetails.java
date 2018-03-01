@@ -1,5 +1,7 @@
 package com.csbgroup.myphr;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
@@ -213,17 +216,52 @@ public class AppointmentsDetails extends Fragment {
             notes.setKeyListener(notesKL);
             notes.setBackground(notesBG);
 
-            // deleting an appointment
-            delete.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View v){
-                    new Thread(new Runnable() {
+            // confirm appointment deletion
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // set up the view
+                    LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+                    View v = inflater.inflate(R.layout.confirm_delete, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setView(v);
+                    final TextView message = v.findViewById(R.id.message);
+                    message.setText("Are you sure you want to delete " + thisappointment.getTitle() + "?");
+
+                    // delete the appointment
+                    builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                         @Override
-                        public void run() {
-                            AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                            db.appointmentsDao().delete(thisappointment);
-                            ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance());
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                    db.appointmentsDao().delete(thisappointment);
+                                    ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance());
+                                }
+                            }).start();
                         }
-                    }).start();
+                    });
+
+                    // cancel the delete
+                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {}
+                    });
+
+                    final AlertDialog dialog = builder.create();
+
+                    // set button colours
+                    dialog.setOnShowListener( new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface arg0) {
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(0xFFF44336);
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(0xFFF44336);
+                        }
+                    });
+
+                    dialog.show();
                 }
             });
 
