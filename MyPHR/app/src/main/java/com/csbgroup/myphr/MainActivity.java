@@ -23,6 +23,8 @@ import com.csbgroup.myphr.database.ContactsDao;
 import com.csbgroup.myphr.database.ContactsEntity;
 import com.csbgroup.myphr.database.MedicineDao;
 import com.csbgroup.myphr.database.MedicineEntity;
+import com.csbgroup.myphr.database.SickDaysDao;
+import com.csbgroup.myphr.database.SickDaysEntity;
 import com.csbgroup.myphr.database.StatValueEntity;
 import com.csbgroup.myphr.database.StatisticsDao;
 import com.csbgroup.myphr.database.StatisticsEntity;
@@ -55,11 +57,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 AppDatabase db = AppDatabase.getAppDatabase(MainActivity.this);
-                populateContacts(db.contactsDao());
                 populateMedicine(db.medicineDao());
+                populateContacts(db.contactsDao());
                 populateAppointments(db.appointmentsDao());
                 populateStatistics(db.statisticsDao());
                 populateInvestigations(db.investigationDao());
+                populateSickDays(db.sickDaysDao());
             }
         }).start();
 
@@ -224,6 +227,17 @@ public class MainActivity extends AppCompatActivity {
         InvestigationsEntity ie3 = new InvestigationsEntity("Hearing Test", "30/06/2017", "due in 12 months");
 
         dao.insertAll(ie, ie1, ie2, ie3);
+    }
+
+    private static void populateSickDays(SickDaysDao dao) {
+        dao.deleteAll();
+
+        SickDaysEntity sd = new SickDaysEntity("28/02/2018");
+        SickDaysEntity sd1 = new SickDaysEntity("14/03/2018");
+        SickDaysEntity sd2 = new SickDaysEntity("01/02/2018");
+        SickDaysEntity sd3 = new SickDaysEntity("06/02/2018");
+
+        dao.insertAll(sd, sd1, sd2, sd3);
     }
 
     private static void populateStatistics(StatisticsDao dao) {
