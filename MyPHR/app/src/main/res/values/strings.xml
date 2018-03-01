@@ -155,7 +155,5 @@
         <item>Favourite colour</item>
     </string-array>
 
-    // Error checking strings
-    <string name="error">Format Error</string>
     <string name="confirm">Confirm Delete</string>
 </resources>

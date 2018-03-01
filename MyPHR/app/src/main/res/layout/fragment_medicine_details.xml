@@ -101,12 +101,43 @@
 
         </RadioGroup>
 
+        <RadioGroup
+            android:id="@+id/radios2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@id/radios"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginBottom="5dp">
+
+            <RadioButton
+                android:id="@+id/general"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="General"
+                android:textSize="17dp"
+                android:textColor="#777777"
+                android:visibility="gone" />
+
+            <RadioButton
+                android:id="@+id/descriptive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17dp"
+                android:textColor="#777777"
+                android:layout_marginStart="28dp"
+                android:text="Descriptive"
+                android:visibility="gone" />
+
+        </RadioGroup>
+
 
         <EditText
             android:id="@+id/reminder_time_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/radios"
+            android:layout_below="@id/radios2"
             android:layout_marginStart="30dp"
             android:textStyle="bold"
             android:visibility="gone"
@@ -118,7 +149,7 @@
             android:id="@+id/reminder_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/radios"
+            android:layout_below="@+id/radios2"
             android:layout_marginStart="35dp"
             android:layout_toEndOf="@+id/reminder_time_title"
             android:hint="HH:MM"
