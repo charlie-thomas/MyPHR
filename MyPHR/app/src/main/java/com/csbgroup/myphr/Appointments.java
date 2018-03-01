@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
@@ -31,8 +30,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import javax.microedition.khronos.egl.EGLDisplay;
 
 public class Appointments extends Fragment {
 
@@ -188,7 +185,7 @@ public class Appointments extends Fragment {
                 final EditText mins = v.findViewById(R.id.appointment_min);
                 final EditText notes = v.findViewById(R.id.appointment_notes);
 
-                // hide the invisible edit texts
+                // hide the invisible edittexts
                 EditText date_error = v.findViewById(R.id.date_error);
                 date_error.setKeyListener(null);
                 date_error.setBackground(null);
@@ -242,7 +239,7 @@ public class Appointments extends Fragment {
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
                 // check user input
-                inputChecking(v, dialog, notes);
+                inputChecking(v, dialog);
             }
         });
     }
@@ -252,9 +249,8 @@ public class Appointments extends Fragment {
      * until all format conditions are met.
      * @param v is the view for the add appointment dialog.
      * @param ad is the new contact alertdialog.
-     * @param n is the next textview following hour.
      */
-    public void inputChecking(View v, AlertDialog ad, EditText n){
+    public void inputChecking(View v, AlertDialog ad){
 
         final EditText title = v.findViewById(R.id.appointment_name);
         final EditText day = v.findViewById(R.id.appointment_DD);
@@ -262,12 +258,12 @@ public class Appointments extends Fragment {
         final EditText year = v.findViewById(R.id.appointment_YYYY);
         final EditText hour = v.findViewById(R.id.appointment_hour);
         final EditText mins = v.findViewById(R.id.appointment_min);
+        final EditText notes = v.findViewById(R.id.appointment_notes);
         final EditText date_error = v.findViewById(R.id.date_error);
         final EditText time_error = v.findViewById(R.id.time_error);
         final AlertDialog dialog = ad;
-        final EditText next = n;
 
-        // ensure appointment title is valid
+        // ensure appointment title is present
         title.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -367,7 +363,7 @@ public class Appointments extends Fragment {
                 if (validTitle && validTime && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
                 else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
 
-                if (mins.getText().toString().length() == 2) {next.requestFocus();}
+                if (mins.getText().toString().length() == 2) {notes.requestFocus();}
 
             }
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}

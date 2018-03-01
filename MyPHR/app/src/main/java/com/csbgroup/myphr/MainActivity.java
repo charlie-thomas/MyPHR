@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 "avrilmason@nhs.net",
                 "01412010000",
                 "Phone will go through to mobile.\n\nGround Floor, Zone 2, Office Block,\nRoyal Hospital for Children,\n" +
-                        "QEUH,\nGovan Road,\nGlasgow G51 4TF"),
+                        "Queen Elizabeth University Hospital,\nGovan Road,\nGlasgow G51 4TF"),
 
                 new ContactsEntity(
                         "Ms Kerri Marshall",

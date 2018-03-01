@@ -37,10 +37,6 @@ import java.util.concurrent.Future;
 
 import static android.view.View.GONE;
 
-/**
- * Created by JBizzle on 04/12/2017.
- */
-
 public class StatisticsDetailsList extends Fragment {
 
     FloatingActionButton fab; // the add measurement fab
@@ -49,6 +45,11 @@ public class StatisticsDetailsList extends Fragment {
     public static boolean isEditMode = false;
     public static View rootView;
     public static String type;
+
+    // format checking booleans
+    private boolean validMeasurement = false;
+    private boolean validDate = false;
+    private boolean validCentile = true;
 
     public StatisticsDetailsList() {
         // Required empty public constructor
@@ -230,6 +231,8 @@ public class StatisticsDetailsList extends Fragment {
                 } else if (!type.equals("Blood Pressure")){
                     title.setText("Add a New " + type);
                     measurement.setHint(type);
+                } else {
+                    title.setText("Add a New Blood Pressure");
                 }
 
                 // fetch the input values (measurement already fetched above ^)
@@ -237,8 +240,10 @@ public class StatisticsDetailsList extends Fragment {
                 final EditText month = v.findViewById(R.id.meas_MM);
                 final EditText year = v.findViewById(R.id.meas_YYYY);
 
-                // auto shift view focus when entering date
-                shiftFocus(day, month, year, cent);
+                // hide the invisible edittext
+                EditText date_error = v.findViewById(R.id.date_error);
+                date_error.setKeyListener(null);
+                date_error.setBackground(null);
 
                 // add a new measurement action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
@@ -249,161 +254,206 @@ public class StatisticsDetailsList extends Fragment {
                         final String fulldate = day.getText().toString() + "/" + month.getText().toString()
                                 + "/" + year.getText().toString();
 
-                        // check that a measurement was given
-                        Boolean validMeasurement = true;
+                        // concatenate blood pressure measurments
                         final String mmnt;
-                        if(type.equals("Blood Pressure")){
-                            String sys = measurement.getText().toString();
-                            String dias = diastolic.getText().toString();
-                            if (sys.equals("") || dias.equals("")) {validMeasurement = false;} // incomplete
-                            mmnt = sys +"/"+ dias;
-                        } else {
-                            mmnt = measurement.getText().toString();
-                        }
+                        if(type.equals("Blood Pressure")){mmnt = measurement.getText().toString() +"/"+ diastolic.getText().toString();}
+                        else {mmnt = measurement.getText().toString();}
 
-                        if (mmnt.equals("")) {
-                            validMeasurement = false;
-                        } // no measurement given
-
-                        // check that a valid date was given
-                        Boolean validDate = true;
-                        if (fulldate.length() != 10) {
-                            validDate = false;
-                        } // incomplete date
-                        else {
-                            try {
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                Date d = sdf.parse(fulldate);
-                                if (!fulldate.equals(sdf.format(d))) {
-                                    validDate = false;
-                                }
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        // check that a valid centile was given for height/weight (providing no centile IS allowed)
-                        Boolean validCentile = true;
+                        // fetch centile or assign null appropriately
                         final String centile;
-                        if (type.equals("Height") || type.equals("Weight")) {
-                            centile = cent.getText().toString();
-                            if (!centile.equals("")) {
-                                int centileint = Integer.parseInt(centile); // convert to an int for checks
-                                if ((centileint < 0 || centileint > 100)) {
-                                    validCentile = false;
-                                }
-                            }
-                        } else {
-                            centile = null;
-                        }
+                        if (type.equals("Height") || type.equals("Weight")) {centile = cent.getText().toString();}
+                        else {centile = null;}
 
-                        //format checks passed - add the new measurement to the database
-                        if (validMeasurement && validDate && validCentile) {
-                            new Thread(new Runnable() {
+                        //Add the new measurement to the database
+                        new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                    final StatisticsEntity thisstat = getStats(type);
-                                    thisstat.addValue(mmnt, fulldate, centile);
-                                    db.statisticsDao().update(thisstat);
+                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                final StatisticsEntity thisstat = getStats(type);
+                                thisstat.addValue(mmnt, fulldate, centile);
+                                db.statisticsDao().update(thisstat);
 
-                                    Fragment details = StatisticsSection.newInstance();
-
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("title", args.getString("title", "Measurements"));
-                                    details.setArguments(bundle);
-
-                                    ((MainActivity) getActivity()).switchFragment(details);
+                                // refresh the view
+                                Fragment details = StatisticsSection.newInstance();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("title", args.getString("title", "Measurements"));
+                                details.setArguments(bundle);
+                                ((MainActivity) getActivity()).switchFragment(details);
                                 }
-                            }).start();
-                        }
+                        }).start();
                     }
                 });
 
-                // action for cancelling add
+                // cancel the add
                 builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
+                    public void onClick(DialogInterface dialogInterface, int i) {}
                 });
 
-                AlertDialog dialog = builder.create();
+                final AlertDialog dialog = builder.create();
                 dialog.show();
+
+                // disable the add button until input conditions are met
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+                // check user input
+                inputChecking(v, type, diastolic, dialog);
             }
         });
     }
 
-    /**
-     * errorDialog is called when an invalid measurement, date or centile is part of a measurement
-     * being added, it displays an error message about the failure.
-     * @param type is the type of error reported
-     */
-    public void errorDialog(String type){
+    public void inputChecking(View v, String t, EditText d, AlertDialog ad){
 
-        // set up the dialog
-        LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-        View v = inflater.inflate(R.layout.format_error, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(v);
+        final EditText measurement = v.findViewById(R.id.measurement);
+        final EditText day = v.findViewById(R.id.meas_DD);
+        final EditText month = v.findViewById(R.id.meas_MM);
+        final EditText year = v.findViewById(R.id.meas_YYYY);
+        final EditText centile = v.findViewById(R.id.centile);
+        final EditText date_error = v.findViewById(R.id.date_error);
+        final EditText diastolic = d;
+        final String type = t;
+        final AlertDialog dialog = ad;
 
-        // specify error type
-        final TextView errortype = v.findViewById(R.id.error_type);
-        if (type.equals("measurement")){errortype.setText("YOU MUST PROVIDE A MEASUREMENT");}
-        if (type.equals("centile")){errortype.setText("INVALID CENTILE");}
-        if (type.equals("date")){errortype.setText("INVALID DATE");}
+        // ensure measurement is present
+        measurement.addTextChangedListener(new TextWatcher() {
 
-        final TextView errormessage = v.findViewById(R.id.error_message);
-        errormessage.setText("Your measurement was not added.");
-
-        // user dismiss message
-        builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface arg0, int arg1) {
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                String mmnt;
+                if(type.equals("Blood Pressure")){
+                    String sys = measurement.getText().toString();
+                    String dias = diastolic.getText().toString();
+                    mmnt = sys + "/" + dias;
+
+                    if (sys.equals("")){validMeasurement = false; measurement.setError("Systolic cannot be empty");}
+                    if (dias.equals("")){validMeasurement = false; diastolic.setError("Diastolic cannot be empty");}
+                }
+                else {mmnt = measurement.getText().toString();}
+
+                if (mmnt.equals("")){validMeasurement = false; measurement.setError("Measurement cannot be empty");}
+                else {validMeasurement = true;}
+
+                // disable/enable add button following format checks
+                if (validMeasurement && validDate && validCentile) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
+
             }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    /**
-     * shiftFocus automatically shifts the fab dialog view focus from day->month and month->year
-     * when two digits have been entered for day and month, respectively.
-     * @param day is the EditText for the dialog day('DD') field
-     * @param month is the EditText for the dialog month('MM') field
-     * @param year is the EditText for the dialog year('YYYY') field
-     * @param next is the EditText for the dialog field that follows year
-     */
-    public void shiftFocus(final EditText day, final EditText month, final EditText year, final EditText next){
-
+        // ensure measurement day is valid
         day.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+
+                // disable/enable add button following format checks
+                if (validMeasurement && validDate && validCentile) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
+
                 if (day.getText().toString().length() == 2) {month.requestFocus();}
             }
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override public void afterTextChanged(Editable editable) {}
         });
 
+        // ensure measurement month is valid
         month.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+
+                // disable/enable add button following format checks
+                if (validMeasurement && validDate && validCentile) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
+
                 if (month.getText().toString().length() == 2) {year.requestFocus();}
             }
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override public void afterTextChanged(Editable editable) {}
         });
 
-        if (next != null) {
-            year.addTextChangedListener(new TextWatcher() {
+        // ensure measurement year is valid
+        year.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+
+                // disable/enable add button following format checks
+                if (validMeasurement && validDate && validCentile) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
+
+                if (year.getText().toString().length() == 4 && (type.equals("Height") || type.equals("Weight"))) {centile.requestFocus();}
+            }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
+        });
+
+        // ensure measurement centile is valid
+        if (type.equals("Height") || type.equals("Weight")){
+            centile.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (year.getText().toString().length() == 4) {next.requestFocus();}
+
+                    String cent;
+                    if (type.equals("Height") || type.equals("Weight")){
+                        cent = centile.getText().toString();
+                        if (!cent.equals("")){
+                            int centileint = Integer.parseInt(cent); // convert to int for checks
+                            if (centileint < 1 || centileint > 100) {
+                                validCentile = false;
+                                centile.setError("Invalid centile (1-100)");
+                            } else {validCentile = true;}
+                        } else {validCentile = true;}
+                    }
+
+                    // disable/enable add button following format checks
+                    if (validMeasurement && validDate && validCentile) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                    else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
                 }
                 @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
                 @Override public void afterTextChanged(Editable editable) {}
             });
         }
+
+    }
+
+    /**
+     * checkFullDate checks the validity of the full date across the three fields in the add dialog
+     * whenever any of them is changed.
+     * @param et1 is the day.
+     * @param et2 is the month.
+     * @param et3 is the year.
+     * @return
+     */
+    public boolean checkFullDate(EditText et1, EditText et2, EditText et3){
+
+        boolean validDate = true;
+
+        // join date into one string
+        final String date = et1.getText().toString() + "/" + et2.getText().toString() + "/" + et3.getText().toString();
+
+        if (date.equals("//")) {validDate = false;} // no date given
+        else if (date.length() != 10) {validDate = false;} // incomplete date
+        else {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                Date d = sdf.parse(date);
+                if (!date.equals(sdf.format(d))){
+                    validDate = false;
+                }
+            } catch (ParseException e) {e.printStackTrace();}
+        }
+
+        return validDate;
     }
 
 }
