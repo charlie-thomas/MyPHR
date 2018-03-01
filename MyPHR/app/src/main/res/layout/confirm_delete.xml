@@ -7,35 +7,25 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/error_title"
+        android:id="@+id/title"
 
-        android:background="@color/colorAccent"
+        android:background="#F44336"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:paddingLeft="10dp"
         android:paddingBottom="10dp"
-        android:paddingTop="15dp"
-        android:text="@string/error"
+        android:paddingTop="10dp"
+        android:text="@string/confirm"
         android:textColor="#FFFFFF"
         android:textSize="20dp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/error_type"
+        android:id="@+id/message"
 
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:paddingTop="10dp"
-        android:paddingLeft="10dp"
-        android:textSize="18dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/error_message"
-
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:paddingTop="2dp"
         android:paddingLeft="10dp"
         android:textSize="18dp"
         android:textStyle="bold" />
