@@ -151,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 "2mg",
                 "Tablets/patches should be taken once a day, every day.",
                 true,
+                1,
                 true,
                 false,
                 "26/02/2018",
@@ -162,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
                 "To be taken on 7-12 days of calendar month either monthly, every 2nd month or" +
                         "every 3rd month.",
                 false,
+                0,
                 true,
                 true,
                 "05/02/2018",
@@ -173,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
                 "Vital roles in regulating the body’s metabolic rate, heart and digestive " +
                         "functions, muscle control, brain development and maintenance of bones.\nTo be taken daily.",
                 true,
+                1,
                 false,
                 true,
                 "01/01/2010",
@@ -183,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
                 "5mg",
                 "To be taken once a day, every day.",
                 false,
+                1,
                 true,
                 false,
                 "26/02/2018",

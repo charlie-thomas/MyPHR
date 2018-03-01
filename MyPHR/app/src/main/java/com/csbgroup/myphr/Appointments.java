@@ -144,21 +144,6 @@ public class Appointments extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-
-    /**
-     * Provides navigation for menu items; currently only needed for navigation to settings
-     * fragment.
-     * @param item is the clicked menu item
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.settings) {
-            ((MainActivity) getActivity()).switchFragment(AppointmentsSettings.newInstance());
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * buildDialog builds the pop-up dialog for adding a new appointment
      * @param fab the floating action button which pulls up the dialog

@@ -122,25 +122,6 @@ public class Medicine extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.settings, menu);
-    }
-
-    /**
-     *  Provides navigation for menu items; currently only needed for navigation to settings
-     *  fragment.
-     *  @param item is the clicked menu item
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.settings) {
-            ((MainActivity) getActivity()).switchFragment(MedicineSettings.newInstance());
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * buildDialog builds the pop-up dialog for adding a new medicine
      * @param fab the floating action button which pulls up the dialog
@@ -175,7 +156,7 @@ public class Medicine extends Fragment {
                                 AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                 MedicineEntity medicine = new MedicineEntity(name.getText().toString(),
                                         description.getText().toString(), dose.getText().toString(),
-                                        notes.getText().toString(), false, true, false,
+                                        notes.getText().toString(), false, 0,true, false,
                                         new SimpleDateFormat("dd/MM/yyyy").format(new Date()), //today's date
                                         "00:00");
                                 long uid = db.medicineDao().insert(medicine);
