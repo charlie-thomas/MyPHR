@@ -16,8 +16,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -62,7 +65,7 @@ public class AppointmentsDetails extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_appointments_details, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_appointments_details, container, false);
         this.rootView = rootView;
         
         Bundle args = getArguments();
@@ -104,6 +107,109 @@ public class AppointmentsDetails extends Fragment {
         Switch reminders = rootView.findViewById(R.id.reminder_switch);
         reminders.setChecked(appointment.getReminders());
 
+        RadioButton general = rootView.findViewById(R.id.general);
+        RadioButton descriptive = rootView.findViewById(R.id.descriptive);
+        CheckBox week = rootView.findViewById(R.id.checkBox1);
+        CheckBox day = rootView.findViewById(R.id.checkBox2);
+        CheckBox morning = rootView.findViewById(R.id.checkBox3);
+
+        // check general/descriptive radios to reflect database
+        if (thisappointment.getReminder_type() == 0){
+            descriptive.setChecked(false);
+            general.setChecked(true);
+        }
+        else {
+            general.setChecked(false);
+            descriptive.setChecked(true);
+        }
+
+        // check week/day/morning checkboxes to reflect database
+        if (thisappointment.isRemind_week()){week.setChecked(true);}
+        if (thisappointment.isRemind_day()){day.setChecked(true);}
+        if (thisappointment.isRemind_morning()){morning.setChecked(true);}
+
+
+        // update the database when general/descriptive radio buttons are changed
+        RadioGroup radioGroup = rootView.findViewById(R.id.radios);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.general:
+                        thisappointment.setReminder_type(0);
+                        break;
+                    case R.id.descriptive:
+                        thisappointment.setReminder_type(1);
+                        break;
+                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                        db.appointmentsDao().update(thisappointment);
+                    }
+                }).start();
+            }
+        });
+
+        // update the database when week/day/morning checkboxes are changed
+        week.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                if (isChecked) {thisappointment.setRemind_week(true);}
+                else {thisappointment.setRemind_week(false);}
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                        db.appointmentsDao().update(thisappointment);
+                    }
+                }).start();
+            }
+        });
+        day.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                if (isChecked) {thisappointment.setRemind_day(true);}
+                else {thisappointment.setRemind_day(false);}
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                        db.appointmentsDao().update(thisappointment);
+                    }
+                }).start();
+            }
+        });
+        morning.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+                if (isChecked) {thisappointment.setRemind_morning(true);}
+                else {thisappointment.setRemind_morning(false);}
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                        db.appointmentsDao().update(thisappointment);
+                    }
+                }).start();
+            }
+        });
+
+        // show the reminders options if reminders are on
+        if (appointment.getReminders()){
+            general.setVisibility(View.VISIBLE);
+            descriptive.setVisibility(View.VISIBLE);
+            week.setVisibility(View.VISIBLE);
+            day.setVisibility(View.VISIBLE);
+            morning.setVisibility(View.VISIBLE);
+        }
+
+        // hide/show reminders options as switch is toggled
         reminders.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
                 new Thread(new Runnable() {
@@ -114,6 +220,27 @@ public class AppointmentsDetails extends Fragment {
                         db.appointmentsDao().update(thisappointment);
                     }
                 }).start();
+
+                RadioButton general = rootView.findViewById(R.id.general);
+                RadioButton descriptive = rootView.findViewById(R.id.descriptive);
+                CheckBox week = rootView.findViewById(R.id.checkBox1);
+                CheckBox day = rootView.findViewById(R.id.checkBox2);
+                CheckBox morning = rootView.findViewById(R.id.checkBox3);
+
+                if (isChecked) { // reminders are on
+                    general.setVisibility(View.VISIBLE);
+                    descriptive.setVisibility(View.VISIBLE);
+                    week.setVisibility(View.VISIBLE);
+                    day.setVisibility(View.VISIBLE);
+                    morning.setVisibility(View.VISIBLE);
+                }
+                else { // reminders are off
+                    general.setVisibility(View.GONE);
+                    descriptive.setVisibility(View.GONE);
+                    week.setVisibility(View.GONE);
+                    day.setVisibility(View.GONE);
+                    morning.setVisibility(View.GONE);
+                }
             }
         });
 

@@ -197,7 +197,8 @@ public class Appointments extends Fragment {
                                 AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                 AppointmentsEntity appointment = new AppointmentsEntity(
                                         title.getText().toString(), location.getText().toString(),
-                                        date, time, notes.getText().toString(), false);
+                                        date, time, notes.getText().toString(), false, 0,
+                                        false, false, false);
                                 long uid = db.appointmentsDao().insert(appointment);
 
                                 // Move to details fragment for new appointment

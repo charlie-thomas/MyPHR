@@ -204,19 +204,24 @@ public class MainActivity extends AppCompatActivity {
 
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Clinic 1", "Royal Hospital for Children, Glasgow",
-                df.format(c.getTime()), "15:55","Go to desk on ground floor ward 2.", true));
+                df.format(c.getTime()), "15:55","Go to desk on ground floor ward 2.", true, 1,
+                false, false, false));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Check Up 1", "Children's Hospital",
-                df.format(c.getTime()), "16:00","Appointment Notes", false));
+                df.format(c.getTime()), "16:00","Appointment Notes", false, 0,
+                false, false, false));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Check Up 2", "Children's Hospital",
-                df.format(c.getTime()), "16:00","Appointment Notes", true));
+                df.format(c.getTime()), "16:00","Appointment Notes", true, 0,
+                false, false, false));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Clinic 2", "Children's Hospital",
-                df.format(c.getTime()), "17:00","Appointment Notes", false));
+                df.format(c.getTime()), "17:00","Appointment Notes", false, 1,
+                false, false, false));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Check Up 3", "Children's Hospital",
-                df.format(c.getTime()), "14:00","Appointment Notes", true));
+                df.format(c.getTime()), "14:00","Appointment Notes", true, 1,
+                false, false, false));
     }
 
     private static void populateInvestigations(InvestigationsDao dao)  {

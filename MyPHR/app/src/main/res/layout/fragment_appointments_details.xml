@@ -102,6 +102,38 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+        <RadioGroup
+            android:id="@+id/radios"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/reminders"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/general"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="General"
+                android:textColor="#777777"
+                android:textSize="17dp"
+                android:visibility="gone"/>
+
+            <RadioButton
+                android:id="@+id/descriptive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:text="Descriptive"
+                android:textColor="#777777"
+                android:textSize="17dp"
+                android:visibility="gone"/>
+
+        </RadioGroup>
+
+
         <Switch
             android:id="@+id/reminder_switch"
             android:layout_width="wrap_content"
@@ -116,7 +148,7 @@
             android:id="@+id/notes_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/reminders"
+            android:layout_below="@id/checkBox3"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:text="@string/notes"
@@ -137,12 +169,12 @@
             android:id="@+id/delete"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/delete"
             android:layout_below="@id/app_notes"
-            android:layout_marginLeft="6dp"
+            android:layout_marginTop="5dp"
             android:backgroundTint="#F44336"
+            android:text="@string/delete"
             android:textColor="#FFFFFF"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/imageView2"
@@ -152,6 +184,37 @@
             android:layout_alignTop="@+id/appointments_title"
             android:layout_marginTop="10dp"
             app:srcCompat="@drawable/ic_appointment" />
+
+        <CheckBox
+            android:id="@+id/checkBox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/radios"
+            android:layout_below="@+id/radios"
+            android:text="One week prior"
+            android:textColor="#777777"
+            android:textSize="17dp"
+            android:visibility="gone"/>
+        <CheckBox
+            android:id="@+id/checkBox2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/radios"
+            android:layout_below="@+id/checkBox1"
+            android:text="One day prior"
+            android:textColor="#777777"
+            android:textSize="17dp"
+            android:visibility="gone"/>
+        <CheckBox
+            android:id="@+id/checkBox3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/radios"
+            android:layout_below="@+id/checkBox2"
+            android:text="The morning of"
+            android:textColor="#777777"
+            android:textSize="17dp"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 </ScrollView>
