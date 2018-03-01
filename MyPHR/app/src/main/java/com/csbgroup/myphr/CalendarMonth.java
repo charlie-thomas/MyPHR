@@ -61,7 +61,7 @@ public class CalendarMonth extends Fragment {
         setHasOptionsMenu(false);
 
         MaterialCalendarView calendarView = rootView.findViewById(R.id.calendarView);
-        calendarView.setDateSelected(Calendar.getInstance(), true);
+        calendarView.setDateSelected(Calendar.getInstance().getTime(), true);
         calendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull com.prolificinteractive.materialcalendarview.CalendarDay date, boolean selected) {
@@ -104,21 +104,21 @@ public class CalendarMonth extends Fragment {
             }
 
             switch (ce.getType()) {
+                case "Sick":
+                    sickdays.add(calendarDay);
+                    break;
                 case "Appointment":
                     apps.add(calendarDay);
                     break;
                 case "Investigation":
                     invest.add(calendarDay);
                     break;
-                case "Sick":
-                    sickdays.add(calendarDay);
-                    break;
             }
         }
 
         calendarView.addDecorator(new EventDecorator(ContextCompat.getColor(rootView.getContext(), R.color.colorAccent), apps));
         calendarView.addDecorator(new EventDecorator(ContextCompat.getColor(rootView.getContext(), R.color.colorAccentDark), invest));
-        calendarView.addDecorator(new EventDecorator(ContextCompat.getColor(rootView.getContext(), R.color.colorTeal), sickdays));
+        calendarView.addDecorator(new EventDecorator(ContextCompat.getColor(rootView.getContext(), R.color.colorSick), sickdays));
 
         LinearLayout upcoming_ll = rootView.findViewById(R.id.upcoming_layout);
         TextView upcomingDate = rootView.findViewById(R.id.upcoming_date);
