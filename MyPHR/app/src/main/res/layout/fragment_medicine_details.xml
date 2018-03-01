@@ -189,6 +189,8 @@
             android:text="@string/delete"
             android:layout_below="@id/medicine_notes"
             android:layout_marginLeft="6dp"
+            android:backgroundTint="#F44336"
+            android:textColor="#FFFFFF"
             android:visibility="gone"/>
 
         <ImageView
