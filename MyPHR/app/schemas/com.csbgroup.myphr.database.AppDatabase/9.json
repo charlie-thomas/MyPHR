@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 9,
-    "identityHash": "5f5849dafbdbbe6a061717ea3f476cb6",
+    "identityHash": "4949e6d98a23171221f2e21558ce8fd6",
     "entities": [
       {
         "tableName": "AppointmentsEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `location` TEXT, `date` TEXT, `time` TEXT, `notes` TEXT, `reminders` INTEGER NOT NULL, `reminder_type` INTEGER NOT NULL, `remind_when` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `location` TEXT, `date` TEXT, `time` TEXT, `notes` TEXT, `reminders` INTEGER NOT NULL, `reminder_type` INTEGER NOT NULL, `remind_week` INTEGER NOT NULL, `remind_day` INTEGER NOT NULL, `remind_morning` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -57,8 +57,20 @@
             "notNull": true
           },
           {
-            "fieldPath": "remind_when",
-            "columnName": "remind_when",
+            "fieldPath": "remind_week",
+            "columnName": "remind_week",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "remind_day",
+            "columnName": "remind_day",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "remind_morning",
+            "columnName": "remind_morning",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -74,7 +86,7 @@
       },
       {
         "tableName": "MedicineEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `description` TEXT, `dose` TEXT, `notes` TEXT, `reminders` INTEGER NOT NULL, `reminder_type` INTEGER NOT NULL, `remind_when` INTEGER NOT NULL, `date` TEXT, `daily` INTEGER NOT NULL, `other_days` INTEGER NOT NULL, `time` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `description` TEXT, `dose` TEXT, `notes` TEXT, `reminders` INTEGER NOT NULL, `reminder_type` INTEGER NOT NULL, `date` TEXT, `daily` INTEGER NOT NULL, `other_days` INTEGER NOT NULL, `time` TEXT)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -115,12 +127,6 @@
           {
             "fieldPath": "reminder_type",
             "columnName": "reminder_type",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "remind_when",
-            "columnName": "remind_when",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -295,7 +301,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"5f5849dafbdbbe6a061717ea3f476cb6\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"4949e6d98a23171221f2e21558ce8fd6\")"
     ]
   }
 }
