@@ -140,12 +140,28 @@ public class AppointmentsEntity {
         this.remind_week = remind_week;
     }
 
-    public boolean isRemind_day(){
+    public boolean isRemind_week() {
+        return remind_week;
+    }
+
+    public void setRemind_week(boolean remind_week) {
+        this.remind_week = remind_week;
+    }
+
+    public boolean isRemind_day() {
         return remind_day;
     }
 
-    public void setRemind_day(boolean remind_day){
+    public void setRemind_day(boolean remind_day) {
         this.remind_day = remind_day;
+    }
+
+    public boolean isRemind_morning() {
+        return remind_morning;
+    }
+
+    public void setRemind_morning(boolean remind_morning) {
+        this.remind_morning = remind_morning;
     }
 
     public boolean isRemind_morning(){

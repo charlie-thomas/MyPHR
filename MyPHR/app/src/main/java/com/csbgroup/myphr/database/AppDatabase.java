@@ -7,7 +7,7 @@ import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 @Database(entities = {AppointmentsEntity.class, MedicineEntity.class,
-        StatisticsEntity.class, ContactsEntity.class, InvestigationsEntity.class}, version = 8)
+        StatisticsEntity.class, ContactsEntity.class, InvestigationsEntity.class, SickDaysEntity.class}, version = 9)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -18,15 +18,12 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract ContactsDao contactsDao();
     public abstract StatisticsDao statisticsDao();
     public abstract InvestigationsDao investigationDao();
+    public abstract SickDaysDao sickDaysDao();
 
     public static AppDatabase getAppDatabase(Context context) {
 
         if (INSTANCE == null) INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                     AppDatabase.class, "database").fallbackToDestructiveMigration().build();
         return INSTANCE;
-    }
-
-    public static void destroyInstance() {
-        INSTANCE = null;
     }
 }
