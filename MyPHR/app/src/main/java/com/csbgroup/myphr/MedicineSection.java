@@ -24,7 +24,7 @@ public class MedicineSection extends Fragment {
                              Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_medicine_section, container, false);
 
-        ((MainActivity) getActivity()).setToolbar("My Medicine", false);
+        ((MainActivity) getActivity()).setToolbar("My Medication", false);
         setHasOptionsMenu(true);
 
         // Set up TabHost
@@ -32,9 +32,9 @@ public class MedicineSection extends Fragment {
         mTabHost.setup();
 
         // Add first tab for the calendar
-        TabHost.TabSpec mSpec = mTabHost.newTabSpec("Medicine");
+        TabHost.TabSpec mSpec = mTabHost.newTabSpec("Medication");
         mSpec.setContent(R.id.medicine_tab);
-        mSpec.setIndicator("Medicine");
+        mSpec.setIndicator("Medication");
         mTabHost.addTab(mSpec);
 
         // Add second tab for the investigations

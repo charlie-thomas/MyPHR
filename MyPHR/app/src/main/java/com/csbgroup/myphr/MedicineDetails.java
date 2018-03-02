@@ -1,7 +1,10 @@
 package com.csbgroup.myphr;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
@@ -70,7 +73,7 @@ public class MedicineDetails extends Fragment {
         thismedicine = medicine;
 
         EditText name = rootView.findViewById(R.id.medicine_title);
-        EditText description = rootView.findViewById(R.id.medicine_info);
+        final EditText description = rootView.findViewById(R.id.medicine_info);
         EditText dose = rootView.findViewById(R.id.medicine_dose);
         EditText remtext = rootView.findViewById(R.id.reminder_time_title);
         EditText remtime = rootView.findViewById(R.id.reminder_time);
@@ -116,6 +119,10 @@ public class MedicineDetails extends Fragment {
         RadioButton daily = rootView.findViewById(R.id.daily);
         RadioButton otherdays = rootView.findViewById(R.id.everyotherday);
 
+        RadioButton general = rootView.findViewById(R.id.general);
+        RadioButton descriptive = rootView.findViewById(R.id.descriptive);
+
+        // check daily/otherdays radios to reflect database
         if (!thismedicine.isDaily()){
             daily.setChecked(false);
             otherdays.setChecked(true);
@@ -125,26 +132,32 @@ public class MedicineDetails extends Fragment {
             daily.setChecked(true);
         }
 
-        // update the database when radio buttons are changed
+        // check general/descriptive radios to reflect database
+        if (thismedicine.getReminder_type() == 0){
+            descriptive.setChecked(false);
+            general.setChecked(true);
+        }
+        else {
+            general.setChecked(false);
+            descriptive.setChecked(true);
+        }
+
+        // update the database when daily/otherdays radio buttons are changed
         RadioGroup radioGroup = rootView.findViewById(R.id.radios);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-
                 switch (checkedId){
-
                     case R.id.daily:
                         thismedicine.setOther_days(false);
                         thismedicine.setDaily(true);
                         break;
-
                     case R.id.everyotherday:
                         thismedicine.setDaily(false);
                         thismedicine.setOther_days(true);
                         break;
                 }
-
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -152,7 +165,30 @@ public class MedicineDetails extends Fragment {
                         db.medicineDao().update(thismedicine);
                     }
                 }).start();
+            }
+        });
 
+        // update the database when general/descriptive radio buttons are changed
+        RadioGroup radioGroup2 = rootView.findViewById(R.id.radios2);
+        radioGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.general:
+                        thismedicine.setReminder_type(0);
+                        break;
+                    case R.id.descriptive:
+                        thismedicine.setReminder_type(1);
+                        break;
+                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                        db.medicineDao().update(thismedicine);
+                    }
+                }).start();
             }
         });
 
@@ -160,6 +196,8 @@ public class MedicineDetails extends Fragment {
         if (medicine.getReminders()) {
             daily.setVisibility(View.VISIBLE);
             otherdays.setVisibility(View.VISIBLE);
+            general.setVisibility(View.VISIBLE);
+            descriptive.setVisibility(View.VISIBLE);
             remtext.setVisibility(View.VISIBLE);
             remtime.setVisibility(View.VISIBLE);
             datetext.setVisibility(View.VISIBLE);
@@ -180,6 +218,8 @@ public class MedicineDetails extends Fragment {
 
                 RadioButton daily = rootView.findViewById(R.id.daily);
                 RadioButton otherdays = rootView.findViewById(R.id.everyotherday);
+                RadioButton general = rootView.findViewById(R.id.general);
+                RadioButton descriptive = rootView.findViewById(R.id.descriptive);
                 EditText remtime = rootView.findViewById(R.id.reminder_time);
                 EditText remtext = rootView.findViewById(R.id.reminder_time_title);
                 EditText remdate = rootView.findViewById(R.id.reminder_date);
@@ -188,6 +228,8 @@ public class MedicineDetails extends Fragment {
                 if (isChecked) { // reminders are on
                     daily.setVisibility(View.VISIBLE);
                     otherdays.setVisibility(View.VISIBLE);
+                    general.setVisibility(View.VISIBLE);
+                    descriptive.setVisibility(View.VISIBLE);
                     remtext.setVisibility(View.VISIBLE);
                     datetext.setVisibility(View.VISIBLE);
                     remtime.setVisibility(View.VISIBLE);
@@ -196,6 +238,8 @@ public class MedicineDetails extends Fragment {
                 else { // reminders are off
                     daily.setVisibility(View.GONE);
                     otherdays.setVisibility(View.GONE);
+                    general.setVisibility(View.GONE);
+                    descriptive.setVisibility(View.GONE);
                     remtext.setVisibility(View.GONE);
                     datetext.setVisibility(View.GONE);
                     remtime.setVisibility(View.GONE);
@@ -257,7 +301,7 @@ public class MedicineDetails extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: // back button - go back
-                ((MainActivity) getActivity()).switchFragment(Medicine.newInstance());
+                ((MainActivity) getActivity()).switchFragment(MedicineSection.newInstance());
                 return true;
 
             case R.id.details_edit: // edit button - edit medicine details
@@ -305,17 +349,52 @@ public class MedicineDetails extends Fragment {
             remdate.setKeyListener(dateKL);
             remdate.setBackground(dateBG);
 
-            // delete the medicine
-            delete.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View v){
-                    new Thread(new Runnable() {
+            // confirm medicine deletion
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // set up the view
+                    LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+                    View v = inflater.inflate(R.layout.confirm_delete, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setView(v);
+                    final TextView message = v.findViewById(R.id.message);
+                    message.setText("Are you sure you want to delete " + thismedicine.getTitle() + "?");
+
+                    // delete the contact
+                    builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                         @Override
-                        public void run() {
-                            AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                            db.medicineDao().delete(thismedicine);
-                            ((MainActivity) getActivity()).switchFragment(MedicineSection.newInstance());
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                    db.medicineDao().delete(thismedicine);
+                                    ((MainActivity) getActivity()).switchFragment(Medicine.newInstance());
+                                }
+                            }).start();
                         }
-                    }).start();
+                    });
+
+                    // cancel the delete
+                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {}
+                    });
+
+                    final AlertDialog dialog = builder.create();
+
+                    // set button colours
+                    dialog.setOnShowListener( new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface arg0) {
+                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(0xFFF44336);
+                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(0xFFF44336);
+                        }
+                    });
+
+                    dialog.show();
                 }
             });
 
@@ -436,7 +515,7 @@ public class MedicineDetails extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 String d = date.getText().toString();
-                if (d.length() != 10) {validDate = false; date.setError("Invalid date (DD/MM/YYYY");} // invalid format
+                if (d.length() != 10) {validDate = false; date.setError("Invalid date (DD/MM/YYYY)");} // invalid format
                 else {
                     try { // valid format
                         validDate = true;

@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,7 +51,7 @@ public class Medicine extends Fragment {
 
         // view set up
         View rootView = inflater.inflate(R.layout.fragment_medicine, container, false);
-        ((MainActivity) getActivity()).setToolbar("My Medicine", false);
+        ((MainActivity) getActivity()).setToolbar("My Medication", false);
         setHasOptionsMenu(true);
 
         // fetch medicines entities from database
@@ -120,25 +122,6 @@ public class Medicine extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.settings, menu);
-    }
-
-    /**
-     *  Provides navigation for menu items; currently only needed for navigation to settings
-     *  fragment.
-     *  @param item is the clicked menu item
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.settings) {
-            ((MainActivity) getActivity()).switchFragment(MedicineSettings.newInstance());
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * buildDialog builds the pop-up dialog for adding a new medicine
      * @param fab the floating action button which pulls up the dialog
@@ -165,83 +148,73 @@ public class Medicine extends Fragment {
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        // check that a name has been given
-                        Boolean validName = true;
-                        if (name.getText().toString().equals("")){
-                            validName = false;
-                        }
 
-                        // format checks passed - add the new medicine to the database
-                        if (validName){
-                            new Thread(new Runnable(){
-                                @Override
-                                public void run(){
-                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                    MedicineEntity medicine = new MedicineEntity(name.getText().toString(),
-                                            description.getText().toString(), dose.getText().toString(),
-                                            notes.getText().toString(), false, true, false,
-                                            new SimpleDateFormat("dd/MM/yyyy").format(new Date()), //today's date
-                                            "00:00");
-                                    long uid = db.medicineDao().insert(medicine);
+                        // Add the new medicine to the database
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                MedicineEntity medicine = new MedicineEntity(name.getText().toString(),
+                                        description.getText().toString(), dose.getText().toString(),
+                                        notes.getText().toString(), false, 0,true, false,
+                                        new SimpleDateFormat("dd/MM/yyyy").format(new Date()), //today's date
+                                        "00:00");
+                                long uid = db.medicineDao().insert(medicine);
 
-                                    // Move to details for new medicine
-                                    Fragment newdetails = MedicineDetails.newInstance();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("uid", String.valueOf(uid));
-                                    newdetails.setArguments(bundle);
-                                    ((MainActivity)getActivity()).switchFragment(newdetails);
-                                }
-                            }).start();
-                        }
-
-                        // format checks failed - abort and show error message
-                        else {
-                            if (!validName){errorDialog("name");} // no name
-                        }
+                                // Move to details for new medicine
+                                Fragment newdetails = MedicineDetails.newInstance();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("uid", String.valueOf(uid));
+                                newdetails.setArguments(bundle);
+                                ((MainActivity) getActivity()).switchFragment(newdetails);
+                            }
+                        }).start();
                     }
                 });
 
-                // action for cancelling activity
+                // cancel the add
                 builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                    }
+                    public void onClick(DialogInterface arg0, int arg1) {}
                 });
 
-                AlertDialog dialog = builder.create();
+                final AlertDialog dialog = builder.create();
                 dialog.show();
+
+                // disable the add button until input conditions are met
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+                // check user input
+                inputChecking(name, dialog);
             }
         });
     }
 
     /**
-     * errorDialog is called when an invalid name is part of a medicine being added, it displays
-     * an error message about the failure.
-     * @param type is the type of error reported
+     * inputChecking checks the user input when adding a new medication, the add button is disabled
+     * until all format conditions are met.
+     * @param et is the medication name, which must not be empty.
+     * @param d is the new medication alertdialog.
      */
-    public void errorDialog(String type){
+    public void inputChecking(EditText et, AlertDialog d){
 
-        // set up the dialog
-        LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-        View v = inflater.inflate(R.layout.format_error, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(v);
+        final EditText name = et;
+        final AlertDialog dialog = d;
 
-        // specify error type
-        final TextView errortype = v.findViewById(R.id.error_type);
-        if (type.equals("name")){errortype.setText("YOU MUST PROVIDE A NAME");}
-
-        final TextView errormessage = v.findViewById(R.id.error_message);
-        errormessage.setText("Your medicine was not added.");
-
-        // user dismiss message
-        builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+        // ensure medication name is valid
+        name.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(DialogInterface arg0, int arg1) {
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (name.getText().length() == 0) { // empty name
+                    name.setError("Name cannot be empty"); // show error message
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                } else { // valid name
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                }
             }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
+
 }

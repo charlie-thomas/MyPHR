@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
@@ -35,6 +34,11 @@ import java.util.concurrent.Future;
 public class Appointments extends Fragment {
 
     private FloatingActionButton fab; // the add appointment fab
+
+    // format error checking booleans
+    private boolean validTitle = false;
+    private boolean validDate = false;
+    private boolean validTime = false;
 
     public Appointments() {
         // Required empty public constructor
@@ -140,21 +144,6 @@ public class Appointments extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-
-    /**
-     * Provides navigation for menu items; currently only needed for navigation to settings
-     * fragment.
-     * @param item is the clicked menu item
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.settings) {
-            ((MainActivity) getActivity()).switchFragment(AppointmentsSettings.newInstance());
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * buildDialog builds the pop-up dialog for adding a new appointment
      * @param fab the floating action button which pulls up the dialog
@@ -181,8 +170,13 @@ public class Appointments extends Fragment {
                 final EditText mins = v.findViewById(R.id.appointment_min);
                 final EditText notes = v.findViewById(R.id.appointment_notes);
 
-                // auto shift view focus when entering date
-                shiftFocus(day, month, year, hour, mins, notes);
+                // hide the invisible edittexts
+                EditText date_error = v.findViewById(R.id.date_error);
+                date_error.setKeyListener(null);
+                date_error.setBackground(null);
+                EditText time_error = v.findViewById(R.id.time_error);
+                time_error.setKeyListener(null);
+                time_error.setBackground(null);
 
                 // add new appointment action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
@@ -196,197 +190,226 @@ public class Appointments extends Fragment {
                         // join time into one string
                         final String time = hour.getText().toString() + ":" + mins.getText().toString();
 
-                        // check that a title has been given
-                        Boolean validTitle = true;
-                        if (title.getText().toString().equals("")){
-                            validTitle = false;
-                        }
-
-                        // check that a valid date was given
-                        Boolean validDate = true;
-                        if (date.equals("//")) {validDate = false;} // no date given
-                        else if (date.length() != 10) {validDate = false;} // incomplete date
-                        else {
-                            try {
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                Date d = sdf.parse(date);
-                                if (!date.equals(sdf.format(d))){
-                                    validDate = false;
-                                }
-                            } catch (ParseException e) {e.printStackTrace();}
-                        }
-
-                        // check that a valid time was given
-                        Boolean validTime = true;
-                        if (time.equals(":")) {validTime = false;}// no time given
-                        else{
-                            int hourint = Integer.parseInt(hour.getText().toString()); // convert to int for checks
-                            int minsint = Integer.parseInt(mins.getText().toString()); // convert to int for checks
-                            if (hourint <0 || hourint >23) {validTime = false;}
-                            if (minsint <0 || minsint >59) {validTime = false;}
-                        }
-
-
-                        // format checks passed - add the new appointment to the database
-                        if (validTitle && validDate && validTime){
-                            new Thread(new Runnable(){
+                        // Add the new appointment to the database
+                        new Thread(new Runnable(){
                                 @Override
                                 public void run(){
-                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                    AppointmentsEntity appointment = new AppointmentsEntity(
-                                            title.getText().toString(), location.getText().toString(),
-                                            date, time, notes.getText().toString(), false);
-                                    long uid = db.appointmentsDao().insert(appointment);
+                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                AppointmentsEntity appointment = new AppointmentsEntity(
+                                        title.getText().toString(), location.getText().toString(),
+                                        date, time, notes.getText().toString(), false, 0,
+                                        false, false, false);
+                                long uid = db.appointmentsDao().insert(appointment);
 
-                                    // Move to details fragment for new appointment
-                                    Fragment newdetails = AppointmentsDetails.newInstance();
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("uid", String.valueOf(uid));
-                                    newdetails.setArguments(bundle);
-                                    ((MainActivity)getActivity()).switchFragment(newdetails);
+                                // Move to details fragment for new appointment
+                                Fragment newdetails = AppointmentsDetails.newInstance();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("uid", String.valueOf(uid));
+                                newdetails.setArguments(bundle);
+                                ((MainActivity)getActivity()).switchFragment(newdetails);
                                 }
-                            }).start();
-                        }
-
-                        // format checks failed - abort and show error message
-                        else {
-                            if (!validTitle){errorDialog("title");} // no title
-                            else if (!validDate){errorDialog("date");} // bad date
-                            else {errorDialog("time");} // bad time
-                        }
+                        }).start();
                     }
                 });
 
-                // action for cancelling add
+                // cancel the add
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                    }
+                    public void onClick(DialogInterface arg0, int arg1) {}
                 });
 
-                AlertDialog dialog = builder.create();
+                final AlertDialog dialog = builder.create();
                 dialog.show();
+
+                // disable the add button until input conditions are met
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+                // check user input
+                inputChecking(v, dialog);
             }
         });
     }
 
     /**
-     * errorDialog is called when an invalid title, date or time
-     * is part of an appointment being added, it displays an error message about the failure.
-     * @param type is the type of error reported
+     * inputChecking checks the user input when adding a new appointment, the add button is disabled
+     * until all format conditions are met.
+     * @param v is the view for the add appointment dialog.
+     * @param ad is the new contact alertdialog.
      */
-    public void errorDialog(String type){
+    public void inputChecking(View v, AlertDialog ad){
 
-        // set up the dialog
-        LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-        View v = inflater.inflate(R.layout.format_error, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(v);
+        final EditText title = v.findViewById(R.id.appointment_name);
+        final EditText day = v.findViewById(R.id.appointment_DD);
+        final EditText month = v.findViewById(R.id.appointment_MM);
+        final EditText year = v.findViewById(R.id.appointment_YYYY);
+        final EditText hour = v.findViewById(R.id.appointment_hour);
+        final EditText mins = v.findViewById(R.id.appointment_min);
+        final EditText notes = v.findViewById(R.id.appointment_notes);
+        final EditText date_error = v.findViewById(R.id.date_error);
+        final EditText time_error = v.findViewById(R.id.time_error);
+        final AlertDialog dialog = ad;
 
-        // specify error type
-        final TextView errortype = v.findViewById(R.id.error_type);
-        if (type.equals("title")){errortype.setText("YOU MUST PROVIDE A TITLE");}
-        if (type.equals("date")){errortype.setText("INVALID DATE");}
-        if (type.equals("time")){errortype.setText("INVALID TIME");}
-
-        final TextView errormessage = v.findViewById(R.id.error_message);
-        errormessage.setText("Your appointment was not added.");
-
-        // user dismiss message
-        builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    /**
-     * shiftFocus automatically shifts the fab dialog view focus from day->month and month->year
-     * when two digits have been entered for day and month, respectively.
-     * @param day is the EditText for the dialog day('DD') field
-     * @param month is the EditText for the dialog month('MM') field
-     * @param year is the EditText for the dialog year('YYYY') field
-     * @param hour is the EditText for the dialog hour field
-     * @param mins is the EditText for the dialog mins field
-     * @param next is the EditText for the dialog field that follows mins
-     */
-    public void shiftFocus(final EditText day, final EditText month, final EditText year,
-                           final EditText hour, final EditText mins, final EditText next){
-
-        day.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
+        // ensure appointment title is present
+        title.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (title.getText().length() != 0){validTitle = true;} // valid title
+                else {validTitle = false; title.setError("Title cannot be empty");} // empty title
+
+                // disable/enable add button following format checks
+                if (validTitle && validTime && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
+            }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
+        });
+
+        // ensure appointment day is valid
+        day.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+
+                // disable/enable add button following format checks
+                if (validTitle && validTime && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
+
                 if (day.getText().toString().length() == 2) {month.requestFocus();}
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
 
+        // ensure appointment month is valid
         month.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+
+                // disable/enable add button following format checks
+                if (validTitle && validTime && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
+
                 if (month.getText().toString().length() == 2) {year.requestFocus();}
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
 
+        // ensure appointment year is valid
         year.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+
+                // disable/enable add button following format checks
+                if (validTitle && validTime && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
+
                 if (year.getText().toString().length() == 4) {hour.requestFocus();}
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
 
+        // ensure appointment hour is valid
         hour.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (checkFullTime(hour, mins)){validTime = true; time_error.setError(null);} // valid date
+                else {validTime = false; time_error.setError("Invalid time (HH MM)");} // invalid date
+
+                // disable/enable add button following format checks
+                if (validTitle && validTime && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
+
                 if (hour.getText().toString().length() == 2) {mins.requestFocus();}
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
 
+        // ensure the appointment minutes is valid
         mins.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (mins.getText().toString().length() == 2) {next.requestFocus();}
-            }
 
-            @Override
-            public void afterTextChanged(Editable editable) { }
+                if (checkFullTime(hour, mins)){validTime = true; time_error.setError(null);} // valid date
+                else {validTime = false; time_error.setError("Invalid time (HH MM)");} // invalid date
+
+                // disable/enable add button following format checks
+                if (validTitle && validTime && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
+
+                if (mins.getText().toString().length() == 2) {notes.requestFocus();}
+
+            }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
 
+    }
 
+    /**
+     * checkFullDate checks the validity of the full date across the three fields in the add dialog
+     * whenever any of them is changed.
+     * @param et1 is the day.
+     * @param et2 is the month.
+     * @param et3 is the year.
+     * @return
+     */
+    public boolean checkFullDate(EditText et1, EditText et2, EditText et3){
+
+        boolean validDate = true;
+
+        // join date into one string
+        final String date = et1.getText().toString() + "/" + et2.getText().toString() + "/" + et3.getText().toString();
+
+        if (date.equals("//")) {validDate = false;} // no date given
+        else if (date.length() != 10) {validDate = false;} // incomplete date
+        else {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                Date d = sdf.parse(date);
+                if (!date.equals(sdf.format(d))){
+                    validDate = false;
+                }
+            } catch (ParseException e) {e.printStackTrace();}
+        }
+
+        return validDate;
+    }
+
+    /**
+     * checkFullTime checks the validity of the full time across the two time fields in the add dialog
+     * whenever either of them is changed.
+     * @param et1 is the hour.
+     * @param et2 is the minutes.
+     */
+    public boolean checkFullTime(EditText et1, EditText et2){
+
+        boolean validTime = true;
+
+        // join time into one string
+        final String time = et1.getText().toString() + ":" + et2.getText().toString();
+
+        if (time.length() != 5) {validTime = false;}// no time given
+        else{
+            int hourint = Integer.parseInt(et1.getText().toString()); // convert to int for checks
+            int minsint = Integer.parseInt(et2.getText().toString()); // convert to int for checks
+            if (hourint <0 || hourint >23) {validTime = false;}
+            if (minsint <0 || minsint >59) {validTime = false;}
+        }
+
+        return validTime;
     }
 
 }
