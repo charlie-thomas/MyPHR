@@ -56,7 +56,8 @@
             android:layout_height="match_parent"
             android:layout_width="90dp"
             android:paddingLeft="8dp"
-            android:maxLength="2" />
+            android:maxLength="2"
+            android:nextFocusDown="@id/meas_MM"/>
 
         <EditText
             android:id="@+id/meas_MM"
@@ -67,6 +68,7 @@
             android:layout_width="100dp"
             android:paddingLeft="8dp"
             android:maxLength="2"
+            android:nextFocusDown="@id/meas_YYYY"
             />
 
         <EditText

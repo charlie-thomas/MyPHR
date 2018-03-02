@@ -230,8 +230,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/dose_title"
-            android:layout_marginTop="27dp"
-            app:srcCompat="@drawable/ic_med_temp" />
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="5dp"
+            app:srcCompat="@drawable/ic_medicine_dark" />
 
     </RelativeLayout>
 </ScrollView>

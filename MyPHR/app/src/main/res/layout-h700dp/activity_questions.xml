@@ -41,7 +41,9 @@
         android:textColor="#FFFF"
         android:backgroundTint="#FFFF"
         tools:ignore="TextFields"
-        android:maxLength="25" />
+        android:maxLength="25"
+        android:inputType="text"
+        android:maxLines="1" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -76,7 +78,9 @@
         android:textColor="#FFFF"
         android:backgroundTint="#FFFF"
         tools:ignore="TextFields"
-        android:maxLength="25" />
+        android:maxLength="25"
+        android:inputType="text"
+        android:maxLines="1" />
 
     <Button
         android:layout_width="wrap_content"

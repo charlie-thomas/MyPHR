@@ -14,7 +14,7 @@ import android.support.v4.app.NotificationCompat;
 
 import static com.csbgroup.myphr.R.color.colorAccent;
 
-public class AlarmReceiver extends BroadcastReceiver{
+public class AlarmReceiver extends BroadcastReceiver {
 
     public static String NOTIFICATION_ID = "notification-id";
 
@@ -22,10 +22,10 @@ public class AlarmReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-            // Re-set any alarms after reboot here
-            //Intent alarmIntent = new Intent(context, AlarmReceiver.class);
-        }
+        //if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+        // Re-set any alarms after reboot here
+        //Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+        //}
 
         // Sets action that notification should perform when clicked on
         NotificationCompat.Builder mBuilder =
