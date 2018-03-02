@@ -39,7 +39,9 @@
         android:textColor="#FFFF"
         android:textColorHint="#FFFF"
         android:textSize="6pt"
-        tools:ignore="TextFields" />
+        tools:ignore="TextFields"
+        android:inputType="text"
+        android:maxLines="1" />
 
     <TextView
         android:id="@+id/security_2_text"
@@ -72,7 +74,9 @@
         android:textColor="#FFFF"
         android:textColorHint="#FFFF"
         android:textSize="6pt"
-        tools:ignore="TextFields" />
+        tools:ignore="TextFields"
+        android:inputType="text"
+        android:maxLines="1" />
 
     <Button
         android:id="@+id/saveQuestions"
