@@ -145,7 +145,7 @@ public class AppointmentsEntity {
     }
     
     public void setRemind_day(boolean remind_day){
-        this.remind_day = remind.day;
+        this.remind_day = remind_day;
     }
 
     public boolean isRemind_morning() {
