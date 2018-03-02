@@ -1,8 +1,14 @@
 package com.csbgroup.myphr;
 
 
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,12 +16,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
 import com.csbgroup.myphr.database.MedicineEntity;
+import com.csbgroup.myphr.database.SickDaysEntity;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -25,6 +33,7 @@ import java.util.Collections;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -33,6 +42,7 @@ import java.util.concurrent.TimeUnit;
 public class CalendarDay extends Fragment {
 
     private String dateString;
+    private Snackbar sb;
 
     public CalendarDay() {
         // Required empty public constructor
@@ -47,7 +57,7 @@ public class CalendarDay extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView =  inflater.inflate(R.layout.fragment_calendar_day, container, false);
+        final View rootView =  inflater.inflate(R.layout.fragment_calendar_day, container, false);
 
         // Get the date passed from the CalendarMonth fragment
         Bundle args = getArguments();
@@ -111,11 +121,30 @@ public class CalendarDay extends Fragment {
 
         calendarList.scrollToPosition(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
 
+        try {
+            if (isSickDay(dateString)) {
+                sb = sb.make(rootView.findViewById(R.id.viewSnack), dateString + " is marked as a sick day", Snackbar.LENGTH_INDEFINITE);
+                sb.show();
+            }
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // fab action for adding sick day
+        FloatingActionButton fab = rootView.findViewById(R.id.sick_fab);
+        buildDialog(fab, dateString);
+
         // back button
         ((MainActivity) getActivity()).setToolbar("", true);
         setHasOptionsMenu(true);
 
         return rootView;
+    }
+
+    @Override
+    public void onStop() {
+        if (sb != null) sb.dismiss();
+        super.onStop();
     }
 
     public String changeDate(int value) throws ParseException {
@@ -131,6 +160,15 @@ public class CalendarDay extends Fragment {
 
         } catch (Exception e) {
             return dateString;
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean visible)
+    {
+        super.setUserVisibleHint(visible);
+        if (!visible && sb != null ){
+            sb.dismiss();
         }
     }
 
@@ -195,6 +233,23 @@ public class CalendarDay extends Fragment {
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) % 2 == 0;
     }
 
+    public boolean isSickDay(final String date) throws ExecutionException, InterruptedException {
+
+        // Create a callable object to get sick day from database
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(getActivity()).sickDaysDao().getSickDaysByDate(date);
+            }
+        };
+
+        // Get a Future object of the sick day
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<SickDaysEntity> result_app = service.submit(callable);
+
+        return result_app.get() != null;
+    }
+
     /**
      * Provides navigation for menu items; currenty only needed for navigation back to the
      * main calendar view.
@@ -209,5 +264,84 @@ public class CalendarDay extends Fragment {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * buildDialog builds the pop-up dialog for marking a sick day
+     * @param fab the floating action button which pulls up the dialog
+     */
+    public void buildDialog(FloatingActionButton fab, final String date) {
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // set up the dialog
+                LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+                View v = inflater.inflate(R.layout.add_sick_day_dialog, null);
+                final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
+                builder.setView(v);
+
+                // add new sick day into database
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        try {
+                            if (!isSickDay(date)) {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                        db.sickDaysDao().insert(new SickDaysEntity(date));
+                                    }
+                                }).start();
+
+                                // Refresh
+                                Fragment cd = CalendarDay.newInstance();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("date", date);
+                                cd.setArguments(bundle);
+                                ((MainActivity)getActivity()).switchFragment(cd);
+                            }
+                        } catch (ExecutionException | InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                // action for cancelling add
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        try {
+                            if (isSickDay(date)) {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                        db.sickDaysDao().delete(db.sickDaysDao().getSickDaysByDate(date));
+                                    }
+                                }).start();
+
+                                // Refresh
+                                Fragment cd = CalendarDay.newInstance();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("date", date);
+                                cd.setArguments(bundle);
+                                ((MainActivity)getActivity()).switchFragment(cd);
+                            }
+                        } catch (ExecutionException | InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                android.app.AlertDialog dialog = builder.create();
+                dialog.show();
+
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorSick));
+                dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorSick));
+            }
+        });
     }
 }

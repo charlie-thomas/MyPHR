@@ -24,11 +24,11 @@
     <string name="next_date_arrow">Next Date Arrow</string>
     <string name="calendar">Calendar</string>
     <string name="next_appointment">Next Appointment</string>
-    <string name="next_medicine">Next Medicine</string>
-    <string name="today_s_medicine">Today\'s Medicine</string>
+    <string name="next_medicine">Next Medication</string>
+    <string name="today_s_medicine">Today\'s Medication</string>
 
     // Contact strings
-    <string name="ctitle">Add a New Contact</string>
+    <string name="ctitle">Add a Contact</string>
     <string name="cmessage">Enter the details for your new contact:</string>
     <string name="cname">Name</string>
     <string name="cnotes">Notes</string>
@@ -37,8 +37,8 @@
     <string name="icon">contact icon</string>
 
     // Medicine strings
-    <string name="medtitle">Add a New Medicine</string>
-    <string name="medmessage">Enter the details for your new medicine:</string>
+    <string name="medtitle">Add a Medication</string>
+    <string name="medmessage">Enter the details for your new medication:</string>
     <string name="medmessage2">You can schedule reminders later.</string>
     <string name="medname">Name</string>
     <string name="meddescription">Description</string>
@@ -89,7 +89,7 @@
     </string>
 
     // Appointment strings
-    <string name="atitle">Add a New Appointment</string>
+    <string name="atitle">Add an Appointment</string>
     <string name="amessage">Enter the details for your new appointment:</string>
     <string name="aname">Appointment Title</string>
     <string name="alocation">Location</string>
@@ -164,5 +164,9 @@
     </string-array>
 
     // Error checking strings
+    <string name="confirm">Confirm Delete</string>
     <string name="error">Format Error</string>
+    <string name="mark_as_sick_day">Mark as Sick Day</string>
+    <string name="markassickday">Would you like to mark this day as a sick day?</string>
+
 </resources>
