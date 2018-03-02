@@ -40,7 +40,7 @@ public class QuestionsActivity extends AppCompatActivity {
         // Security question 2 spinner
         Spinner spinner2 = findViewById(id.security_2);
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
-                array.questions_array, layout.spinner_item);
+                array.questions_array_2, layout.spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner2.setAdapter(adapter2);
 

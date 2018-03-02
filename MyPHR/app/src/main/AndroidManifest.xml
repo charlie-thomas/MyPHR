@@ -15,6 +15,8 @@
     <!-- Lets app ask for permissions to check if phone has recently booted up -->
     <uses-permission
         android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!-- Permission required to use Alarm Manager -->
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
 
     <application
         android:resizeableActivity="false"

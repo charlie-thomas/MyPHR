@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context="com.csbgroup.myphr.ChangePINActivity">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/question_1"
+        android:id="@+id/security_1_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:textSize="6pt"
+        android:textColor="#FFFF" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/security_1"
+        android:layout_marginTop="100dp"
+        android:backgroundTint="#FFFF"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:textColor="#FFFF"
+        android:textSize="6pt" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/security_1_answer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        android:hint="@string/question_answer"
+        android:textSize="6pt"
+        android:textColorHint="#FFFF"
+        android:textColor="#FFFF"
+        android:backgroundTint="#FFFF"
+        tools:ignore="TextFields"
+        android:maxLength="25"
+        android:inputType="text"
+        android:maxLines="1" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/question_2"
+        android:id="@+id/security_2_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="250dp"
+        android:textSize="6pt"
+        android:textColor="#FFFF" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/security_2"
+        android:layout_marginTop="300dp"
+        android:backgroundTint="#FFFF"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        android:textColor="#FFFF"
+        android:textSize="6pt" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/security_2_answer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="350dp"
+        android:hint="@string/question_answer"
+        android:textSize="6pt"
+        android:textColorHint="#FFFF"
+        android:textColor="#FFFF"
+        android:backgroundTint="#FFFF"
+        tools:ignore="TextFields"
+        android:maxLength="25"
+        android:inputType="text"
+        android:maxLines="1" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:textSize="7pt"
+        android:textColor="#FFFF"
+        android:id="@+id/saveQuestions"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="420dp"
+        android:onClick="questionsButton"
+        style="?android:attr/borderlessButtonStyle"
+        tools:ignore="OnClick" />
+
+
+</RelativeLayout>
