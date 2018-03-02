@@ -39,6 +39,10 @@ public class Investigations extends Fragment {
 
     private FloatingActionButton fab; // the add investigation fab
 
+    // format error chekcing booleans
+    private boolean validTitle  = false;
+    private boolean validDate = false;
+
     public Investigations() {
         // Required empty public constructor
     }
@@ -153,8 +157,10 @@ public class Investigations extends Fragment {
                 final EditText year = v.findViewById(R.id.inv_YYYY);
                 final EditText notes = v.findViewById(R.id.inv_notes);
 
-                // auto shift view focus when entering date
-                shiftFocus(day, month, year, notes);
+                // hide the invisible edit text
+                EditText date_error = v.findViewById(R.id.date_error);
+                date_error.setKeyListener(null);
+                date_error.setBackground(null);
 
                 // add a new investigation action
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
@@ -171,43 +177,23 @@ public class Investigations extends Fragment {
                             validTitle = false;
                         }
 
-                        // check that a valid date was given
-                        Boolean validDate = true;
-                        if (date.equals("//")) {validDate = false;} // no date given
-                        else if (date.length() != 10) {validDate = false;} // incomplete date
-                        else {
-                            try {
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                Date d = sdf.parse(date);
-                                if (!date.equals(sdf.format(d))){
-                                    validDate = false;
-                                }
-                            } catch (ParseException e) {e.printStackTrace();}
-                        }
-
-                        // format checks passed - add the new investigation to the database
-                        if (validTitle && validDate){
-                            new Thread(new Runnable() {
+                        new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                    InvestigationsEntity investigation = new InvestigationsEntity(
-                                            title.getText().toString(), date, notes.getText().toString());
-                                    db.investigationDao().insertAll(investigation);
+                                AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                InvestigationsEntity investigation = new InvestigationsEntity(
+                                        title.getText().toString(), date, notes.getText().toString());
+                                long uid = db.investigationDao().insert(investigation);
 
-                                    //TODO: GO TO DETAILS FRAGMENT
-                                    // (for now) update the list view
-                                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                    ft.detach(Investigations.this).attach(Investigations.this).commit();
+                                // Move to details fragment for new appointment
+                                Fragment newdetails = InvestigationDetails.newInstance();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("uid", String.valueOf(uid));
+                                newdetails.setArguments(bundle);
+                                ((MainActivity)getActivity()).switchFragment(newdetails);
+
                                 }
                             }).start();
-                        }
-
-                        // format checks failed - abort and show error message
-                        else {
-                            if (!validTitle){errorDialog("title");} // no title
-                            else {errorDialog("date");} // bad date
-                        }
                     }
 
                 });
@@ -221,94 +207,131 @@ public class Investigations extends Fragment {
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
+
+                // disable the add button until input conditions are met
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+
+                // check user input
+                inputChecking(v, dialog);
             }
         });
 
     }
 
     /**
-     * errorDialog is called when an invalid title or date is part of an investigation
-     * being added, it displays an error message about the failure.
-     * @param type is the type of error reported
+     * inputChecking checks the user input when adding a new investigation, the add button is disabled
+     * until all format conditions are met.
+     * @param v is the view for the add investigation dialog.
+     * @param ad is the new investigation alertdog.
      */
-    public void errorDialog(String type){
+    public void inputChecking(View v, AlertDialog ad){
 
-        // set up the dialog
-        LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-        View v = inflater.inflate(R.layout.format_error, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(v);
+        final EditText title = v.findViewById(R.id.inv_title);
+        final EditText day = v.findViewById(R.id.inv_DD);
+        final EditText month = v.findViewById(R.id.inv_MM);
+        final EditText year = v.findViewById(R.id.inv_YYYY);
+        final EditText notes = v.findViewById(R.id.inv_notes);
+        final EditText date_error = v.findViewById(R.id.date_error);
+        final AlertDialog dialog = ad;
 
-        // specify error type
-        final TextView errortype = v.findViewById(R.id.error_type);
-        if (type.equals("title")){errortype.setText("YOU MUST PROVIDE A TITLE");}
-        if (type.equals("date")){errortype.setText("INVALID DATE");}
-
-        final TextView errormessage = v.findViewById(R.id.error_message);
-        errormessage.setText("Your investigation was not added.");
-
-        // user dismiss message
-        builder.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-    /**
-     * shiftFocus automatically shifts the fab dialog view focus from day->month and month->year
-     * when two digits have been entered for day and month, respectively.
-     * @param day is the EditText for the dialog day('DD') field
-     * @param month is the EditText for the dialog month('MM') field
-     * @param year is the EditText for the dialog year('YYYY') field
-     * @param next is the EditText for the dialog field that follows year
-     */
-    public void shiftFocus(final EditText day, final EditText month, final EditText year, final EditText next){
-
-        day.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
+        // ensure investigation title is valid
+        title.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (title.getText().length() != 0){validTitle = true;} // valid title
+                else {validTitle = false; title.setError("Title cannot be empty");} // empty title
+
+                // disable/enable add button following format checks
+                if (validTitle && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
+            }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
+        });
+
+        // ensure appointment day is valid
+        day.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+
+                // disable/enable add button following format checks
+                if (validTitle && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
+
                 if (day.getText().toString().length() == 2) {month.requestFocus();}
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
 
+        // ensure appointment month is valid
         month.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+
+                // disable/enable add button following format checks
+                if (validTitle && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
+
                 if (month.getText().toString().length() == 2) {year.requestFocus();}
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
 
+        // ensure appointment year is valid
         year.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (year.getText().toString().length() == 4) {next.requestFocus();}
+
+                if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+
+                // disable/enable add button following format checks
+                if (validTitle && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
+
+                if (year.getText().toString().length() == 4) {notes.requestFocus();}
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) { }
+            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+            @Override public void afterTextChanged(Editable editable) {}
         });
+    }
 
+    /**
+     * checkFullDate checks the validity of the full date across the three fields in the add dialog
+     * whenever any of them is changed.
+     * @param et1 is the day.
+     * @param et2 is the month.
+     * @param et3 is the year.
+     * @return
+     */
+    public boolean checkFullDate(EditText et1, EditText et2, EditText et3){
+
+        boolean validDate = true;
+
+        // join date into one string
+        final String date = et1.getText().toString() + "/" + et2.getText().toString() + "/" + et3.getText().toString();
+
+        if (date.equals("//")) {validDate = false;} // no date given
+        else if (date.length() != 10) {validDate = false;} // incomplete date
+        else {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                Date d = sdf.parse(date);
+                if (!date.equals(sdf.format(d))){
+                    validDate = false;
+                }
+            } catch (ParseException e) {e.printStackTrace();}
+        }
+
+        return validDate;
     }
 }

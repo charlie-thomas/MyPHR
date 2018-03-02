@@ -45,13 +45,18 @@ public class AppointmentsEntity {
 
     // Constructor
     public AppointmentsEntity(String title, String location, String date, String time, String notes,
-                              boolean reminders) {
+                              boolean reminders, int reminder_type, boolean remind_week, boolean remind_day,
+                              boolean remind_morning) {
         this.title = title;
         this.location = location;
         this.date = date;
         this.time = time;
         this.notes = notes;
         this.reminders = reminders;
+        this.reminder_type = reminder_type;
+        this.remind_week = remind_week;
+        this.remind_day = remind_day;
+        this.remind_morning = remind_morning;
     }
 
 
@@ -127,7 +132,6 @@ public class AppointmentsEntity {
         this.reminder_type = reminder_type;
     }
 
-
     public boolean isRemind_week() {
         return remind_week;
     }
@@ -135,12 +139,12 @@ public class AppointmentsEntity {
     public void setRemind_week(boolean remind_week) {
         this.remind_week = remind_week;
     }
-
-    public boolean isRemind_day() {
+    
+    public boolean isRemind_day(){
         return remind_day;
     }
-
-    public void setRemind_day(boolean remind_day) {
+    
+    public void setRemind_day(boolean remind_day){
         this.remind_day = remind_day;
     }
 
@@ -151,4 +155,5 @@ public class AppointmentsEntity {
     public void setRemind_morning(boolean remind_morning) {
         this.remind_morning = remind_morning;
     }
+
 }

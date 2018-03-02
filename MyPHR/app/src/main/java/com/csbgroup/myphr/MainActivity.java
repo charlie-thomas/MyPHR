@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 "avrilmason@nhs.net",
                 "01412010000",
                 "Phone will go through to mobile.\n\nGround Floor, Zone 2, Office Block,\nRoyal Hospital for Children,\n" +
-                        "QEUH,\nGovan Road,\nGlasgow G51 4TF"),
+                        "Queen Elizabeth University Hospital,\nGovan Road,\nGlasgow G51 4TF"),
 
                 new ContactsEntity(
                         "Ms Kerri Marshall",
@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
                 "2mg",
                 "Tablets/patches should be taken once a day, every day.",
                 true,
+                1,
                 true,
                 false,
                 "26/02/2018",
@@ -165,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
                 "To be taken on 7-12 days of calendar month either monthly, every 2nd month or" +
                         "every 3rd month.",
                 false,
+                0,
                 true,
                 true,
                 "05/02/2018",
@@ -176,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
                 "Vital roles in regulating the body’s metabolic rate, heart and digestive " +
                         "functions, muscle control, brain development and maintenance of bones.\nTo be taken daily.",
                 true,
+                1,
                 false,
                 true,
                 "01/01/2010",
@@ -186,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 "5mg",
                 "To be taken once a day, every day.",
                 false,
+                1,
                 true,
                 false,
                 "26/02/2018",
@@ -202,29 +206,34 @@ public class MainActivity extends AppCompatActivity {
         @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 
         c.add(Calendar.DATE, 1);
-        dao.insertAll(new AppointmentsEntity("Clinic 1", "Children's Hospital",
-                df.format(c.getTime()), "15:55","Appointment Notes", true));
+        dao.insertAll(new AppointmentsEntity("Clinic 1", "Royal Hospital for Children, Glasgow",
+                df.format(c.getTime()), "15:55","Go to desk on ground floor ward 2.", true, 1,
+                false, false, false));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Check Up 1", "Children's Hospital",
-                df.format(c.getTime()), "16:00","Appointment Notes", true));
+                df.format(c.getTime()), "16:00","Appointment Notes", false, 0,
+                false, false, false));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Check Up 2", "Children's Hospital",
-                df.format(c.getTime()), "16:00","Appointment Notes", true));
+                df.format(c.getTime()), "16:00","Appointment Notes", true, 0,
+                false, false, false));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Clinic 2", "Children's Hospital",
-                df.format(c.getTime()), "17:00","Appointment Notes", true));
+                df.format(c.getTime()), "17:00","Appointment Notes", false, 1,
+                false, false, false));
         c.add(Calendar.DATE, 1);
         dao.insertAll(new AppointmentsEntity("Check Up 3", "Children's Hospital",
-                df.format(c.getTime()), "14:00","Appointment Notes", true));
+                df.format(c.getTime()), "14:00","Appointment Notes", true, 1,
+                false, false, false));
     }
 
     private static void populateInvestigations(InvestigationsDao dao)  {
         dao.deleteAll();
 
-        InvestigationsEntity ie = new InvestigationsEntity("Blood Test", "03/01/2018", "due in 6 months");
-        InvestigationsEntity ie1 = new InvestigationsEntity("Hearing Test", "29/12/2017", "due in 12 months");
-        InvestigationsEntity ie2 = new InvestigationsEntity("Blood Test", "04/06/2017", "due in 6 months");
-        InvestigationsEntity ie3 = new InvestigationsEntity("Hearing Test", "30/06/2017", "due in 12 months");
+        InvestigationsEntity ie = new InvestigationsEntity("Blood Test", "03/01/2018", "Due again in 6 months time (03/07/2018)");
+        InvestigationsEntity ie1 = new InvestigationsEntity("Hearing Test", "29/12/2017", "Due again in 12 months (29/12/2018)");
+        InvestigationsEntity ie2 = new InvestigationsEntity("Blood Test", "04/06/2017", "Due again in 6 months (04/12/2017)");
+        InvestigationsEntity ie3 = new InvestigationsEntity("Hearing Test", "30/06/2017", "Due again in 12 months (30/06/2018)");
 
         dao.insertAll(ie, ie1, ie2, ie3);
     }
