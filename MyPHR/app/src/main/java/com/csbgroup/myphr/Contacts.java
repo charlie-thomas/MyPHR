@@ -37,7 +37,7 @@ public class Contacts extends Fragment {
         Contacts fragment = new Contacts();
         return fragment;
     }
-
+    
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
