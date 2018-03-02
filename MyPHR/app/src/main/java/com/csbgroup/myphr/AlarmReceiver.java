@@ -22,10 +22,10 @@ public class AlarmReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+        //if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
             // Re-set any alarms after reboot here
             //Intent alarmIntent = new Intent(context, AlarmReceiver.class);
-        }
+        //}
 
         // Sets action that notification should perform when clicked on
         NotificationCompat.Builder mBuilder =
