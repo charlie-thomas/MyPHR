@@ -65,6 +65,4 @@ public class ChangePINActivity extends AppCompatActivity {
         }
     };
 
-    public void questionsButton(View view) {
-    }
 }
