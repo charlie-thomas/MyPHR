@@ -12,10 +12,10 @@
         android:contentDescription="@string/icon_desc"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:adjustViewBounds="true"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:scaleType="fitXY"
         app:srcCompat="@mipmap/ic_launcher" />
 
@@ -24,8 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="230dp"
-        app:dotDiameter="20dp" />
+        android:layout_marginTop="180dp"
+        app:dotDiameter="15dp" />
 
     <com.andrognito.pinlockview.PinLockView
         android:id="@+id/pin_lock_view"
@@ -33,17 +33,26 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/iconLogin"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="80dp"
         app:keypadButtonSize="72dp"
         app:keypadShowDeleteButton="true"
         app:keypadTextColor="#FFFF"
         app:keypadTextSize="22dp" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/indicator_dots"
+        android:id="@+id/textview"
+        android:textColor="#FFFF"
+        android:layout_marginTop="330dp"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/pin_lock_view"
-        android:layout_marginTop="20dp"
+        android:layout_below="@id/indicator_dots"
+        android:layout_marginTop="360dp"
         android:textColor="#FFFF"
         android:layout_centerHorizontal="true"
         android:text="@string/forgot"
@@ -57,16 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/iconLogin"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="510dp"
+        android:layout_marginTop="470dp"
         app:srcCompat="@drawable/ic_fingerprint_white" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/pin_lock_view"
-        android:id="@+id/textview"
-        android:textColor="#FFFF"
-        android:layout_marginTop="10dp"/>
 
 </RelativeLayout>

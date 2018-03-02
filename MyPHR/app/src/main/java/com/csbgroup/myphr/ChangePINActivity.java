@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.andrognito.pinlockview.PinLockView;
@@ -63,4 +64,7 @@ public class ChangePINActivity extends AppCompatActivity {
             Log.d(TAG, "Pin changed, new length " + pinLength + " with intermediate pin " + intermediatePin);
         }
     };
+
+    public void questionsButton(View view) {
+    }
 }

@@ -1,0 +1,72 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context="com.csbgroup.myphr.LoginActivity">
+
+    <ImageView
+        android:id="@+id/iconLogin"
+        android:contentDescription="@string/icon_desc"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:adjustViewBounds="true"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:scaleType="fitXY"
+        app:srcCompat="@mipmap/ic_launcher" />
+
+    <com.andrognito.pinlockview.IndicatorDots
+        android:id="@+id/indicator_dots"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="230dp"
+        app:dotDiameter="20dp" />
+
+    <com.andrognito.pinlockview.PinLockView
+        android:id="@+id/pin_lock_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iconLogin"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="130dp"
+        app:keypadButtonSize="72dp"
+        app:keypadShowDeleteButton="true"
+        app:keypadTextColor="#FFFF"
+        app:keypadTextSize="22dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/indicator_dots"
+        android:id="@+id/textview"
+        android:textColor="#FFFF"
+        android:layout_marginTop="330dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/indicator_dots"
+        android:layout_marginTop="350dp"
+        android:textColor="#FFFF"
+        android:layout_centerHorizontal="true"
+        android:text="@string/forgot"
+        android:onClick="goToForgot"
+        style="?android:attr/borderlessButtonStyle" />
+
+    <ImageView
+        android:id="@+id/fingerprintIcon"
+        android:contentDescription="@string/finger_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iconLogin"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="490dp"
+        app:srcCompat="@drawable/ic_fingerprint_white" />
+
+</RelativeLayout>
