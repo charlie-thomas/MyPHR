@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context="com.csbgroup.myphr.ChangePINActivity">
+
+
+    <TextView
+        android:id="@+id/security_1_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="@string/answer_1"
+        android:textColor="#FFFF"
+        android:textSize="6pt" />
+
+    <TextView
+        android:id="@+id/chosen1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:textColor="#FFFF"
+        android:textSize="6pt" />
+
+    <EditText
+        android:id="@+id/attempt_1_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        android:backgroundTint="#FFFF"
+        android:hint="@string/question_answer"
+        android:maxLength="25"
+        android:textColor="#FFFF"
+        android:textColorHint="#FFFF"
+        android:textSize="6pt"
+        tools:ignore="TextFields" />
+
+    <TextView
+        android:id="@+id/security_2_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="250dp"
+        android:text="@string/answer_2"
+        android:textColor="#FFFF"
+        android:textSize="6pt" />
+
+    <TextView
+        android:id="@+id/chosen2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="300dp"
+        android:textColor="#FFFF"
+        android:textSize="6pt" />
+
+    <EditText
+        android:id="@+id/attempt_2_answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="350dp"
+        android:backgroundTint="#FFFF"
+        android:hint="@string/question_answer"
+        android:maxLength="25"
+        android:textColor="#FFFF"
+        android:textColorHint="#FFFF"
+        android:textSize="6pt"
+        tools:ignore="TextFields" />
+
+    <Button
+        android:id="@+id/saveQuestions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="420dp"
+        android:onClick="forgotButton"
+        android:textColor="#FFFF"
+        android:textSize="7pt"
+        android:text="@string/enter"
+        style="?android:attr/borderlessButtonStyle"
+        tools:ignore="OnClick" />
+
+
+</RelativeLayout>

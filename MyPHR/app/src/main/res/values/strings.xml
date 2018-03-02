@@ -155,6 +155,15 @@
         <item>Favourite colour</item>
     </string-array>
 
+    <string-array name="questions_array_2">
+        <item>First school</item>
+        <item>First street</item>
+        <item>Favourite actor</item>
+        <item>Favourite class</item>
+        <item>Favourite sport</item>
+    </string-array>
+
+    // Error checking strings
     <string name="confirm">Confirm Delete</string>
     <string name="error">Format Error</string>
     <string name="mark_as_sick_day">Mark as Sick Day</string>

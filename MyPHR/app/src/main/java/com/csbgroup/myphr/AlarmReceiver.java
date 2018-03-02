@@ -16,12 +16,16 @@ import static com.csbgroup.myphr.R.color.colorAccent;
 
 public class AlarmReceiver extends BroadcastReceiver{
 
+    public static String NOTIFICATION_ID = "notification-id";
+
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
-//        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
-//            // Re-set any alarms after reboot here
-//        }
+        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+            // Re-set any alarms after reboot here
+            //Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+        }
 
         // Sets action that notification should perform when clicked on
         NotificationCompat.Builder mBuilder =
@@ -41,6 +45,8 @@ public class AlarmReceiver extends BroadcastReceiver{
         mBuilder.setPriority(Notification.PRIORITY_MAX);
         mBuilder.setStyle(bigText);
 
+        int id = intent.getIntExtra(NOTIFICATION_ID, 0);
+
         NotificationManager mNotificationManager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -57,7 +63,7 @@ public class AlarmReceiver extends BroadcastReceiver{
 
         // Starts notification
         if (mNotificationManager != null) {
-            mNotificationManager.notify(0, mBuilder.build());
+            mNotificationManager.notify(id, mBuilder.build());
         }
 
 
