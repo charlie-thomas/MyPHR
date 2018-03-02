@@ -73,7 +73,8 @@
             android:layout_height="match_parent"
             android:layout_width="45dp"
             android:paddingLeft="8dp"
-            android:maxLength="2" />
+            android:maxLength="2"
+            android:nextFocusDown="@id/appointment_MM"/>
 
         <EditText
             android:id="@+id/appointment_MM"
@@ -84,7 +85,7 @@
             android:layout_width="49dp"
             android:paddingLeft="8dp"
             android:maxLength="2"
-            />
+            android:nextFocusDown="@id/appointment_YYYY"/>
 
         <EditText
             android:id="@+id/appointment_YYYY"
@@ -94,7 +95,8 @@
             android:layout_height="match_parent"
             android:layout_width="65dp"
             android:paddingLeft="8dp"
-            android:maxLength="4" />
+            android:maxLength="4"
+            android:nextFocusDown="@id/appointment_hour"/>
 
         <!-- used for format error reporting across date fields -->
         <EditText
@@ -110,7 +112,8 @@
             android:layout_marginLeft="20dp"
             android:hint="@string/ahour"
             android:inputType="number"
-            android:paddingLeft="8dp" />
+            android:paddingLeft="8dp"
+            android:nextFocusDown="@id/appointment_min"/>
 
         <EditText
             android:id="@+id/appointment_min"
@@ -120,7 +123,8 @@
             android:layout_width="49dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
-            android:paddingLeft="8dp" />
+            android:paddingLeft="8dp"
+            android:nextFocusDown="@id/appointment_notes"/>
 
         <!-- used for format error reporting across time fields -->
         <EditText
