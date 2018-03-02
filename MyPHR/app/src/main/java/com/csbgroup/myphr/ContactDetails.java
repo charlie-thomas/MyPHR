@@ -1,9 +1,12 @@
 package com.csbgroup.myphr;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.KeyListener;
@@ -18,7 +21,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.AppointmentsEntity;
 import com.csbgroup.myphr.database.ContactsEntity;
+import com.csbgroup.myphr.database.StatisticsEntity;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -182,17 +187,46 @@ public class ContactDetails extends Fragment {
             notes.setKeyListener(notesKL);
             notes.setBackground(notesBG);
 
-            // delete the contact
-            delete.setOnClickListener(new View.OnClickListener(){
-                public void onClick(View v){
-                    new Thread(new Runnable() {
+            // confirm contact deletion
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // set up the view
+                    LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+                    View v = inflater.inflate(R.layout.confirm_delete, null);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setView(v);
+                    final TextView message = v.findViewById(R.id.message);
+                    message.setText("Are you sure you want to delete " + thiscontact.getName() + "?");
+
+                    // delete the contact
+                    builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                         @Override
-                        public void run() {
-                            AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                            db.contactsDao().delete(thiscontact);
-                            ((MainActivity) getActivity()).switchFragment(Contacts.newInstance());
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                    db.contactsDao().delete(thiscontact);
+                                    ((MainActivity) getActivity()).switchFragment(Contacts.newInstance());
+                                }
+                            }).start();
                         }
-                    }).start();
+                    });
+
+                    // cancel the delete
+                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {}
+                    });
+
+                    final AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                    // set button colours
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
                 }
             });
 

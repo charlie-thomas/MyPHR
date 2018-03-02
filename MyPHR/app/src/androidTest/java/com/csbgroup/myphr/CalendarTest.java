@@ -3,7 +3,8 @@ package com.csbgroup.myphr;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.test.ActivityInstrumentationTestCase2;
-import android.widget.CalendarView;
+
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -18,7 +19,7 @@ import static android.support.test.espresso.Espresso.*;
 public class CalendarTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
     private MainActivity mainActivity;
-    private CalendarView cv;
+    private MaterialCalendarView cv;
 
     public CalendarTest() {
         super(MainActivity.class);
@@ -98,7 +99,7 @@ public class CalendarTest extends ActivityInstrumentationTestCase2<MainActivity>
         getActivity().switchFragment(cd);
 
         onView(withContentDescription("Navigate up")).perform(click());
-        onView(withText("Thyroxine")).check(matches(isDisplayed()));
+        onView(withText("Clinic 1")).check(matches(isDisplayed()));
     }
 
     private String getDateString(Date d) {

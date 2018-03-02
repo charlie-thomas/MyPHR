@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 8,
-    "identityHash": "2e3b99c7fc66c86382e53ba02a5f26df",
+    "version": 9,
+    "identityHash": "4949e6d98a23171221f2e21558ce8fd6",
     "entities": [
       {
         "tableName": "AppointmentsEntity",
@@ -86,7 +86,7 @@
       },
       {
         "tableName": "MedicineEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `description` TEXT, `dose` TEXT, `notes` TEXT, `reminders` INTEGER NOT NULL, `reminder_type` INTEGER NOT NULL, `remind_when` INTEGER NOT NULL, `date` TEXT, `daily` INTEGER NOT NULL, `other_days` INTEGER NOT NULL, `time` TEXT)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT, `description` TEXT, `dose` TEXT, `notes` TEXT, `reminders` INTEGER NOT NULL, `reminder_type` INTEGER NOT NULL, `date` TEXT, `daily` INTEGER NOT NULL, `other_days` INTEGER NOT NULL, `time` TEXT)",
         "fields": [
           {
             "fieldPath": "uid",
@@ -127,12 +127,6 @@
           {
             "fieldPath": "reminder_type",
             "columnName": "reminder_type",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "remind_when",
-            "columnName": "remind_when",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -277,11 +271,37 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "SickDaysEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "uid",
+            "columnName": "uid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "date",
+            "columnName": "date",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "uid"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"2e3b99c7fc66c86382e53ba02a5f26df\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"4949e6d98a23171221f2e21558ce8fd6\")"
     ]
   }
 }

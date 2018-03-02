@@ -54,10 +54,9 @@
             android:hint="@string/DD"
             android:inputType="number"
             android:layout_height="match_parent"
-            android:layout_width="0dp"
+            android:layout_width="90dp"
             android:paddingLeft="8dp"
-            android:maxLength="2"
-            android:layout_weight="1"/>
+            android:maxLength="2" />
 
         <EditText
             android:id="@+id/meas_MM"
@@ -65,10 +64,10 @@
             android:hint="@string/MM"
             android:inputType="number"
             android:layout_height="match_parent"
-            android:layout_width="0dp"
+            android:layout_width="100dp"
             android:paddingLeft="8dp"
             android:maxLength="2"
-            android:layout_weight="1"/>
+            />
 
         <EditText
             android:id="@+id/meas_YYYY"
@@ -76,10 +75,15 @@
             android:hint="@string/YYYY"
             android:inputType="number"
             android:layout_height="match_parent"
-            android:layout_width="0dp"
+            android:layout_width="130dp"
             android:paddingLeft="8dp"
-            android:maxLength="4"
-            android:layout_weight="2"/>
+            android:maxLength="4" />
+
+        <!-- used for format error reporting across date fields -->
+        <EditText
+            android:id="@+id/date_error"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
