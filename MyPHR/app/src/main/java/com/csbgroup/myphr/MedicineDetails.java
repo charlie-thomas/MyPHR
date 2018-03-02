@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.KeyListener;
@@ -384,17 +385,11 @@ public class MedicineDetails extends Fragment {
                     });
 
                     final AlertDialog dialog = builder.create();
+                    dialog.show();
 
                     // set button colours
-                    dialog.setOnShowListener( new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface arg0) {
-                            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(0xFFF44336);
-                            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(0xFFF44336);
-                        }
-                    });
-
-                    dialog.show();
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
                 }
             });
 
