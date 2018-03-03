@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -145,7 +146,8 @@ public class ContactDetails extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: // back button - go back
-                ((MainActivity) getActivity()).switchFragment(Contacts.newInstance());
+                BottomNavigationView bn = getActivity().findViewById(R.id.bottom_nav);
+                bn.setSelectedItemId(R.id.contacts);
                 return true;
 
             case R.id.details_edit: // edit button - edit contact details

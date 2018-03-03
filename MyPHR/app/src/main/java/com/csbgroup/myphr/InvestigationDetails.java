@@ -259,7 +259,6 @@ public class InvestigationDetails extends Fragment {
             }).start();
 
             this.mode = "view";
-            return;
         }
     }
 

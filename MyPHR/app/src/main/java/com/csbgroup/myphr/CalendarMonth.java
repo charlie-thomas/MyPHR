@@ -3,6 +3,7 @@ package com.csbgroup.myphr;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -135,6 +136,8 @@ public class CalendarMonth extends Fragment {
                     bundle.putString("uid", String.valueOf(upcomingAppointment.getUid()));
                     eventFrag.setArguments(bundle);
 
+                    BottomNavigationView bn = getActivity().findViewById(R.id.bottom_nav);
+                    bn.setSelectedItemId(R.id.appointments);
                     ((MainActivity) getContext()).switchFragment(eventFrag);
                 }
             });
@@ -163,6 +166,8 @@ public class CalendarMonth extends Fragment {
                         bundle.putString("uid", String.valueOf(_med.getUid()));
                         eventFrag.setArguments(bundle);
 
+                        BottomNavigationView bn = getActivity().findViewById(R.id.bottom_nav);
+                        bn.setSelectedItemId(R.id.medicine);
                         ((MainActivity) getContext()).switchFragment(eventFrag);
                     }
                 });

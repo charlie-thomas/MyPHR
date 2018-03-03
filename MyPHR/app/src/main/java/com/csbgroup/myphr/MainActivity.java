@@ -35,6 +35,8 @@ import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
+    public BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         }).start();
 
         // Get the bottom nav bar view
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView = findViewById(R.id.bottom_nav);
 
         // Switch fragment based on which element on the nav bar is selected
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -302,7 +303,8 @@ public class MedicineDetails extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: // back button - go back
-                ((MainActivity) getActivity()).switchFragment(MedicineSection.newInstance());
+                BottomNavigationView bn = getActivity().findViewById(R.id.bottom_nav);
+                bn.setSelectedItemId(R.id.medicine);
                 return true;
 
             case R.id.details_edit: // edit button - edit medicine details
@@ -394,7 +396,6 @@ public class MedicineDetails extends Fragment {
             });
 
             this.mode = "edit";
-            return;
         }
 
         if (this.mode.equals("edit")) { // exiting edit mode
@@ -431,7 +432,6 @@ public class MedicineDetails extends Fragment {
             }).start();
 
             this.mode = "view";
-            return;
         }
     }
 
