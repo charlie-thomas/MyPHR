@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -77,6 +78,10 @@ public class Investigations extends Fragment {
                 ((MainActivity) getActivity()).switchFragment(details);
             }
         });
+
+        LinearLayout noinvest = rootView.findViewById(R.id.no_invest);
+        noinvest.setVisibility(View.INVISIBLE);
+        if (listView.getAdapter().getCount() == 0) noinvest.setVisibility(View.VISIBLE);
 
         // fab action for adding investigation
         fab = rootView.findViewById(R.id.investigation_fab);

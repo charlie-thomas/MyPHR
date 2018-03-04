@@ -11,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.support.design.widget.FloatingActionButton;
+import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.ContactsEntity;
@@ -75,6 +77,10 @@ public class Contacts extends Fragment {
                 ((MainActivity) getActivity()).switchFragment(details);
             }
         });
+
+        LinearLayout nocontacts = rootView.findViewById(R.id.no_contacts);
+        nocontacts.setVisibility(View.INVISIBLE);
+        if (listView.getAdapter().getCount() == 0) nocontacts.setVisibility(View.VISIBLE);
 
         // fab action for adding contact
         fab = rootView.findViewById(R.id.contact_fab);

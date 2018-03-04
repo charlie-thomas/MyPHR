@@ -133,119 +133,119 @@ public class MainActivity extends AppCompatActivity {
         dao.deleteAll();
 
         // Key medical staff at Royal Childrens Hospital, Glasgow are pre-loaded
-        dao.insertAll(
-                new ContactsEntity(
-                "Dr Avril Mason",
-                "avrilmason@nhs.net",
-                "01412010000",
-                "Phone will go through to mobile.\n\nGround Floor, Zone 2, Office Block,\nRoyal Hospital for Children,\n" +
-                        "Queen Elizabeth University Hospital,\nGovan Road,\nGlasgow G51 4TF"),
-
-                new ContactsEntity(
-                        "Ms Kerri Marshall",
-                        "",
-                        "01414516548(ext), 86548(int)",
-                        "Endocrine/Metabolic Secretary"),
-
-                new ContactsEntity(
-                  "Ms Teresa McBride",
-                  "teresa.mcbride@ggc.scot.nhs.uk",
-                  "07904881485",
-                  "Paediatric Endocrine Nurse"));
+//        dao.insertAll(
+//                new ContactsEntity(
+//                "Dr Avril Mason",
+//                "avrilmason@nhs.net",
+//                "01412010000",
+//                "Phone will go through to mobile.\n\nGround Floor, Zone 2, Office Block,\nRoyal Hospital for Children,\n" +
+//                        "Queen Elizabeth University Hospital,\nGovan Road,\nGlasgow G51 4TF"),
+//
+//                new ContactsEntity(
+//                        "Ms Kerri Marshall",
+//                        "",
+//                        "01414516548(ext), 86548(int)",
+//                        "Endocrine/Metabolic Secretary"),
+//
+//                new ContactsEntity(
+//                  "Ms Teresa McBride",
+//                  "teresa.mcbride@ggc.scot.nhs.uk",
+//                  "07904881485",
+//                  "Paediatric Endocrine Nurse"));
     }
 
     private static void populateMedicine(MedicineDao dao) {
         dao.deleteAll();
 
-        dao.insertAll(
-                new MedicineEntity(
-                "Oestrogen",
-                "Helps in the development and maintenance of sexual maturation.",
-                "2mg",
-                "Tablets/patches should be taken once a day, every day.",
-                true,
-                1,
-                true,
-                false,
-                "26/02/2018",
-                "15:50"),
-                new MedicineEntity(
-                "Progesterone",
-                "Sex hormone involved in the menstrual cycle, pregnancy and embryogenesis",
-                "5mg",
-                "To be taken on 7-12 days of calendar month either monthly, every 2nd month or" +
-                        "every 3rd month.",
-                false,
-                0,
-                true,
-                true,
-                "05/02/2018",
-                "13:30"),
-                new MedicineEntity(
-                "Thyroxine",
-                "Main thyroid hormone",
-                "2mg",
-                "Vital roles in regulating the body’s metabolic rate, heart and digestive " +
-                        "functions, muscle control, brain development and maintenance of bones.\nTo be taken daily.",
-                true,
-                1,
-                false,
-                true,
-                "01/01/2010",
-                "13:15"),
-        new MedicineEntity(
-                "Growth Hormone",
-                "Natural hormone to simulate growth.",
-                "5mg",
-                "To be taken once a day, every day.",
-                false,
-                1,
-                true,
-                false,
-                "26/02/2018",
-                "21:15")
-                );
+//        dao.insertAll(
+//                new MedicineEntity(
+//                "Oestrogen",
+//                "Helps in the development and maintenance of sexual maturation.",
+//                "2mg",
+//                "Tablets/patches should be taken once a day, every day.",
+//                true,
+//                1,
+//                true,
+//                false,
+//                "26/02/2018",
+//                "15:50"),
+//                new MedicineEntity(
+//                "Progesterone",
+//                "Sex hormone involved in the menstrual cycle, pregnancy and embryogenesis",
+//                "5mg",
+//                "To be taken on 7-12 days of calendar month either monthly, every 2nd month or" +
+//                        "every 3rd month.",
+//                false,
+//                0,
+//                true,
+//                true,
+//                "05/02/2018",
+//                "13:30"),
+//                new MedicineEntity(
+//                "Thyroxine",
+//                "Main thyroid hormone",
+//                "2mg",
+//                "Vital roles in regulating the body’s metabolic rate, heart and digestive " +
+//                        "functions, muscle control, brain development and maintenance of bones.\nTo be taken daily.",
+//                true,
+//                1,
+//                false,
+//                true,
+//                "01/01/2010",
+//                "13:15"),
+//        new MedicineEntity(
+//                "Growth Hormone",
+//                "Natural hormone to simulate growth.",
+//                "5mg",
+//                "To be taken once a day, every day.",
+//                false,
+//                1,
+//                true,
+//                false,
+//                "26/02/2018",
+//                "21:15")
+//                );
     }
 
 
     private static void populateAppointments(AppointmentsDao dao)  {
         dao.deleteAll();
 
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-
-        c.add(Calendar.DATE, 1);
-        dao.insertAll(new AppointmentsEntity("Clinic 1", "Royal Hospital for Children, Glasgow",
-                df.format(c.getTime()), "15:55","Go to desk on ground floor ward 2.", true, 1,
-                false, false, false));
-        c.add(Calendar.DATE, 1);
-        dao.insertAll(new AppointmentsEntity("Check Up 1", "Children's Hospital",
-                df.format(c.getTime()), "16:00","Appointment Notes", false, 0,
-                false, false, false));
-        c.add(Calendar.DATE, 1);
-        dao.insertAll(new AppointmentsEntity("Check Up 2", "Children's Hospital",
-                df.format(c.getTime()), "16:00","Appointment Notes", true, 0,
-                false, false, false));
-        c.add(Calendar.DATE, 1);
-        dao.insertAll(new AppointmentsEntity("Clinic 2", "Children's Hospital",
-                df.format(c.getTime()), "17:00","Appointment Notes", false, 1,
-                false, false, false));
-        c.add(Calendar.DATE, 1);
-        dao.insertAll(new AppointmentsEntity("Check Up 3", "Children's Hospital",
-                df.format(c.getTime()), "14:00","Appointment Notes", true, 1,
-                false, false, false));
+//        Calendar c = Calendar.getInstance();
+//        c.set(Calendar.HOUR_OF_DAY, 0);
+//        @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+//
+//        c.add(Calendar.DATE, 1);
+//        dao.insertAll(new AppointmentsEntity("Clinic 1", "Royal Hospital for Children, Glasgow",
+//                df.format(c.getTime()), "15:55","Go to desk on ground floor ward 2.", true, 1,
+//                false, false, false));
+//        c.add(Calendar.DATE, 1);
+//        dao.insertAll(new AppointmentsEntity("Check Up 1", "Children's Hospital",
+//                df.format(c.getTime()), "16:00","Appointment Notes", false, 0,
+//                false, false, false));
+//        c.add(Calendar.DATE, 1);
+//        dao.insertAll(new AppointmentsEntity("Check Up 2", "Children's Hospital",
+//                df.format(c.getTime()), "16:00","Appointment Notes", true, 0,
+//                false, false, false));
+//        c.add(Calendar.DATE, 1);
+//        dao.insertAll(new AppointmentsEntity("Clinic 2", "Children's Hospital",
+//                df.format(c.getTime()), "17:00","Appointment Notes", false, 1,
+//                false, false, false));
+//        c.add(Calendar.DATE, 1);
+//        dao.insertAll(new AppointmentsEntity("Check Up 3", "Children's Hospital",
+//                df.format(c.getTime()), "14:00","Appointment Notes", true, 1,
+//                false, false, false));
     }
 
     private static void populateInvestigations(InvestigationsDao dao)  {
         dao.deleteAll();
 
-        InvestigationsEntity ie = new InvestigationsEntity("Blood Test", "03/01/2018", "Due again in 6 months time (03/07/2018)");
-        InvestigationsEntity ie1 = new InvestigationsEntity("Hearing Test", "29/12/2017", "Due again in 12 months (29/12/2018)");
-        InvestigationsEntity ie2 = new InvestigationsEntity("Blood Test", "04/06/2017", "Due again in 6 months (04/12/2017)");
-        InvestigationsEntity ie3 = new InvestigationsEntity("Hearing Test", "30/06/2017", "Due again in 12 months (30/06/2018)");
-
-        dao.insertAll(ie, ie1, ie2, ie3);
+//        InvestigationsEntity ie = new InvestigationsEntity("Blood Test", "03/01/2018", "Due again in 6 months time (03/07/2018)");
+//        InvestigationsEntity ie1 = new InvestigationsEntity("Hearing Test", "29/12/2017", "Due again in 12 months (29/12/2018)");
+//        InvestigationsEntity ie2 = new InvestigationsEntity("Blood Test", "04/06/2017", "Due again in 6 months (04/12/2017)");
+//        InvestigationsEntity ie3 = new InvestigationsEntity("Hearing Test", "30/06/2017", "Due again in 12 months (30/06/2018)");
+//
+//        dao.insertAll(ie, ie1, ie2, ie3);
     }
 
     private static void populateSickDays(SickDaysDao dao) {

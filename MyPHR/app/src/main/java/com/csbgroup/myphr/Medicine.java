@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -82,6 +83,10 @@ public class Medicine extends Fragment {
                 ((MainActivity) getActivity()).switchFragment(details);
             }
         });
+
+        LinearLayout nomeds = rootView.findViewById(R.id.no_meds);
+        nomeds.setVisibility(View.INVISIBLE);
+        if (listView.getAdapter().getCount() == 0) nomeds.setVisibility(View.VISIBLE);
 
         // fab action for adding medicine
         fab = rootView.findViewById(R.id.med_fab);

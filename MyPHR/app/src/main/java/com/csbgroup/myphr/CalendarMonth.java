@@ -40,6 +40,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import static android.view.View.GONE;
+
 public class CalendarMonth extends Fragment {
 
     private CalendarEvent upcomingAppointment;
@@ -141,6 +143,9 @@ public class CalendarMonth extends Fragment {
                     ((MainActivity) getContext()).switchFragment(eventFrag);
                 }
             });
+        } else {
+            upcoming_ll.setVisibility(GONE);
+            rootView.findViewById(R.id.upcoming_app).setVisibility(GONE);
         }
 
         // Today's Medicines
@@ -176,6 +181,11 @@ public class CalendarMonth extends Fragment {
             }
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+
+        if (todays_meds.getChildCount() == 0) {
+            todays_meds.setVisibility(View.GONE);
+            rootView.findViewById(R.id.upcoming_med).setVisibility(View.GONE);
         }
         return rootView;
     }

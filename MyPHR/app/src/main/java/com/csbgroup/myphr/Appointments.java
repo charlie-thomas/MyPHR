@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsEntity;
@@ -76,6 +78,10 @@ public class Appointments extends Fragment {
                 ((MainActivity) getActivity()).switchFragment(details);
             }
         });
+
+        LinearLayout noapps = rootView.findViewById(R.id.no_apps);
+        noapps.setVisibility(View.INVISIBLE);
+        if (listView.getAdapter().getCount() == 0) noapps.setVisibility(View.VISIBLE);
 
         // fab action for adding appointment
         fab = rootView.findViewById(R.id.app_fab);
