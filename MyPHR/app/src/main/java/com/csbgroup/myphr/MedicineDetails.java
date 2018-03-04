@@ -246,7 +246,7 @@ public class MedicineDetails extends Fragment {
                     datetext.setVisibility(View.GONE);
                     remtime.setVisibility(View.GONE);
                     remdate.setVisibility(View.GONE);
-               }
+                }
             }
         });
 
@@ -396,6 +396,7 @@ public class MedicineDetails extends Fragment {
             });
 
             this.mode = "edit";
+            return;
         }
 
         if (this.mode.equals("edit")) { // exiting edit mode
@@ -432,6 +433,7 @@ public class MedicineDetails extends Fragment {
             }).start();
 
             this.mode = "view";
+            return;
         }
     }
 
