@@ -81,7 +81,7 @@ public class MedicineDetails extends Fragment {
         MedicineEntity medicine = getMedicine(Integer.valueOf(args.getString("uid")));
         thismedicine = medicine;
 
-        EditText name = rootView.findViewById(R.id.medicine_title);
+        final EditText name = rootView.findViewById(R.id.medicine_title);
         final EditText description = rootView.findViewById(R.id.medicine_info);
         EditText dose = rootView.findViewById(R.id.medicine_dose);
         EditText remtext = rootView.findViewById(R.id.reminder_time_title);
@@ -238,10 +238,6 @@ public class MedicineDetails extends Fragment {
 
                     // *********** NOTIFICATION SECTION STARTS **************
 
-                    System.out.println("*********** NOTIFICATION SECTION STARTS **************");
-                    System.out.println(remdate.getText().toString() + " " + remtime.getText().toString());
-                    System.out.println("*********** NOTIFICATION SECTION ENDS ****************");
-
                     // Time variables
                     int hourToSet = Integer.parseInt(remtime.getText().toString().substring(0,2));
                     int minuteToSet = Integer.parseInt(remtime.getText().toString().substring(3,5));
@@ -254,6 +250,8 @@ public class MedicineDetails extends Fragment {
                     AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
                     Intent intentAlarm = new Intent(mContext, AlarmReceiver.class);
+                    // Send the name of the medicine and whether notification should be descriptive to AlarmReceiver
+                    intentAlarm.putExtra(name.getText().toString(), thismedicine.getReminder_type());
                     PendingIntent notifySender = PendingIntent.getBroadcast(mContext, 123, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     // Set notification to launch at medicine reminder time
