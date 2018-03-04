@@ -9,10 +9,12 @@ import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.not;
 
 public class InvestigationTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
@@ -48,15 +50,15 @@ public class InvestigationTest extends ActivityInstrumentationTestCase2<MainActi
 
     public void testFormatError() {
         onView(withId(R.id.investigation_fab)).perform(click());
-        onView(withText(R.string.investigationmessage)).check(matches(isDisplayed()));
+        onView(withText("Add an Investigation")).check(matches(isDisplayed()));
 
-        onView(withText("ADD")).perform(click());
-        onView(withText("Format Error")).check(matches(isDisplayed()));
+        onView(withId(R.id.inv_DD)).perform(typeText("2"));
+        onView(withId(R.id.date_error)).check(matches(isDisplayed()));
     }
 
     public void testAddNewInvestigation() {
         onView(withId(R.id.investigation_fab)).perform(click());
-        onView(withText(R.string.investigationmessage)).check(matches(isDisplayed()));
+        onView(withText("Add an Investigation")).check(matches(isDisplayed()));
 
         onView(withId(R.id.inv_title)).perform(typeText("Invest Title"));
         onView(withId(R.id.inv_DD)).perform(typeText("02"));

@@ -57,25 +57,12 @@ public class MedicineTest extends ActivityInstrumentationTestCase2<MainActivity>
 
     public void testFabOnClick() {
         onView(withId(R.id.med_fab)).perform(click());
-        onView(withText("Add a New Medicine")).check(matches(isDisplayed()));
-    }
-
-    public void testSettings() {
-        onView(withContentDescription("Settings Cog")).perform(click());
-        onView(withText("Descriptive")).check(matches(isDisplayed()));
-    }
-
-    public void testErrorDialog() {
-        onView(withId(R.id.med_fab)).perform(click());
-        onView(withText("Add a New Medicine")).check(matches(isDisplayed()));
-
-        onView(withText("ADD")).perform(click());
-        onView(withText("Format Error")).check(matches(isDisplayed()));
+        onView(withText("Add a Medication")).check(matches(isDisplayed()));
     }
 
     public void testCorrectFormat() {
         onView(withId(R.id.med_fab)).perform(click());
-        onView(withText("Add a New Medicine")).check(matches(isDisplayed()));
+        onView(withText("Add a Medication")).check(matches(isDisplayed()));
 
         onView(withId(R.id.med_name)).perform(typeText("Med Name"));
         onView(withId(R.id.med_description)).perform(typeText("Med"));

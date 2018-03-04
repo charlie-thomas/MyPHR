@@ -50,20 +50,12 @@ public class ContactTest extends ActivityInstrumentationTestCase2<MainActivity> 
 
     public void testFabOnClick() {
         onView(withId(R.id.contact_fab)).perform(click());
-        onView(withText("Add a New Contact")).check(matches(isDisplayed()));
-    }
-
-    public void testErrorDialog() {
-        onView(withId(R.id.contact_fab)).perform(click());
-        onView(withText("Add a New Contact")).check(matches(isDisplayed()));
-
-        onView(withText("ADD")).perform(click());
-        onView(withText("Format Error")).check(matches(isDisplayed()));
+        onView(withText("Add a Contact")).check(matches(isDisplayed()));
     }
 
     public void testCorrectFormat() {
         onView(withId(R.id.contact_fab)).perform(click());
-        onView(withText("Add a New Contact")).check(matches(isDisplayed()));
+        onView(withText("Add a Contact")).check(matches(isDisplayed()));
 
         onView(withId(R.id.contact_name)).perform(typeText("Contact Name"));
         onView(withId(R.id.contact_phone)).perform(typeText("Contact Phone"));

@@ -38,11 +38,6 @@ public class StatisticTest extends ActivityInstrumentationTestCase2<MainActivity
         onView(withText("My Measurements")).check(matches(isDisplayed()));
     }
 
-    public void testSettings() {
-        onView(withContentDescription("Settings Cog")).perform(click());
-        onView(withText("Weight Metric")).check(matches(isDisplayed()));
-    }
-
     public void testMeasurementsList() {
         onView(withText("Blood Pressure")).perform(click());
         onView(withId(R.id.statistics_graph_list)).check(matches(isDisplayed()));
@@ -54,8 +49,8 @@ public class StatisticTest extends ActivityInstrumentationTestCase2<MainActivity
         onView(withId(R.id.s_fab)).perform(click());
         onView(withText("Add a New Height")).check(matches(isDisplayed()));
 
-        onView(withText("ADD")).perform(click());
-        onView(withText("Format Error")).check(matches(isDisplayed()));
+        onView(withId(R.id.meas_DD)).perform(typeText("2"));
+        onView(withId(R.id.date_error)).check(matches(isDisplayed()));
     }
 
     public void testAddNewStatistic() {
