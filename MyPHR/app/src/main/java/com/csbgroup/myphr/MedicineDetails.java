@@ -262,8 +262,6 @@ public class MedicineDetails extends Fragment {
                     calendar.set(Calendar.MINUTE, minuteToSet);
                     calendar.set(Calendar.SECOND, 0);
 
-                    System.out.println(calendar.toString());
-
                     if (thismedicine.isDaily()) {
                         // If medicine is daily, repeat notification daily
                         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifySender);

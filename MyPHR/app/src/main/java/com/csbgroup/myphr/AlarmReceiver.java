@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import static com.csbgroup.myphr.R.color.colorAccent;
@@ -26,6 +27,14 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Re-set any alarms after reboot here
         //Intent alarmIntent = new Intent(context, AlarmReceiver.class);
         //}
+
+        // How to get one section of return
+        String extra = intent.getStringExtra("Progesterone");
+
+        // How to get all of return
+        Bundle b = intent.getExtras();
+
+        System.out.println(b);
 
         // Sets action that notification should perform when clicked on
         NotificationCompat.Builder mBuilder =
