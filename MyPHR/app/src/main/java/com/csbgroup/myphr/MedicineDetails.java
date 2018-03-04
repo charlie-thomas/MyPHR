@@ -1,7 +1,11 @@
 package com.csbgroup.myphr;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -11,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.KeyListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +35,7 @@ import com.csbgroup.myphr.database.MedicineEntity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -65,6 +71,8 @@ public class MedicineDetails extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        final Context mContext = this.getContext();
 
         final View rootView = inflater.inflate(R.layout.fragment_medicine_details, container, false);
         this.rootView = rootView;
@@ -227,6 +235,29 @@ public class MedicineDetails extends Fragment {
                 EditText datetext = rootView.findViewById(R.id.reminder_date_title);
 
                 if (isChecked) { // reminders are on
+
+                    System.out.println("*********** NOTIFICATION SECTION STARTS **************");
+                    System.out.println(remtext);
+                    System.out.println("*********** NOTIFICATION SECTION ENDS ****************");
+
+
+                    // *********** NOTIFICATION SECTION STARTS **************
+
+                    AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+
+                    Intent intentAlarm = new Intent(mContext, AlarmReceiver.class);
+                    PendingIntent notifySender = PendingIntent.getBroadcast(mContext, 123, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(System.currentTimeMillis());
+                    calendar.set(Calendar.HOUR_OF_DAY, 13);
+                    calendar.set(Calendar.MINUTE, 30);
+                    calendar.set(Calendar.SECOND, 0);
+
+                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifySender);
+
+                    // *********** NOTIFICATION SECTION ENDS ****************
+
                     daily.setVisibility(View.VISIBLE);
                     otherdays.setVisibility(View.VISIBLE);
                     general.setVisibility(View.VISIBLE);

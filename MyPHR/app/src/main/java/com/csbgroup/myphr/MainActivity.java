@@ -40,26 +40,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        // *********** NOTIFICATION SECTION STARTS **************
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        Intent intentAlarm = new Intent(this.getApplicationContext(), AlarmReceiver.class);
-        PendingIntent notifySender = PendingIntent.getBroadcast(this, 123, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 13);
-        calendar.set(Calendar.MINUTE, 30);
-        calendar.set(Calendar.SECOND, 0);
-
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifySender);
-
-        // *********** NOTIFICATION SECTION ENDS **************
-
-
-
         // Populate database with data for debug purposes
         new Thread(new Runnable() {
             @Override
