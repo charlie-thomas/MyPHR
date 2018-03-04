@@ -236,12 +236,20 @@ public class MedicineDetails extends Fragment {
 
                 if (isChecked) { // reminders are on
 
+                    // *********** NOTIFICATION SECTION STARTS **************
+
                     System.out.println("*********** NOTIFICATION SECTION STARTS **************");
-                    System.out.println(remtext);
+                    System.out.println(remdate.getText().toString() + " " + remtime.getText().toString());
                     System.out.println("*********** NOTIFICATION SECTION ENDS ****************");
 
+                    // Time variables
+                    int hourToSet = Integer.parseInt(remtime.getText().toString().substring(0,2));
+                    int minuteToSet = Integer.parseInt(remtime.getText().toString().substring(3,5));
 
-                    // *********** NOTIFICATION SECTION STARTS **************
+                    // Date variables
+                    int yearToSet = Integer.parseInt(remdate.getText().toString().substring(6,10));
+                    int monthToSet = Integer.parseInt(remdate.getText().toString().substring(3,5));
+                    int dayToSet = Integer.parseInt(remdate.getText().toString().substring(0,2));
 
                     AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
@@ -250,9 +258,12 @@ public class MedicineDetails extends Fragment {
 
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTimeInMillis(System.currentTimeMillis());
-                    calendar.set(Calendar.HOUR_OF_DAY, 13);
-                    calendar.set(Calendar.MINUTE, 30);
+                    calendar.set(yearToSet, monthToSet, dayToSet);
+                    calendar.set(Calendar.HOUR_OF_DAY, hourToSet);
+                    calendar.set(Calendar.MINUTE, minuteToSet);
                     calendar.set(Calendar.SECOND, 0);
+
+                    System.out.println(calendar.toString());
 
                     alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifySender);
 
