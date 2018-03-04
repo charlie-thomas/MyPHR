@@ -256,6 +256,7 @@ public class MedicineDetails extends Fragment {
                     Intent intentAlarm = new Intent(mContext, AlarmReceiver.class);
                     PendingIntent notifySender = PendingIntent.getBroadcast(mContext, 123, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
 
+                    // Set notification to launch at medicine reminder time
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTimeInMillis(System.currentTimeMillis());
                     calendar.set(yearToSet, monthToSet, dayToSet);
@@ -265,7 +266,13 @@ public class MedicineDetails extends Fragment {
 
                     System.out.println(calendar.toString());
 
-                    alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifySender);
+                    if (thismedicine.isDaily()) {
+                        // If medicine is daily, repeat notification daily
+                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifySender);
+                    } else {
+                        // Else repeat every other day
+                        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 48, notifySender);
+                    }
 
                     // *********** NOTIFICATION SECTION ENDS ****************
 
