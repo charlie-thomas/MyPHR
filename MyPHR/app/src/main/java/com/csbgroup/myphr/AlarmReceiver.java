@@ -28,13 +28,17 @@ public class AlarmReceiver extends BroadcastReceiver {
         //Intent alarmIntent = new Intent(context, AlarmReceiver.class);
         //}
 
-        // How to get one section of return
-        String extra = intent.getStringExtra("Progesterone");
+        // Get name of medicine from medicine details section
+        String medicine = intent.getStringExtra("medicine");
+        int descriptive = intent.getIntExtra("descriptive", 0);
 
-        // How to get all of return
-        Bundle b = intent.getExtras();
+        System.out.println("Medicine: " + medicine);
 
-        System.out.println(b);
+        if (descriptive == 0) {
+            System.out.println("General");
+        } else {
+            System.out.println("Descriptive");
+        }
 
         // Sets action that notification should perform when clicked on
         NotificationCompat.Builder mBuilder =
@@ -42,11 +46,20 @@ public class AlarmReceiver extends BroadcastReceiver {
         Intent notificationIntent = new Intent(context.getApplicationContext(), LoginActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
+
+
         // Sets notification text
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
-        bigText.bigText("Queen Elizabeth's Hospice - 11:30am");
-        bigText.setBigContentTitle("Appointment");
-        bigText.setSummaryText("Appointment reminder");
+
+        if (descriptive == 0) {
+            bigText.bigText("You have a new reminder");
+            bigText.setBigContentTitle("New reminder");
+            bigText.setSummaryText("Reminder");
+        } else {
+            bigText.bigText("Remember to take your " + medicine);
+            bigText.setBigContentTitle("Medicine reminder");
+            bigText.setSummaryText("Medicine");
+        }
 
         mBuilder.setContentIntent(pendingIntent);
         mBuilder.setSmallIcon(R.drawable.ic_notification);

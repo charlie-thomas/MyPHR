@@ -251,7 +251,8 @@ public class MedicineDetails extends Fragment {
 
                     Intent intentAlarm = new Intent(mContext, AlarmReceiver.class);
                     // Send the name of the medicine and whether notification should be descriptive to AlarmReceiver
-                    intentAlarm.putExtra(name.getText().toString(), thismedicine.getReminder_type());
+                    intentAlarm.putExtra("medicine", name.getText().toString());
+                    intentAlarm.putExtra("descriptive", thismedicine.getReminder_type());
                     PendingIntent notifySender = PendingIntent.getBroadcast(mContext, 123, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     // Set notification to launch at medicine reminder time
