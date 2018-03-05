@@ -218,7 +218,7 @@ public class CalendarDay extends Fragment {
             all_events.add(new CalendarEvent(ae.getUid(), 0, ae.getTime(), ae.getDate(), ae.getTitle(), "Appointment"));
 
         for (MedicineEntity me : medicines) {
-            if (me.isDaily() || (me.isOther_days() && isOtherDay(me.getDate(), date)))
+            if (me.getReminders() && (me.isDaily() || (me.isOther_days() && isOtherDay(me.getDate(), date))))
                 all_events.add(new CalendarEvent(me.getUid(), 0, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
         }
 
