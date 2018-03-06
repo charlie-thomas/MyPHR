@@ -486,13 +486,16 @@ public class MedicineDetails extends Fragment {
                 if (t.length() == 5 && t.charAt(2) == ':') { // valid format
                     validTime = true;
                     String[] spl = t.split(":");
-                    int hr = Integer.parseInt(spl[0]);
-                    int min = Integer.parseInt(spl[1]);
-                    if (spl[0].length() != 2 || spl[1].length() != 2 || hr < 0 || hr > 23 || min < 0 || min > 59) { // invalid value
-                        validTime = false;
-                        time.setError("Invalid time (HH:MM)");
+                    try {
+                        int hr = Integer.parseInt(spl[0]);
+                        int min = Integer.parseInt(spl[1]);
+                        if (spl[0].length() != 2 || spl[1].length() != 2 || hr < 0 || hr > 23 || min < 0 || min > 59) { // invalid value
+                            validTime = false;
+                            time.setError("Invalid time (HH:MM)");
+                        }
+                        else {validTime = true;} // valid value
                     }
-                    else {validTime = true;} // valid value
+                    catch(Exception e){validTime = false; time.setError("Invalid time (HH:MM)");}
                 } else {validTime = false; time.setError("Invalid time (HH:MM)");} // invalid format
 
 

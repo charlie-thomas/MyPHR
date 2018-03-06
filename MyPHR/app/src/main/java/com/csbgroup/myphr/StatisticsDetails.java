@@ -11,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.csbgroup.myphr.database.AppDatabase;
@@ -98,6 +99,15 @@ public class StatisticsDetails extends Fragment {
             graph.addSeries(serieslist.get(1));
             graph.getLegendRenderer().setVisible(true);
             graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        }
+
+        // Show "No measurements" message if required
+        LinearLayout no_stats = rootView.findViewById(R.id.no_stats);
+        no_stats.setVisibility(View.INVISIBLE);
+        if (valueslist.size() == 0) {
+            medTitle.setVisibility(View.INVISIBLE);
+            graph.setVisibility(View.INVISIBLE);
+            no_stats.setVisibility(View.VISIBLE);
         }
 
         return rootView;
