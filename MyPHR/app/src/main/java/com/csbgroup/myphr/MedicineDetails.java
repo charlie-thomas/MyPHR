@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -245,7 +246,7 @@ public class MedicineDetails extends Fragment {
                     datetext.setVisibility(View.GONE);
                     remtime.setVisibility(View.GONE);
                     remdate.setVisibility(View.GONE);
-               }
+                }
             }
         });
 
@@ -302,7 +303,8 @@ public class MedicineDetails extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: // back button - go back
-                ((MainActivity) getActivity()).switchFragment(MedicineSection.newInstance());
+                BottomNavigationView bn = getActivity().findViewById(R.id.bottom_nav);
+                bn.setSelectedItemId(R.id.medicine);
                 return true;
 
             case R.id.details_edit: // edit button - edit medicine details
@@ -372,7 +374,7 @@ public class MedicineDetails extends Fragment {
                                 public void run() {
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                     db.medicineDao().delete(thismedicine);
-                                    ((MainActivity) getActivity()).switchFragment(Medicine.newInstance());
+                                    ((MainActivity) getActivity()).switchFragment(Medicine.newInstance(), false);
                                 }
                             }).start();
                         }
@@ -388,8 +390,8 @@ public class MedicineDetails extends Fragment {
                     dialog.show();
 
                     // set button colours
-                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
                 }
             });
 

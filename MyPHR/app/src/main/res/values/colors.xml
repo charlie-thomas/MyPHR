@@ -6,4 +6,5 @@
     <color name="colorAccent">#E91E63</color>
     <color name="colorAccentDark">#AD1457</color>
     <color name="colorSick">#009688</color>
+    <color name="colorRed">#F44336</color>
 </resources>

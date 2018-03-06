@@ -169,4 +169,10 @@
     <string name="mark_as_sick_day">Mark as Sick Day</string>
     <string name="markassickday">Would you like to mark this day as a sick day?</string>
 
+    // No X strings
+    <string name="no_apps">No appointments have been added yet</string>
+    <string name="no_contacts">No contacts have been added yet</string>
+    <string name="no_meds">No medications have been added yet</string>
+    <string name="no_invest">No investigations have been added yet</string>
+
 </resources>

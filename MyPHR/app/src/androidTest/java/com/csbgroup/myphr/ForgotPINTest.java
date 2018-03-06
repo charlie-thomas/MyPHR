@@ -18,12 +18,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
@@ -37,6 +38,16 @@ public class ForgotPINTest {
 
     @Test
     public void forgotPINTest() {
+        ViewInteraction imageView = onView(
+                allOf(withId(R.id.iconLoginStart), withContentDescription("App Icon"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        imageView.check(matches(isDisplayed()));
+
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.button), withText("5"),
                         childAtPosition(
@@ -95,9 +106,19 @@ public class ForgotPINTest {
                                         0),
                                 2),
                         isDisplayed()));
-        appCompatEditText2.perform(replaceText("A"), closeSoftKeyboard());
+        appCompatEditText2.perform(replaceText("a"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText3 = onView(
+                allOf(withId(R.id.security_1_answer), withText("a"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        appCompatEditText3.perform(pressImeActionButton());
+
+        ViewInteraction appCompatEditText4 = onView(
                 allOf(withId(R.id.security_2_answer),
                         childAtPosition(
                                 childAtPosition(
@@ -105,7 +126,17 @@ public class ForgotPINTest {
                                         0),
                                 5),
                         isDisplayed()));
-        appCompatEditText3.perform(replaceText("B"), closeSoftKeyboard());
+        appCompatEditText4.perform(replaceText("b"), closeSoftKeyboard());
+
+        ViewInteraction appCompatEditText5 = onView(
+                allOf(withId(R.id.security_2_answer), withText("b"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                5),
+                        isDisplayed()));
+        appCompatEditText5.perform(pressImeActionButton());
 
         ViewInteraction appCompatButton5 = onView(
                 allOf(withId(R.id.saveQuestions), withText("Save"),
@@ -124,7 +155,7 @@ public class ForgotPINTest {
                                         childAtPosition(
                                                 withId(android.R.id.content),
                                                 0)),
-                                3),
+                                4),
                         isDisplayed()));
         appCompatButton6.perform(click());
 
@@ -138,26 +169,6 @@ public class ForgotPINTest {
                         isDisplayed()));
         textView.check(matches(withText("Please answer first security question")));
 
-        ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.attempt_1_answer),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        appCompatEditText4.perform(click());
-
-        ViewInteraction appCompatEditText5 = onView(
-                allOf(withId(R.id.attempt_1_answer),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        appCompatEditText5.perform(click());
-
         ViewInteraction appCompatEditText6 = onView(
                 allOf(withId(R.id.attempt_1_answer),
                         childAtPosition(
@@ -166,9 +177,29 @@ public class ForgotPINTest {
                                         0),
                                 2),
                         isDisplayed()));
-        appCompatEditText6.perform(replaceText("A"), closeSoftKeyboard());
+        appCompatEditText6.perform(click());
 
         ViewInteraction appCompatEditText7 = onView(
+                allOf(withId(R.id.attempt_1_answer),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        appCompatEditText7.perform(replaceText("a"), closeSoftKeyboard());
+
+        ViewInteraction appCompatEditText8 = onView(
+                allOf(withId(R.id.attempt_1_answer), withText("a"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        appCompatEditText8.perform(pressImeActionButton());
+
+        ViewInteraction appCompatEditText9 = onView(
                 allOf(withId(R.id.attempt_2_answer),
                         childAtPosition(
                                 childAtPosition(
@@ -176,7 +207,17 @@ public class ForgotPINTest {
                                         0),
                                 5),
                         isDisplayed()));
-        appCompatEditText7.perform(replaceText("B"), closeSoftKeyboard());
+        appCompatEditText9.perform(replaceText("b"), closeSoftKeyboard());
+
+        ViewInteraction appCompatEditText10 = onView(
+                allOf(withId(R.id.attempt_2_answer), withText("b"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                5),
+                        isDisplayed()));
+        appCompatEditText10.perform(pressImeActionButton());
 
         ViewInteraction appCompatButton7 = onView(
                 allOf(withId(R.id.saveQuestions), withText("Enter"),
@@ -278,15 +319,25 @@ public class ForgotPINTest {
                         isDisplayed()));
         appCompatButton15.perform(click());
 
+        // Added a sleep statement to match the app's execution delay.
+        // The recommended way to handle such scenarios is to use Espresso idling resources:
+        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+        try {
+            Thread.sleep(16);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         ViewInteraction textView3 = onView(
-                allOf(withId(R.id.upcoming_med), withText("Today's Medicine"),
+                allOf(withText("My Calendar"),
                         childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
-                                        0),
-                                1),
+                                allOf(withId(R.id.toolbar),
+                                        childAtPosition(
+                                                IsInstanceOf.<View>instanceOf(android.widget.RelativeLayout.class),
+                                                0)),
+                                0),
                         isDisplayed()));
-        textView3.check(matches(withText("Today's Medicine")));
+        textView3.check(matches(withText("My Calendar")));
 
     }
 

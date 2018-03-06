@@ -39,8 +39,7 @@ public class MedicineEntityTest {
     @Test
     public void createMedicineTest() throws Exception {
         MedicineEntity medicineEntity = new MedicineEntity("Test Medicine",
-                "Description", "Dose", "Notes", true,
-                true, true, "03/12/2017", "15:00");
+                "Description", "Dose", "Notes", true, 0, true, false, "03/12/2017", "15:00");
         medicineDao.insert(medicineEntity);
 
         MedicineEntity me = medicineDao.getMedicineByTitle("Test Medicine");
@@ -50,7 +49,7 @@ public class MedicineEntityTest {
     @Test
     public void deleteMedicineTest() throws Exception {
         MedicineEntity medicineEntity = new MedicineEntity("Test Medicine",
-                "Description", "Dose", "Notes", true,
+                "Description", "Dose", "Notes", true, 0,
                 true, true, "03/12/2017", "15:00");
         medicineDao.insert(medicineEntity);
 
@@ -69,7 +68,7 @@ public class MedicineEntityTest {
 
         List<MedicineEntity> medicines = new ArrayList<>();
         for (int i = 1; i < 5; i++)
-            medicines.add(new MedicineEntity("Med " + i, null, null,null, false, false, false, null, null ));
+            medicines.add(new MedicineEntity("Med " + i, null, null,null, false, 0,false, false, null, null ));
         medicineDao.insertAll(medicines.toArray(new MedicineEntity[medicines.size()]));
 
         assertEquals(titles, medicineDao.getAllTitles());
@@ -78,7 +77,7 @@ public class MedicineEntityTest {
     @Test
     public void getAllMedicinesTest() throws Exception {
         for (int i = 1; i < 5; i++)
-            medicineDao.insert((new MedicineEntity("Med " + i, null, null,null, false, false, false, null, null )));
+            medicineDao.insert((new MedicineEntity("Med " + i, null, null,null, false, 0,false, false, null, null )));
 
         assertEquals(4, medicineDao.getAll().size());
     }
@@ -86,7 +85,7 @@ public class MedicineEntityTest {
     @Test
     public void deleteAllMedicinesTest() throws Exception {
         for (int i = 1; i < 5; i++)
-            medicineDao.insert(new MedicineEntity("Med " + i, null, null, null, false, false, false, null, null));
+            medicineDao.insert(new MedicineEntity("Med " + i, null, null, null, false, 0,false, false, null, null));
 
         // Ensure there are currently 4 medicines in the database
         assertEquals(4, medicineDao.getAll().size());
@@ -99,7 +98,7 @@ public class MedicineEntityTest {
     @Test
     public void updateMedicineTest() throws Exception {
         MedicineEntity medicineEntity = new MedicineEntity("Test Medicine",
-                "Description", "Dose", "Notes", true,
+                "Description", "Dose", "Notes", true,0,
                 true, true, "03/12/2017", "15:00");
         medicineEntity.setUid(132);
         medicineDao.insert(medicineEntity);

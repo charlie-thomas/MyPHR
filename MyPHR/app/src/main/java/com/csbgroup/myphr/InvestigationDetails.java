@@ -144,7 +144,7 @@ public class InvestigationDetails extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: // back button - go back
-                ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance());
+                ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance(), false);
                 return true;
 
             case R.id.details_edit: // edit button - edit appointment details
@@ -205,7 +205,7 @@ public class InvestigationDetails extends Fragment {
                                 public void run() {
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                     db.investigationDao().delete(thisinvestigation);
-                                    ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance());
+                                    ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance(), false);
                                 }
                             }).start();
                         }
@@ -222,8 +222,8 @@ public class InvestigationDetails extends Fragment {
                     dialog.show();
 
                     // set button colours
-                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
-                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
                 }
             });
 
@@ -259,7 +259,6 @@ public class InvestigationDetails extends Fragment {
             }).start();
 
             this.mode = "view";
-            return;
         }
     }
 

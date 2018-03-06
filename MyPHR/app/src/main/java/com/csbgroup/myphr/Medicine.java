@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -79,9 +80,13 @@ public class Medicine extends Fragment {
                 bundle.putString("uid", view.getTag().toString());
                 details.setArguments(bundle);
 
-                ((MainActivity) getActivity()).switchFragment(details);
+                ((MainActivity) getActivity()).switchFragment(details, true);
             }
         });
+
+        LinearLayout nomeds = rootView.findViewById(R.id.no_meds);
+        nomeds.setVisibility(View.INVISIBLE);
+        if (listView.getAdapter().getCount() == 0) nomeds.setVisibility(View.VISIBLE);
 
         // fab action for adding medicine
         fab = rootView.findViewById(R.id.med_fab);
@@ -166,7 +171,7 @@ public class Medicine extends Fragment {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("uid", String.valueOf(uid));
                                 newdetails.setArguments(bundle);
-                                ((MainActivity) getActivity()).switchFragment(newdetails);
+                                ((MainActivity) getActivity()).switchFragment(newdetails, true);
                             }
                         }).start();
                     }

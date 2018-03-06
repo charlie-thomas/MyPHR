@@ -56,7 +56,7 @@ public class NavigationTests extends ActivityInstrumentationTestCase2<MainActivi
 
     public void testMedicineNavBar() {
         onView(withId(R.id.medicine)).perform(click());
-        onView(withText("My Medicine")).check(matches(isDisplayed()));
+        onView(withText("My Medication")).check(matches(isDisplayed()));
     }
 
     public void testAppointmentsNavBar() {

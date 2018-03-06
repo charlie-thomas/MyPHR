@@ -38,7 +38,7 @@ public class AppointmentsEntityTest {
     @Test
     public void createAppointmentTest() throws Exception {
         AppointmentsEntity appointmentsEntity = new AppointmentsEntity("Appointment",
-                "Location", "Date", "Time", "Notes", false);
+                "Location", "Date", "Time", "Notes", false, 0, false, false, false);
         appointmentsEntity.setUid(15);
         appointmentsDao.insert(appointmentsEntity);
 
@@ -49,7 +49,7 @@ public class AppointmentsEntityTest {
     @Test
     public void deleteAppointmentTest() throws Exception {
         AppointmentsEntity appointmentsEntity = new AppointmentsEntity("Appointment",
-                "Location", "Date", "Time", "Notes", false);
+                "Location", "Date", "Time", "Notes", false,0, false, false, false);
         appointmentsEntity.setUid(16);
         appointmentsDao.insert(appointmentsEntity);
 
@@ -67,7 +67,7 @@ public class AppointmentsEntityTest {
 
         List<AppointmentsEntity> appointments = new ArrayList<>();
         for (int i = 1; i < 5; i++)
-            appointments.add(new AppointmentsEntity("App " + i, null, null,null, null, false));
+            appointments.add(new AppointmentsEntity("App " + i, null, null,null, null, false,0, false, false, false));
         appointmentsDao.insertAll(appointments.toArray(new AppointmentsEntity[appointments.size()]));
 
         assertEquals(titles, appointmentsDao.getAllTitles());
@@ -76,15 +76,15 @@ public class AppointmentsEntityTest {
     @Test
     public void getAllAppointmentsTest() throws Exception {
         for (int i = 1; i < 5; i++)
-            appointmentsDao.insert(new AppointmentsEntity("App " + i, null, null,null, null, false));
+            appointmentsDao.insert(new AppointmentsEntity("App " + i, null, null,null, null, false,0, false, false, false));
 
         assertEquals(4, appointmentsDao.getAll().size());
     }
 
     @Test
     public void getAppointmentByDate() throws Exception {
-        appointmentsDao.insert(new AppointmentsEntity("App 1", null, "03/12/1997",null, null, false));
-        appointmentsDao.insert(new AppointmentsEntity("App 2", null, "03/12/1997",null, null, false));
+        appointmentsDao.insert(new AppointmentsEntity("App 1", null, "03/12/1997",null, null, false,0, false, false, false));
+        appointmentsDao.insert(new AppointmentsEntity("App 2", null, "03/12/1997",null, null, false,0, false, false, false));
 
         assertEquals(2, appointmentsDao.getAppointmentByDate("03/12/1997").size());
     }
@@ -92,7 +92,7 @@ public class AppointmentsEntityTest {
     @Test
     public void deleteAllAppointmentsTest() throws Exception {
         for (int i = 1; i < 5; i++)
-            appointmentsDao.insert(new AppointmentsEntity("App " + i, null, null,null, null, false));
+            appointmentsDao.insert(new AppointmentsEntity("App " + i, null, null,null, null, false,0, false, false, false));
 
         // Ensure there are currently 4 appointments in the database
         assertEquals(4, appointmentsDao.getAll().size());
@@ -105,7 +105,7 @@ public class AppointmentsEntityTest {
     @Test
     public void updateAppointmentTest() throws Exception {
         AppointmentsEntity appointmentsEntity = new AppointmentsEntity("Appointment",
-                "Location", "Date", "Time", "Notes", false);
+                "Location", "Date", "Time", "Notes", false,0, false, false, false);
         appointmentsEntity.setUid(16);
         appointmentsDao.insert(appointmentsEntity);
 

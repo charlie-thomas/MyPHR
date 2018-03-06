@@ -179,7 +179,7 @@ public class CalendarDay extends Fragment {
         bundle.putString("date", newDate);
         newDayFragment.setArguments(bundle);
 
-        ((MainActivity) getActivity()).switchFragment(newDayFragment);
+        ((MainActivity) getActivity()).switchFragment(newDayFragment, true);
     }
 
     public List<CalendarEvent> getEvents(final String date) throws ParseException {
@@ -218,7 +218,7 @@ public class CalendarDay extends Fragment {
             all_events.add(new CalendarEvent(ae.getUid(), 0, ae.getTime(), ae.getDate(), ae.getTitle(), "Appointment"));
 
         for (MedicineEntity me : medicines) {
-            if (me.isDaily() || (me.isOther_days() && isOtherDay(me.getDate(), date)))
+            if (me.getReminders() && (me.isDaily() || (me.isOther_days() && isOtherDay(me.getDate(), date))))
                 all_events.add(new CalendarEvent(me.getUid(), 0, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
         }
 
@@ -260,7 +260,7 @@ public class CalendarDay extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: // back button
-                ((MainActivity) getActivity()).switchFragment(CalendarMonth.newInstance());
+                ((MainActivity) getActivity()).switchFragment(CalendarMonth.newInstance(), false);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -301,7 +301,7 @@ public class CalendarDay extends Fragment {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("date", date);
                                 cd.setArguments(bundle);
-                                ((MainActivity)getActivity()).switchFragment(cd);
+                                ((MainActivity)getActivity()).switchFragment(cd, true);
                             }
                         } catch (ExecutionException | InterruptedException e) {
                             e.printStackTrace();
@@ -328,7 +328,7 @@ public class CalendarDay extends Fragment {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("date", date);
                                 cd.setArguments(bundle);
-                                ((MainActivity)getActivity()).switchFragment(cd);
+                                ((MainActivity)getActivity()).switchFragment(cd, true);
                             }
                         } catch (ExecutionException | InterruptedException e) {
                             e.printStackTrace();
