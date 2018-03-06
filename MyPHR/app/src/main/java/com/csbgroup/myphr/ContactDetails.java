@@ -211,7 +211,7 @@ public class ContactDetails extends Fragment {
                                 public void run() {
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                     db.contactsDao().delete(thiscontact);
-                                    ((MainActivity) getActivity()).switchFragment(Contacts.newInstance());
+                                    ((MainActivity) getActivity()).switchFragment(Contacts.newInstance(), false);
                                 }
                             }).start();
                         }

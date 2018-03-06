@@ -144,7 +144,7 @@ public class InvestigationDetails extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: // back button - go back
-                ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance());
+                ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance(), false);
                 return true;
 
             case R.id.details_edit: // edit button - edit appointment details
@@ -205,7 +205,7 @@ public class InvestigationDetails extends Fragment {
                                 public void run() {
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                     db.investigationDao().delete(thisinvestigation);
-                                    ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance());
+                                    ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance(), false);
                                 }
                             }).start();
                         }

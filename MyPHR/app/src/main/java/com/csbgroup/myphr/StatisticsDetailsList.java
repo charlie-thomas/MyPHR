@@ -180,7 +180,7 @@ public class StatisticsDetailsList extends Fragment {
                 }
                 break;
             case android.R.id.home:
-                ((MainActivity) getActivity()).switchFragment(Statistics.newInstance());
+                ((MainActivity) getActivity()).switchFragment(Statistics.newInstance(), false);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -278,7 +278,7 @@ public class StatisticsDetailsList extends Fragment {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("title", args.getString("title", "Measurements"));
                                 details.setArguments(bundle);
-                                ((MainActivity) getActivity()).switchFragment(details);
+                                ((MainActivity) getActivity()).switchFragment(details, true);
                                 }
                         }).start();
                     }

@@ -4,8 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +78,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
                             BottomNavigationView bn = ((MainActivity) ctx).findViewById(R.id.bottom_nav);
                             bn.setSelectedItemId(R.id.appointments);
-                            ((MainActivity) ctx).switchFragment(eventFrag);
+
+                            ((MainActivity) ctx).switchFragment(eventFrag, true);
                         }
                     });
 
@@ -104,7 +107,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
                             BottomNavigationView bn = ((MainActivity) ctx).findViewById(R.id.bottom_nav);
                             bn.setSelectedItemId(R.id.medicine);
-                            ((MainActivity) ctx).switchFragment(eventFrag);
+
+                            ((MainActivity) ctx).switchFragment(eventFrag, true);
                         }
                     });
 

@@ -374,7 +374,7 @@ public class MedicineDetails extends Fragment {
                                 public void run() {
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                     db.medicineDao().delete(thismedicine);
-                                    ((MainActivity) getActivity()).switchFragment(Medicine.newInstance());
+                                    ((MainActivity) getActivity()).switchFragment(Medicine.newInstance(), false);
                                 }
                             }).start();
                         }

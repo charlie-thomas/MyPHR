@@ -69,7 +69,7 @@ public class Statistics extends Fragment {
                 bundle.putString("title", parent.getAdapter().getItem(position).toString());
                 details.setArguments(bundle);
 
-                ((MainActivity) getActivity()).switchFragment(details);
+                ((MainActivity) getActivity()).switchFragment(details, true);
 
             }
         });

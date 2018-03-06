@@ -368,7 +368,7 @@ public class AppointmentsDetails extends Fragment {
                                 public void run() {
                                     AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                     db.appointmentsDao().delete(thisappointment);
-                                    ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance());
+                                    ((MainActivity) getActivity()).switchFragment(AppointmentsSection.newInstance(), false);
                                 }
                             }).start();
                         }

@@ -81,7 +81,7 @@ public class CalendarMonth extends Fragment {
                 bundle.putString("date", day + "/" + month + "/" + date.getYear());
                 dayFragment.setArguments(bundle);
 
-                ((MainActivity) getActivity()).switchFragment(dayFragment);
+                ((MainActivity) getActivity()).switchFragment(dayFragment, true);
             }
         });
 
@@ -140,7 +140,7 @@ public class CalendarMonth extends Fragment {
 
                     BottomNavigationView bn = getActivity().findViewById(R.id.bottom_nav);
                     bn.setSelectedItemId(R.id.appointments);
-                    ((MainActivity) getContext()).switchFragment(eventFrag);
+                    ((MainActivity) getContext()).switchFragment(eventFrag, true);
                 }
             });
         } else {
@@ -173,7 +173,7 @@ public class CalendarMonth extends Fragment {
 
                         BottomNavigationView bn = getActivity().findViewById(R.id.bottom_nav);
                         bn.setSelectedItemId(R.id.medicine);
-                        ((MainActivity) getContext()).switchFragment(eventFrag);
+                        ((MainActivity) getContext()).switchFragment(eventFrag, true);
                     }
                 });
 

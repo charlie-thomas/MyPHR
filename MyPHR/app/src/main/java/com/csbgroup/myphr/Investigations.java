@@ -75,7 +75,7 @@ public class Investigations extends Fragment {
                 bundle.putString("uid", view.getTag().toString());
                 details.setArguments(bundle);
 
-                ((MainActivity) getActivity()).switchFragment(details);
+                ((MainActivity) getActivity()).switchFragment(details, true);
             }
         });
 
@@ -195,7 +195,7 @@ public class Investigations extends Fragment {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("uid", String.valueOf(uid));
                                 newdetails.setArguments(bundle);
-                                ((MainActivity)getActivity()).switchFragment(newdetails);
+                                ((MainActivity)getActivity()).switchFragment(newdetails, true);
 
                                 }
                             }).start();

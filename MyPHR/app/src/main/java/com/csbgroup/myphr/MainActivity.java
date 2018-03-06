@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.csbgroup.myphr.database.AppDatabase;
@@ -32,6 +34,7 @@ import com.csbgroup.myphr.database.StatisticsEntity;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -102,13 +105,13 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
 
-                switchFragment(selectedPage);
+                switchFragment(selectedPage, false);
                 return true;
             }
         });
 
         // Show calendar when app first loads
-        switchFragment(CalendarMonth.newInstance());
+        switchFragment(CalendarMonth.newInstance(), false);
         bottomNavigationView.setSelectedItemId(R.id.calendar);
     }
 
@@ -123,10 +126,32 @@ public class MainActivity extends AppCompatActivity {
 
 
     /* Helper function to switch the current fragment in the frame */
-    public void switchFragment(Fragment newFragment) {
+    public void switchFragment(Fragment newFragment, boolean backStack) {
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, newFragment);
+        transaction.replace(R.id.frame_layout, newFragment, newFragment.toString().split("\\{")[0]);
+
+        if (backStack) {
+            for(int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i)
+                getSupportFragmentManager().popBackStack();
+            transaction.addToBackStack(newFragment.getTag());
+        }
         transaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+
+            if (fm.getBackStackEntryAt(0).getName().equals("AppointmentsDetails")) {
+                fm.popBackStack();
+                switchFragment(AppointmentsSection.newInstance(), false);
+            } else if (fm.getBackStackEntryAt(0).getName().equals("MedicineDetails")) {
+                fm.popBackStack();
+                switchFragment(MedicineSection.newInstance(), false);
+            } else fm.popBackStack();
+        } else super.onBackPressed();
     }
 
     private static void populateContacts(ContactsDao dao) {
@@ -297,11 +322,6 @@ public class MainActivity extends AppCompatActivity {
             dao.insertAll(st);
         }
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        // stops user going back to login screen
     }
 
     @Override
