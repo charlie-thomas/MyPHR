@@ -174,5 +174,6 @@
     <string name="no_contacts">No contacts have been added yet</string>
     <string name="no_meds">No medications have been added yet</string>
     <string name="no_invest">No investigations have been added yet</string>
+    <string name="no_stats">No measurements have been added yet</string>
 
 </resources>

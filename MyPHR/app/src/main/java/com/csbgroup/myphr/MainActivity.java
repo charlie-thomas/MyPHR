@@ -124,18 +124,16 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(back);
     }
 
-
     /* Helper function to switch the current fragment in the frame */
     public void switchFragment(Fragment newFragment, boolean backStack) {
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, newFragment, newFragment.toString().split("\\{")[0]);
 
-        if (backStack) {
-            for(int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i)
-                getSupportFragmentManager().popBackStack();
-            transaction.addToBackStack(newFragment.getTag());
-        }
+        for(int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i)
+            getSupportFragmentManager().popBackStack();
+
+        if (backStack) transaction.addToBackStack(newFragment.getTag());
         transaction.commit();
     }
 
@@ -143,7 +141,6 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         FragmentManager fm = getSupportFragmentManager();
         if (fm.getBackStackEntryCount() > 0) {
-
             if (fm.getBackStackEntryAt(0).getName().equals("AppointmentsDetails")) {
                 fm.popBackStack();
                 switchFragment(AppointmentsSection.newInstance(), false);

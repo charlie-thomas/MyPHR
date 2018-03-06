@@ -55,6 +55,7 @@ build:
 
 unitTests:
   stage: test
+  when: manual
   script:
     - ./gradlew test
 
