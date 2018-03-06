@@ -3,6 +3,7 @@ package com.csbgroup.myphr;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -38,6 +39,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+
+import static android.view.View.GONE;
 
 public class CalendarMonth extends Fragment {
 
@@ -78,7 +81,7 @@ public class CalendarMonth extends Fragment {
                 bundle.putString("date", day + "/" + month + "/" + date.getYear());
                 dayFragment.setArguments(bundle);
 
-                ((MainActivity) getActivity()).switchFragment(dayFragment);
+                ((MainActivity) getActivity()).switchFragment(dayFragment, true);
             }
         });
 
@@ -135,9 +138,14 @@ public class CalendarMonth extends Fragment {
                     bundle.putString("uid", String.valueOf(upcomingAppointment.getUid()));
                     eventFrag.setArguments(bundle);
 
-                    ((MainActivity) getContext()).switchFragment(eventFrag);
+                    BottomNavigationView bn = getActivity().findViewById(R.id.bottom_nav);
+                    bn.setSelectedItemId(R.id.appointments);
+                    ((MainActivity) getContext()).switchFragment(eventFrag, true);
                 }
             });
+        } else {
+            upcoming_ll.setVisibility(GONE);
+            rootView.findViewById(R.id.upcoming_app).setVisibility(GONE);
         }
 
         // Today's Medicines
@@ -163,7 +171,9 @@ public class CalendarMonth extends Fragment {
                         bundle.putString("uid", String.valueOf(_med.getUid()));
                         eventFrag.setArguments(bundle);
 
-                        ((MainActivity) getContext()).switchFragment(eventFrag);
+                        BottomNavigationView bn = getActivity().findViewById(R.id.bottom_nav);
+                        bn.setSelectedItemId(R.id.medicine);
+                        ((MainActivity) getContext()).switchFragment(eventFrag, true);
                     }
                 });
 
@@ -171,6 +181,11 @@ public class CalendarMonth extends Fragment {
             }
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+
+        if (todays_meds.getChildCount() == 0) {
+            todays_meds.setVisibility(View.GONE);
+            rootView.findViewById(R.id.upcoming_med).setVisibility(View.GONE);
         }
         return rootView;
     }

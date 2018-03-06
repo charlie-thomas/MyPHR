@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -74,9 +75,13 @@ public class Investigations extends Fragment {
                 bundle.putString("uid", view.getTag().toString());
                 details.setArguments(bundle);
 
-                ((MainActivity) getActivity()).switchFragment(details);
+                ((MainActivity) getActivity()).switchFragment(details, true);
             }
         });
+
+        LinearLayout noinvest = rootView.findViewById(R.id.no_invest);
+        noinvest.setVisibility(View.INVISIBLE);
+        if (listView.getAdapter().getCount() == 0) noinvest.setVisibility(View.VISIBLE);
 
         // fab action for adding investigation
         fab = rootView.findViewById(R.id.investigation_fab);
@@ -190,7 +195,7 @@ public class Investigations extends Fragment {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("uid", String.valueOf(uid));
                                 newdetails.setArguments(bundle);
-                                ((MainActivity)getActivity()).switchFragment(newdetails);
+                                ((MainActivity)getActivity()).switchFragment(newdetails, true);
 
                                 }
                             }).start();
