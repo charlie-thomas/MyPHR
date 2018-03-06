@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
@@ -108,7 +109,10 @@ public class StatisticsDetailsList extends Fragment {
         adapter = new StatValueAdapter(getActivity(),R.layout.stat_list_adapter, valueslist,type);
         listview.setAdapter(adapter);
 
-
+        // Show "No measurements" message if required
+        LinearLayout no_stats = rootView.findViewById(R.id.no_stats);
+        no_stats.setVisibility(View.INVISIBLE);
+        if (listview.getAdapter().getCount() == 0) no_stats.setVisibility(View.VISIBLE);
 
         // fab action for adding measurement
         fab = rootView.findViewById(R.id.s_fab);
