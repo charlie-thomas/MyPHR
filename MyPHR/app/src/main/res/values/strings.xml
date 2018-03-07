@@ -175,5 +175,10 @@
     <string name="no_meds">No medications have been added yet</string>
     <string name="no_invest">No investigations have been added yet</string>
     <string name="no_stats">No measurements have been added yet</string>
+    <string name="appointment_logo">Appointment Logo</string>
+    <string name="contacts_logo">Contacts Logo</string>
+    <string name="appointments_logo">Appointments Logo</string>
+    <string name="medicine_logo">Medicine Logo</string>
+    <string name="delete_button">Delete Button</string>
 
 </resources>

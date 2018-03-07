@@ -13,9 +13,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
+import com.csbgroup.myphr.Appointments.AppointmentsSection;
+import com.csbgroup.myphr.Calendar.CalendarMonth;
+import com.csbgroup.myphr.Contacts.Contacts;
+import com.csbgroup.myphr.Login.LoginActivity;
+import com.csbgroup.myphr.Medicine.MedicineSection;
+import com.csbgroup.myphr.Statistics.Statistics;
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsDao;
 import com.csbgroup.myphr.database.AppointmentsEntity;
@@ -34,7 +39,6 @@ import com.csbgroup.myphr.database.StatisticsEntity;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 

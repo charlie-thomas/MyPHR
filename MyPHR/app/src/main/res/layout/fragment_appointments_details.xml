@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="com.csbgroup.myphr.AppointmentsDetails">
+        tools:context="com.csbgroup.myphr.Appointments.AppointmentsDetails">
 
         <!-- Appointment Title -->
         <EditText
@@ -183,7 +183,8 @@
             android:layout_alignEnd="@+id/date_title"
             android:layout_alignTop="@+id/appointments_title"
             android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/ic_appointment" />
+            app:srcCompat="@drawable/ic_appointment"
+            android:contentDescription="@string/appointment_logo" />
 
         <CheckBox
             android:id="@+id/checkBox1"

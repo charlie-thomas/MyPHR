@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="com.csbgroup.myphr.MedicineDetails">
+        tools:context="com.csbgroup.myphr.Medicine.MedicineDetails">
 
         <!-- Medicine Name -->
         <EditText
@@ -232,7 +232,8 @@
             android:layout_alignStart="@+id/dose_title"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="5dp"
-            app:srcCompat="@drawable/ic_medicine_dark" />
+            app:srcCompat="@drawable/ic_medicine_dark"
+            android:contentDescription="@string/medicine_logo" />
 
     </RelativeLayout>
 </ScrollView>

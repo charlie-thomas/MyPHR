@@ -47,7 +47,7 @@
         </activity>
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".Login.LoginActivity"
             android:label="MyPHR"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -57,31 +57,31 @@
         </activity>
 
         <activity
-            android:name=".FingerprintHandler"
+            android:name=".Login.FingerprintHandler"
             android:label="MyPHR"
             android:screenOrientation="portrait" >
         </activity>
 
         <activity
-            android:name=".ChangePINActivity"
+            android:name=".Login.ChangePINActivity"
             android:label="MyPHR"
             android:screenOrientation="portrait" >
         </activity>
 
         <activity
-            android:name=".StartupActivity"
+            android:name=".Login.StartupActivity"
             android:label="MyPHR"
             android:screenOrientation="portrait" >
         </activity>
 
         <activity
-            android:name=".QuestionsActivity"
+            android:name=".Login.QuestionsActivity"
             android:label="MyPHR"
             android:screenOrientation="portrait" >
         </activity>
 
         <activity
-            android:name=".ForgotPINActivity"
+            android:name=".Login.ForgotPINActivity"
             android:label="MyPHR"
             android:screenOrientation="portrait" >
         </activity>
