@@ -3,7 +3,11 @@ package com.csbgroup.myphr;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -155,6 +159,15 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
                         array.remove(position);
                         notifyDataSetChanged();
                         notifyDataSetInvalidated();
+
+                        // refresh to show no measurements image
+                        if (array.size() == 0) {
+                            Fragment dlist = StatisticsSection.newInstance();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("title", mType);
+                            dlist.setArguments(bundle);
+                            ((MainActivity)mContext).switchFragment(dlist, true);
+                        }
                     }
                 });
 
@@ -170,7 +183,6 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
                 // set button colours
                 dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
-
             }
 
         });
