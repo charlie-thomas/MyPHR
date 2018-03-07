@@ -1,7 +1,10 @@
 package com.csbgroup.myphr;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,21 +128,48 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                new Thread(new Runnable() {
+            public void onClick(View view) {
+
+                // set up the view
+                LayoutInflater inflater = LayoutInflater.from(mContext); // get inflater
+                View v = inflater.inflate(R.layout.confirm_delete, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setView(v);
+                final TextView message = v.findViewById(R.id.message);
+                message.setText("Are you sure you want to delete this measurement?");
+
+                // delete the measurement
+                builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                     @Override
-                    public void run() {
-                        AppDatabase db = AppDatabase.getAppDatabase(mContext);
-                        final StatisticsEntity thisstat = getStats(mType);
-                        thisstat.deleteValue(date);
-                        db.statisticsDao().update(thisstat);
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                AppDatabase db = AppDatabase.getAppDatabase(mContext);
+                                final StatisticsEntity thisstat = getStats(mType);
+                                thisstat.deleteValue(date);
+                                db.statisticsDao().update(thisstat);
+                            }
+                        }).start();
+
+                        array.remove(position);
+                        notifyDataSetChanged();
+                        notifyDataSetInvalidated();
                     }
-                }).start();
+                });
 
+                // cancel the delete
+                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {}
+                });
 
-                array.remove(position);
-                notifyDataSetChanged();
-                notifyDataSetInvalidated();
+                final AlertDialog dialog = builder.create();
+                dialog.show();
+
+                // set button colours
+                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
 
             }
 
