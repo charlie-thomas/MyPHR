@@ -7,7 +7,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.csbgroup.myphr.InvestigationDetails">
+        tools:context="com.csbgroup.myphr.Appointments.InvestigationDetails">
 
         <!-- Investigation Title -->
         <EditText
@@ -84,7 +84,8 @@
             android:layout_alignEnd="@+id/investigation_date_name"
             android:layout_alignTop="@+id/investigation_name"
             android:layout_marginTop="10dp"
-            app:srcCompat="@drawable/ic_appointment" />
+            app:srcCompat="@drawable/ic_appointment"
+            android:contentDescription="@string/appointments_logo" />
 
     </RelativeLayout>
 </ScrollView>

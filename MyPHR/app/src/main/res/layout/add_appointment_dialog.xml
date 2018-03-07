@@ -102,7 +102,7 @@
         <EditText
             android:id="@+id/date_error"
             android:layout_width="30dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"/>
 
         <EditText
             android:id="@+id/appointment_hour"

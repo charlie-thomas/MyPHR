@@ -7,7 +7,7 @@
     android:background="#FFFFFF">
 
     <RelativeLayout
-        tools:context="com.csbgroup.myphr.StatisticsDetails"
+        tools:context="com.csbgroup.myphr.Statistics.StatisticsDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 

@@ -4,7 +4,7 @@
     android:id="@+id/contacts_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.csbgroup.myphr.Contacts">
+    tools:context="com.csbgroup.myphr.Contacts.Contacts">
 
     <LinearLayout
         android:id="@+id/no_contacts"
