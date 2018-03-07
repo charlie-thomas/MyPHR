@@ -12,6 +12,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
+import com.csbgroup.myphr.Login.LoginActivity;
+
 import static com.csbgroup.myphr.R.color.colorAccent;
 
 public class AlarmReceiver extends BroadcastReceiver {

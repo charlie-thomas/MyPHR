@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="com.csbgroup.myphr.ContactDetails">
+        tools:context="com.csbgroup.myphr.Contacts.ContactDetails">
 
         <!-- Contact Name -->
         <TextView
@@ -117,7 +117,8 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/email_title"
             android:layout_marginTop="20dp"
-            app:srcCompat="@drawable/ic_person" />
+            app:srcCompat="@drawable/ic_person"
+            android:contentDescription="@string/contacts_logo" />
 
 
     </RelativeLayout>

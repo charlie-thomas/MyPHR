@@ -15,7 +15,7 @@
         <TextView
             android:id="@+id/textView1"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="0dp"
             android:layout_weight="100"
             android:gravity="left"
             android:paddingLeft="10dp"
@@ -26,7 +26,6 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:layout_below="@id/textView1"
             android:gravity="left"
             android:paddingLeft="10dp"
             android:text="TextView2" />
@@ -36,7 +35,6 @@
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:paddingLeft="10dp"
-            android:layout_below="@+id/textView2"
             android:gravity="left"
             android:text="TextView3" />
 
@@ -48,8 +46,9 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginLeft="17dp"
+        android:layout_marginStart="17dp"
         android:backgroundTint="#F44336"
-        android:src="@drawable/ic_delete" />
+        android:src="@drawable/ic_delete"
+        android:contentDescription="@string/delete_button" />
 
 </LinearLayout>

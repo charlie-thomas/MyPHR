@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="com.csbgroup.myphr.StatisticsDetails">
+        tools:context="com.csbgroup.myphr.Statistics.StatisticsDetails">
 
         <LinearLayout
             android:id="@+id/no_stats"
