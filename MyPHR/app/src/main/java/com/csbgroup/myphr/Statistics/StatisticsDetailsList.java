@@ -36,6 +36,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import static android.view.View.GONE;
 
@@ -47,6 +48,10 @@ public class StatisticsDetailsList extends Fragment {
     public static boolean isEditMode = false;
     public static View rootView;
     public static String type;
+
+    //This formatter is for changing the string entered in form "dd/MM/yyyy" into a Java Date type
+    static final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
 
     // format checking booleans
     private boolean validMeasurement = false;
@@ -73,10 +78,8 @@ public class StatisticsDetailsList extends Fragment {
         isEditMode = false;
 
         Bundle args = getArguments();
+        type = args.getString("title");
 
-        //This formatter is for changing the string entered in form "dd/MM/yyyy" into a Java Date type
-        final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        Date d1 = null;
 
         //currentstat is a the StatisticsEntity for the current statistics page (e.g weight, height etc)
         final StatisticsEntity currentstat = getStats(args.getString("title", "Statistics"));
@@ -101,7 +104,6 @@ public class StatisticsDetailsList extends Fragment {
         /*Reversing the list now so its ordered newest to oldest
           This is so the listview underneath prints from newest to oldest */
         Collections.reverse(valueslist);
-        type = args.getString("title");
 
         listview = (ListView) rootView.findViewById(R.id.statistics_graph_list);
         /*The listview uses a custom adapter which uses an xml to print each list item
@@ -160,35 +162,39 @@ public class StatisticsDetailsList extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
-            case(R.id.details_edit):
-                TabHost tabhost = (TabHost) getActivity().findViewById(R.id.tabHost);
-                View thisfab = rootView.findViewById(R.id.s_fab);
-                if(tabhost.getCurrentTab() == 0) {
-                    if (isEditMode) {
-                        isEditMode = false;
-                        adapter.notifyDataSetChanged();
-                        if(!type.equals("Height Velocity")) {
+        switch (item.getItemId()) {
+            case (R.id.details_edit):
+                if(!type.equals("Height Velocity")) {
+                    TabHost tabhost = (TabHost) getActivity().findViewById(R.id.tabHost);
+                    View thisfab = rootView.findViewById(R.id.s_fab);
+                    if (tabhost.getCurrentTab() == 0) {
+                        if (isEditMode) {
+                            isEditMode = false;
+                            adapter.notifyDataSetChanged();
                             thisfab.setVisibility(View.VISIBLE);
-                        }
 
+                        } else {
+                            isEditMode = true;
+                            adapter.notifyDataSetChanged();
+                            thisfab.setVisibility(View.GONE);
+                        }
                     } else {
+                        tabhost.setCurrentTab(0);
                         isEditMode = true;
                         adapter.notifyDataSetChanged();
                         thisfab.setVisibility(View.GONE);
+
                     }
-                } else {
-                    tabhost.setCurrentTab(0);
-                    isEditMode = true;
-                    adapter.notifyDataSetChanged();
-                    thisfab.setVisibility(View.GONE);
                 }
-                break;
-            case android.R.id.home:
-                ((MainActivity) getActivity()).switchFragment(Statistics.newInstance(), false);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+                    break;
+                    case android.R.id.home:
+                        ((MainActivity) getActivity()).switchFragment(Statistics.newInstance(),false);
+                        return true;
+                }
+
+
+
+                return super.onOptionsItemSelected(item);
     }
 
     public void buildDialog(FloatingActionButton fab, final String type, final Bundle args) {
@@ -278,7 +284,15 @@ public class StatisticsDetailsList extends Fragment {
                                 thisstat.addValue(mmnt, fulldate, centile);
                                 db.statisticsDao().update(thisstat);
 
-                                // refresh the view
+                                    if(type.equals("Height")){
+                                        final StatisticsEntity heightvels = getStats("Height Velocity");
+                                        ArrayList<StatValueEntity> newvels = updateHeightVelocity(getStats("Height").getValues());
+                                        heightvels.getValues().clear();
+                                        heightvels.getValues().addAll(newvels);
+                                        db.statisticsDao().update(heightvels);
+                                    }
+
+                                    // refresh the view
                                 Fragment details = StatisticsSection.newInstance();
                                 Bundle bundle = new Bundle();
                                 bundle.putString("title", args.getString("title", "Measurements"));
@@ -306,6 +320,40 @@ public class StatisticsDetailsList extends Fragment {
             }
         });
     }
+
+    public static ArrayList<StatValueEntity> updateHeightVelocity(ArrayList<StatValueEntity> orderedheight){
+        Collections.sort(orderedheight, new Comparator<StatValueEntity>() {
+            @Override
+            public int compare(StatValueEntity t1, StatValueEntity t2) {
+                try {
+                    return formatter.parse(t1.getDate()).compareTo(formatter.parse(t2.getDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return 0;
+            }
+        });
+        double heightchanged;
+        long diff;
+        double heightvelocity;
+        float days = 0;
+        final ArrayList<StatValueEntity> heightvels = new ArrayList<>();
+        for(int i=1; i<orderedheight.size(); i++) {
+            heightchanged = Double.parseDouble(orderedheight.get(i).getValue()) - Double.parseDouble(orderedheight.get(i-1).getValue());
+            try {
+                diff = formatter.parse(orderedheight.get(i).getDate()).getTime() -
+                        formatter.parse(orderedheight.get(i-1).getDate()).getTime();
+                days = (diff / (1000 * 60 * 60 * 24));
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            heightvelocity = Math.round(heightchanged / (days / 365));
+            heightvels.add(new StatValueEntity(Double.toString(heightvelocity), orderedheight.get(i).getDate(), null));
+        }
+        return heightvels;
+    }
+
 
     public void inputChecking(View v, String t, EditText d, AlertDialog ad){
 

@@ -3,6 +3,7 @@ package com.csbgroup.myphr.Adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -29,6 +30,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import static com.csbgroup.myphr.Statistics.StatisticsDetailsList.updateHeightVelocity;
+
 
 import static android.view.View.GONE;
 
@@ -157,6 +160,15 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
                                 final StatisticsEntity thisstat = getStats(mType);
                                 thisstat.deleteValue(date);
                                 db.statisticsDao().update(thisstat);
+
+                                if(mType.equals("Height")){
+                                    final StatisticsEntity heightvels = getStats("Height Velocity");
+                                    ArrayList<StatValueEntity> newvels = updateHeightVelocity(getStats("Height").getValues());
+                                    heightvels.getValues().clear();
+                                    heightvels.getValues().addAll(newvels);
+                                    db.statisticsDao().update(heightvels);
+                                }
+
                             }
                         }).start();
 

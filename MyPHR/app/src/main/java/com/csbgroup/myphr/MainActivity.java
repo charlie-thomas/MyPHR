@@ -21,6 +21,7 @@ import com.csbgroup.myphr.Contacts.Contacts;
 import com.csbgroup.myphr.Login.LoginActivity;
 import com.csbgroup.myphr.Medicine.MedicineSection;
 import com.csbgroup.myphr.Statistics.Statistics;
+import com.csbgroup.myphr.Statistics.StatisticsDetailsList;
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.AppointmentsDao;
 import com.csbgroup.myphr.database.AppointmentsEntity;
@@ -269,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
         dao.deleteAll();
 
         String[] stats = {"Body Mass Index (BMI)", "Head Circumference", "Height",
-                "Height Velocity", "Weight"};
+                "Weight"};
         ArrayList<StatValueEntity> list;
 
         list = new ArrayList<>();
@@ -302,6 +303,10 @@ public class MainActivity extends AppCompatActivity {
             st = new StatisticsEntity(stat, list);
             dao.insertAll(st);
         }
+        ArrayList<StatValueEntity> heightvels = StatisticsDetailsList.updateHeightVelocity(list);
+        st = new StatisticsEntity("Height Velocity", heightvels);
+        dao.insertAll(st);
+
 
     }
 
