@@ -16,8 +16,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.csbgroup.myphr.MainActivity;
 import com.csbgroup.myphr.R;
 import com.csbgroup.myphr.Statistics.StatisticsDetailsList;
+import com.csbgroup.myphr.Statistics.StatisticsSection;
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.StatValueEntity;
 import com.csbgroup.myphr.database.StatisticsEntity;
