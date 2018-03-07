@@ -66,8 +66,6 @@ public class StatisticsDetails extends Fragment {
         Bundle args = getArguments();
 
         title = args.getString("title","Measurements");
-        TextView medTitle = rootView.findViewById(R.id.statistics_title);
-        medTitle.setText(title);
 
         //currentstat is a the StatisticsEntity for the current statistics page (e.g weight, height etc)
         final StatisticsEntity currentstat = getStats(args.getString("title", "Statistics"));
@@ -105,7 +103,6 @@ public class StatisticsDetails extends Fragment {
         LinearLayout no_stats = rootView.findViewById(R.id.no_stats);
         no_stats.setVisibility(View.INVISIBLE);
         if (valueslist.size() == 0) {
-            medTitle.setVisibility(View.INVISIBLE);
             graph.setVisibility(View.INVISIBLE);
             no_stats.setVisibility(View.VISIBLE);
         }
@@ -180,7 +177,10 @@ public class StatisticsDetails extends Fragment {
                 e.printStackTrace();
             }
         }
-        series2.setColor(Color.RED);
+        series.setColor(Color.parseColor("#E91E63"));
+        series2.setColor(Color.BLUE);
+        series.setThickness(7);
+        series2.setThickness(7);
         if(title.equals("Blood Pressure")){
             series.setTitle("Systolic");
             series2.setTitle("Diastolic");
