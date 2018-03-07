@@ -1,7 +1,11 @@
 package com.csbgroup.myphr.Medicine;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
@@ -11,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.KeyListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,6 +30,7 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.csbgroup.myphr.AlarmReceiver;
 import com.csbgroup.myphr.MainActivity;
 import com.csbgroup.myphr.R;
 import com.csbgroup.myphr.database.AppDatabase;
@@ -32,6 +38,7 @@ import com.csbgroup.myphr.database.MedicineEntity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -74,7 +81,7 @@ public class MedicineDetails extends Fragment {
         MedicineEntity medicine = getMedicine(Integer.valueOf(args.getString("uid")));
         thismedicine = medicine;
 
-        EditText name = rootView.findViewById(R.id.medicine_title);
+        final EditText name = rootView.findViewById(R.id.medicine_title);
         final EditText description = rootView.findViewById(R.id.medicine_info);
         EditText dose = rootView.findViewById(R.id.medicine_dose);
         EditText remtext = rootView.findViewById(R.id.reminder_time_title);
@@ -228,6 +235,8 @@ public class MedicineDetails extends Fragment {
                 EditText datetext = rootView.findViewById(R.id.reminder_date_title);
 
                 if (isChecked) { // reminders are on
+                    sendNotification();
+
                     daily.setVisibility(View.VISIBLE);
                     otherdays.setVisibility(View.VISIBLE);
                     general.setVisibility(View.VISIBLE);
@@ -238,6 +247,8 @@ public class MedicineDetails extends Fragment {
                     remdate.setVisibility(View.VISIBLE);
                 }
                 else { // reminders are off
+                    cancelNotification();
+
                     daily.setVisibility(View.GONE);
                     otherdays.setVisibility(View.GONE);
                     general.setVisibility(View.GONE);
@@ -400,6 +411,8 @@ public class MedicineDetails extends Fragment {
         }
 
         if (this.mode.equals("edit")) { // exiting edit mode
+            sendNotification();
+
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
             // hide the delete button
@@ -540,4 +553,67 @@ public class MedicineDetails extends Fragment {
         });
     }
 
+    public void sendNotification() {
+
+        final Context mContext = this.getContext();
+
+        EditText remtime = rootView.findViewById(R.id.reminder_time);
+        EditText remdate = rootView.findViewById(R.id.reminder_date);
+
+        final EditText name = rootView.findViewById(R.id.medicine_title);
+
+        System.out.println(thismedicine.getReminders());
+
+        if (thismedicine.getReminders()) {
+
+            // Time variables
+            int hourToSet = Integer.parseInt(remtime.getText().toString().substring(0,2));
+            int minuteToSet = Integer.parseInt(remtime.getText().toString().substring(3,5));
+
+            // Date variables
+            int yearToSet = Integer.parseInt(remdate.getText().toString().substring(6,10));
+            int monthToSet = Integer.parseInt(remdate.getText().toString().substring(3,5));
+            int dayToSet = Integer.parseInt(remdate.getText().toString().substring(0,2));
+
+            AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+
+            Intent intentAlarm = new Intent(mContext, AlarmReceiver.class);
+            // Send the name of the medicine and whether notification should be descriptive to AlarmReceiver
+            intentAlarm.putExtra("medicine", name.getText().toString());
+            intentAlarm.putExtra("descriptive", thismedicine.getReminder_type());
+            PendingIntent notifySender = PendingIntent.getBroadcast(mContext, thismedicine.getUid(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            // Set notification to launch at medicine reminder time
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.set(yearToSet, monthToSet, dayToSet);
+            calendar.set(Calendar.HOUR_OF_DAY, hourToSet);
+            calendar.set(Calendar.MINUTE, minuteToSet);
+            calendar.set(Calendar.SECOND, 0);
+
+            if (thismedicine.isDaily()) {
+
+                //if(calSet.compareTo(calNow) <= 0){
+                    //Today Set time passed, count to tomorrow
+                //    calSet.add(Calendar.DATE, 1);
+                //}
+
+                // If medicine is daily, repeat notification daily
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifySender);
+            } else {
+                // Else repeat every other day
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 48, notifySender);
+            }
+        } else {
+            System.out.println("Ignored notification because reminders are not set");
+        }
+    }
+
+    public void cancelNotification() {
+        final Context mContext = this.getContext();
+        Intent intent = new Intent(mContext, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, thismedicine.getUid(), intent, 0);
+        AlarmManager alarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+    }
 }
