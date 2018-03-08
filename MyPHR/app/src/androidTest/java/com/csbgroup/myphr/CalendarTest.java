@@ -54,7 +54,7 @@ public class CalendarTest extends ActivityInstrumentationTestCase2<MainActivity>
         Bundle bundle = new Bundle();
         bundle.putString("date", d);
         cd.setArguments(bundle);
-        getActivity().switchFragment(cd);
+        getActivity().switchFragment(cd, false);
 
         onView(withText(d)).check(matches(isDisplayed()));
     }
@@ -78,7 +78,7 @@ public class CalendarTest extends ActivityInstrumentationTestCase2<MainActivity>
         Bundle bundle = new Bundle();
         bundle.putString("date", d);
         cd.setArguments(bundle);
-        getActivity().switchFragment(cd);
+        getActivity().switchFragment(cd, false);
 
         onView(withId(R.id.previous_date)).perform(click());
         c.add(Calendar.DATE, -1);
@@ -98,7 +98,7 @@ public class CalendarTest extends ActivityInstrumentationTestCase2<MainActivity>
         Bundle bundle = new Bundle();
         bundle.putString("date", d);
         cd.setArguments(bundle);
-        getActivity().switchFragment(cd);
+        getActivity().switchFragment(cd, false);
 
         onView(withContentDescription("Navigate up")).perform(click());
         onView(withText("Clinic 1")).check(matches(isDisplayed()));
