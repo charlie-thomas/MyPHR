@@ -1,5 +1,7 @@
 package com.csbgroup.myphr.Calendar;
 
+/* Object to represent all types of event: Medicine/Appointments/Investigations
+   Used to ease the display of such items */
 public class CalendarEvent {
 
     private int uid;

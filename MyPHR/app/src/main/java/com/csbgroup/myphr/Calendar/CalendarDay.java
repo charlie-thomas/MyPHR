@@ -3,6 +3,7 @@ package com.csbgroup.myphr.Calendar;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -48,13 +49,13 @@ public class CalendarDay extends Fragment {
         // Required empty public constructor
     }
 
+    @NonNull
     public static CalendarDay newInstance() {
-        CalendarDay fragment = new CalendarDay();
-        return fragment;
+        return new CalendarDay();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         final View rootView =  inflater.inflate(R.layout.fragment_calendar_day, container, false);
@@ -65,6 +66,7 @@ public class CalendarDay extends Fragment {
         dateString = args.getString("date");
         dateTitle.setText(dateString);
 
+        // Set up previous date button
         ImageButton prevDate = rootView.findViewById(R.id.previous_date);
         prevDate.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -77,6 +79,7 @@ public class CalendarDay extends Fragment {
             }
         });
 
+        // Set up next date button
         ImageButton nextDate = rootView.findViewById(R.id.next_date);
         nextDate.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -89,7 +92,7 @@ public class CalendarDay extends Fragment {
             }
         });
 
-
+        // Get all of the specified days events (medicines, appointments)
         List<CalendarEvent> daysEvents = Collections.emptyList();
         try {
             daysEvents = getEvents(dateString);
@@ -97,30 +100,35 @@ public class CalendarDay extends Fragment {
             e.printStackTrace();
         }
 
+        // Create a list containing 24 lists - one for each hour of the day
+        // Each secondary list may contain multiple CalendarEvent objects
         List<List<CalendarEvent>> hours = new ArrayList<>();
         for (int i = 0; i < 24; i++) {
 
+            // Add each calendar event to the correct list in hours
             List<CalendarEvent> hourEvents = new ArrayList<>();
-
-            for (CalendarEvent ce : daysEvents) {
-                if (i == Integer.parseInt(ce.getTime().substring(0, 2))) {
+            for (CalendarEvent ce : daysEvents)
+                if (i == Integer.parseInt(ce.getTime().substring(0, 2)))
                     hourEvents.add(new CalendarEvent(ce.getUid(), i, ce.getTime(), dateString, ce.getEvent(), ce.getType()));
-                }
-            }
 
-            if (hourEvents.size() == 0) hourEvents.add(new CalendarEvent(0, i, null, dateString, null, "Empty"));
+            // If no events are specified for any hour, add a null CalendarEvent
+            if (hourEvents.size() == 0)
+                hourEvents.add(new CalendarEvent(0, i, null, dateString, null, "Empty"));
 
             hours.add(hourEvents);
         }
 
+        // Set up the list to display the day's events
         CalendarAdapter adapter = new CalendarAdapter(hours);
         RecyclerView calendarList = rootView.findViewById(R.id.calendar_list);
         calendarList.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
         calendarList.addItemDecoration(new DividerItemDecoration(rootView.getContext(), DividerItemDecoration.VERTICAL));
         calendarList.setAdapter(adapter);
 
+        // Automatically scroll to the current hour
         calendarList.scrollToPosition(Calendar.getInstance().get(Calendar.HOUR_OF_DAY));
 
+        // Mark the day as a sick day if required
         try {
             if (isSickDay(dateString)) {
                 sb = sb.make(rootView.findViewById(R.id.viewSnack), dateString + " is marked as a sick day", Snackbar.LENGTH_INDEFINITE);
@@ -141,12 +149,15 @@ public class CalendarDay extends Fragment {
         return rootView;
     }
 
+    /* Remove the snackbar sick day message once the fragment is switched */
     @Override
     public void onStop() {
         if (sb != null) sb.dismiss();
         super.onStop();
     }
 
+    /* Helper function which aids the switchDate methods, and adds a given number of days to the
+     * current date specified in dateString */
     public String changeDate(int value) throws ParseException {
 
         try {
@@ -163,6 +174,7 @@ public class CalendarDay extends Fragment {
         }
     }
 
+    /* Remove the snackbar sick day message once the fragment is switched */
     @Override
     public void setUserVisibleHint(boolean visible)
     {
@@ -172,6 +184,7 @@ public class CalendarDay extends Fragment {
         }
     }
 
+    /* Helper function which switches which date the user is looking at to the supplied date */
     public void switchDate(String newDate) {
         Fragment newDayFragment = CalendarDay.newInstance();
 
@@ -182,11 +195,14 @@ public class CalendarDay extends Fragment {
         ((MainActivity) getActivity()).switchFragment(newDayFragment, true);
     }
 
+    /* Method which retrieves all medicine and appointments that should be shown on the current view */
     public List<CalendarEvent> getEvents(final String date) throws ParseException {
-        List<CalendarEvent> all_events = new ArrayList<>();
+
+        // Create a list of CalendarEvent objects to hold all the events
+        List<CalendarEvent> allEvents = new ArrayList<>();
 
         // Create a callable object to get appointments from database
-        Callable callable_app = new Callable() {
+        Callable callableApp = new Callable() {
             @Override
             public Object call() throws Exception {
                 return AppDatabase.getAppDatabase(getActivity()).appointmentsDao().getAppointmentByDate(date);
@@ -194,7 +210,7 @@ public class CalendarDay extends Fragment {
         };
 
         // Create a callable object to get medicine from database
-        Callable callable_med = new Callable() {
+        Callable callableMed = new Callable() {
             @Override
             public Object call() throws Exception {
                 return AppDatabase.getAppDatabase(getActivity()).medicineDao().getAll();
@@ -203,26 +219,30 @@ public class CalendarDay extends Fragment {
 
         // Get a Future object of all the appointment names
         ExecutorService service = Executors.newFixedThreadPool(2);
-        Future<List<AppointmentsEntity>> result_app = service.submit(callable_app);
-        Future<List<MedicineEntity>> result_med = service.submit(callable_med);
+        Future<List<AppointmentsEntity>> resultApp = service.submit(callableApp);
+        Future<List<MedicineEntity>> resultMed = service.submit(callableMed);
 
         // Create lists of the appointment and medicine names
         List<AppointmentsEntity> appointments = Collections.emptyList();
         List<MedicineEntity> medicines = Collections.emptyList();
         try {
-            appointments = result_app.get();
-            medicines = result_med.get();
-        } catch (Exception e) {}
-
-        for (AppointmentsEntity ae : appointments)
-            all_events.add(new CalendarEvent(ae.getUid(), 0, ae.getTime(), ae.getDate(), ae.getTitle(), "Appointment"));
-
-        for (MedicineEntity me : medicines) {
-            if (me.getReminders() && (me.isDaily() || (me.isOther_days() && isOtherDay(me.getDate(), date))))
-                all_events.add(new CalendarEvent(me.getUid(), 0, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
+            appointments = resultApp.get();
+            medicines = resultMed.get();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        return all_events;
+        // Convert the AppointmentEntity objects into CalendarEvents
+        for (AppointmentsEntity ae : appointments)
+            allEvents.add(new CalendarEvent(ae.getUid(), 0, ae.getTime(), ae.getDate(), ae.getTitle(), "Appointment"));
+
+        // Convert the MedicineEntity objects into CalendarEvents
+        for (MedicineEntity me : medicines)
+            // Ensure that the medicine should be shown on this date
+            if (me.getReminders() && (me.isDaily() || (me.isOther_days() && isOtherDay(me.getDate(), date))))
+                allEvents.add(new CalendarEvent(me.getUid(), 0, me.getTime(), me.getDate(), me.getTitle(), "Medicine"));
+
+        return allEvents;
     }
 
     /* Helper function to calculate whether the start date and follow up date are correctly spaced */
@@ -233,6 +253,7 @@ public class CalendarDay extends Fragment {
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) % 2 == 0;
     }
 
+    /* Method to retrieve whether the supplied date is or is not marked as a sick day */
     public boolean isSickDay(final String date) throws ExecutionException, InterruptedException {
 
         // Create a callable object to get sick day from database
@@ -339,6 +360,7 @@ public class CalendarDay extends Fragment {
                 android.app.AlertDialog dialog = builder.create();
                 dialog.show();
 
+                // Set the colour of the dialog box text
                 dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorSick));
                 dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorSick));
             }
