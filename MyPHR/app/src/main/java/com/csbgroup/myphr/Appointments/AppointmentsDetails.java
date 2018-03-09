@@ -42,8 +42,8 @@ public class AppointmentsDetails extends Fragment {
 
     private AppointmentsEntity thisappointment; // the appointment we're viewing now
 
+    private String mode = "view"; // load in view mode
     private Menu editMenu;
-    private String mode = "view";
     private View rootView;
 
     // key listeners and backgrounds for toggling field editability
@@ -55,9 +55,7 @@ public class AppointmentsDetails extends Fragment {
     private Boolean validTime = true;
     private Boolean validDate = true;
 
-    public AppointmentsDetails() {
-        // Required empty public constructor
-    }
+    public AppointmentsDetails() {} // Required empty public constructor
 
     public static AppointmentsDetails newInstance() {
         AppointmentsDetails fragment = new AppointmentsDetails();
@@ -70,7 +68,8 @@ public class AppointmentsDetails extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_appointments_details, container, false);
         this.rootView = rootView;
-        
+
+        // receive the details from the main fragment
         Bundle args = getArguments();
         AppointmentsEntity appointment = getAppointment(Integer.parseInt(args.getString("uid")));
         thisappointment = appointment;
@@ -80,6 +79,11 @@ public class AppointmentsDetails extends Fragment {
         EditText date = rootView.findViewById(R.id.app_date);
         EditText time = rootView.findViewById(R.id.app_time);
         EditText notes = rootView.findViewById(R.id.app_notes);
+        RadioButton general = rootView.findViewById(R.id.general);
+        RadioButton descriptive = rootView.findViewById(R.id.descriptive);
+        CheckBox week = rootView.findViewById(R.id.checkBox1);
+        CheckBox day = rootView.findViewById(R.id.checkBox2);
+        CheckBox morning = rootView.findViewById(R.id.checkBox3);
 
         //fill in the values
         title.setText(appointment.getTitle());
@@ -107,14 +111,9 @@ public class AppointmentsDetails extends Fragment {
         disableEditing(time);
         disableEditing(notes);
 
+        // set reminder switch to reflect database
         Switch reminders = rootView.findViewById(R.id.reminder_switch);
         reminders.setChecked(appointment.getReminders());
-
-        RadioButton general = rootView.findViewById(R.id.general);
-        RadioButton descriptive = rootView.findViewById(R.id.descriptive);
-        CheckBox week = rootView.findViewById(R.id.checkBox1);
-        CheckBox day = rootView.findViewById(R.id.checkBox2);
-        CheckBox morning = rootView.findViewById(R.id.checkBox3);
 
         // check general/descriptive radios to reflect database
         if (thisappointment.getReminder_type() == 0){
@@ -255,7 +254,7 @@ public class AppointmentsDetails extends Fragment {
     }
 
     /**
-     * Fetches a single appointment from the database.
+     * getAppointment etches a single appointment from the database.
      * @param uid is the primary key of the appointment to be retrieved
      * @return the appointment entity
      */
@@ -278,7 +277,6 @@ public class AppointmentsDetails extends Fragment {
         } catch (Exception e) {}
 
         return appointment;
-
     }
 
     @Override
@@ -293,9 +291,9 @@ public class AppointmentsDetails extends Fragment {
     }
 
     /**
-     * Provides navigation/actions for menu items.
+     * onOptionsItemSelected provides navigation/actions for menu items.
      * @param item is the clicked menu item
-     * @return
+     * @return super.onOptionsItemSelected(item)
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -326,7 +324,7 @@ public class AppointmentsDetails extends Fragment {
         final EditText notes = rootView.findViewById(R.id.app_notes);
         final Button delete = rootView.findViewById(R.id.delete);
 
-        if (this.mode.equals("view")) {
+        if (this.mode.equals("view")) { // entering edit mode
             editMenu.getItem(0).setIcon(R.drawable.tick);
 
             // activate error checking
@@ -394,7 +392,7 @@ public class AppointmentsDetails extends Fragment {
             return;
         }
 
-        if (this.mode.equals("edit")){
+        if (this.mode.equals("edit")){ // exiting edit mode
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
             // hide the delete button
@@ -407,7 +405,7 @@ public class AppointmentsDetails extends Fragment {
             disableEditing(time);
             disableEditing(notes);
 
-            // update the contact in the database
+            // update the appointment in the database
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -431,7 +429,7 @@ public class AppointmentsDetails extends Fragment {
     }
 
     /**
-     * disableEditing sets background and keylistener to null to stop user editing
+     * disableEditing sets an editText's background and keylistener to null to stop user editing.
      * @param field is the editText field to be disabled
      */
     public void disableEditing(EditText field){
@@ -448,24 +446,22 @@ public class AppointmentsDetails extends Fragment {
      */
     public void errorChecking(EditText et1, EditText et2, EditText et3){
 
-        final EditText name = et1;
+        final EditText title = et1;
         final EditText time = et2;
         final EditText date = et3;
 
-        // name format checking
-        name.addTextChangedListener(new TextWatcher() {
+        // title format checking
+        title.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                if (name.getText().length() != 0){validTitle = true;} // valid name
-                else {validTitle = false; name.setError("Name cannot be empty");} // empty name
+                if (title.getText().length() != 0){validTitle = true;} // valid title
+                else {validTitle = false; title.setError("Name cannot be empty");} // empty title
 
                 // disable/enable save button following format checks
                 if (validTitle && validTime && validDate) {editMenu.getItem(0).setEnabled(true);}
                 else {editMenu.getItem(0).setEnabled(false);}
             }
-
-            // not needed for our purposes
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override public void afterTextChanged(Editable editable) {}
         });
@@ -493,8 +489,6 @@ public class AppointmentsDetails extends Fragment {
                 if (validTitle && validTime && validDate) {editMenu.getItem(0).setEnabled(true);}
                 else {editMenu.getItem(0).setEnabled(false);}
             }
-
-            // not needed for our purposes
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override public void afterTextChanged(Editable editable) {}
         });
@@ -523,12 +517,8 @@ public class AppointmentsDetails extends Fragment {
                 if (validTitle && validTime && validDate) {editMenu.getItem(0).setEnabled(true);}
                 else {editMenu.getItem(0).setEnabled(false);}
             }
-
-            // not needed for our purposes
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override public void afterTextChanged(Editable editable) {}
         });
     }
-
-
 }
