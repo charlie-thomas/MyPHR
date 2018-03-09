@@ -103,7 +103,7 @@ public class StatisticsDetails extends Fragment {
         LinearLayout no_stats = rootView.findViewById(R.id.no_stats);
         no_stats.setVisibility(View.INVISIBLE);
         if (valueslist.size() == 0) {
-            graph.setVisibility(View.INVISIBLE);
+            graph.setVisibility(View.GONE);
             no_stats.setVisibility(View.VISIBLE);
         }
 
