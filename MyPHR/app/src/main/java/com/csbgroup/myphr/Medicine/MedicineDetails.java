@@ -609,7 +609,7 @@ public class MedicineDetails extends Fragment {
                     // Today Set time passed, count to tomorrow
                     calendar.add(Calendar.DATE, 2);
                 }
-                
+
                 // Else repeat every other day
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 48, notifySender);
             }

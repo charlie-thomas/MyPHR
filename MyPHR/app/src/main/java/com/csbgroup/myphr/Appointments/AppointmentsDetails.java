@@ -1,7 +1,11 @@
 package com.csbgroup.myphr.Appointments;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
@@ -26,6 +30,7 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.csbgroup.myphr.AlarmReceiver;
 import com.csbgroup.myphr.MainActivity;
 import com.csbgroup.myphr.R;
 import com.csbgroup.myphr.database.AppDatabase;
@@ -33,6 +38,7 @@ import com.csbgroup.myphr.database.AppointmentsEntity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -530,5 +536,76 @@ public class AppointmentsDetails extends Fragment {
         });
     }
 
+    public void sendNotification() {
 
+        final Context mContext = this.getContext();
+
+        EditText time = rootView.findViewById(R.id.app_time);
+        EditText date = rootView.findViewById(R.id.app_date);
+
+        final EditText name = rootView.findViewById(R.id.medicine_title);
+
+        System.out.println(thismedicine.getReminders());
+
+        if (thismedicine.getReminders()) {
+
+            // Time variables
+            int hourToSet = Integer.parseInt(remtime.getText().toString().substring(0,2));
+            int minuteToSet = Integer.parseInt(remtime.getText().toString().substring(3,5));
+
+            // Date variables
+            int yearToSet = Integer.parseInt(remdate.getText().toString().substring(6,10));
+            int monthToSet = Integer.parseInt(remdate.getText().toString().substring(3,5));
+            int dayToSet = Integer.parseInt(remdate.getText().toString().substring(0,2));
+
+            AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+
+            Intent intentAlarm = new Intent(mContext, AlarmReceiver.class);
+            // Send the name of the medicine and whether notification should be descriptive to AlarmReceiver
+            intentAlarm.putExtra("medicine", name.getText().toString());
+            intentAlarm.putExtra("descriptive", thismedicine.getReminder_type());
+            PendingIntent notifySender = PendingIntent.getBroadcast(mContext, thismedicine.getUid(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            // Set notification to launch at medicine reminder time
+            Calendar calendar = Calendar.getInstance();
+            Calendar calNow = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.set(yearToSet, monthToSet, dayToSet);
+            calendar.set(Calendar.HOUR_OF_DAY, hourToSet);
+            calendar.set(Calendar.MINUTE, minuteToSet);
+            calendar.set(Calendar.SECOND, 0);
+
+
+
+            if (thismedicine.isDaily()) {
+
+                if(calendar.compareTo(calNow) <= 0){
+                    // Today Set time passed, count to tomorrow
+                    calendar.add(Calendar.DATE, 1);
+                }
+
+                // If medicine is daily, repeat notification daily
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 24, notifySender);
+            } else {
+
+                if(calendar.compareTo(calNow) <= 0){
+                    // Today Set time passed, count to tomorrow
+                    calendar.add(Calendar.DATE, 2);
+                }
+
+                // Else repeat every other day
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 48, notifySender);
+            }
+        } else {
+            System.out.println("Ignored notification because reminders are not set");
+        }
+    }
+
+    public void cancelNotification() {
+        final Context mContext = this.getContext();
+        Intent intent = new Intent(mContext, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, thismedicine.getUid(), intent, 0);
+        AlarmManager alarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+    }
 }
