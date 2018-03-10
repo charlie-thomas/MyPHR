@@ -543,68 +543,65 @@ public class AppointmentsDetails extends Fragment {
         EditText time = rootView.findViewById(R.id.app_time);
         EditText date = rootView.findViewById(R.id.app_date);
 
-        final EditText name = rootView.findViewById(R.id.medicine_title);
+        final EditText name = rootView.findViewById(R.id.appointments_title);
+        final EditText location = rootView.findViewById(R.id.app_location);
 
-        System.out.println(thismedicine.getReminders());
+        System.out.println(thisappointment.getReminders());
 
-        if (thismedicine.getReminders()) {
+        if (thisappointment.getReminders()) {
 
             // Time variables
-            int hourToSet = Integer.parseInt(remtime.getText().toString().substring(0,2));
-            int minuteToSet = Integer.parseInt(remtime.getText().toString().substring(3,5));
+            int hourToSet = Integer.parseInt(time.getText().toString().substring(0,2));
+            int minuteToSet = Integer.parseInt(time.getText().toString().substring(3,5));
 
             // Date variables
-            int yearToSet = Integer.parseInt(remdate.getText().toString().substring(6,10));
-            int monthToSet = Integer.parseInt(remdate.getText().toString().substring(3,5));
-            int dayToSet = Integer.parseInt(remdate.getText().toString().substring(0,2));
+            int yearToSet = Integer.parseInt(date.getText().toString().substring(6,10));
+            int monthToSet = Integer.parseInt(date.getText().toString().substring(3,5));
+            int dayToSet = Integer.parseInt(date.getText().toString().substring(0,2));
 
             AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
             Intent intentAlarm = new Intent(mContext, AlarmReceiver.class);
             // Send the name of the medicine and whether notification should be descriptive to AlarmReceiver
-            intentAlarm.putExtra("medicine", name.getText().toString());
-            intentAlarm.putExtra("descriptive", thismedicine.getReminder_type());
-            PendingIntent notifySender = PendingIntent.getBroadcast(mContext, thismedicine.getUid(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+            intentAlarm.putExtra("type", "appointment");
+            intentAlarm.putExtra("location", location.getText().toString());
+            intentAlarm.putExtra("appointment", name.getText().toString());
+            intentAlarm.putExtra("descriptive", thisappointment.getReminder_type());
+            PendingIntent notifySender = PendingIntent.getBroadcast(mContext, thisappointment.getUid(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
 
             // Set notification to launch at medicine reminder time
             Calendar calendar = Calendar.getInstance();
-            Calendar calNow = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
             calendar.set(yearToSet, monthToSet, dayToSet);
             calendar.set(Calendar.HOUR_OF_DAY, hourToSet);
             calendar.set(Calendar.MINUTE, minuteToSet);
             calendar.set(Calendar.SECOND, 0);
 
-
-
-            if (thismedicine.isDaily()) {
-
-                if(calendar.compareTo(calNow) <= 0){
-                    // Today Set time passed, count to tomorrow
-                    calendar.add(Calendar.DATE, 1);
-                }
-
-                // If medicine is daily, repeat notification daily
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 24, notifySender);
-            } else {
-
-                if(calendar.compareTo(calNow) <= 0){
-                    // Today Set time passed, count to tomorrow
-                    calendar.add(Calendar.DATE, 2);
-                }
-
-                // Else repeat every other day
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 48, notifySender);
+            if (thisappointment.isRemind_week()) {
+                // Set for a week before the appointment date
+                calendar.add(Calendar.DATE, -7);
             }
-        } else {
-            System.out.println("Ignored notification because reminders are not set");
+
+
+            if (thisappointment.isRemind_day()) {
+                // Set for a day before the appointment date
+                calendar.add(Calendar.DATE, -1);
+
+            }
+
+            if (thisappointment.isRemind_morning()) {
+                // Set for a week before the appointment date
+                calendar.add(Calendar.HOUR, -7);
+
+
+            }
         }
     }
 
     public void cancelNotification() {
         final Context mContext = this.getContext();
         Intent intent = new Intent(mContext, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, thismedicine.getUid(), intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, thisappointment.getUid(), intent, 0);
         AlarmManager alarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
     }

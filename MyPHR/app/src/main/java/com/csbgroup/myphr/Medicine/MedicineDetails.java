@@ -578,7 +578,8 @@ public class MedicineDetails extends Fragment {
             AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
             Intent intentAlarm = new Intent(mContext, AlarmReceiver.class);
-            // Send the name of the medicine and whether notification should be descriptive to AlarmReceiver
+            // Send the type of notification, name of the medicine and whether notification should be descriptive to AlarmReceiver
+            intentAlarm.putExtra("type", "medicine");
             intentAlarm.putExtra("medicine", name.getText().toString());
             intentAlarm.putExtra("descriptive", thismedicine.getReminder_type());
             PendingIntent notifySender = PendingIntent.getBroadcast(mContext, thismedicine.getUid(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);

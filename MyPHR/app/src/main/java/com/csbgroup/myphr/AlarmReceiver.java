@@ -30,38 +30,69 @@ public class AlarmReceiver extends BroadcastReceiver {
         //Intent alarmIntent = new Intent(context, AlarmReceiver.class);
         //}
 
-        // Get name of medicine from medicine details section
-        String medicine = intent.getStringExtra("medicine");
-        int descriptive = intent.getIntExtra("descriptive", 0);
-
-        System.out.println("Medicine: " + medicine);
-
-        if (descriptive == 0) {
-            System.out.println("General");
-        } else {
-            System.out.println("Descriptive");
-        }
-
         // Sets action that notification should perform when clicked on
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(context.getApplicationContext(), "notify_001");
         Intent notificationIntent = new Intent(context.getApplicationContext(), LoginActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
-
-
         // Sets notification text
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
 
-        if (descriptive == 0) {
-            bigText.bigText("You have a new reminder");
-            bigText.setBigContentTitle("New reminder");
-            bigText.setSummaryText("Reminder");
-        } else {
-            bigText.bigText("Remember to take your " + medicine);
-            bigText.setBigContentTitle("Medicine reminder");
-            bigText.setSummaryText("Medicine");
+
+        // Find out if medicine or appointment reminder
+        String notificationType = intent.getStringExtra("type");
+
+        if (notificationType.equals("medicine")) {
+            // Get name of medicine from medicine details section
+            String medicine = intent.getStringExtra("medicine");
+            int meddescriptive = intent.getIntExtra("meddescriptive", 0);
+
+            System.out.println("Medicine: " + medicine);
+
+            if (meddescriptive == 0) {
+                System.out.println("General");
+            } else {
+                System.out.println("meddescriptive");
+            }
+
+            if (meddescriptive == 0) {
+                bigText.bigText("You have a new reminder");
+                bigText.setBigContentTitle("New reminder");
+                bigText.setSummaryText("Reminder");
+            } else {
+                bigText.bigText("Remember to take your " + medicine);
+                bigText.setBigContentTitle("Medicine reminder");
+                bigText.setSummaryText("Medicine");
+            }
         }
+
+        if (notificationType.equals("appointment")) {
+            // Get name of appointment from appointment details section
+            String appointment = intent.getStringExtra("appointment");
+            String location = intent.getStringExtra("location");
+            int apptdescriptive = intent.getIntExtra("apptdescriptive", 0);
+
+            System.out.println("Appointment: " + appointment);
+
+            if (apptdescriptive == 0) {
+                System.out.println("General");
+            } else {
+                System.out.println("apptdescriptive");
+            }
+
+            if (apptdescriptive == 0) {
+                bigText.bigText("You have a new reminder");
+                bigText.setBigContentTitle("New reminder");
+                bigText.setSummaryText("Reminder");
+            } else {
+                bigText.bigText(appointment);
+                bigText.setBigContentTitle(location);
+                bigText.setSummaryText("Appointment");
+            }
+
+        }
+
 
         mBuilder.setContentIntent(pendingIntent);
         mBuilder.setSmallIcon(R.drawable.ic_notification);
