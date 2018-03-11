@@ -1,5 +1,6 @@
 package com.csbgroup.myphr.Medicine;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -8,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -15,7 +17,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.KeyListener;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -66,12 +67,11 @@ public class MedicineDetails extends Fragment {
     }
 
     public static MedicineDetails newInstance() {
-        MedicineDetails fragment = new MedicineDetails();
-        return fragment;
+        return new MedicineDetails();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         final View rootView = inflater.inflate(R.layout.fragment_medicine_details, container, false);
@@ -450,7 +450,6 @@ public class MedicineDetails extends Fragment {
             }).start();
 
             this.mode = "view";
-            return;
         }
     }
 
@@ -536,7 +535,7 @@ public class MedicineDetails extends Fragment {
                 else {
                     try { // valid format
                         validDate = true;
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                         if (!d.equals(sdf.format(sdf.parse(d)))) { // invalid value
                             validDate = false;
                             date.setError("Invalid date (DD/MM/YYYY)");
