@@ -186,9 +186,11 @@ public class MedicineDetails extends Fragment {
                 switch (checkedId){
                     case R.id.general:
                         thismedicine.setReminder_type(0);
+                        sendNotification();
                         break;
                     case R.id.descriptive:
                         thismedicine.setReminder_type(1);
+                        sendNotification();
                         break;
                 }
                 new Thread(new Runnable() {

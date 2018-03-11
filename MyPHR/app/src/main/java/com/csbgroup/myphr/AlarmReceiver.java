@@ -39,9 +39,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Sets notification text
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
 
-
         // Find out if medicine or appointment reminder
         String notificationType = intent.getStringExtra("type");
+
+        System.out.println("type: " + notificationType);
 
         if (notificationType.equals("medicine")) {
             // Get name of medicine from medicine details section
@@ -53,7 +54,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             if (meddescriptive == 0) {
                 System.out.println("General");
             } else {
-                System.out.println("meddescriptive");
+                System.out.println("Descriptive");
             }
 
             if (meddescriptive == 0) {
@@ -68,6 +69,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
         if (notificationType.equals("appointment")) {
+            System.out.println("APPT RECEIVED");
             // Get name of appointment from appointment details section
             String appointment = intent.getStringExtra("appointment");
             String location = intent.getStringExtra("location");
@@ -92,7 +94,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             }
 
         }
-
 
         mBuilder.setContentIntent(pendingIntent);
         mBuilder.setSmallIcon(R.drawable.ic_notification);

@@ -166,8 +166,14 @@ public class AppointmentsDetails extends Fragment {
         week.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-                if (isChecked) {thisappointment.setRemind_week(true);}
-                else {thisappointment.setRemind_week(false);}
+                if (isChecked) {
+                    sendNotification();
+                    thisappointment.setRemind_week(true);
+                }
+                else {
+                    cancelNotification();
+                    thisappointment.setRemind_week(false);
+                }
 
                 new Thread(new Runnable() {
                     @Override
@@ -237,6 +243,8 @@ public class AppointmentsDetails extends Fragment {
                 CheckBox morning = rootView.findViewById(R.id.checkBox3);
 
                 if (isChecked) { // reminders are on
+                    sendNotification();
+
                     general.setVisibility(View.VISIBLE);
                     descriptive.setVisibility(View.VISIBLE);
                     week.setVisibility(View.VISIBLE);
@@ -244,6 +252,8 @@ public class AppointmentsDetails extends Fragment {
                     morning.setVisibility(View.VISIBLE);
                 }
                 else { // reminders are off
+                    cancelNotification();
+
                     general.setVisibility(View.GONE);
                     descriptive.setVisibility(View.GONE);
                     week.setVisibility(View.GONE);
@@ -401,6 +411,8 @@ public class AppointmentsDetails extends Fragment {
         }
 
         if (this.mode.equals("edit")){
+            sendNotification();
+
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
             // hide the delete button
@@ -580,20 +592,23 @@ public class AppointmentsDetails extends Fragment {
             if (thisappointment.isRemind_week()) {
                 // Set for a week before the appointment date
                 calendar.add(Calendar.DATE, -7);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), notifySender);
+                System.out.println(calendar.toString());
+                System.out.println("week reminders");
             }
-
 
             if (thisappointment.isRemind_day()) {
                 // Set for a day before the appointment date
                 calendar.add(Calendar.DATE, -1);
-
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), notifySender);
+                System.out.println("day reminders");
             }
 
             if (thisappointment.isRemind_morning()) {
-                // Set for a week before the appointment date
-                calendar.add(Calendar.HOUR, -7);
-
-
+                // Set for morning before the appointment date
+                calendar.set(Calendar.HOUR_OF_DAY, 9);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), notifySender);
+                System.out.println("morning reminders");
             }
         }
     }
