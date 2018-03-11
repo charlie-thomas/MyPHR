@@ -19,18 +19,17 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
     // You should use the CancellationSignal method whenever your app can no longer process user input, for example when your app goes
     // into the background. If you don’t use this method, then other apps will be unable to access the touch sensor, including the lockscreen!//
 
-    private CancellationSignal cancellationSignal;
     private Context context;
 
-    public FingerprintHandler(Context mContext) {
+    FingerprintHandler(Context mContext) {
         context = mContext;
     }
 
     //Implement the startAuth method, which is responsible for starting the fingerprint authentication process//
 
-    public void startAuth(FingerprintManager manager, FingerprintManager.CryptoObject cryptoObject) {
+    void startAuth(FingerprintManager manager, FingerprintManager.CryptoObject cryptoObject) {
 
-        cancellationSignal = new CancellationSignal();
+        CancellationSignal cancellationSignal = new CancellationSignal();
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.USE_FINGERPRINT) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
@@ -65,7 +64,7 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
         Toast.makeText(context, "Authentication help\n" + helpString, Toast.LENGTH_LONG).show();
     }
 
-    public void CustomAdapter(Context context) {
+    private void CustomAdapter(Context context) {
         this.context = context;
     }
 
