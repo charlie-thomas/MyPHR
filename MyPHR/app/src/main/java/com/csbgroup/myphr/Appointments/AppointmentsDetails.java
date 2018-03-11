@@ -1,5 +1,6 @@
 package com.csbgroup.myphr.Appointments;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -8,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -66,12 +68,11 @@ public class AppointmentsDetails extends Fragment {
     }
 
     public static AppointmentsDetails newInstance() {
-        AppointmentsDetails fragment = new AppointmentsDetails();
-        return fragment;
+        return new AppointmentsDetails();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         final View rootView = inflater.inflate(R.layout.fragment_appointments_details, container, false);
@@ -297,7 +298,9 @@ public class AppointmentsDetails extends Fragment {
         AppointmentsEntity appointment = null;
         try {
             appointment = result.get();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return appointment;
 
@@ -450,7 +453,6 @@ public class AppointmentsDetails extends Fragment {
             }).start();
 
             this.mode = "view";
-            return;
         }
     }
 
@@ -533,7 +535,7 @@ public class AppointmentsDetails extends Fragment {
                 else {
                     try { // valid format
                         validDate = true;
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                         if (!d.equals(sdf.format(sdf.parse(d)))) { // invalid value
                             validDate = false;
                             date.setError("Invalid date (DD/MM/YYYY)");
