@@ -566,7 +566,8 @@ public class MedicineDetails extends Fragment {
 
         final EditText name = rootView.findViewById(R.id.medicine_title);
 
-        System.out.println(thismedicine.getReminders());
+        System.out.println("Notifications on is set to " + thismedicine.getReminders());
+        System.out.println("Reminder type set to " + thismedicine.getReminder_type());
 
         if (thismedicine.getReminders()) {
 

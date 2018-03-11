@@ -47,9 +47,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         if (notificationType.equals("medicine")) {
             // Get name of medicine from medicine details section
             String medicine = intent.getStringExtra("medicine");
-            int meddescriptive = intent.getIntExtra("meddescriptive", 0);
+            int meddescriptive = intent.getIntExtra("descriptive", 0);
 
             System.out.println("Medicine: " + medicine);
+            System.out.println("Notification type reported as type " + meddescriptive);
 
             if (meddescriptive == 0) {
                 System.out.println("General");
