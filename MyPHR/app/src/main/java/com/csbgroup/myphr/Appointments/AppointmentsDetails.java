@@ -601,22 +601,18 @@ public class AppointmentsDetails extends Fragment {
                 // Set for a week before the appointment date
                 calendar.add(Calendar.DATE, -7);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), notifySender);
-                System.out.println(calendar.toString());
-                System.out.println("week reminders");
             }
 
             if (thisappointment.isRemind_day()) {
                 // Set for a day before the appointment date
                 calendar.add(Calendar.DATE, -1);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), notifySender);
-                System.out.println("day reminders");
             }
 
             if (thisappointment.isRemind_morning()) {
                 // Set for morning before the appointment date
                 calendar.set(Calendar.HOUR_OF_DAY, 9);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), notifySender);
-                System.out.println("morning reminders");
             }
         }
     }
