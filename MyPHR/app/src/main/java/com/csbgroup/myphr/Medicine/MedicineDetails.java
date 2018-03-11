@@ -597,8 +597,6 @@ public class MedicineDetails extends Fragment {
             calendar.set(Calendar.MINUTE, minuteToSet);
             calendar.set(Calendar.SECOND, 0);
 
-
-
             if (thismedicine.isDaily()) {
 
                 if(calendar.compareTo(calNow) <= 0){
