@@ -21,7 +21,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     public static String NOTIFICATION_ID = "notification-id";
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -42,15 +41,12 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Find out if medicine or appointment reminder
         String notificationType = intent.getStringExtra("type");
 
-        System.out.println("type: " + notificationType);
+        System.out.println(notificationType);
 
         if (notificationType.equals("medicine")) {
             // Get name of medicine from medicine details section
             String medicine = intent.getStringExtra("medicine");
             int meddescriptive = intent.getIntExtra("descriptive", 0);
-
-            System.out.println("Medicine: " + medicine);
-            System.out.println("Notification type reported as type " + meddescriptive);
 
             if (meddescriptive == 0) {
                 System.out.println("General");
@@ -81,7 +77,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             if (apptdescriptive == 0) {
                 System.out.println("General");
             } else {
-                System.out.println("apptdescriptive");
+                System.out.println("Descriptive");
             }
 
             if (apptdescriptive == 0) {

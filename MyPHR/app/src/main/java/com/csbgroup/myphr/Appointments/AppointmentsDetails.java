@@ -187,7 +187,10 @@ public class AppointmentsDetails extends Fragment {
         day.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-                if (isChecked) {thisappointment.setRemind_day(true);}
+                if (isChecked) {
+                    thisappointment.setRemind_day(true);
+                    sendNotification();
+                }
                 else {thisappointment.setRemind_day(false);}
 
                 new Thread(new Runnable() {
@@ -202,7 +205,10 @@ public class AppointmentsDetails extends Fragment {
         morning.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-                if (isChecked) {thisappointment.setRemind_morning(true);}
+                if (isChecked) {
+                    thisappointment.setRemind_morning(true);
+                    sendNotification();
+                }
                 else {thisappointment.setRemind_morning(false);}
 
                 new Thread(new Runnable() {
