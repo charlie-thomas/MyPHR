@@ -159,10 +159,12 @@ public class MedicineDetails extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId){
                     case R.id.daily:
+                        sendNotification();
                         thismedicine.setOther_days(false);
                         thismedicine.setDaily(true);
                         break;
                     case R.id.everyotherday:
+                        sendNotification();
                         thismedicine.setDaily(false);
                         thismedicine.setOther_days(true);
                         break;
