@@ -250,7 +250,6 @@ public class AppointmentsDetails extends Fragment {
                 CheckBox morning = rootView.findViewById(R.id.checkBox3);
 
                 if (isChecked) { // reminders are on
-                    System.out.println("REMINDERS ARE ON");
                     sendNotification();
 
                     general.setVisibility(View.VISIBLE);
@@ -567,9 +566,12 @@ public class AppointmentsDetails extends Fragment {
         final EditText name = rootView.findViewById(R.id.appointments_title);
         final EditText location = rootView.findViewById(R.id.app_location);
 
-        System.out.println(thisappointment.getReminders());
-
         if (thisappointment.getReminders()) {
+
+            // Intent variables
+            PendingIntent notifyWeek = null;
+            PendingIntent notifyDay = null;
+            PendingIntent notifyMorning = null;
 
             // Time variables
             int hourToSet = Integer.parseInt(time.getText().toString().substring(0,2));
@@ -588,7 +590,20 @@ public class AppointmentsDetails extends Fragment {
             intentAlarm.putExtra("location", location.getText().toString());
             intentAlarm.putExtra("appointment", name.getText().toString());
             intentAlarm.putExtra("descriptive", thisappointment.getReminder_type());
-            PendingIntent notifySender = PendingIntent.getBroadcast(mContext, thisappointment.getUid(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            if (thisappointment.isRemind_week()) {
+                notifyWeek = PendingIntent.getBroadcast(mContext, thisappointment.getUid()+1000, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+            }
+
+            if (thisappointment.isRemind_day()) {
+                notifyDay = PendingIntent.getBroadcast(mContext, thisappointment.getUid()+2000, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+            }
+
+            if (thisappointment.isRemind_morning()) {
+                notifyMorning = PendingIntent.getBroadcast(mContext, thisappointment.getUid()+3000, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+            }
+
+            //PendingIntent notifySender = PendingIntent.getBroadcast(mContext, thisappointment.getUid(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
 
             // Set notification to launch at medicine reminder time
             Calendar calendar = Calendar.getInstance();
@@ -597,7 +612,6 @@ public class AppointmentsDetails extends Fragment {
             calendar.set(Calendar.HOUR_OF_DAY, hourToSet);
             calendar.set(Calendar.MINUTE, minuteToSet);
             calendar.set(Calendar.SECOND, 0);
-            System.out.println("Default Calendar: " + calendar.toString());
 
             // Set for a week before the appointment date
             Calendar weekCalendar = (Calendar) calendar.clone();
@@ -613,15 +627,15 @@ public class AppointmentsDetails extends Fragment {
             morningCalendar.set(Calendar.MINUTE, 0);
 
             if (thisappointment.isRemind_week()) {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifySender);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
             }
 
             if (thisappointment.isRemind_day()) {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifySender);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyDay);
             }
 
             if (thisappointment.isRemind_morning()) {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifySender);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyMorning);
             }
         }
     }
@@ -629,8 +643,12 @@ public class AppointmentsDetails extends Fragment {
     public void cancelNotification() {
         final Context mContext = this.getContext();
         Intent intent = new Intent(mContext, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, thisappointment.getUid(), intent, 0);
+        PendingIntent weekIntent = PendingIntent.getBroadcast(mContext, thisappointment.getUid()+1000, intent, 0);
+        PendingIntent dayIntent = PendingIntent.getBroadcast(mContext, thisappointment.getUid()+2000, intent, 0);
+        PendingIntent morningIntent = PendingIntent.getBroadcast(mContext, thisappointment.getUid()+3000, intent, 0);
         AlarmManager alarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pendingIntent);
+        alarmManager.cancel(weekIntent);
+        alarmManager.cancel(dayIntent);
+        alarmManager.cancel(morningIntent);
     }
 }
