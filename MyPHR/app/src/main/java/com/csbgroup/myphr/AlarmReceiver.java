@@ -24,6 +24,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Override
     public void onReceive(Context context, Intent intent) {
+        System.out.println("ACTIVATED");
 
         //if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
         // Re-set any alarms after reboot here
@@ -67,13 +68,12 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
         if (notificationType.equals("appointment")) {
-            System.out.println("APPT RECEIVED");
             // Get name of appointment from appointment details section
             String appointment = intent.getStringExtra("appointment");
             String location = intent.getStringExtra("location");
-            int apptdescriptive = intent.getIntExtra("apptdescriptive", 0);
-
-            System.out.println("Appointment: " + appointment);
+            String date = intent.getStringExtra("date");
+            String time = intent.getStringExtra("time");
+            int apptdescriptive = intent.getIntExtra("descriptive", 0);
 
             if (apptdescriptive == 0) {
                 System.out.println("General");
@@ -86,8 +86,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                 bigText.setBigContentTitle("New reminder");
                 bigText.setSummaryText("Reminder");
             } else {
-                bigText.bigText(appointment);
-                bigText.setBigContentTitle(location);
+                bigText.bigText(location);
+                bigText.setBigContentTitle(appointment + " - " + date + " " + time);
                 bigText.setSummaryText("Appointment");
             }
 

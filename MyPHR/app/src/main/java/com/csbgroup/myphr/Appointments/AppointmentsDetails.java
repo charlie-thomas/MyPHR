@@ -590,6 +590,12 @@ public class AppointmentsDetails extends Fragment {
             intentAlarm.putExtra("location", location.getText().toString());
             intentAlarm.putExtra("appointment", name.getText().toString());
             intentAlarm.putExtra("descriptive", thisappointment.getReminder_type());
+            intentAlarm.putExtra("time", time.getText().toString().substring(0,5));
+            intentAlarm.putExtra("date", date.getText().toString().substring(0,5));
+
+            PendingIntent test = PendingIntent.getBroadcast(mContext, 123, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            alarmManager.set(AlarmManager.RTC_WAKEUP, 1000, test);
 
             if (thisappointment.isRemind_week()) {
                 notifyWeek = PendingIntent.getBroadcast(mContext, thisappointment.getUid()+1000, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
