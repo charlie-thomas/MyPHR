@@ -149,11 +149,11 @@ public class AppointmentsDetails extends Fragment {
                 switch (checkedId){
                     case R.id.general:
                         thisappointment.setReminder_type(0);
-                        sendNotification();
+                        Appointments.sendNotification(thisappointment);
                         break;
                     case R.id.descriptive:
                         thisappointment.setReminder_type(1);
-                        sendNotification();
+                        Appointments.sendNotification(thisappointment);
                         break;
                 }
                 new Thread(new Runnable() {
@@ -172,11 +172,11 @@ public class AppointmentsDetails extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                 if (isChecked) {
                     thisappointment.setRemind_week(true);
-                    sendNotification();
+                    Appointments.sendNotification(thisappointment);
                 }
                 else {
                     thisappointment.setRemind_week(false);
-                    cancelNotification(1000);
+                    Appointments.cancelNotification(thisappointment, 1000);
                 }
 
                 new Thread(new Runnable() {
@@ -193,11 +193,11 @@ public class AppointmentsDetails extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                 if (isChecked) {
                     thisappointment.setRemind_day(true);
-                    sendNotification();
+                    Appointments.sendNotification(thisappointment);
                 }
                 else {
                     thisappointment.setRemind_day(false);
-                    cancelNotification(2000);
+                    Appointments.cancelNotification(thisappointment, 2000);
                 }
 
                 new Thread(new Runnable() {
@@ -214,11 +214,11 @@ public class AppointmentsDetails extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                 if (isChecked) {
                     thisappointment.setRemind_morning(true);
-                    sendNotification();
+                    Appointments.sendNotification(thisappointment);
                 }
                 else {
                     thisappointment.setRemind_morning(false);
-                    cancelNotification(3000);
+                    Appointments.cancelNotification(thisappointment, 3000);
                 }
 
                 new Thread(new Runnable() {
@@ -259,7 +259,7 @@ public class AppointmentsDetails extends Fragment {
                 CheckBox morning = rootView.findViewById(R.id.checkBox3);
 
                 if (isChecked) { // reminders are on
-                    sendNotification();
+                    Appointments.sendNotification(thisappointment);
 
                     general.setVisibility(View.VISIBLE);
                     descriptive.setVisibility(View.VISIBLE);
@@ -268,9 +268,9 @@ public class AppointmentsDetails extends Fragment {
                     morning.setVisibility(View.VISIBLE);
                 }
                 else { // reminders are off
-                    cancelNotification(1000);
-                    cancelNotification(2000);
-                    cancelNotification(3000);
+                    Appointments.cancelNotification(thisappointment, 1000);
+                    Appointments.cancelNotification(thisappointment, 2000);
+                    Appointments.cancelNotification(thisappointment,3000);
 
                     general.setVisibility(View.GONE);
                     descriptive.setVisibility(View.GONE);
@@ -430,7 +430,7 @@ public class AppointmentsDetails extends Fragment {
         }
 
         if (this.mode.equals("edit")){
-            sendNotification();
+            Appointments.sendNotification(thisappointment);
 
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
@@ -558,107 +558,5 @@ public class AppointmentsDetails extends Fragment {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override public void afterTextChanged(Editable editable) {}
         });
-    }
-    
-    /**
-     * sendNotification runs every time the user changes anything in the reminders section of
-     * an individual appointment. It gets the information submitted by the user about the appointment -
-     * time, location, date, etc., and sends it to the notification creator, then uses the AlarmManager
-     * to schedule it at the appropriate time to remind them.
-     */
-    public void sendNotification() {
-
-        final Context mContext = this.getContext();
-
-        EditText time = rootView.findViewById(R.id.app_time);
-        EditText date = rootView.findViewById(R.id.app_date);
-
-        final EditText name = rootView.findViewById(R.id.appointments_title);
-        final EditText location = rootView.findViewById(R.id.app_location);
-
-        if (thisappointment.getReminders()) {
-
-            // Time variables
-            int hourToSet = Integer.parseInt(time.getText().toString().substring(0,2));
-            int minuteToSet = Integer.parseInt(time.getText().toString().substring(3,5));
-
-            // Date variables
-            int yearToSet = Integer.parseInt(date.getText().toString().substring(6,10));
-            int monthToSet = Integer.parseInt(date.getText().toString().substring(3,5));
-            int dayToSet = Integer.parseInt(date.getText().toString().substring(0,2));
-
-            AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-
-            Intent intentAlarm = new Intent(mContext, AlarmReceiver.class);
-            // Send the name of the medicine and whether notification should be descriptive to AlarmReceiver
-            intentAlarm.putExtra("type", "appointment");
-            intentAlarm.putExtra("location", location.getText().toString());
-            intentAlarm.putExtra("appointment", name.getText().toString());
-            intentAlarm.putExtra("descriptive", thisappointment.getReminder_type());
-            intentAlarm.putExtra("time", time.getText().toString().substring(0,5));
-            intentAlarm.putExtra("date", date.getText().toString().substring(0,5));
-
-            // Intent variables
-            PendingIntent notifyWeek = PendingIntent.getBroadcast(mContext, thisappointment.getUid()+1000, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
-            PendingIntent notifyDay = PendingIntent.getBroadcast(mContext, thisappointment.getUid()+2000, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
-            PendingIntent notifyMorning = PendingIntent.getBroadcast(mContext, thisappointment.getUid()+3000, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            // Set notification to launch at medicine reminder time
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(yearToSet, monthToSet, dayToSet, hourToSet, minuteToSet, 00);
-            // Subtract one from month to account for Java calendar
-            calendar.add(Calendar.MONTH, -1);
-
-            // Clone calendar so each reminder can adjust it
-            Calendar weekCalendar = (Calendar) calendar.clone();
-            Calendar dayCalendar = (Calendar) calendar.clone();
-            Calendar morningCalendar = (Calendar) calendar.clone();
-
-            if (thisappointment.isRemind_week()) {
-                // Subtract a week from calendar for prior week reminder
-                weekCalendar.add(Calendar.DAY_OF_YEAR, -7);
-                // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
-                }
-            }
-
-            if (thisappointment.isRemind_day()) {
-                // Subtract a day from calendar for prior day reminder
-                dayCalendar.add(Calendar.DAY_OF_YEAR, -1);
-                // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyDay);
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyWeek);
-                }
-            }
-
-            if (thisappointment.isRemind_morning()) {
-                // Set time for 10AM for same-day appointments
-                morningCalendar.set(Calendar.HOUR_OF_DAY, 10);
-                // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyMorning);
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyWeek);
-                }
-            }
-        }
-    }
-
-    /**
-     * cancelNotification is called when the user switches off reminders altogether or specifically requests only
-     * to be reminded at certain times. It cancels all notifications that have already been scheduled by the AlarmManager
-     * that are no longer required.
-     */
-    public void cancelNotification(int id) {
-        final Context mContext = this.getContext();
-        Intent intent = new Intent(mContext, AlarmReceiver.class);
-        PendingIntent Intent = PendingIntent.getBroadcast(mContext, thisappointment.getUid()+id, intent, 0);
-        AlarmManager alarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(Intent);
     }
 }

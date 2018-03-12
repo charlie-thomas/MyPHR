@@ -231,6 +231,10 @@ public class Medicine extends Fragment {
         });
     }
 
+    /**
+     * Returns the current app context for use
+     * in send/cancel notification functions, which are static
+     */
     public static Context getAppContext() {
         return (Context)mContext;
     }
