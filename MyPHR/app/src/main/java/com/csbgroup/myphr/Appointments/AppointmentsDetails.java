@@ -630,7 +630,7 @@ public class AppointmentsDetails extends Fragment {
                 dayCalendar.add(Calendar.DAY_OF_YEAR, -1);
                 // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyWeek);
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyDay);
                 } else {
                     alarmManager.setExact(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyWeek);
                 }
@@ -638,10 +638,10 @@ public class AppointmentsDetails extends Fragment {
 
             if (thisappointment.isRemind_morning()) {
                 // Set time for 10AM for same-day appointments
-                morningCalendar.set(Calendar.HOUR, 10);
+                morningCalendar.set(Calendar.HOUR_OF_DAY, 10);
                 // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyWeek);
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyMorning);
                 } else {
                     alarmManager.setExact(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyWeek);
                 }
