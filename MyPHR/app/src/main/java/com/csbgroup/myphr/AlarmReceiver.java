@@ -57,11 +57,11 @@ public class AlarmReceiver extends BroadcastReceiver {
             }
 
             if (meddescriptive == 0) {
-                bigText.bigText("You have a new reminder");
+                bigText.bigText("You have a new reminder.");
                 bigText.setBigContentTitle("New reminder");
                 bigText.setSummaryText("Reminder");
             } else {
-                bigText.bigText("Remember to take your " + medicine);
+                bigText.bigText("Take " + medicine + ".");
                 bigText.setBigContentTitle("Medicine reminder");
                 bigText.setSummaryText("Medicine");
             }
@@ -82,11 +82,11 @@ public class AlarmReceiver extends BroadcastReceiver {
             }
 
             if (apptdescriptive == 0) {
-                bigText.bigText("You have a new reminder");
+                bigText.bigText("You have a new reminder.");
                 bigText.setBigContentTitle("New reminder");
                 bigText.setSummaryText("Reminder");
             } else {
-                bigText.bigText(location);
+                bigText.bigText(location + ".");
                 bigText.setBigContentTitle(appointment + " - " + date + " " + time);
                 bigText.setSummaryText("Appointment");
             }
