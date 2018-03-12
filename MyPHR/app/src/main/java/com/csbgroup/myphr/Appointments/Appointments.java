@@ -1,5 +1,6 @@
 package com.csbgroup.myphr.Appointments;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -537,5 +538,35 @@ public class Appointments extends Fragment {
         PendingIntent Intent = PendingIntent.getBroadcast(getAppContext(), appointment.getUid()+id, intent, 0);
         AlarmManager alarmManager = (AlarmManager)getAppContext().getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(Intent);
+    }
+
+    public static void resetNotifications() {
+
+        final Activity activity = (Activity)mContext;
+
+        // Create a callable object for database transactions
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(activity).appointmentsDao().getAll();
+            }
+        };
+
+        // Get a Future object of all the appointment titles
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<List<AppointmentsEntity>> result = service.submit(callable);
+
+        // Create a list of the appointment names
+        List<AppointmentsEntity> appointments = null;
+        try {
+            appointments = result.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (appointments != null) {
+            for (AppointmentsEntity ae : appointments)
+                sendNotification(ae);
+        }
     }
 }

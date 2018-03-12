@@ -1,6 +1,7 @@
 package com.csbgroup.myphr.Medicine;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -25,6 +26,7 @@ import com.csbgroup.myphr.MainActivity;
 import com.csbgroup.myphr.R;
 import com.csbgroup.myphr.Adapters.SimpleAdapter;
 import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.AppointmentsEntity;
 import com.csbgroup.myphr.database.MedicineEntity;
 
 import java.text.SimpleDateFormat;
@@ -298,5 +300,35 @@ public class Medicine extends Fragment {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getAppContext(), medicine.getUid(), intent, 0);
         AlarmManager alarmManager = (AlarmManager)getAppContext().getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
+    }
+
+    public static void resetNotifications() {
+
+        final Activity activity = (Activity)mContext;
+
+        // Create a callable object for database transactions
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(activity).appointmentsDao().getAll();
+            }
+        };
+
+        // Get a Future object of all the appointment titles
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<List<MedicineEntity>> result = service.submit(callable);
+
+        // Create a list of the appointment names
+        List<MedicineEntity> medicines = null;
+        try {
+            medicines = result.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (medicines != null) {
+            for (MedicineEntity md : medicines)
+                sendNotification(md);
+        }
     }
 }
