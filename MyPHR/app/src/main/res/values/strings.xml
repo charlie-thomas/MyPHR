@@ -1,30 +1,21 @@
 <resources>
     
     <string name="app_name">MyPHR</string>
+    <string name="contacts">Contacts</string>
+    <string name="medication">Medication</string>
+    <string name="calendar">Calendar</string>
+    <string name="appointments">Appointments</string>
+    <string name="measurements">Measurements</string>
 
     // Settings and Details strings
-    <string name="settings_cog">Settings Cog</string>
     <string name="edit_icon">Edit Icon</string>
-    <string name="remind_when">Remind When</string>
-    <string name="reminder_type">Reminder Type</string>
-    <string name="_1_hour_prior">1 Hour Prior</string>
-    <string name="_20_minutes_prior">20 Minutes Prior</string>
-    <string name="at_dose_time">At Dose Time</string>
-    <string name="general">General</string>
-    <string name="descriptive">Descriptive</string>
     <string name="reminders">Reminders</string>
     <string name="notes">Notes</string>
-    <string name="_2_weeks_prior">2 Weeks Prior</string>
-    <string name="_1_week_prior_">1 Week Prior</string>
-    <string name="_day_before">Day before</string>
-    <string name="_morning_of">Morning of</string>
 
     // Calendar strings
     <string name="last_date_arrow">Last Date Arrow</string>
     <string name="next_date_arrow">Next Date Arrow</string>
-    <string name="calendar">Calendar</string>
     <string name="next_appointment">Next Appointment</string>
-    <string name="next_medicine">Next Medication</string>
     <string name="today_s_medicine">Today\'s Medication</string>
 
     // Contact strings
@@ -34,7 +25,6 @@
     <string name="cnotes">Notes</string>
     <string name="cemail">Email</string>
     <string name="cphone">Phone</string>
-    <string name="icon">contact icon</string>
 
     // Medicine strings
     <string name="medtitle">Add a Medication</string>
@@ -44,11 +34,8 @@
     <string name="meddescription">Description</string>
     <string name="mednotes">Notes</string>
     <string name="meddose">Dose</string>
-
-    <string name="this_is_the_holiday_letter">This is the holiday letter</string>
     <string name="remindertime">Reminder Time: </string>
     <string name="reminderdate">Starting On: </string>
-    <string name="on">On: </string>
     <string name="daily">Every Day</string>
     <string name="otherdays">Every Other Day</string>
 
@@ -100,15 +87,25 @@
     <string name="anotes">Notes</string>
     <string name="amessage2">You can schedule reminders later.</string>
     <string name="delete">Delete</string>
+    <string name="appointmentslogo">appointments logo</string>
+    <string name="title">Title</string>
+    <string name="location">Location</string>
+    <string name="ddmmyyyy">DD/MM/YYYY</string>
+    <string name="hhmm">HH:MM</string>
+    <string name="general">General</string>
+    <string name="descriptive">Descriptive</string>
+    <string name="week">One week prior</string>
+    <string name="day">One day prior</string>
+    <string name="morning">The morning of</string>
 
     // Measurement strings
     <string name="centile">Centile</string>
     <string name="measmessage">Enter the details for your new measurement:</string>
     <string name="systolic">Systolic</string>
     <string name="diastolic">Diastolic</string>
+    <string name="statisticslogo">statistics logo</string>
 
     // Investigation strings
-    <string name="investigations">Investigations</string>
     <string name="investigationtitle">Add an Investigation</string>
     <string name="investigationmessage">Enter the details of your recent investigation</string>
     <string name="invtitle">Title</string>
@@ -116,23 +113,13 @@
     <string name="MM">MM</string>
     <string name="YYYY">YYYY</string>
     <string name="invnotes">Notes</string>
-    <string name="dash">_</string>
 
-    // Calendar Strings
-    <string name="upcoming_appointment">Upcoming Appointment</string>
-    
     // Login strings
-    <string name="fingerprint">Fingerprint Authentication</string>
-    <string name="instructions">Use fingerprint or PIN to unlock</string>
     <string name="change_pin">Please set new PIN</string>
-    <string name="forgot_pin">Forgot PIN?</string>
     <string name="save">Save</string>
-    <string name="pin">Enter PIN</string>
-    <string name="new_pin">Set new PIN</string>
     <string name="icon_desc">App Icon</string>
     <string name="finger_desc">Fingerprint Icon</string>
     <string name="welcome">Welcome\nPlease set a PIN"</string>
-    <string name="setup">Setup</string>
     <string name="finger_unsupported">Your device does not support fingerprint authentication</string>
     <string name="finger_perm">Please enable the fingerprint permission</string>
     <string name="finger_deconfigured">No fingerprint configured. Please register at least one fingerprint in your device\'s Settings</string>
@@ -165,7 +152,6 @@
 
     // Error checking strings
     <string name="confirm">Confirm Delete</string>
-    <string name="error">Format Error</string>
     <string name="mark_as_sick_day">Mark as Sick Day</string>
     <string name="markassickday">Would you like to mark this day as a sick day?</string>
 

@@ -32,11 +32,9 @@ import java.util.concurrent.Future;
 
 public class Contacts extends Fragment {
 
-    private FloatingActionButton fab; //the add contact fab
+    private FloatingActionButton fab; // add contact fab
 
-    public Contacts() {
-        // Required empty public constructor
-    }
+    public Contacts() {} // Required empty public constructor
 
     public static Contacts newInstance() {
         Contacts fragment = new Contacts();
@@ -80,6 +78,7 @@ public class Contacts extends Fragment {
             }
         });
 
+        // display no contacts message when contacts empty
         LinearLayout nocontacts = rootView.findViewById(R.id.no_contacts);
         nocontacts.setVisibility(View.INVISIBLE);
         if (listView.getAdapter().getCount() == 0) nocontacts.setVisibility(View.VISIBLE);
@@ -98,7 +97,6 @@ public class Contacts extends Fragment {
 
     /**
      * getContacts fetches the list of contacts from the database
-     *
      * @return the list of contact entities
      */
     private List<ContactsEntity> getContacts() {
@@ -121,13 +119,11 @@ public class Contacts extends Fragment {
             contacts = result.get();
         } catch (Exception e) {
         }
-
         return contacts;
     }
 
     /**
      * buildDialog builds the pop-up dialog for adding a new contact, with input format checking.
-     *
      * @param fab the floating action button which pulls up the dialog
      */
     public void buildDialog(FloatingActionButton fab) {
@@ -148,12 +144,10 @@ public class Contacts extends Fragment {
                 final EditText phone = v.findViewById(R.id.contact_phone);
                 final EditText notes = v.findViewById(R.id.contact_notes);
 
-                // add new contact action
+                // add the new contact to the database
                 builder.setPositiveButton("ADD", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-
-                        // add the new contact to the database
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -163,7 +157,7 @@ public class Contacts extends Fragment {
                                         notes.getText().toString());
                                 long uid = db.contactsDao().insert(contact);
 
-                                // Move to details for new contact
+                                // Move to details page for new contact
                                 Fragment newdetails = ContactDetails.newInstance();
                                 Bundle bundle = new Bundle();
                                 bundle.putString("uid", String.valueOf(uid));
@@ -196,14 +190,14 @@ public class Contacts extends Fragment {
      * inputChecking checks the user input when adding a new contact, the add button is disabled
      * until all format conditions are met.
      * @param et is the contact name, which must not be empty.
-     * @param d is the new contact alertdialog.
+     * @param d is the add contact alertdialog.
      */
     public void inputChecking(EditText et, AlertDialog d){
 
         final EditText name = et;
         final AlertDialog dialog = d;
 
-        // ensure input name is valid
+        // ensure input name is present
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -214,6 +208,7 @@ public class Contacts extends Fragment {
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                 }
             }
+
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override public void afterTextChanged(Editable editable) {}
         });

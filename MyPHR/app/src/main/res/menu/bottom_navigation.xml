@@ -6,35 +6,35 @@
         android:id="@+id/contacts"
         android:enabled="true"
         android:icon="@drawable/ic_contacts"
-        android:title="Contacts"
+        android:title="@string/contacts"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/medicine"
         android:enabled="true"
         android:icon="@drawable/ic_medicine"
-        android:title="Medication"
+        android:title="@string/medication"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/calendar"
         android:enabled="true"
         android:icon="@drawable/ic_calendar"
-        android:title="Calendar"
+        android:title="@string/calendar"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/appointments"
         android:enabled="true"
         android:icon="@drawable/ic_appointments"
-        android:title="Appointments"
+        android:title="@string/appointments"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/statistics"
         android:enabled="true"
         android:icon="@drawable/ic_statistics"
-        android:title="Measurements"
+        android:title="@string/measurements"
         app:showAsAction="ifRoom"/>
 
 </menu>
