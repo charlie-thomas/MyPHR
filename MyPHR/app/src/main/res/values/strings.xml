@@ -1,6 +1,11 @@
 <resources>
     
     <string name="app_name">MyPHR</string>
+    <string name="contacts">Contacts</string>
+    <string name="medication">Medication</string>
+    <string name="calendar">Calendar</string>
+    <string name="appointments">Appointments</string>
+    <string name="measurements">Measurements</string>
 
     // Settings and Details strings
     <string name="edit_icon">Edit Icon</string>
@@ -10,7 +15,6 @@
     // Calendar strings
     <string name="last_date_arrow">Last Date Arrow</string>
     <string name="next_date_arrow">Next Date Arrow</string>
-    <string name="calendar">Calendar</string>
     <string name="next_appointment">Next Appointment</string>
     <string name="today_s_medicine">Today\'s Medication</string>
 
@@ -30,7 +34,6 @@
     <string name="meddescription">Description</string>
     <string name="mednotes">Notes</string>
     <string name="meddose">Dose</string>
-
     <string name="remindertime">Reminder Time: </string>
     <string name="reminderdate">Starting On: </string>
     <string name="daily">Every Day</string>
@@ -84,12 +87,23 @@
     <string name="anotes">Notes</string>
     <string name="amessage2">You can schedule reminders later.</string>
     <string name="delete">Delete</string>
+    <string name="appointmentslogo">appointments logo</string>
+    <string name="title">Title</string>
+    <string name="location">Location</string>
+    <string name="ddmmyyyy">DD/MM/YYYY</string>
+    <string name="hhmm">HH:MM</string>
+    <string name="general">General</string>
+    <string name="descriptive">Descriptive</string>
+    <string name="week">One week prior</string>
+    <string name="day">One day prior</string>
+    <string name="morning">The morning of</string>
 
     // Measurement strings
     <string name="centile">Centile</string>
     <string name="measmessage">Enter the details for your new measurement:</string>
     <string name="systolic">Systolic</string>
     <string name="diastolic">Diastolic</string>
+    <string name="statisticslogo">statistics logo</string>
 
     // Investigation strings
     <string name="investigationtitle">Add an Investigation</string>
@@ -99,8 +113,6 @@
     <string name="MM">MM</string>
     <string name="YYYY">YYYY</string>
     <string name="invnotes">Notes</string>
-
-    // Calendar Strings
 
     // Login strings
     <string name="change_pin">Please set new PIN</string>

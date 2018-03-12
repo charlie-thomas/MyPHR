@@ -277,7 +277,7 @@ public class Appointments extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
-                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY)");} // invalid date
 
                 // disable/enable add button following format checks
                 if (validTitle && validTime && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
@@ -295,7 +295,7 @@ public class Appointments extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
-                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY)");} // invalid date
 
                 // disable/enable add button following format checks
                 if (validTitle && validTime && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
@@ -313,7 +313,7 @@ public class Appointments extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
-                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY)");} // invalid date
 
                 // disable/enable add button following format checks
                 if (validTitle && validTime && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
@@ -390,6 +390,7 @@ public class Appointments extends Fragment {
                 }
             } catch (ParseException e) {e.printStackTrace();}
         }
+
         return validDate;
     }
 
@@ -398,7 +399,7 @@ public class Appointments extends Fragment {
      * whenever either of them is changed.
      * @param et1 is the hour.
      * @param et2 is the minutes.
-     * @return whether the input is a valid time
+     * @return whether the input was a valid i
      */
     public boolean checkFullTime(EditText et1, EditText et2){
 
@@ -409,11 +410,13 @@ public class Appointments extends Fragment {
 
         if (time.length() != 5) {validTime = false;}// no time given
         else{
-            int hourint = Integer.parseInt(et1.getText().toString());
-            int minsint = Integer.parseInt(et2.getText().toString());
-            if (hourint <0 || hourint >23) {validTime = false;} // invalid time
-            if (minsint <0 || minsint >59) {validTime = false;} // invalid time
+            int hourint = Integer.parseInt(et1.getText().toString()); // convert to int for checks
+            int minsint = Integer.parseInt(et2.getText().toString()); // convert to int for checks
+            if (hourint <0 || hourint >23) {validTime = false;}
+            if (minsint <0 || minsint >59) {validTime = false;}
         }
+
         return validTime;
     }
+
 }

@@ -259,7 +259,7 @@ public class Investigations extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
-                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY)");} // invalid date
 
                 // disable/enable add button following format checks
                 if (validTitle && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
@@ -277,7 +277,7 @@ public class Investigations extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
-                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY)");} // invalid date
 
                 // disable/enable add button following format checks
                 if (validTitle && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
@@ -295,7 +295,7 @@ public class Investigations extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
-                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY)");} // invalid date
 
                 // disable/enable add button following format checks
                 if (validTitle && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}

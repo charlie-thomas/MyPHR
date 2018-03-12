@@ -18,7 +18,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="16dp"
             android:layout_toEndOf="@+id/notes_title"
-            android:hint="Name"
+            android:hint="@string/medname"
             android:textColor="#777777"
             android:textSize="26dp"
             android:textStyle="bold" />
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/medicine_title"
             android:layout_marginStart="10dp"
-            android:hint="Description"
+            android:hint="@string/meddescription"
             android:inputType="textMultiLine"
             android:textColor="#777777" />
 
@@ -53,7 +53,7 @@
             android:layout_alignBaseline="@+id/dose_title"
             android:layout_alignBottom="@+id/dose_title"
             android:layout_alignStart="@+id/medicine_title"
-            android:hint="Dose"
+            android:hint="@string/meddose"
             android:inputType="text"
             android:maxLines="1"
             android:textColor="#777777" />
@@ -115,7 +115,7 @@
                 android:id="@+id/general"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="General"
+                android:text="@string/general"
                 android:textSize="17dp"
                 android:textColor="#777777"
                 android:visibility="gone" />
@@ -127,7 +127,7 @@
                 android:textSize="17dp"
                 android:textColor="#777777"
                 android:layout_marginStart="28dp"
-                android:text="Descriptive"
+                android:text="@string/descriptive"
                 android:visibility="gone" />
 
         </RadioGroup>
@@ -152,7 +152,7 @@
             android:layout_below="@+id/radios"
             android:layout_marginStart="35dp"
             android:layout_toEndOf="@+id/reminder_time_title"
-            android:hint="HH:MM"
+            android:hint="@string/hhmm"
             android:visibility="gone"
             android:inputType="text"
             android:textColor="#777777" />
@@ -177,7 +177,7 @@
             android:layout_alignBaseline="@+id/reminder_date_title"
             android:layout_alignBottom="@+id/reminder_date_title"
             android:layout_alignStart="@+id/reminder_time"
-            android:hint="DD/MM/YYYY"
+            android:hint="@string/ddmmyyyy"
             android:visibility="gone"
             android:inputType="text"
             android:textColor="#777777" />
@@ -200,7 +200,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/notes_title"
             android:layout_marginStart="5dp"
-            android:hint="Notes"
+            android:hint="@string/notes"
             android:inputType="textMultiLine"
             android:textColor="#777777" />
 

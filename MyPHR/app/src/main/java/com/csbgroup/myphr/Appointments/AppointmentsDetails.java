@@ -499,7 +499,7 @@ public class AppointmentsDetails extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 String d = date.getText().toString();
-                if (d.length() != 10) {validDate = false; date.setError("Invalid date (DD/MM/YYYY");} // invalid format
+                if (d.length() != 10) {validDate = false; date.setError("Invalid date (DD/MM/YYYY)");} // invalid format
                 else {
                     try { // valid format
                         validDate = true;
