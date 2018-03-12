@@ -58,6 +58,9 @@ public class AppointmentTest extends ActivityInstrumentationTestCase2<MainActivi
 
         onView(withId(R.id.appointment_DD)).perform(typeText("3"));
         onView(withId(R.id.date_error)).check(matches(isDisplayed()));
+
+        onView(withId(R.id.appointment_MM)).perform(typeText("3"));
+        onView(withId(R.id.time_error)).check(matches(isDisplayed()));
     }
 
     public void testCorrectFormat() {
@@ -93,7 +96,6 @@ public class AppointmentTest extends ActivityInstrumentationTestCase2<MainActivi
         onView(withId(R.id.appointments_title)).perform(clearText());
         onView(withId(R.id.appointments_title)).perform(typeText("New Title"));
         onView(withContentDescription("Edit Icon")).perform(click());
-
         onView(withText("New Title")).check(matches(isDisplayed()));
     }
 }
