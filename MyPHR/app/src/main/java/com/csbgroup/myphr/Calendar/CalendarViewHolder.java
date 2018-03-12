@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.csbgroup.myphr.R;
 
+/* Class to aid the CalendarDay view, and ensure items do not repeat */
 public class CalendarViewHolder extends RecyclerView.ViewHolder {
 
     public TextView time;
