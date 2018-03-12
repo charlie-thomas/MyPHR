@@ -603,7 +603,6 @@ public class AppointmentsDetails extends Fragment {
             PendingIntent notifyDay = PendingIntent.getBroadcast(mContext, thisappointment.getUid()+2000, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
             PendingIntent notifyMorning = PendingIntent.getBroadcast(mContext, thisappointment.getUid()+3000, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
 
-
             // Set notification to launch at medicine reminder time
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
@@ -611,6 +610,8 @@ public class AppointmentsDetails extends Fragment {
             calendar.set(Calendar.HOUR_OF_DAY, hourToSet);
             calendar.set(Calendar.MINUTE, minuteToSet);
             calendar.set(Calendar.SECOND, 0);
+
+            // *** PROBLEM AT THE MOMENT IS THAT NOTIFICATIONS WILL ACTIVATE WITH SPECIFIED DELAY, BUT NOT USING THEIR OWN CALENDAR ***
 
             // Set for a week before the appointment date
             Calendar weekCalendar = (Calendar) calendar.clone();
@@ -625,10 +626,10 @@ public class AppointmentsDetails extends Fragment {
             morningCalendar.set(Calendar.HOUR_OF_DAY, 10);
             morningCalendar.set(Calendar.MINUTE, 0);
 
-            alarmManager.set(AlarmManager.RTC_WAKEUP, 1000, notifyWeek);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
 
             if (thisappointment.isRemind_week()) {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), notifyWeek);
             }
 
             if (thisappointment.isRemind_day()) {
