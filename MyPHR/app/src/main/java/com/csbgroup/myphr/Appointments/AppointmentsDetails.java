@@ -557,7 +557,13 @@ public class AppointmentsDetails extends Fragment {
             @Override public void afterTextChanged(Editable editable) {}
         });
     }
-
+    
+    /**
+     * sendNotification runs every time the user changes anything in the reminders section of
+     * an individual appointment. It gets the information submitted by the user about the appointment -
+     * time, location, date, etc., and sends it to the notification creator, then uses the AlarmManager
+     * to schedule it at the appropriate time to remind them.
+     */
     public void sendNotification() {
 
         final Context mContext = this.getContext();
@@ -634,6 +640,11 @@ public class AppointmentsDetails extends Fragment {
         }
     }
 
+    /**
+     * cancelNotification is called when the user switches off reminders altogether or specifically requests only
+     * to be reminded at certain times. It cancels all notifications that have already been scheduled by the AlarmManager
+     * that are no longer required.
+     */
     public void cancelNotification(int id) {
         final Context mContext = this.getContext();
         Intent intent = new Intent(mContext, AlarmReceiver.class);
