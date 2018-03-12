@@ -13,9 +13,7 @@ import com.csbgroup.myphr.R;
 
 public class StatisticsSection extends Fragment {
 
-    public StatisticsSection() {
-        // Required empty public constructor
-    }
+    public StatisticsSection() {} // Required empty public constructor
 
     public static StatisticsSection newInstance() {
         StatisticsSection fragment = new StatisticsSection();
@@ -25,8 +23,9 @@ public class StatisticsSection extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View rootView =  inflater.inflate(R.layout.fragment_statistics_section, container, false);
 
+        // set up the view
+        final View rootView =  inflater.inflate(R.layout.fragment_statistics_section, container, false);
         ((MainActivity) getActivity()).setToolbar("Graph", false);
         setHasOptionsMenu(true);
 
@@ -34,9 +33,8 @@ public class StatisticsSection extends Fragment {
         final TabHost mTabHost = rootView.findViewById(R.id.tabHost);
         mTabHost.setup();
 
-        Bundle args = getArguments();
-
         // Add first tab for the calendar
+        Bundle args = getArguments();
         TabHost.TabSpec mSpec = mTabHost.newTabSpec(args.getString("title", "Measurements"));
         mSpec.setContent(R.id.list_tab);
         mSpec.setIndicator(args.getString("title", "Measurements"));
@@ -69,23 +67,22 @@ public class StatisticsSection extends Fragment {
             public void onTabChanged(String s) {
                 StatisticsDetailsList.isEditMode = false;
                 StatisticsDetailsList.adapter.notifyDataSetChanged();
+
+                // show the add fab
                 if(!StatisticsDetailsList.type.equals("Height Velocity")) {
                     StatisticsDetailsList.rootView.findViewById(R.id.s_fab).setVisibility(View.VISIBLE);
                 }
+                // switch to graph tab
                 if(s.equals("Graph")) {
-
                     Fragment nextFrag = StatisticsDetails.newInstance();
                     nextFrag.setArguments(bundle);
                     FragmentTransaction transaction2 = getFragmentManager().beginTransaction();
                     transaction2.addToBackStack(null);
                     transaction2.replace(R.id.graph_tab, nextFrag);
                     transaction2.commit();
-
                 }
             }
         });
-
         return rootView;
     }
-
 }

@@ -48,9 +48,7 @@ public class InvestigationDetails extends Fragment {
     private Boolean validTitle = true;
     private Boolean validDate = true;
 
-    public InvestigationDetails() {
-        // Required empty public constructor
-    }
+    public InvestigationDetails() {} // Required empty public constructor
 
     public static InvestigationDetails newInstance() {
         InvestigationDetails fragment = new InvestigationDetails();
@@ -61,6 +59,7 @@ public class InvestigationDetails extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // view set up
         final View rootView = inflater.inflate(R.layout.fragment_investigation_details, container, false);
         this.rootView = rootView;
 
@@ -132,13 +131,13 @@ public class InvestigationDetails extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit, menu);
-        editMenu = menu;
+        editMenu = menu; // edit button
     }
 
     /**
      * Provides navigation/actions for menu items.
      * @param item is the clicked menu item
-     * @return
+     * @return super.onOptionsItemSelected(item);
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -218,7 +217,6 @@ public class InvestigationDetails extends Fragment {
                     });
 
                     final AlertDialog dialog = builder.create();
-
                     dialog.show();
 
                     // set button colours
@@ -263,7 +261,7 @@ public class InvestigationDetails extends Fragment {
     }
 
     /**
-     * disableEditing sets background and keylistener to null to stop user editing
+     * disableEditing sets background and keylistener of the given edit text to nulls to stop user editing.
      * @param field is the editText field to be disabled
      */
     public void disableEditing(EditText field){

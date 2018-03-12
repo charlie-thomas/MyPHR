@@ -390,7 +390,6 @@ public class Appointments extends Fragment {
                 }
             } catch (ParseException e) {e.printStackTrace();}
         }
-
         return validDate;
     }
 
@@ -417,5 +416,4 @@ public class Appointments extends Fragment {
         }
         return validTime;
     }
-
 }

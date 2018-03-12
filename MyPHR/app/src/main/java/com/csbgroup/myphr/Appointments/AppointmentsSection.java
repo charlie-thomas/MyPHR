@@ -13,9 +13,7 @@ import com.csbgroup.myphr.R;
 
 public class AppointmentsSection extends Fragment {
 
-    public AppointmentsSection() {
-        // Required empty public constructor
-    }
+    public AppointmentsSection() {} // Required empty public constructor
 
     public static AppointmentsSection newInstance() {
         AppointmentsSection fragment = new AppointmentsSection();
@@ -25,8 +23,9 @@ public class AppointmentsSection extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_appointments_section, container, false);
 
+        // set up the view
+        View rootView =  inflater.inflate(R.layout.fragment_appointments_section, container, false);
         ((MainActivity) getActivity()).setToolbar("My Appointments", false);
         setHasOptionsMenu(true);
 

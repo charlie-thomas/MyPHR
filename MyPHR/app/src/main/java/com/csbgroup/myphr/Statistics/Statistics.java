@@ -1,7 +1,6 @@
 package com.csbgroup.myphr.Statistics;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,11 +23,7 @@ import java.util.concurrent.Future;
 
 public class Statistics extends Fragment {
 
-    FloatingActionButton but;
-
-    public Statistics() {
-        // Required empty public constructor
-    }
+    public Statistics() {} // Required empty public constructor
 
     public static Statistics newInstance() {
         Statistics fragment = new Statistics();
@@ -39,19 +34,17 @@ public class Statistics extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // set up the view
         View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
-
         ((MainActivity) getActivity()).setToolbar("My Measurements", false);
         setHasOptionsMenu(true);
 
-
+        // display the measurements in list
         List<StatisticsEntity> stats = getStats();
-
         List<String> statistics = new ArrayList<String>();
         for (StatisticsEntity st : stats) {
             statistics.add(st.getUnit());
         }
-
         ArrayAdapter<String> statisticsAdapter = new ArrayAdapter<>(
                 getActivity(),
                 R.layout.simple_list_item,
@@ -60,6 +53,7 @@ public class Statistics extends Fragment {
         ListView listView = rootView.findViewById(R.id.statistics_list);
         listView.setAdapter(statisticsAdapter);
 
+        // switching to details fragment
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment details = StatisticsSection.newInstance();
@@ -70,14 +64,16 @@ public class Statistics extends Fragment {
                 details.setArguments(bundle);
 
                 ((MainActivity) getActivity()).switchFragment(details, true);
-
             }
         });
-
 
         return rootView;
     }
 
+    /**
+     * getStats fetches the list of measurement types from the database.
+     * @return the list of StatisticsEntities
+     */
     private List<StatisticsEntity> getStats() {
         // Create a callable object for database transactions
         Callable callable = new Callable() {
@@ -95,8 +91,8 @@ public class Statistics extends Fragment {
         List<StatisticsEntity> statistics = null;
         try {
             statistics = result.get();
-        } catch (Exception e) {}
-
+        }
+        catch (Exception e) {}
         return statistics;
     }
 
@@ -104,5 +100,4 @@ public class Statistics extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
-
 }
