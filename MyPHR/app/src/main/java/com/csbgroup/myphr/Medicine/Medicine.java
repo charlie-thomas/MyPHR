@@ -1,7 +1,12 @@
 package com.csbgroup.myphr.Medicine;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -16,15 +21,18 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.csbgroup.myphr.AlarmReceiver;
 import com.csbgroup.myphr.MainActivity;
 import com.csbgroup.myphr.R;
 import com.csbgroup.myphr.Adapters.SimpleAdapter;
 import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.AppointmentsEntity;
 import com.csbgroup.myphr.database.MedicineEntity;
 
 import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +42,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class Medicine extends Fragment {
+
+    private static Object mContext;
 
     private FloatingActionButton fab; // add medicine fab
 
@@ -46,6 +56,8 @@ public class Medicine extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        mContext = this.getContext();
 
         // view set up
         View rootView = inflater.inflate(R.layout.fragment_medicine, container, false);
@@ -219,5 +231,104 @@ public class Medicine extends Fragment {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override public void afterTextChanged(Editable editable) {}
         });
+    }
+
+    /**
+     * Returns the current app context for use
+     * in send/cancel notification functions, which are static
+     */
+    public static Context getAppContext() {
+        return (Context)mContext;
+    }
+
+    /**
+     * sendNotification runs every time the user changes anything in the reminders section of
+     * an individual medicine. It gets the information submitted by the user about the medicine -
+     * dosage, drug, when to take it, etc., and sends it to the notification creator, then uses the AlarmManager
+     * to schedule it at the appropriate time to remind them to take said medicine.
+     */
+    public static void sendNotification(MedicineEntity medicine) {
+
+        String remtime = medicine.getTime();
+        String remdate = medicine.getDate();
+
+        final String name = medicine.getTitle();
+
+        if (medicine.getReminders()) {
+
+            // Time variables
+            int hourToSet = Integer.parseInt(remtime.substring(0,2));
+            int minuteToSet = Integer.parseInt(remtime.substring(3,5));
+
+            // Date variables
+            int yearToSet = Integer.parseInt(remdate.substring(6,10));
+            int monthToSet = Integer.parseInt(remdate.substring(3,5));
+            int dayToSet = Integer.parseInt(remdate.substring(0,2));
+
+            AlarmManager alarmManager = (AlarmManager) getAppContext().getSystemService(Context.ALARM_SERVICE);
+
+            Intent intentAlarm = new Intent(getAppContext(), AlarmReceiver.class);
+            // Send the type of notification, name of the medicine and whether notification should be descriptive to AlarmReceiver
+            intentAlarm.putExtra("type", "medicine");
+            intentAlarm.putExtra("medicine", name);
+            intentAlarm.putExtra("descriptive", medicine.getReminder_type());
+            PendingIntent notifySender = PendingIntent.getBroadcast(getAppContext(), medicine.getUid(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            // Set notification to launch at medicine reminder time
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(yearToSet, monthToSet, dayToSet, hourToSet, minuteToSet, 0);
+            // Subtract one from month to account for Java calendar
+            calendar.add(Calendar.MONTH, -1);
+
+            if (medicine.isDaily()) {
+                // If medicine is daily, repeat notification daily
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 24, notifySender);
+            } else {
+                // Else repeat every other day
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 48, notifySender);
+            }
+        }
+    }
+
+    /**
+     * cancelNotification is called when the user switches off reminders altogether or specifically requests only
+     * to be reminded at certain times. It cancels all notifications that have already been scheduled by the AlarmManager
+     * that are no longer required.
+     */
+    public static void cancelNotification(MedicineEntity medicine) {
+        Intent intent = new Intent(getAppContext(), AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getAppContext(), medicine.getUid(), intent, 0);
+        AlarmManager alarmManager = (AlarmManager)getAppContext().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+    }
+
+    public static void resetNotifications() {
+
+        final Activity activity = (Activity)mContext;
+
+        // Create a callable object for database transactions
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(activity).appointmentsDao().getAll();
+            }
+        };
+
+        // Get a Future object of all the appointment titles
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<List<MedicineEntity>> result = service.submit(callable);
+
+        // Create a list of the appointment names
+        List<MedicineEntity> medicines = null;
+        try {
+            medicines = result.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (medicines != null) {
+            for (MedicineEntity md : medicines)
+                sendNotification(md);
+        }
     }
 }

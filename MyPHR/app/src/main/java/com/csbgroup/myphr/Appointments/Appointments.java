@@ -1,7 +1,13 @@
 package com.csbgroup.myphr.Appointments;
 
+import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -15,6 +21,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.csbgroup.myphr.AlarmReceiver;
 import com.csbgroup.myphr.Calendar.CalendarEvent;
 import com.csbgroup.myphr.Adapters.DateAdapter;
 import com.csbgroup.myphr.MainActivity;
@@ -26,6 +33,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -36,6 +44,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class Appointments extends Fragment {
+
+    private static Object mContext;
 
     private FloatingActionButton fab; // add appointment fab
 
@@ -54,6 +64,8 @@ public class Appointments extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        mContext = this.getContext();
 
         // view set up
         View rootView = inflater.inflate(R.layout.fragment_appointments, container, false);
@@ -419,4 +431,142 @@ public class Appointments extends Fragment {
         return validTime;
     }
 
+    /**
+     * Returns the current app context for use
+     * in send/cancel notification functions, which are static
+     */
+    public static Context getAppContext() {
+        return (Context)mContext;
+    }
+
+    /**
+     * sendNotification runs every time the user changes anything in the reminders section of
+     * an individual appointment. It gets the information submitted by the user about the appointment -
+     * time, location, date, etc., and sends it to the notification creator, then uses the AlarmManager
+     * to schedule it at the appropriate time to remind them.
+     */
+    public static void sendNotification(AppointmentsEntity appointment) {
+
+        final Context mContext = getAppContext();
+
+        String time = appointment.getTime();
+        String date = appointment.getDate();
+
+        final String name = appointment.getTitle();
+        final String location = appointment.getLocation();
+
+        if (appointment.getReminders()) {
+
+            // Time variables
+            int hourToSet = Integer.parseInt(time.substring(0,2));
+            int minuteToSet = Integer.parseInt(time.substring(3,5));
+
+            // Date variables
+            int yearToSet = Integer.parseInt(date.substring(6,10));
+            int monthToSet = Integer.parseInt(date.substring(3,5));
+            int dayToSet = Integer.parseInt(date.substring(0,2));
+
+            AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+
+            Intent intentAlarm = new Intent(mContext, AlarmReceiver.class);
+            // Send the name of the medicine and whether notification should be descriptive to AlarmReceiver
+            intentAlarm.putExtra("type", "appointment");
+            intentAlarm.putExtra("location", location);
+            intentAlarm.putExtra("appointment", name);
+            intentAlarm.putExtra("descriptive", appointment.getReminder_type());
+            intentAlarm.putExtra("time", time.substring(0,5));
+            intentAlarm.putExtra("date", date.substring(0,5));
+
+            // Intent variables
+            PendingIntent notifyWeek = PendingIntent.getBroadcast(mContext, appointment.getUid()+1000, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent notifyDay = PendingIntent.getBroadcast(mContext, appointment.getUid()+2000, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent notifyMorning = PendingIntent.getBroadcast(mContext, appointment.getUid()+3000, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            // Set notification to launch at medicine reminder time
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(yearToSet, monthToSet, dayToSet, hourToSet, minuteToSet, 0);
+            // Subtract one from month to account for Java calendar
+            calendar.add(Calendar.MONTH, -1);
+
+            // Clone calendar so each reminder can adjust it
+            Calendar weekCalendar = (Calendar) calendar.clone();
+            Calendar dayCalendar = (Calendar) calendar.clone();
+            Calendar morningCalendar = (Calendar) calendar.clone();
+
+            if (appointment.isRemind_week()) {
+                // Subtract a week from calendar for prior week reminder
+                weekCalendar.add(Calendar.DAY_OF_YEAR, -7);
+                // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
+                } else {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
+                }
+            }
+
+            if (appointment.isRemind_day()) {
+                // Subtract a day from calendar for prior day reminder
+                dayCalendar.add(Calendar.DAY_OF_YEAR, -1);
+                // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyDay);
+                } else {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyWeek);
+                }
+            }
+
+            if (appointment.isRemind_morning()) {
+                // Set time for 10AM for same-day appointments
+                morningCalendar.set(Calendar.HOUR_OF_DAY, 10);
+                // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyMorning);
+                } else {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyWeek);
+                }
+            }
+        }
+    }
+
+    /**
+     * cancelNotification is called when the user switches off reminders altogether or specifically requests only
+     * to be reminded at certain times. It cancels all notifications that have already been scheduled by the AlarmManager
+     * that are no longer required.
+     */
+    public static void cancelNotification(AppointmentsEntity appointment, int id) {
+        Intent intent = new Intent(getAppContext(), AlarmReceiver.class);
+        PendingIntent Intent = PendingIntent.getBroadcast(getAppContext(), appointment.getUid()+id, intent, 0);
+        AlarmManager alarmManager = (AlarmManager)getAppContext().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(Intent);
+    }
+
+    public static void resetNotifications() {
+
+        final Activity activity = (Activity)mContext;
+
+        // Create a callable object for database transactions
+        Callable callable = new Callable() {
+            @Override
+            public Object call() throws Exception {
+                return AppDatabase.getAppDatabase(activity).appointmentsDao().getAll();
+            }
+        };
+
+        // Get a Future object of all the appointment titles
+        ExecutorService service = Executors.newFixedThreadPool(2);
+        Future<List<AppointmentsEntity>> result = service.submit(callable);
+
+        // Create a list of the appointment names
+        List<AppointmentsEntity> appointments = null;
+        try {
+            appointments = result.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (appointments != null) {
+            for (AppointmentsEntity ae : appointments)
+                sendNotification(ae);
+        }
+    }
 }
