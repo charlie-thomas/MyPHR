@@ -1,5 +1,6 @@
 package com.csbgroup.myphr;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -10,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
 import com.csbgroup.myphr.Login.LoginActivity;
@@ -21,26 +21,15 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     public static String NOTIFICATION_ID = "notification-id";
 
-
+    @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Override
     public void onReceive(Context context, Intent intent) {
+        System.out.println("ACTIVATED");
 
         //if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
         // Re-set any alarms after reboot here
         //Intent alarmIntent = new Intent(context, AlarmReceiver.class);
         //}
-
-        // Get name of medicine from medicine details section
-        String medicine = intent.getStringExtra("medicine");
-        int descriptive = intent.getIntExtra("descriptive", 0);
-
-        System.out.println("Medicine: " + medicine);
-
-        if (descriptive == 0) {
-            System.out.println("General");
-        } else {
-            System.out.println("Descriptive");
-        }
 
         // Sets action that notification should perform when clicked on
         NotificationCompat.Builder mBuilder =
@@ -48,19 +37,60 @@ public class AlarmReceiver extends BroadcastReceiver {
         Intent notificationIntent = new Intent(context.getApplicationContext(), LoginActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 
-
-
         // Sets notification text
         NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
 
-        if (descriptive == 0) {
-            bigText.bigText("You have a new reminder");
-            bigText.setBigContentTitle("New reminder");
-            bigText.setSummaryText("Reminder");
-        } else {
-            bigText.bigText("Remember to take your " + medicine);
-            bigText.setBigContentTitle("Medicine reminder");
-            bigText.setSummaryText("Medicine");
+        // Find out if medicine or appointment reminder
+        String notificationType = intent.getStringExtra("type");
+
+        System.out.println(notificationType);
+
+        if (notificationType.equals("medicine")) {
+            // Get name of medicine from medicine details section
+            String medicine = intent.getStringExtra("medicine");
+            int meddescriptive = intent.getIntExtra("descriptive", 0);
+
+            if (meddescriptive == 0) {
+                System.out.println("General");
+            } else {
+                System.out.println("Descriptive");
+            }
+
+            if (meddescriptive == 0) {
+                bigText.bigText("You have a new reminder.");
+                bigText.setBigContentTitle("New reminder");
+                bigText.setSummaryText("Reminder");
+            } else {
+                bigText.bigText("Take " + medicine + ".");
+                bigText.setBigContentTitle("Medicine reminder");
+                bigText.setSummaryText("Medicine");
+            }
+        }
+
+        if (notificationType.equals("appointment")) {
+            // Get name of appointment from appointment details section
+            String appointment = intent.getStringExtra("appointment");
+            String location = intent.getStringExtra("location");
+            String date = intent.getStringExtra("date");
+            String time = intent.getStringExtra("time");
+            int apptdescriptive = intent.getIntExtra("descriptive", 0);
+
+            if (apptdescriptive == 0) {
+                System.out.println("General");
+            } else {
+                System.out.println("Descriptive");
+            }
+
+            if (apptdescriptive == 0) {
+                bigText.bigText("You have a new reminder.");
+                bigText.setBigContentTitle("New reminder");
+                bigText.setSummaryText("Reminder");
+            } else {
+                bigText.bigText(location + ".");
+                bigText.setBigContentTitle(appointment + " - " + date + " " + time);
+                bigText.setSummaryText("Appointment");
+            }
+
         }
 
         mBuilder.setContentIntent(pendingIntent);

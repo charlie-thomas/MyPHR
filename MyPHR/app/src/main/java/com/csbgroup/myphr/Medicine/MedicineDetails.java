@@ -1,5 +1,6 @@
 package com.csbgroup.myphr.Medicine;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -8,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -63,12 +65,11 @@ public class MedicineDetails extends Fragment {
     public MedicineDetails() {}// Required empty public constructor
 
     public static MedicineDetails newInstance() {
-        MedicineDetails fragment = new MedicineDetails();
-        return fragment;
+        return new MedicineDetails();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         // set up the view
@@ -158,10 +159,12 @@ public class MedicineDetails extends Fragment {
                     case R.id.daily:
                         thismedicine.setOther_days(false);
                         thismedicine.setDaily(true);
+                        sendNotification();
                         break;
                     case R.id.everyotherday:
                         thismedicine.setDaily(false);
                         thismedicine.setOther_days(true);
+                        sendNotification();
                         break;
                 }
                 new Thread(new Runnable() {
@@ -183,9 +186,11 @@ public class MedicineDetails extends Fragment {
                 switch (checkedId){
                     case R.id.general:
                         thismedicine.setReminder_type(0);
+                        sendNotification();
                         break;
                     case R.id.descriptive:
                         thismedicine.setReminder_type(1);
+                        sendNotification();
                         break;
                 }
                 new Thread(new Runnable() {
@@ -443,7 +448,6 @@ public class MedicineDetails extends Fragment {
             }).start();
 
             this.mode = "view";
-            return;
         }
     }
 
@@ -529,7 +533,7 @@ public class MedicineDetails extends Fragment {
                 else {
                     try { // valid format
                         validDate = true;
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                         if (!d.equals(sdf.format(sdf.parse(d)))) { // invalid value
                             validDate = false;
                             date.setError("Invalid date (DD/MM/YYYY)");
@@ -550,8 +554,12 @@ public class MedicineDetails extends Fragment {
         });
     }
 
-    // TODO: method headers for notifications methods
-
+    /**
+     * sendNotification runs every time the user changes anything in the reminders section of
+     * an individual medicine. It gets the information submitted by the user about the medicine -
+     * dosage, drug, when to take it, etc., and sends it to the notification creator, then uses the AlarmManager
+     * to schedule it at the appropriate time to remind them to take said medicine.
+     */
     public void sendNotification() {
 
         final Context mContext = this.getContext();
@@ -560,8 +568,6 @@ public class MedicineDetails extends Fragment {
         EditText remdate = rootView.findViewById(R.id.reminder_date);
 
         final EditText name = rootView.findViewById(R.id.medicine_title);
-
-        System.out.println(thismedicine.getReminders());
 
         if (thismedicine.getReminders()) {
 
@@ -577,13 +583,15 @@ public class MedicineDetails extends Fragment {
             AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
             Intent intentAlarm = new Intent(mContext, AlarmReceiver.class);
-            // Send the name of the medicine and whether notification should be descriptive to AlarmReceiver
+            // Send the type of notification, name of the medicine and whether notification should be descriptive to AlarmReceiver
+            intentAlarm.putExtra("type", "medicine");
             intentAlarm.putExtra("medicine", name.getText().toString());
             intentAlarm.putExtra("descriptive", thismedicine.getReminder_type());
             PendingIntent notifySender = PendingIntent.getBroadcast(mContext, thismedicine.getUid(), intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT);
 
             // Set notification to launch at medicine reminder time
             Calendar calendar = Calendar.getInstance();
+            Calendar calNow = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
             calendar.set(yearToSet, monthToSet, dayToSet);
             calendar.set(Calendar.HOUR_OF_DAY, hourToSet);
@@ -592,14 +600,20 @@ public class MedicineDetails extends Fragment {
 
             if (thismedicine.isDaily()) {
 
-                //if(calSet.compareTo(calNow) <= 0){
-                    //Today Set time passed, count to tomorrow
-                //    calSet.add(Calendar.DATE, 1);
-                //}
+                if(calendar.compareTo(calNow) <= 0){
+                    // Today Set time passed, count to tomorrow
+                    calendar.add(Calendar.DATE, 1);
+                }
 
                 // If medicine is daily, repeat notification daily
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifySender);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 24, notifySender);
             } else {
+
+                if(calendar.compareTo(calNow) <= 0){
+                    // Today Set time passed, count to tomorrow
+                    calendar.add(Calendar.DATE, 2);
+                }
+
                 // Else repeat every other day
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 48, notifySender);
             }
@@ -608,6 +622,11 @@ public class MedicineDetails extends Fragment {
         }
     }
 
+    /**
+     * cancelNotification is called when the user switches off reminders altogether or specifically requests only
+     * to be reminded at certain times. It cancels all notifications that have already been scheduled by the AlarmManager
+     * that are no longer required.
+     */
     public void cancelNotification() {
         final Context mContext = this.getContext();
         Intent intent = new Intent(mContext, AlarmReceiver.class);
