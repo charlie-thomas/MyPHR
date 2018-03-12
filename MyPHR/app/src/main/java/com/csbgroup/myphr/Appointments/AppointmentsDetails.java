@@ -250,6 +250,7 @@ public class AppointmentsDetails extends Fragment {
                 CheckBox morning = rootView.findViewById(R.id.checkBox3);
 
                 if (isChecked) { // reminders are on
+                    System.out.println("REMINDERS ARE ON");
                     sendNotification();
 
                     general.setVisibility(View.VISIBLE);
@@ -596,23 +597,31 @@ public class AppointmentsDetails extends Fragment {
             calendar.set(Calendar.HOUR_OF_DAY, hourToSet);
             calendar.set(Calendar.MINUTE, minuteToSet);
             calendar.set(Calendar.SECOND, 0);
+            System.out.println("Default Calendar: " + calendar.toString());
+
+            // Set for a week before the appointment date
+            Calendar weekCalendar = (Calendar) calendar.clone();
+            weekCalendar.add(Calendar.DATE,-7);
+
+            // Set for a day before the appointment date
+            Calendar dayCalendar = (Calendar) calendar.clone();
+            dayCalendar.add(Calendar.DATE, -1);
+
+            // Set for morning before the appointment date
+            Calendar morningCalendar = (Calendar) calendar.clone();
+            morningCalendar.set(Calendar.HOUR_OF_DAY, 10);
+            morningCalendar.set(Calendar.MINUTE, 0);
 
             if (thisappointment.isRemind_week()) {
-                // Set for a week before the appointment date
-                calendar.add(Calendar.DATE, -7);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), notifySender);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifySender);
             }
 
             if (thisappointment.isRemind_day()) {
-                // Set for a day before the appointment date
-                calendar.add(Calendar.DATE, -1);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), notifySender);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifySender);
             }
 
             if (thisappointment.isRemind_morning()) {
-                // Set for morning before the appointment date
-                calendar.set(Calendar.HOUR_OF_DAY, 9);
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), notifySender);
+                alarmManager.set(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifySender);
             }
         }
     }
