@@ -61,7 +61,6 @@ public class Medicine extends Fragment {
         for (MedicineEntity me : medicines)
             medicine_map.add(new AbstractMap.SimpleEntry<>(me.getUid(), me.getTitle()));
 
-
         // display the medicines in list
         SimpleAdapter medicineAdapter = new SimpleAdapter(getActivity(), medicine_map);
         ListView listView = rootView.findViewById(R.id.medicine_list);
@@ -219,5 +218,4 @@ public class Medicine extends Fragment {
             @Override public void afterTextChanged(Editable editable) {}
         });
     }
-
 }

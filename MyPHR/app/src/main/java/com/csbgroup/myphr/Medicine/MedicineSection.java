@@ -13,9 +13,7 @@ import com.csbgroup.myphr.R;
 
 public class MedicineSection extends Fragment {
 
-    public MedicineSection() {
-        // Required empty public constructor
-    }
+    public MedicineSection() {} // Required empty public constructor
 
     public static MedicineSection newInstance() {
         MedicineSection fragment = new MedicineSection();
@@ -25,8 +23,9 @@ public class MedicineSection extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView =  inflater.inflate(R.layout.fragment_medicine_section, container, false);
 
+        // set up the view
+        View rootView =  inflater.inflate(R.layout.fragment_medicine_section, container, false);
         ((MainActivity) getActivity()).setToolbar("My Medication", false);
         setHasOptionsMenu(true);
 
@@ -54,5 +53,4 @@ public class MedicineSection extends Fragment {
 
         return rootView;
     }
-
 }
