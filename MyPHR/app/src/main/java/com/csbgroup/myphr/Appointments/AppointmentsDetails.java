@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -603,39 +605,46 @@ public class AppointmentsDetails extends Fragment {
 
             // Set notification to launch at medicine reminder time
             Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(yearToSet, monthToSet, dayToSet);
-            calendar.set(Calendar.HOUR_OF_DAY, hourToSet);
-            calendar.set(Calendar.MINUTE, minuteToSet);
-            calendar.set(Calendar.SECOND, 0);
+            calendar.set(yearToSet, monthToSet, dayToSet, hourToSet, minuteToSet, 00);
+            // Subtract one from month to account for Java calendar
+            calendar.add(Calendar.MONTH, -1);
 
-            // *** PROBLEM AT THE MOMENT IS THAT NOTIFICATIONS WILL ACTIVATE WITH SPECIFIED DELAY, BUT NOT USING THEIR OWN CALENDAR ***
-
-            // Set for a week before the appointment date
+            // Clone calendar so each reminder can adjust it
             Calendar weekCalendar = (Calendar) calendar.clone();
-            weekCalendar.add(Calendar.DATE,-7);
-
-            // Set for a day before the appointment date
             Calendar dayCalendar = (Calendar) calendar.clone();
-            dayCalendar.add(Calendar.DATE, -1);
-
-            // Set for morning before the appointment date
             Calendar morningCalendar = (Calendar) calendar.clone();
-            morningCalendar.set(Calendar.HOUR_OF_DAY, 10);
-            morningCalendar.set(Calendar.MINUTE, 0);
-
-            alarmManager.set(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
 
             if (thisappointment.isRemind_week()) {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), notifyWeek);
+                // Subtract a week from calendar for prior week reminder
+                weekCalendar.add(Calendar.DAY_OF_YEAR, -7);
+                // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
+                } else {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
+                }
             }
 
             if (thisappointment.isRemind_day()) {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyDay);
+                // Subtract a day from calendar for prior day reminder
+                dayCalendar.add(Calendar.DAY_OF_YEAR, -1);
+                // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyWeek);
+                } else {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyWeek);
+                }
             }
 
             if (thisappointment.isRemind_morning()) {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyMorning);
+                // Set time for 10AM for same-day appointments
+                morningCalendar.set(Calendar.HOUR, 10);
+                // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyWeek);
+                } else {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyWeek);
+                }
             }
         }
     }
