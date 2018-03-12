@@ -46,7 +46,6 @@ public class Medicine extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // view set up
         View rootView = inflater.inflate(R.layout.fragment_medicine, container, false);
         ((MainActivity) getActivity()).setToolbar("My Medication", false);
