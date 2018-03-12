@@ -35,9 +35,9 @@ import java.util.concurrent.Future;
 
 public class Medicine extends Fragment {
 
-    public Medicine() {
-        // Required empty public constructor
-    }
+    private FloatingActionButton fab; // add medicine fab
+
+    public Medicine() {} // Required empty public constructor
 
     public static Medicine newInstance() {
         return new Medicine();
@@ -61,7 +61,6 @@ public class Medicine extends Fragment {
         for (MedicineEntity me : medicines)
             medicine_map.add(new AbstractMap.SimpleEntry<>(me.getUid(), me.getTitle()));
 
-
         // display the medicines in list
         SimpleAdapter medicineAdapter = new SimpleAdapter(getActivity(), medicine_map);
         ListView listView = rootView.findViewById(R.id.medicine_list);
@@ -81,6 +80,7 @@ public class Medicine extends Fragment {
             }
         });
 
+        // display no medications message when meds empty
         LinearLayout nomeds = rootView.findViewById(R.id.no_meds);
         nomeds.setVisibility(View.INVISIBLE);
         if (listView.getAdapter().getCount() == 0) nomeds.setVisibility(View.VISIBLE);
@@ -127,7 +127,7 @@ public class Medicine extends Fragment {
     }
 
     /**
-     * buildDialog builds the pop-up dialog for adding a new medicine
+     * buildDialog builds the pop-up dialog for adding a new medicine, with input format checking.
      * @param fab the floating action button which pulls up the dialog
      */
     public void buildDialog(FloatingActionButton fab) {
@@ -220,5 +220,4 @@ public class Medicine extends Fragment {
             @Override public void afterTextChanged(Editable editable) {}
         });
     }
-
 }

@@ -1,6 +1,5 @@
 package com.csbgroup.myphr.Medicine;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,9 +10,7 @@ import com.csbgroup.myphr.R;
 
 public class HolidayLetter extends Fragment {
 
-    public HolidayLetter() {
-        // Required empty public constructor
-    }
+    public HolidayLetter() {} // Required empty public constructor
 
     public static HolidayLetter newInstance() {
         HolidayLetter fragment = new HolidayLetter();
@@ -24,6 +21,7 @@ public class HolidayLetter extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // display the holiday letter
         View rootView = inflater.inflate(R.layout.fragment_holiday_letter, container, false);
 
         return rootView;

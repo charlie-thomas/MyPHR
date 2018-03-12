@@ -27,7 +27,7 @@
             android:layout_alignBaseline="@+id/contact_title"
             android:layout_alignBottom="@+id/contact_title"
             android:layout_toEndOf="@+id/email_title"
-            android:hint="Name"
+            android:hint="@string/cname"
             android:textColor="#777777"
             android:textSize="26dp"
             android:textStyle="bold" />
@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/email_title"
                 android:layout_marginStart="5dp"
-                android:hint="Email"
+                android:hint="@string/cemail"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:textColor="#777777" />
@@ -73,7 +73,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/phone_title"
                 android:layout_marginStart="5dp"
-                android:hint="Phone"
+                android:hint="@string/cphone"
                 android:inputType="phone"
                 android:maxLines="1"
                 android:textColor="#777777" />
@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/notes_title"
                 android:layout_marginStart="5dp"
-                android:hint="Notes"
+                android:hint="@string/cnotes"
                 android:inputType="textMultiLine"
                 android:textColor="#777777" />
 

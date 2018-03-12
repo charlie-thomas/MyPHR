@@ -37,16 +37,14 @@ import java.util.concurrent.Future;
 
 public class Appointments extends Fragment {
 
-    private FloatingActionButton fab; // the add appointment fab
+    private FloatingActionButton fab; // add appointment fab
 
     // format error checking booleans
     private boolean validTitle = false;
     private boolean validDate = false;
     private boolean validTime = false;
 
-    public Appointments() {
-        // Required empty public constructor
-    }
+    public Appointments() {} // Required empty public constructor
 
     public static Appointments newInstance() {
         Appointments fragment = new Appointments();
@@ -81,6 +79,7 @@ public class Appointments extends Fragment {
             }
         });
 
+        // display no appointments message when contacts empty
         LinearLayout noapps = rootView.findViewById(R.id.no_apps);
         noapps.setVisibility(View.INVISIBLE);
         if (listView.getAdapter().getCount() == 0) noapps.setVisibility(View.VISIBLE);
@@ -137,12 +136,11 @@ public class Appointments extends Fragment {
                     e.printStackTrace();
                 }
 
-                if (dateComp != 0) return dateComp;
+                if (dateComp != 0) {return dateComp;}
 
                 return e2.getTime().replace(":", "").compareTo(e1.getTime().replace(":", ""));
             }
         });
-
         return events;
     }
 
@@ -153,7 +151,7 @@ public class Appointments extends Fragment {
     }
 
     /**
-     * buildDialog builds the pop-up dialog for adding a new appointment
+     * buildDialog builds the pop-up dialog for adding a new appointment, with input format checking.
      * @param fab the floating action button which pulls up the dialog
      */
     public void buildDialog(FloatingActionButton fab) {
@@ -279,7 +277,7 @@ public class Appointments extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
-                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY)");} // invalid date
 
                 // disable/enable add button following format checks
                 if (validTitle && validTime && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
@@ -297,7 +295,7 @@ public class Appointments extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
-                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY)");} // invalid date
 
                 // disable/enable add button following format checks
                 if (validTitle && validTime && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
@@ -315,7 +313,7 @@ public class Appointments extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
-                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY)");} // invalid date
 
                 // disable/enable add button following format checks
                 if (validTitle && validTime && validDate) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
@@ -372,7 +370,7 @@ public class Appointments extends Fragment {
      * @param et1 is the day.
      * @param et2 is the month.
      * @param et3 is the year.
-     * @return
+     * @return whether the input is a valid date
      */
     public boolean checkFullDate(EditText et1, EditText et2, EditText et3){
 
@@ -388,7 +386,7 @@ public class Appointments extends Fragment {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 Date d = sdf.parse(date);
                 if (!date.equals(sdf.format(d))){
-                    validDate = false;
+                    validDate = false; // invalid date
                 }
             } catch (ParseException e) {e.printStackTrace();}
         }
@@ -401,6 +399,7 @@ public class Appointments extends Fragment {
      * whenever either of them is changed.
      * @param et1 is the hour.
      * @param et2 is the minutes.
+     * @return whether the input was a valid i
      */
     public boolean checkFullTime(EditText et1, EditText et2){
 

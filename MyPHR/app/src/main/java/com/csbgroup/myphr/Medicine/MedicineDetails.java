@@ -62,9 +62,7 @@ public class MedicineDetails extends Fragment {
     private Boolean validTime = true;
     private Boolean validDate = true;
 
-    public MedicineDetails() {
-        // Required empty public constructor
-    }
+    public MedicineDetails() {}// Required empty public constructor
 
     public static MedicineDetails newInstance() {
         return new MedicineDetails();
@@ -74,6 +72,7 @@ public class MedicineDetails extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // set up the view
         final View rootView = inflater.inflate(R.layout.fragment_medicine_details, container, false);
         this.rootView = rootView;
 
@@ -89,6 +88,10 @@ public class MedicineDetails extends Fragment {
         EditText datetext = rootView.findViewById(R.id.reminder_date_title);
         EditText remdate = rootView.findViewById(R.id.reminder_date);
         EditText notes = rootView.findViewById(R.id.medicine_notes);
+        RadioButton daily = rootView.findViewById(R.id.daily);
+        RadioButton otherdays = rootView.findViewById(R.id.everyotherday);
+        RadioButton general = rootView.findViewById(R.id.general);
+        RadioButton descriptive = rootView.findViewById(R.id.descriptive);
 
         // fill in the values
         name.setText(medicine.getTitle());
@@ -122,14 +125,9 @@ public class MedicineDetails extends Fragment {
         disableEditing(remdate);
         disableEditing(notes);
 
+        // set reminders switch to reflect database
         Switch reminders = rootView.findViewById(R.id.reminder_switch);
         reminders.setChecked(medicine.getReminders());
-
-        RadioButton daily = rootView.findViewById(R.id.daily);
-        RadioButton otherdays = rootView.findViewById(R.id.everyotherday);
-
-        RadioButton general = rootView.findViewById(R.id.general);
-        RadioButton descriptive = rootView.findViewById(R.id.descriptive);
 
         // check daily/otherdays radios to reflect database
         if (!thismedicine.isDaily()){
@@ -306,13 +304,13 @@ public class MedicineDetails extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit, menu);
-        editMenu = menu;
+        editMenu = menu; // toolbar w/ edit button
     }
 
     /**
      * Provides navigation/actions for menu items.
      * @param item the clicked menu item
-     * @return
+     * @return onOptionsItemSelected(item)
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -322,7 +320,7 @@ public class MedicineDetails extends Fragment {
                 bn.setSelectedItemId(R.id.medicine);
                 return true;
 
-            case R.id.details_edit: // edit button - edit medicine details
+            case R.id.details_edit: // edit button - edit medication details
                 switchMode();
                 return true;
 
@@ -332,7 +330,7 @@ public class MedicineDetails extends Fragment {
     }
 
     /**
-     * switchMode toggles between viewing and editing the medicine details.
+     * switchMode toggles between viewing and editing the medication details.
      */
     public void switchMode() {
 
@@ -430,7 +428,7 @@ public class MedicineDetails extends Fragment {
             disableEditing(remtime);
             disableEditing(remdate);
 
-            // update the medicine in the database
+            // update the medication in the database
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -555,6 +553,8 @@ public class MedicineDetails extends Fragment {
             @Override public void afterTextChanged(Editable editable) {}
         });
     }
+
+    // TODO: method headers for notifications methods
 
     public void sendNotification() {
 

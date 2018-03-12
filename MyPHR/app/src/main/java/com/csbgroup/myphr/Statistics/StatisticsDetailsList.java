@@ -36,13 +36,13 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import static android.view.View.GONE;
 
 public class StatisticsDetailsList extends Fragment {
 
-    FloatingActionButton fab; // the add measurement fab
+    FloatingActionButton fab; // add measurement fab
+
     public static ListView listview;
     public static StatValueAdapter adapter;
     public static boolean isEditMode = false;
@@ -52,15 +52,12 @@ public class StatisticsDetailsList extends Fragment {
     //This formatter is for changing the string entered in form "dd/MM/yyyy" into a Java Date type
     static final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
-
     // format checking booleans
     private boolean validMeasurement = false;
     private boolean validDate = false;
     private boolean validCentile = true;
 
-    public StatisticsDetailsList() {
-        // Required empty public constructor
-    }
+    public StatisticsDetailsList() {} // Required empty public constructor
 
     public static StatisticsDetailsList newInstance() {
         StatisticsDetailsList fragment = new StatisticsDetailsList();
@@ -80,39 +77,35 @@ public class StatisticsDetailsList extends Fragment {
         Bundle args = getArguments();
         type = args.getString("title");
 
-
         //currentstat is a the StatisticsEntity for the current statistics page (e.g weight, height etc)
         final StatisticsEntity currentstat = getStats(args.getString("title", "Statistics"));
+
         //valueslist is the list of all the entity's in currentstat. Each contains a date, value and centile.
         ArrayList<StatValueEntity> valueslist =  currentstat.getValues();
 
-        //Sorting valueslist so it's ordered in date order, oldest first.
-        //Need to do this because the graph must plot from oldest to newest.
+        // order valuesList by oldest date first so that graph plots old -> new
         Collections.sort(valueslist, new Comparator<StatValueEntity>(){
             @Override
             public int compare(StatValueEntity t1, StatValueEntity t2) {
                 try {
                     return formatter.parse(t1.getDate()).compareTo(formatter.parse(t2.getDate()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
                 }
+                catch (ParseException e) {e.printStackTrace();}
                 return 0;
             }
         });
 
-
-        /*Reversing the list now so its ordered newest to oldest
-          This is so the listview underneath prints from newest to oldest */
+        // reorder valuesList by newest date first for list view
         Collections.reverse(valueslist);
 
-        listview = (ListView) rootView.findViewById(R.id.statistics_graph_list);
+        listview = rootView.findViewById(R.id.statistics_graph_list);
         /*The listview uses a custom adapter which uses an xml to print each list item
         Format located in stat_list_adapter.xml
         Listview is formatted in StatValueAdpater.java */
         adapter = new StatValueAdapter(getActivity(),R.layout.stat_list_adapter, valueslist,type);
         listview.setAdapter(adapter);
 
-        // Show "No measurements" message if required
+        // Show "No measurements" message if measurements empty
         LinearLayout no_stats = rootView.findViewById(R.id.no_stats);
         no_stats.setVisibility(View.INVISIBLE);
         if (listview.getAdapter().getCount() == 0) no_stats.setVisibility(View.VISIBLE);
@@ -122,11 +115,13 @@ public class StatisticsDetailsList extends Fragment {
         buildDialog(fab, type, args);
 
         return rootView;
-
     }
 
-
-    //method to get the StatisticsEntity for a given measurement(e.g weight, height etc)
+    /**
+     * getStats fetches the statisticsEntity for a given measurement type from the database.
+     * @param unit is the measurement type (height/weight/BMI...)
+     * @return the requested statisticsEntity
+     */
     public StatisticsEntity getStats(final String unit) {
         // Create a callable object for database transactions
         Callable callable = new Callable() {
@@ -144,8 +139,8 @@ public class StatisticsDetailsList extends Fragment {
         StatisticsEntity statistics = null;
         try {
             statistics = result.get();
-        } catch (Exception e) {}
-
+        }
+        catch (Exception e) {}
         return statistics;
     }
 
@@ -156,50 +151,57 @@ public class StatisticsDetailsList extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.edit, menu);
+        inflater.inflate(R.menu.edit, menu); //edit button
     }
 
-
+    /**
+     * onOptionsItemSelected provides navigation/actions for menu items.
+     * @param item is the clicked menu item
+     * @return super.onOptionsItemSelected(item)
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case (R.id.details_edit):
-                if(!type.equals("Height Velocity")) {
-                    TabHost tabhost = (TabHost) getActivity().findViewById(R.id.tabHost);
+
+            case android.R.id.home: // back button - go back
+                ((MainActivity) getActivity()).switchFragment(Statistics.newInstance(), false);
+                return true;
+
+            case (R.id.details_edit): // edit button - edit measurements list
+                if (!type.equals("Height Velocity")) {
+                    TabHost tabhost = getActivity().findViewById(R.id.tabHost);
                     View thisfab = rootView.findViewById(R.id.s_fab);
-                    if (tabhost.getCurrentTab() == 0) {
+
+                    if (tabhost.getCurrentTab() == 0) { // list view
                         if (isEditMode) {
                             isEditMode = false;
                             adapter.notifyDataSetChanged();
                             thisfab.setVisibility(View.VISIBLE);
-
                         } else {
                             isEditMode = true;
                             adapter.notifyDataSetChanged();
                             thisfab.setVisibility(View.GONE);
                         }
-                    } else {
+                    } else { // graph view
                         tabhost.setCurrentTab(0);
                         isEditMode = true;
                         adapter.notifyDataSetChanged();
                         thisfab.setVisibility(View.GONE);
-
                     }
                 }
-                    break;
-                    case android.R.id.home:
-                        ((MainActivity) getActivity()).switchFragment(Statistics.newInstance(),false);
-                        return true;
-                }
-
-
-
-                return super.onOptionsItemSelected(item);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * buildDialog builds the pop-up dialog for adding a new appointment, with input format checking.
+     * @param fab the floating action button which pulls up the dialog
+     * @param type is the type of measurement being added
+     * @param args is the bundled args
+     */
     public void buildDialog(FloatingActionButton fab, final String type, final Bundle args) {
 
-        // no fab for height velocity
+        // hide fab for height velocity
         if (type.equals("Height Velocity")) {
             fab.setVisibility(GONE);
             return;
@@ -210,12 +212,12 @@ public class StatisticsDetailsList extends Fragment {
             @Override
             public void onClick(View view) {
 
-                // set up the dialog
                 View v;
                 final EditText cent;
                 final EditText diastolic;
-
                 LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
+
+                // set up the appropriate dialog view
                 if (type.equals("Height") || type.equals("Weight")) {
                     v = inflater.inflate(R.layout.add_measurement_centile, null);
                     diastolic = null;
@@ -236,6 +238,7 @@ public class StatisticsDetailsList extends Fragment {
                 final TextView title = v.findViewById((R.id.dialog_title));
                 final EditText measurement = v.findViewById(R.id.measurement);
 
+                // set the title and hint
                 if (type.equals("Body Mass Index (BMI)")) {
                     title.setText("Add a New BMI");
                     measurement.setHint("BMI");
@@ -292,7 +295,7 @@ public class StatisticsDetailsList extends Fragment {
                                         db.statisticsDao().update(heightvels);
                                     }
 
-                                    // refresh the view
+                                // refresh the view
                                 Fragment details = StatisticsSection.newInstance();
                                 Bundle bundle = new Bundle();
                                 bundle.putString("title", args.getString("title", "Measurements"));
@@ -321,23 +324,30 @@ public class StatisticsDetailsList extends Fragment {
         });
     }
 
+    /**
+     * updateHeightVelocity updates the height velocity calculations.
+     * @param orderedheight is the list of height measurements as StatValueEntities
+     * @return the heigh velocity values
+     */
     public static ArrayList<StatValueEntity> updateHeightVelocity(ArrayList<StatValueEntity> orderedheight){
+
         Collections.sort(orderedheight, new Comparator<StatValueEntity>() {
             @Override
             public int compare(StatValueEntity t1, StatValueEntity t2) {
                 try {
                     return formatter.parse(t1.getDate()).compareTo(formatter.parse(t2.getDate()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
                 }
+                catch (ParseException e) {e.printStackTrace();}
                 return 0;
             }
         });
+
         double heightchanged;
         long diff;
         double heightvelocity;
         float days = 0;
         final ArrayList<StatValueEntity> heightvels = new ArrayList<>();
+
         for(int i=1; i<orderedheight.size(); i++) {
             heightchanged = Double.parseDouble(orderedheight.get(i).getValue()) - Double.parseDouble(orderedheight.get(i-1).getValue());
             try {
@@ -354,7 +364,14 @@ public class StatisticsDetailsList extends Fragment {
         return heightvels;
     }
 
-
+    /**
+     * inputChecking checks the user input when adding a new measurement, the add button is disabled
+     * until all format conditions are met.
+     * @param v is the view for the add measurement dialog
+     * @param t is the type of measurement we're adding
+     * @param d is the diastolic value if adding blood pressure
+     * @param ad is the new measurement alertdialog
+     */
     public void inputChecking(View v, String t, EditText d, AlertDialog ad){
 
         final EditText measurement = v.findViewById(R.id.measurement);
@@ -402,7 +419,7 @@ public class StatisticsDetailsList extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
-                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY)");} // invalid date
 
                 // disable/enable add button following format checks
                 if (validMeasurement && validDate && validCentile) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
@@ -420,7 +437,7 @@ public class StatisticsDetailsList extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
-                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY)");} // invalid date
 
                 // disable/enable add button following format checks
                 if (validMeasurement && validDate && validCentile) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
@@ -438,7 +455,7 @@ public class StatisticsDetailsList extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
-                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY");} // invalid date
+                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY)");} // invalid date
 
                 // disable/enable add button following format checks
                 if (validMeasurement && validDate && validCentile) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
@@ -476,7 +493,6 @@ public class StatisticsDetailsList extends Fragment {
                 @Override public void afterTextChanged(Editable editable) {}
             });
         }
-
     }
 
     /**
@@ -505,8 +521,6 @@ public class StatisticsDetailsList extends Fragment {
                 }
             } catch (ParseException e) {e.printStackTrace();}
         }
-
         return validDate;
     }
-
 }

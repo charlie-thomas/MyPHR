@@ -17,7 +17,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="16dp"
             android:layout_toEndOf="@+id/investigation_notes"
-            android:hint="Title"
+            android:hint="@string/title"
             android:textColor="#777777"
             android:textSize="26dp"
             android:textStyle="bold" />
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/investigation_date_name"
             android:textColor="#777777"
-            android:hint="DD/MM/YYYY"
+            android:hint="@string/ddmmyyyy"
             android:inputType="text"
             android:layout_marginStart="5dp" />
 
