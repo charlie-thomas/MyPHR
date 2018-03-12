@@ -24,7 +24,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     @SuppressLint("UnsafeProtectedBroadcastReceiver")
     @Override
     public void onReceive(Context context, Intent intent) {
-        System.out.println("ACTIVATED");
 
         //if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
         // Re-set any alarms after reboot here
@@ -43,18 +42,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         // Find out if medicine or appointment reminder
         String notificationType = intent.getStringExtra("type");
 
-        System.out.println(notificationType);
-
         if (notificationType.equals("medicine")) {
             // Get name of medicine from medicine details section
             String medicine = intent.getStringExtra("medicine");
             int meddescriptive = intent.getIntExtra("descriptive", 0);
-
-            if (meddescriptive == 0) {
-                System.out.println("General");
-            } else {
-                System.out.println("Descriptive");
-            }
 
             if (meddescriptive == 0) {
                 bigText.bigText("You have a new reminder.");
@@ -74,12 +65,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             String date = intent.getStringExtra("date");
             String time = intent.getStringExtra("time");
             int apptdescriptive = intent.getIntExtra("descriptive", 0);
-
-            if (apptdescriptive == 0) {
-                System.out.println("General");
-            } else {
-                System.out.println("Descriptive");
-            }
 
             if (apptdescriptive == 0) {
                 bigText.bigText("You have a new reminder.");

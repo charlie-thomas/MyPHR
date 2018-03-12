@@ -591,34 +591,17 @@ public class MedicineDetails extends Fragment {
 
             // Set notification to launch at medicine reminder time
             Calendar calendar = Calendar.getInstance();
-            Calendar calNow = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(yearToSet, monthToSet, dayToSet);
-            calendar.set(Calendar.HOUR_OF_DAY, hourToSet);
-            calendar.set(Calendar.MINUTE, minuteToSet);
-            calendar.set(Calendar.SECOND, 0);
+            calendar.set(yearToSet, monthToSet, dayToSet, hourToSet, minuteToSet, 00);
+            // Subtract one from month to account for Java calendar
+            calendar.add(Calendar.MONTH, -1);
 
             if (thismedicine.isDaily()) {
-
-                if(calendar.compareTo(calNow) <= 0){
-                    // Today Set time passed, count to tomorrow
-                    calendar.add(Calendar.DATE, 1);
-                }
-
                 // If medicine is daily, repeat notification daily
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 24, notifySender);
             } else {
-
-                if(calendar.compareTo(calNow) <= 0){
-                    // Today Set time passed, count to tomorrow
-                    calendar.add(Calendar.DATE, 2);
-                }
-
                 // Else repeat every other day
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 48, notifySender);
             }
-        } else {
-            System.out.println("Ignored notification because reminders are not set");
         }
     }
 
