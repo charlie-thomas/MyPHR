@@ -12,7 +12,16 @@ import android.widget.Toast;
 import com.andrognito.pinlockview.IndicatorDots;
 import com.andrognito.pinlockview.PinLockListener;
 import com.andrognito.pinlockview.PinLockView;
+import com.csbgroup.myphr.MainActivity;
 import com.csbgroup.myphr.R;
+import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.ContactsDao;
+import com.csbgroup.myphr.database.ContactsEntity;
+import com.csbgroup.myphr.database.StatValueEntity;
+import com.csbgroup.myphr.database.StatisticsDao;
+import com.csbgroup.myphr.database.StatisticsEntity;
+
+import java.util.ArrayList;
 
 import static com.csbgroup.myphr.R.layout.*;
 
@@ -27,6 +36,16 @@ public class StartupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(activity_startup);
 
+        // Populate the database with the required contacts and statistics on start up
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AppDatabase db = AppDatabase.getAppDatabase(StartupActivity.this);
+                populateContacts(db.contactsDao());
+                populateStats(db.statisticsDao());
+            }
+        }).start();
+
         mPinLockView_start = findViewById(R.id.initial_pin);
         mPinLockView_start.setPinLockListener(mPinLockListener);
         mPinLockView_start = findViewById(R.id.initial_pin);
@@ -36,7 +55,6 @@ public class StartupActivity extends AppCompatActivity {
         mPinLockView_start.setPinLength(4);
         mPinLockView_start.setTextColor(ContextCompat.getColor(this, R.color.white));
         mIndicatorDots_start.setIndicatorType(IndicatorDots.IndicatorType.FIXED);
-
     }
 
 
@@ -69,4 +87,38 @@ public class StartupActivity extends AppCompatActivity {
             Log.d(TAG, "Pin changed, new length " + pinLength + " with intermediate pin " + intermediatePin);
         }
     };
+
+
+    /* Helper function to populate contacts with staff */
+    private void populateContacts(ContactsDao dao) {
+        // Key medical staff at Royal Childrens Hospital, Glasgow are pre-loaded
+        dao.insertAll(
+                new ContactsEntity(
+                        "Dr Avril Mason",
+                        "avrilmason@nhs.net",
+                        "01412010000",
+                        "Phone will go through to mobile.\n\nGround Floor, Zone 2, Office Block,\nRoyal Hospital for Children,\n" +
+                                "Queen Elizabeth University Hospital,\nGovan Road,\nGlasgow G51 4TF"),
+
+                new ContactsEntity(
+                        "Ms Kerri Marshall",
+                        "",
+                        "01414516548(ext), 86548(int)",
+                        "Endocrine/Metabolic Secretary"),
+
+                new ContactsEntity(
+                        "Ms Teresa McBride",
+                        "teresa.mcbride@ggc.scot.nhs.uk",
+                        "07904881485",
+                        "Paediatric Endocrine Nurse"));
+    }
+
+    /* Helper function to populate statistics section */
+    private void populateStats(StatisticsDao dao) {
+        String[] stats = {"Blood Pressure", "Body Mass Index (BMI)", "Head Circumference", "Height",
+                "Height Velocity", "Weight"};
+
+        for (String s : stats)
+            dao.insertAll(new StatisticsEntity(s, new ArrayList<StatValueEntity>()));
+    }
 }

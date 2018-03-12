@@ -17,6 +17,9 @@ public interface SickDaysDao {
     @Query("SELECT * FROM sickdaysentity WHERE date LIKE :date")
     SickDaysEntity getSickDaysByDate(String date);
 
+    @Query("SELECT * FROM sickdaysentity WHERE uid LIKE :uid")
+    SickDaysEntity getSickDay(int uid);
+
     @Insert
     long insert(SickDaysEntity sickDaysEntity);
 
