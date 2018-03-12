@@ -77,7 +77,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "PIN Incorrect", Toast.LENGTH_SHORT).show();
                 mPinLockView.resetPinLockView();
             }
-            Log.d(TAG, "Pin complete: " + pin);
         }
 
         @Override
@@ -87,7 +86,6 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onPinChange(int pinLength, String intermediatePin) {
-            Log.d(TAG, "Pin changed, new length " + pinLength + " with intermediate pin " + intermediatePin);
         }
     };
 

@@ -1,5 +1,6 @@
 package com.csbgroup.myphr.Medicine;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.support.v4.app.Fragment;
 import android.content.DialogInterface;
@@ -39,8 +40,7 @@ public class Medicine extends Fragment {
     public Medicine() {} // Required empty public constructor
 
     public static Medicine newInstance() {
-        Medicine fragment = new Medicine();
-        return fragment;
+        return new Medicine();
     }
 
     @Override
@@ -86,7 +86,7 @@ public class Medicine extends Fragment {
         if (listView.getAdapter().getCount() == 0) nomeds.setVisibility(View.VISIBLE);
 
         // fab action for adding medicine
-        fab = rootView.findViewById(R.id.med_fab);
+        FloatingActionButton fab = rootView.findViewById(R.id.med_fab);
         buildDialog(fab);
 
         return rootView;
@@ -114,7 +114,9 @@ public class Medicine extends Fragment {
         List<MedicineEntity> medicines = null;
         try {
             medicines = result.get();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return medicines;
     }
@@ -136,7 +138,7 @@ public class Medicine extends Fragment {
 
                 // set up the dialog
                 LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-                View v = inflater.inflate(R.layout.add_medicine_dialog, null);
+                @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.add_medicine_dialog, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setView(v);
 
@@ -156,7 +158,7 @@ public class Medicine extends Fragment {
                             @Override
                             public void run() {
                                 AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                MedicineEntity medicine = new MedicineEntity(name.getText().toString(),
+                                @SuppressLint("SimpleDateFormat") MedicineEntity medicine = new MedicineEntity(name.getText().toString(),
                                         description.getText().toString(), dose.getText().toString(),
                                         notes.getText().toString(), false, 0,true, false,
                                         new SimpleDateFormat("dd/MM/yyyy").format(new Date()), //today's date
