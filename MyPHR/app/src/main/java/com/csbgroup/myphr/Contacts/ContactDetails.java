@@ -35,17 +35,15 @@ public class ContactDetails extends Fragment {
 
     private ContactsEntity thiscontact; // the contact we're viewing now
 
+    private String mode = "view"; // load in view mode
     private Menu editMenu;
-    private String mode = "view";
     private View rootView;
 
     // key listeners and backgrounds for toggling field editability
     private KeyListener titleKL, emailKL, phoneKL, notesKL;
     private Drawable titleBG, emailBG, phoneBG, notesBG;
 
-    public ContactDetails() {
-        // Required empty public constructor
-    }
+    public ContactDetails() {} // Required empty public constructor
 
     public static ContactDetails newInstance() {
         ContactDetails fragment = new ContactDetails();
@@ -59,6 +57,7 @@ public class ContactDetails extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_contact_details, container, false);
         this.rootView = rootView;
 
+        // receive the details from the main fragment
         Bundle args = getArguments();
         ContactsEntity contact = getContact(Integer.valueOf(args.getString("uid")));
         thiscontact = contact;
@@ -98,7 +97,7 @@ public class ContactDetails extends Fragment {
     }
 
     /**
-     * Fetches a single contact entity from the database, found by name
+     * getContact fetches a single contact entity from the database.
      * @param uid is the primary key of the contact to be retrieved
      * @return the contact entity
      */
@@ -118,8 +117,7 @@ public class ContactDetails extends Fragment {
         ContactsEntity contact = null;
         try {
             contact = result.get();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
 
         return contact;
     }
@@ -136,9 +134,9 @@ public class ContactDetails extends Fragment {
     }
 
     /**
-     * Provides navigation/actions for menu items.
+     * onOptionsItemSelected provides navigation/actions for menu items.
      * @param item the clicked menu item
-     * @return
+     * @return super.onOptionsItemSelected(item)
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -269,7 +267,7 @@ public class ContactDetails extends Fragment {
     }
 
     /**
-     * disableEditing sets background and keylistener to null to stop user editing
+     * disableEditing sets an editText's background and keylistener to null to stop user editing.
      * @param field is the editText field to be disabled
      */
     public void disableEditing(EditText field){
@@ -298,10 +296,8 @@ public class ContactDetails extends Fragment {
                     editMenu.getItem(0).setEnabled(true); // enable save button
                 }
             }
-            // not needed for our purposes
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override public void afterTextChanged(Editable editable) {}
         });
     }
-
 }

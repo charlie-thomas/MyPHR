@@ -18,7 +18,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="16dp"
             android:layout_toEndOf="@+id/notes_title"
-            android:hint="Title"
+            android:hint="@string/title"
             android:textColor="#777777"
             android:textSize="26dp"
             android:textStyle="bold" />
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/location_title"
             android:layout_marginStart="5dp"
-            android:hint="Location"
+            android:hint="@string/location"
             android:inputType="textMultiLine"
             android:textColor="#777777" />
 
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/date_title"
             android:layout_marginStart="5dp"
-            android:hint="DD/MM/YYYY"
+            android:hint="@string/ddmmyyyy"
             android:inputType="text"
             android:textColor="#777777" />
 
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/time_title"
             android:layout_below="@+id/time_title"
-            android:hint="HH:MM"
+            android:hint="@string/hhmm"
             android:inputType="text"
             android:textColor="#777777" />
 
@@ -116,7 +116,7 @@
                 android:id="@+id/general"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="General"
+                android:text="@string/general"
                 android:textColor="#777777"
                 android:textSize="17dp"
                 android:visibility="gone"/>
@@ -126,7 +126,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="28dp"
-                android:text="Descriptive"
+                android:text="@string/descriptive"
                 android:textColor="#777777"
                 android:textSize="17dp"
                 android:visibility="gone"/>
@@ -161,7 +161,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/notes_title"
             android:layout_marginStart="5dp"
-            android:hint="Notes"
+            android:hint="@string/notes"
             android:inputType="textMultiLine"
             android:textColor="#777777" />
 
@@ -192,7 +192,7 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/radios"
             android:layout_below="@+id/radios"
-            android:text="One week prior"
+            android:text="@string/week"
             android:textColor="#777777"
             android:textSize="17dp"
             android:visibility="gone"/>
@@ -202,7 +202,7 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/radios"
             android:layout_below="@+id/checkBox1"
-            android:text="One day prior"
+            android:text="@string/day"
             android:textColor="#777777"
             android:textSize="17dp"
             android:visibility="gone"/>
@@ -212,7 +212,7 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/radios"
             android:layout_below="@+id/checkBox2"
-            android:text="The morning of"
+            android:text="@string/morning"
             android:textColor="#777777"
             android:textSize="17dp"
             android:visibility="gone"/>

@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.csbgroup.myphr.MainActivity;
 import com.csbgroup.myphr.R;
@@ -33,9 +32,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-/**
- * Created by JBizzle on 04/12/2017.
- */
 
 public class StatisticsDetails extends Fragment {
 
@@ -45,9 +41,7 @@ public class StatisticsDetails extends Fragment {
     String title;
     GraphView graph;
 
-    public StatisticsDetails() {
-        // Required empty public constructor
-    }
+    public StatisticsDetails() {} // Required empty public constructor
 
     public static StatisticsDetails newInstance() {
         StatisticsDetails fragment = new StatisticsDetails();
@@ -64,7 +58,6 @@ public class StatisticsDetails extends Fragment {
         setHasOptionsMenu(true);
 
         Bundle args = getArguments();
-
         title = args.getString("title","Measurements");
 
         //currentstat is a the StatisticsEntity for the current statistics page (e.g weight, height etc)
@@ -73,16 +66,14 @@ public class StatisticsDetails extends Fragment {
         //valueslist is the list of all the entity's in currentstat. Each contains a date, value and centile.
         valueslist = currentstat.getValues();
 
-        //Sorting valueslist so it's ordered in date order, oldest first.
-        //Need to do this because the graph must plot from oldest to newest.
+        // order valuesList by oldest date first so that graph plots old -> new
         Collections.sort(valueslist, new Comparator<StatValueEntity>() {
             @Override
             public int compare(StatValueEntity t1, StatValueEntity t2) {
                 try {
                     return formatter.parse(t1.getDate()).compareTo(formatter.parse(t2.getDate()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
                 }
+                catch (ParseException e) {e.printStackTrace();}
                 return 0;
             }
         });
@@ -99,20 +90,22 @@ public class StatisticsDetails extends Fragment {
             graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         }
 
-        // Show "No measurements" message if required
+        // Show "No measurements" message if measurements list empty
         LinearLayout no_stats = rootView.findViewById(R.id.no_stats);
         no_stats.setVisibility(View.INVISIBLE);
         if (valueslist.size() == 0) {
-            graph.setVisibility(View.INVISIBLE);
+            graph.setVisibility(View.GONE);
             no_stats.setVisibility(View.VISIBLE);
         }
 
         return rootView;
-
     }
 
-
-    //method to get the StatisticsEntity for a given measurement(e.g weight, height etc)
+    /**
+     * getStats fetches the statisticsEntity for a given measurement type from the database.
+     * @param unit is the measurement type (height/weight/BMI...)
+     * @return the requested statisticsEntity
+     */
     public StatisticsEntity getStats(final String unit) {
         // Create a callable object for database transactions
         Callable callable = new Callable() {
@@ -130,9 +123,8 @@ public class StatisticsDetails extends Fragment {
         StatisticsEntity statistics = null;
         try {
             statistics = result.get();
-        } catch (Exception e) {
         }
-
+        catch (Exception e) {}
         return statistics;
     }
 
@@ -142,22 +134,30 @@ public class StatisticsDetails extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    }
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {}
 
-    /* Navigation from details fragment back to Statistics */
+    /**
+     * onOptionsItemSelected provides navigation/actions for menu items.
+     * @param item is the clicked menu item
+     * @return super.onOptionsItemSelected(item)
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
 
-
+    /**
+     * createDataPoints plots the data points onto the measurements graph.
+     * @return the array list of linegraphseries datapoints
+     */
     public ArrayList<LineGraphSeries<DataPoint>> createDataPoints() {
-        ArrayList<LineGraphSeries<DataPoint>> seriesList = new ArrayList<LineGraphSeries<DataPoint>>();
-        series = new LineGraphSeries<DataPoint>();
-        LineGraphSeries<DataPoint> series2 = new LineGraphSeries<DataPoint>();
+
+        ArrayList<LineGraphSeries<DataPoint>> seriesList = new ArrayList();
+        series = new LineGraphSeries();
+        LineGraphSeries<DataPoint> series2 = new LineGraphSeries();
         Date d1;
-        //Iterating through the valueslist we format each string date intot a java Date and add it as a datapoint
+
+        //Iterating through the valueslist, we format each string date into a java Date and add it as a datapoint
         for (int i = 0; i < valueslist.size(); i++) {
             StatValueEntity sve = valueslist.get(i);
             try {
@@ -181,6 +181,7 @@ public class StatisticsDetails extends Fragment {
         series2.setColor(Color.BLUE);
         series.setThickness(7);
         series2.setThickness(7);
+
         if(title.equals("Blood Pressure")){
             series.setTitle("Systolic");
             series2.setTitle("Diastolic");
@@ -192,10 +193,16 @@ public class StatisticsDetails extends Fragment {
         return seriesList;
     }
 
+    /**
+     * createGraph displays the graph of measurements.
+     * @param series is the datapoint series for the graph
+     * @return the graph
+     */
     private GraphView createGraph(LineGraphSeries<DataPoint> series) {
 
-        //All of these "graph." make adjustments to the graph so it displays correctly
         graph.addSeries(series); //adds the datapoint series to the graph
+
+        // graph display adjustments
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
         graph.getGridLabelRenderer().setNumHorizontalLabels(4);
         graph.getGridLabelRenderer().setTextSize(25);
@@ -210,9 +217,12 @@ public class StatisticsDetails extends Fragment {
         checkGraphMin();
 
         return graph;
-
     }
 
+    /**
+     * checkGraphMin checks the number of data points on the graph and allows scrolling of the graph
+     * view after 4.
+     */
     private void checkGraphMin(){
 
         //this if statement allows for the graph to keep four values at a time and begin scrolling after 4 have been added.
@@ -225,8 +235,7 @@ public class StatisticsDetails extends Fragment {
             }
         } else try {
             if(valueslist.size()>0) graph.getViewport().setMinX(formatter.parse(valueslist.get(0).getDate()).getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
+        catch (ParseException e) {e.printStackTrace();}
     }
 }
