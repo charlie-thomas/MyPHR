@@ -7,7 +7,10 @@ import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 import java.util.Collection;
 import java.util.HashSet;
 
-/* Class which allows event dots to be shown under certain days on the CalendarMonth view */
+/**
+ * the EventDecorator class allows event dots to be shown under certain days on the
+ * calendarMonth view
+ */
 public class EventDecorator implements DayViewDecorator {
 
     private int color;
