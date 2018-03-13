@@ -6,13 +6,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.andrognito.pinlockview.IndicatorDots;
 import com.andrognito.pinlockview.PinLockListener;
 import com.andrognito.pinlockview.PinLockView;
-import com.csbgroup.myphr.MainActivity;
 import com.csbgroup.myphr.R;
 import com.csbgroup.myphr.database.AppDatabase;
 import com.csbgroup.myphr.database.ContactsDao;
@@ -26,7 +24,6 @@ import java.util.ArrayList;
 import static com.csbgroup.myphr.R.layout.*;
 
 public class StartupActivity extends AppCompatActivity {
-    public static final String TAG = "PinLockView";
     PinLockView mPinLockView_start;
     IndicatorDots mIndicatorDots_start;
     public static final String PREFS = "pin";
@@ -79,12 +76,10 @@ public class StartupActivity extends AppCompatActivity {
 
         @Override
         public void onEmpty() {
-            Log.d(TAG, "PIN empty");
         }
 
         @Override
         public void onPinChange(int pinLength, String intermediatePin) {
-            Log.d(TAG, "Pin changed, new length " + pinLength + " with intermediate pin " + intermediatePin);
         }
     };
 
