@@ -78,7 +78,7 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
         final TextView tvCentile = (TextView) convertView.findViewById(R.id.textView3);
         final ImageButton deleteBtn = (ImageButton)convertView.findViewById(R.id.delete_btn);
 
-        tvDate.setText("Date: "+date);
+        tvDate.setText(date);
         if(!mType.equals("Body Mass Index (BMI)")) {
             String ending;
             switch(mType){
@@ -95,34 +95,34 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
                     ending = "kg";
                     break;
                 case "Height Velocity":
-                    ending = "cm per year";
+                    ending = "cm/year";
                     break;
                 default:
                     ending = "";
                     break;
             }
-            tvValue.setText(mType + ": " + value + ending);
+            tvValue.setText(value + ending);
         } else{
-            tvValue.setText("BMI: "+value);
+            tvValue.setText(value);
         }
 
         //if the centile doesn't exist then we remove the textview and double the height of the value's textview
         
         if(centile==null || centile=="" || (!mType.equals("Weight") && !(mType.equals("Height")))){
-            tvCentile.setVisibility(GONE);
+            tvCentile.setText("");
         } else {
             switch (centile.substring(centile.length() - 1, centile.length())) {
                 case "1":
-                    tvCentile.setText("Centile: " + centile + "st");
+                    tvCentile.setText(centile + "st" + " centile");
                     break;
                 case "2":
-                    tvCentile.setText("Centile: " + centile + "nd");
+                    tvCentile.setText(centile + "nd" +" centile");
                     break;
                 case "3":
-                    tvCentile.setText("Centile: " + centile + "rd");
+                    tvCentile.setText(centile + "rd"+ " centile");
                     break;
                 default:
-                    tvCentile.setText("Centile: " + centile + "th");
+                    tvCentile.setText(centile + "th" + " centile");
                     break;
             }
         }
