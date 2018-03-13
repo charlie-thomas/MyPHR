@@ -1,6 +1,5 @@
 package com.csbgroup.myphr.Calendar;
 
-
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -45,9 +44,7 @@ public class CalendarDay extends Fragment {
     private String dateString;
     private Snackbar sb;
 
-    public CalendarDay() {
-        // Required empty public constructor
-    }
+    public CalendarDay() {} // Required empty public constructor
 
     @NonNull
     public static CalendarDay newInstance() {
@@ -149,15 +146,22 @@ public class CalendarDay extends Fragment {
         return rootView;
     }
 
-    /* Remove the snackbar sick day message once the fragment is switched */
+    /**
+     * onStop removes the snackbar sick day message
+     */
     @Override
     public void onStop() {
         if (sb != null) sb.dismiss();
         super.onStop();
     }
 
-    /* Helper function which aids the switchDate methods, and adds a given number of days to the
-     * current date specified in dateString */
+    /**
+     * changeDate is a helper function which aids the switchDate methods, and adds a given number
+     * of days to the current date specified in dateString
+     * @param value is the given number of days
+     * @return is the new date after calculation
+     * @throws ParseException
+     */
     public String changeDate(int value) throws ParseException {
 
         try {
@@ -174,7 +178,10 @@ public class CalendarDay extends Fragment {
         }
     }
 
-    /* Remove the snackbar sick day message once the fragment is switched */
+    /**
+     * setUseVisibleHint sets whether the sickday snackbar should display on the day view
+     * @param visible is whether the snackbar should be visible
+     */
     @Override
     public void setUserVisibleHint(boolean visible)
     {
@@ -183,8 +190,11 @@ public class CalendarDay extends Fragment {
             sb.dismiss();
         }
     }
-
-    /* Helper function which switches which date the user is looking at to the supplied date */
+    /**
+     * switchDate is a helper function which switches which date the user is looking at to the
+     * supplied date
+     * @param newDate is the date to switch to
+     */
     public void switchDate(String newDate) {
         Fragment newDayFragment = CalendarDay.newInstance();
 
@@ -195,7 +205,12 @@ public class CalendarDay extends Fragment {
         ((MainActivity) getActivity()).switchFragment(newDayFragment, true);
     }
 
-    /* Method which retrieves all medicine and appointments that should be shown on the current view */
+    /**
+     * getEvents retrieves all medications and appointments that should be shown in the current view
+     * @param date is the date being viewed
+     * @return the list of events for that day
+     * @throws ParseException
+     */
     public List<CalendarEvent> getEvents(final String date) throws ParseException {
 
         // Create a list of CalendarEvent objects to hold all the events
@@ -245,7 +260,13 @@ public class CalendarDay extends Fragment {
         return allEvents;
     }
 
-    /* Helper function to calculate whether the start date and follow up date are correctly spaced */
+    /**
+     * isOtherDay is a helper function to calculate whether the start date and follow up date are correctly spaced
+     * @param d1 is the first date
+     * @param d2 is the second date
+     * @return whether the dates are spaced correctly
+     * @throws ParseException
+     */
     public static boolean isOtherDay(String d1, String d2) throws ParseException {
         DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
         long diff = f.parse(d2).getTime() - f.parse(d1).getTime();
@@ -253,7 +274,13 @@ public class CalendarDay extends Fragment {
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) % 2 == 0;
     }
 
-    /* Method to retrieve whether the supplied date is or is not marked as a sick day */
+    /**
+     * isSickDay retrieves whether the specified date is or is not marked as a sick day
+     * @param date is the date in question
+     * @return whether the day is a sick day
+     * @throws ExecutionException
+     * @throws InterruptedException
+     */
     public boolean isSickDay(final String date) throws ExecutionException, InterruptedException {
 
         // Create a callable object to get sick day from database
