@@ -20,8 +20,6 @@ import static com.csbgroup.myphr.R.color.colorAccent;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-    public static String NOTIFICATION_ID = "notification-id";
-
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -88,8 +86,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             mBuilder.setPriority(Notification.PRIORITY_MAX);
             mBuilder.setStyle(bigText);
 
-            int id = intent.getIntExtra(NOTIFICATION_ID, 0);
-
             NotificationManager mNotificationManager =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -97,7 +93,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel channel = new NotificationChannel("notify_001",
                         "Notifications",
-                        NotificationManager.IMPORTANCE_DEFAULT);
+                        NotificationManager.IMPORTANCE_HIGH);
                 channel.setShowBadge(false);
                 if (mNotificationManager != null) {
                     mNotificationManager.createNotificationChannel(channel);
