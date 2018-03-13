@@ -48,7 +48,8 @@ public class Medicine extends Fragment {
 
     private FloatingActionButton fab; // add medicine fab
 
-    public Medicine() {} // Required empty public constructor
+    public Medicine() {
+    } // Required empty public constructor
 
     public static Medicine newInstance() {
         return new Medicine();
@@ -107,6 +108,7 @@ public class Medicine extends Fragment {
 
     /**
      * getMedicines fetches the list of medicines from the database
+     *
      * @return the list of medicine entities
      */
     private List<MedicineEntity> getMedicines() {
@@ -141,6 +143,7 @@ public class Medicine extends Fragment {
 
     /**
      * buildDialog builds the pop-up dialog for adding a new medicine, with input format checking.
+     *
      * @param fab the floating action button which pulls up the dialog
      */
     public void buildDialog(FloatingActionButton fab) {
@@ -173,7 +176,7 @@ public class Medicine extends Fragment {
                                 AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                 @SuppressLint("SimpleDateFormat") MedicineEntity medicine = new MedicineEntity(name.getText().toString(),
                                         description.getText().toString(), dose.getText().toString(),
-                                        notes.getText().toString(), false, 0,true, false,
+                                        notes.getText().toString(), false, 0, true, false,
                                         new SimpleDateFormat("dd/MM/yyyy").format(new Date()), //today's date
                                         "00:00");
                                 long uid = db.medicineDao().insert(medicine);
@@ -192,7 +195,8 @@ public class Medicine extends Fragment {
                 // cancel the add
                 builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface arg0, int arg1) {}
+                    public void onClick(DialogInterface arg0, int arg1) {
+                    }
                 });
 
                 final AlertDialog dialog = builder.create();
@@ -210,10 +214,11 @@ public class Medicine extends Fragment {
     /**
      * inputChecking checks the user input when adding a new medication, the add button is disabled
      * until all format conditions are met.
+     *
      * @param et is the medication name, which must not be empty.
-     * @param d is the new medication alertdialog.
+     * @param d  is the new medication alertdialog.
      */
-    public void inputChecking(EditText et, AlertDialog d){
+    public void inputChecking(EditText et, AlertDialog d) {
 
         final EditText name = et;
         final AlertDialog dialog = d;
@@ -229,8 +234,14 @@ public class Medicine extends Fragment {
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                 }
             }
-            @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-            @Override public void afterTextChanged(Editable editable) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
         });
     }
 
@@ -239,7 +250,7 @@ public class Medicine extends Fragment {
      * in send/cancel notification functions, which are static
      */
     public static Context getAppContext() {
-        return (Context)mContext;
+        return (Context) mContext;
     }
 
     /**
@@ -258,13 +269,13 @@ public class Medicine extends Fragment {
         if (medicine.getReminders()) {
 
             // Time variables
-            int hourToSet = Integer.parseInt(remtime.substring(0,2));
-            int minuteToSet = Integer.parseInt(remtime.substring(3,5));
+            int hourToSet = Integer.parseInt(remtime.substring(0, 2));
+            int minuteToSet = Integer.parseInt(remtime.substring(3, 5));
 
             // Date variables
-            int yearToSet = Integer.parseInt(remdate.substring(6,10));
-            int monthToSet = Integer.parseInt(remdate.substring(3,5));
-            int dayToSet = Integer.parseInt(remdate.substring(0,2));
+            int yearToSet = Integer.parseInt(remdate.substring(6, 10));
+            int monthToSet = Integer.parseInt(remdate.substring(3, 5));
+            int dayToSet = Integer.parseInt(remdate.substring(0, 2));
 
             AlarmManager alarmManager = (AlarmManager) getAppContext().getSystemService(Context.ALARM_SERVICE);
 
@@ -282,22 +293,19 @@ public class Medicine extends Fragment {
             // Subtract one from month to account for Java calendar
             calendar.add(Calendar.MONTH, -1);
 
-
-
             if (medicine.isDaily()) {
                 // If date (not time) is in the past
                 if (TimeUnit.MILLISECONDS.toDays(Math.abs(timeNow.getTimeInMillis() - calendar.getTimeInMillis())) < 0) {
                     // Sets date to today
                     calendar = Calendar.getInstance();
-
                 } else {
                     // If time is in the past
                     if (calendar.compareTo(timeNow) != 1) {
                         calendar.add(Calendar.DAY_OF_YEAR, 1);
                     }
                 }
-                // Else repeat every other day
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY*1, notifySender);
+                // Repeat every day
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifySender);
             } else {
                 // If date (not time) is in the past
                 if (TimeUnit.MILLISECONDS.toDays(Math.abs(timeNow.getTimeInMillis() - calendar.getTimeInMillis())) < 0) {
@@ -317,7 +325,7 @@ public class Medicine extends Fragment {
                     }
                 }
                 // Else repeat every other day
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY*2, notifySender);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 2, notifySender);
             }
         }
     }
@@ -330,13 +338,13 @@ public class Medicine extends Fragment {
     public static void cancelNotification(MedicineEntity medicine) {
         Intent intent = new Intent(getAppContext(), AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getAppContext(), medicine.getUid(), intent, 0);
-        AlarmManager alarmManager = (AlarmManager)getAppContext().getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) getAppContext().getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(pendingIntent);
     }
 
     public static void resetNotifications() {
 
-        final Activity activity = (Activity)mContext;
+        final Activity activity = (Activity) mContext;
 
         // Create a callable object for database transactions
         Callable callable = new Callable() {
