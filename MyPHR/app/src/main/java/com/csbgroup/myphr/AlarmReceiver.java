@@ -15,6 +15,7 @@ import android.support.v4.app.NotificationCompat;
 import com.csbgroup.myphr.Appointments.Appointments;
 import com.csbgroup.myphr.Login.LoginActivity;
 import com.csbgroup.myphr.Medicine.Medicine;
+import com.csbgroup.myphr.database.MedicineEntity;
 
 import static com.csbgroup.myphr.R.color.colorAccent;
 
@@ -99,6 +100,9 @@ public class AlarmReceiver extends BroadcastReceiver {
                     mNotificationManager.createNotificationChannel(channel);
                 }
             }
+
+            int id = intent.getIntExtra("id", 0);
+            System.out.println(id);
 
             // Starts notification
             if (mNotificationManager != null) {

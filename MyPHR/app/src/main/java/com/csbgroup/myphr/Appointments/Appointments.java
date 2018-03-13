@@ -487,6 +487,8 @@ public class Appointments extends Fragment {
             calendar.set(yearToSet, monthToSet, dayToSet, hourToSet, minuteToSet, 0);
             // Subtract one from month to account for Java calendar
             calendar.add(Calendar.MONTH, -1);
+            // Add one to minute to allow for battery optimisations
+            calendar.add(Calendar.MINUTE, +1);
 
             // Clone calendar so each reminder can adjust it
             Calendar weekCalendar = (Calendar) calendar.clone();
