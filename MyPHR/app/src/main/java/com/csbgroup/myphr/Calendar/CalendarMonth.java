@@ -45,9 +45,7 @@ public class CalendarMonth extends Fragment {
 
     private CalendarEvent upcomingAppointment;
 
-    public CalendarMonth() {
-        // Required empty public constructor
-    }
+    public CalendarMonth() {} // Required empty public constructor
 
     @NonNull
     public static CalendarMonth newInstance() {
@@ -203,7 +201,13 @@ public class CalendarMonth extends Fragment {
         return rootView;
     }
 
-    /* Helper function to retrieve the next upcoming appointment from a list of appointments */
+    /**
+     * getUpcomingAppointment is a helper function to retrieve the next upcoming appointment from
+     * a list of appointments
+     * @param appointments is the list of appointments
+     * @return the next upcoming appointment
+     * @throws ParseException
+     */
     public CalendarEvent getUpcomingAppointment(List<CalendarEvent> appointments) throws ParseException {
 
         // Create a placeholder in case there are no upcoming appointments
@@ -242,6 +246,11 @@ public class CalendarMonth extends Fragment {
         return placeholder;
     }
 
+    /**
+     * getTodaysMedicine fetches the list of medications to be taken today from the database
+     * @return the calendarevent list of medications
+     * @throws ParseException
+     */
     public List<CalendarEvent> getTodaysMedicine() throws ParseException {
 
         List<CalendarEvent> todaysMeds = new ArrayList<>();
@@ -284,6 +293,12 @@ public class CalendarMonth extends Fragment {
         return todaysMeds;
     }
 
+    /**
+     * getAllEvents fetches the list of appointments, investigations and sick day for today where
+     * present
+     * @return the list of calendar events for today
+     * @throws ParseException
+     */
     public List<CalendarEvent> getAllEvents() throws ParseException {
 
         List<CalendarEvent> allEvents = new ArrayList<>();

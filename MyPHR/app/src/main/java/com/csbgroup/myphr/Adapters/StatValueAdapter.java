@@ -3,12 +3,9 @@ package com.csbgroup.myphr.Adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,26 +29,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import static com.csbgroup.myphr.Statistics.StatisticsDetailsList.updateHeightVelocity;
 
-
 import static android.view.View.GONE;
-
-/**
- * Created by JBizzle on 22/01/2018.
- */
 
 public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
     private Context mContext;
     int mResource;
     String mType;
     ArrayList<StatValueEntity> array;
-
-    /**
-     * @param context
-     * @param resource
-     * @param objects
-     * @param type
-     */
-
 
     public StatValueAdapter(Context context, int resource, ArrayList<StatValueEntity> objects, String type) {
         super(context,resource,objects);
@@ -68,15 +52,13 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
         String value = getItem(position).getValue();
         final String centile = getItem(position).getCentile();
 
-        StatValueEntity sve = new StatValueEntity(date,value,centile);
-
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource,parent,false);
 
-        final TextView tvDate = (TextView) convertView.findViewById(R.id.textView1);
-        final TextView tvValue = (TextView) convertView.findViewById(R.id.textView2);
-        final TextView tvCentile = (TextView) convertView.findViewById(R.id.textView3);
-        final ImageButton deleteBtn = (ImageButton)convertView.findViewById(R.id.delete_btn);
+        final TextView tvDate = convertView.findViewById(R.id.textView1);
+        final TextView tvValue = convertView.findViewById(R.id.textView2);
+        final TextView tvCentile = convertView.findViewById(R.id.textView3);
+        final ImageButton deleteBtn = convertView.findViewById(R.id.delete_btn);
 
         tvDate.setText(date);
         if(!mType.equals("Body Mass Index (BMI)")) {
@@ -107,7 +89,6 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
         }
 
         //if the centile doesn't exist then we remove the textview and double the height of the value's textview
-        
         if(centile==null || centile=="" || (!mType.equals("Weight") && !(mType.equals("Height")))){
             tvCentile.setText("");
         } else {
@@ -127,15 +108,9 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
             }
         }
 
-
-        if(StatisticsDetailsList.isEditMode)
-        {
-            deleteBtn.setVisibility(View.VISIBLE);
-        }
-        else
-        {
-            deleteBtn.setVisibility(View.INVISIBLE);
-        }
+        // show delete buttons in edit mode
+        if(StatisticsDetailsList.isEditMode) {deleteBtn.setVisibility(View.VISIBLE);}
+        else {deleteBtn.setVisibility(View.INVISIBLE);}
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,7 +143,6 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
                                     heightvels.getValues().addAll(newvels);
                                     db.statisticsDao().update(heightvels);
                                 }
-
                             }
                         }).start();
 
@@ -205,7 +179,11 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
         return convertView;
     }
 
-    //method to get the StatisticsEntity for a given measurement(e.g weight, height etc)
+    /**
+     * getStats fetches the StatisticsEntity for the specified measurement type (e.g. weight/BMI...)
+     * @param unit is the measurement type
+     * @return the StatisticsEntity
+     */
     public StatisticsEntity getStats(final String unit) {
         // Create a callable object for database transactions
         Callable callable = new Callable() {
@@ -228,5 +206,3 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
         return statistics;
     }
 }
-
-
