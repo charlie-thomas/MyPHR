@@ -105,11 +105,12 @@ public class AlarmReceiver extends BroadcastReceiver {
             System.out.println(id);
 
             // Starts notification
-            if (mNotificationManager != null) {
-                mNotificationManager.notify(id, mBuilder.build());
+            if (!bigText.toString().equals(null) && !bigText.toString().equals("")) {
+                if (mNotificationManager != null) {
+                    mNotificationManager.notify(id, mBuilder.build());
+                }
             }
-
-
+            
             ComponentName receiver = new ComponentName(context, AlarmReceiver.class);
             PackageManager pm = context.getPackageManager();
 
