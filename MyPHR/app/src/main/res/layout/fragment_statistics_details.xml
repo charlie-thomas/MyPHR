@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fillViewport="true"
-    android:background="#FFFFFF">
+    android:background="#FAFAFA">
 
     <RelativeLayout
         tools:context="com.csbgroup.myphr.Statistics.StatisticsDetails"

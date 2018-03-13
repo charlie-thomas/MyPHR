@@ -48,6 +48,7 @@ public class StatisticsDetailsList extends Fragment {
     public static boolean isEditMode = false;
     public static View rootView;
     public static String type;
+    static Menu editMenu;
 
     //This formatter is for changing the string entered in form "dd/MM/yyyy" into a Java Date type
     static final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -151,7 +152,8 @@ public class StatisticsDetailsList extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.edit, menu); //edit button
+        if(!type.equals("Height Velocity")) inflater.inflate(R.menu.edit, menu); //edit button
+        editMenu = menu;
     }
 
     /**
@@ -172,21 +174,26 @@ public class StatisticsDetailsList extends Fragment {
                     TabHost tabhost = getActivity().findViewById(R.id.tabHost);
                     View thisfab = rootView.findViewById(R.id.s_fab);
 
-                    if (tabhost.getCurrentTab() == 0) { // list view
-                        if (isEditMode) {
-                            isEditMode = false;
-                            adapter.notifyDataSetChanged();
-                            thisfab.setVisibility(View.VISIBLE);
-                        } else {
+                    if(listview.getChildCount()>0) {
+                        if (tabhost.getCurrentTab() == 0) { // list view
+                            if (isEditMode) {
+                                editMenu.getItem(0).setIcon(R.drawable.edit);
+                                isEditMode = false;
+                                adapter.notifyDataSetChanged();
+                                thisfab.setVisibility(View.VISIBLE);
+                            } else {
+                                editMenu.getItem(0).setIcon(R.drawable.tick);
+                                isEditMode = true;
+                                adapter.notifyDataSetChanged();
+                                thisfab.setVisibility(View.GONE);
+                            }
+                        } else { // graph view
+                            tabhost.setCurrentTab(0);
                             isEditMode = true;
+                            editMenu.getItem(0).setIcon(R.drawable.tick);
                             adapter.notifyDataSetChanged();
                             thisfab.setVisibility(View.GONE);
                         }
-                    } else { // graph view
-                        tabhost.setCurrentTab(0);
-                        isEditMode = true;
-                        adapter.notifyDataSetChanged();
-                        thisfab.setVisibility(View.GONE);
                     }
                 }
         }

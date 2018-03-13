@@ -1,9 +1,17 @@
 package com.csbgroup.myphr.Appointments;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -26,6 +34,7 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.csbgroup.myphr.AlarmReceiver;
 import com.csbgroup.myphr.MainActivity;
 import com.csbgroup.myphr.R;
 import com.csbgroup.myphr.database.AppDatabase;
@@ -33,6 +42,7 @@ import com.csbgroup.myphr.database.AppointmentsEntity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -58,12 +68,11 @@ public class AppointmentsDetails extends Fragment {
     public AppointmentsDetails() {} // Required empty public constructor
 
     public static AppointmentsDetails newInstance() {
-        AppointmentsDetails fragment = new AppointmentsDetails();
-        return fragment;
+        return new AppointmentsDetails();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         final View rootView = inflater.inflate(R.layout.fragment_appointments_details, container, false);
@@ -140,9 +149,11 @@ public class AppointmentsDetails extends Fragment {
                 switch (checkedId){
                     case R.id.general:
                         thisappointment.setReminder_type(0);
+                        Appointments.sendNotification(thisappointment);
                         break;
                     case R.id.descriptive:
                         thisappointment.setReminder_type(1);
+                        Appointments.sendNotification(thisappointment);
                         break;
                 }
                 new Thread(new Runnable() {
@@ -159,8 +170,14 @@ public class AppointmentsDetails extends Fragment {
         week.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-                if (isChecked) {thisappointment.setRemind_week(true);}
-                else {thisappointment.setRemind_week(false);}
+                if (isChecked) {
+                    thisappointment.setRemind_week(true);
+                    Appointments.sendNotification(thisappointment);
+                }
+                else {
+                    thisappointment.setRemind_week(false);
+                    Appointments.cancelNotification(thisappointment, 1000);
+                }
 
                 new Thread(new Runnable() {
                     @Override
@@ -174,8 +191,14 @@ public class AppointmentsDetails extends Fragment {
         day.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-                if (isChecked) {thisappointment.setRemind_day(true);}
-                else {thisappointment.setRemind_day(false);}
+                if (isChecked) {
+                    thisappointment.setRemind_day(true);
+                    Appointments.sendNotification(thisappointment);
+                }
+                else {
+                    thisappointment.setRemind_day(false);
+                    Appointments.cancelNotification(thisappointment, 2000);
+                }
 
                 new Thread(new Runnable() {
                     @Override
@@ -189,8 +212,14 @@ public class AppointmentsDetails extends Fragment {
         morning.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-                if (isChecked) {thisappointment.setRemind_morning(true);}
-                else {thisappointment.setRemind_morning(false);}
+                if (isChecked) {
+                    thisappointment.setRemind_morning(true);
+                    Appointments.sendNotification(thisappointment);
+                }
+                else {
+                    thisappointment.setRemind_morning(false);
+                    Appointments.cancelNotification(thisappointment, 3000);
+                }
 
                 new Thread(new Runnable() {
                     @Override
@@ -230,6 +259,8 @@ public class AppointmentsDetails extends Fragment {
                 CheckBox morning = rootView.findViewById(R.id.checkBox3);
 
                 if (isChecked) { // reminders are on
+                    Appointments.sendNotification(thisappointment);
+
                     general.setVisibility(View.VISIBLE);
                     descriptive.setVisibility(View.VISIBLE);
                     week.setVisibility(View.VISIBLE);
@@ -237,6 +268,10 @@ public class AppointmentsDetails extends Fragment {
                     morning.setVisibility(View.VISIBLE);
                 }
                 else { // reminders are off
+                    Appointments.cancelNotification(thisappointment, 1000);
+                    Appointments.cancelNotification(thisappointment, 2000);
+                    Appointments.cancelNotification(thisappointment,3000);
+
                     general.setVisibility(View.GONE);
                     descriptive.setVisibility(View.GONE);
                     week.setVisibility(View.GONE);
@@ -274,7 +309,9 @@ public class AppointmentsDetails extends Fragment {
         AppointmentsEntity appointment = null;
         try {
             appointment = result.get();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return appointment;
     }
@@ -392,7 +429,9 @@ public class AppointmentsDetails extends Fragment {
             return;
         }
 
-        if (this.mode.equals("edit")){ // exiting edit mode
+        if (this.mode.equals("edit")){
+            Appointments.sendNotification(thisappointment);
+
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
             // hide the delete button
@@ -424,7 +463,6 @@ public class AppointmentsDetails extends Fragment {
             }).start();
 
             this.mode = "view";
-            return;
         }
     }
 
@@ -503,7 +541,7 @@ public class AppointmentsDetails extends Fragment {
                 else {
                     try { // valid format
                         validDate = true;
-                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                         if (!d.equals(sdf.format(sdf.parse(d)))) { // invalid value
                             validDate = false;
                             date.setError("Invalid date (DD/MM/YYYY)");
