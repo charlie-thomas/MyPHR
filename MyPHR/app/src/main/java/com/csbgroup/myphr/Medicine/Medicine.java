@@ -22,11 +22,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.csbgroup.myphr.AlarmReceiver;
+import com.csbgroup.myphr.Calendar.CalendarEvent;
 import com.csbgroup.myphr.MainActivity;
 import com.csbgroup.myphr.R;
 import com.csbgroup.myphr.Adapters.SimpleAdapter;
 import com.csbgroup.myphr.database.AppDatabase;
-import com.csbgroup.myphr.database.AppointmentsEntity;
 import com.csbgroup.myphr.database.MedicineEntity;
 
 import java.text.SimpleDateFormat;
@@ -40,6 +40,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 public class Medicine extends Fragment {
 
@@ -276,16 +277,47 @@ public class Medicine extends Fragment {
 
             // Set notification to launch at medicine reminder time
             Calendar calendar = Calendar.getInstance();
+            Calendar timeNow = Calendar.getInstance();
             calendar.set(yearToSet, monthToSet, dayToSet, hourToSet, minuteToSet, 0);
             // Subtract one from month to account for Java calendar
             calendar.add(Calendar.MONTH, -1);
 
+
+
             if (medicine.isDaily()) {
-                // If medicine is daily, repeat notification daily
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 24, notifySender);
-            } else {
+                // If date (not time) is in the past
+                if (TimeUnit.MILLISECONDS.toDays(Math.abs(timeNow.getTimeInMillis() - calendar.getTimeInMillis())) < 0) {
+                    // Sets date to today
+                    calendar = Calendar.getInstance();
+
+                } else {
+                    // If time is in the past
+                    if (calendar.compareTo(timeNow) != 1) {
+                        calendar.add(Calendar.DAY_OF_YEAR, 1);
+                    }
+                }
                 // Else repeat every other day
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 60 * 60 * 48, notifySender);
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY*1, notifySender);
+            } else {
+                // If date (not time) is in the past
+                if (TimeUnit.MILLISECONDS.toDays(Math.abs(timeNow.getTimeInMillis() - calendar.getTimeInMillis())) < 0) {
+                    // If days between current date and past date divisible by 2,
+                    if (TimeUnit.MILLISECONDS.toDays(Math.abs(timeNow.getTimeInMillis() - calendar.getTimeInMillis())) % 2 == 0) {
+                        // Sets date to today
+                        calendar = Calendar.getInstance();
+                    } else {
+                        // Sets date to tomorrow
+                        calendar = Calendar.getInstance();
+                        calendar.add(Calendar.DAY_OF_YEAR, 1);
+                    }
+                } else {
+                    // If time is in the past
+                    if (calendar.compareTo(timeNow) != 1) {
+                        calendar.add(Calendar.DAY_OF_YEAR, 1);
+                    }
+                }
+                // Else repeat every other day
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY*2, notifySender);
             }
         }
     }
