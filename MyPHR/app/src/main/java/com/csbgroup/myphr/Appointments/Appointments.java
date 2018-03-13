@@ -501,7 +501,7 @@ public class Appointments extends Fragment {
                 // Subtract a week from calendar for prior week reminder
                 weekCalendar.add(Calendar.DAY_OF_YEAR, -7);
                 // Checks if event is in the past. If so, does not activate
-                if (weekCalendar.compareTo(timeNow) != 1) {
+                if (weekCalendar.compareTo(timeNow) == 1) {
                     // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
@@ -516,7 +516,7 @@ public class Appointments extends Fragment {
                 // Subtract a day from calendar for prior day reminder
                 dayCalendar.add(Calendar.DAY_OF_YEAR, -1);
                 // Checks if event is in the past. If so, does not activate
-                if (dayCalendar.compareTo(timeNow) != 1) {
+                if (dayCalendar.compareTo(timeNow) == 1) {
                     // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyDay);
@@ -530,7 +530,7 @@ public class Appointments extends Fragment {
                 // Set time for 10AM for same-day appointments
                 morningCalendar.set(Calendar.HOUR_OF_DAY, 10);
                 // Checks if event is in the past. If so, does not activate
-                if (morningCalendar.compareTo(timeNow) != 1) {
+                if (morningCalendar.compareTo(timeNow) == 1) {
                     // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyMorning);

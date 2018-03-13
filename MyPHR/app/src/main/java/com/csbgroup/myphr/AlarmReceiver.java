@@ -78,7 +78,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                         } else {
                             bigText.bigText(location + ".");
                         }
-                        bigText.setBigContentTitle(appointment + " - " + date + " " + time);
+                        bigText.setBigContentTitle(appointment + " - " + date + ", " + time);
                         bigText.setSummaryText("Appointment");
                     }
 
