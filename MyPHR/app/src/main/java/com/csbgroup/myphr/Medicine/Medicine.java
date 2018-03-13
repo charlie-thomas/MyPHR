@@ -296,7 +296,6 @@ public class Medicine extends Fragment {
             if (medicine.isDaily()) {
                 // If date (not time) is in the past
                 if (TimeUnit.MILLISECONDS.toDays(calendar.getTimeInMillis() - timeNow.getTimeInMillis()) < 0) {
-                    System.out.println("Day, not time, is in the past (Daily)");
                     // If the day *and* time are wrong, this should progress day to tomorrow
                     if (calendar.compareTo(timeNow) != 1) {
                         calendar = Calendar.getInstance();
@@ -313,21 +312,17 @@ public class Medicine extends Fragment {
                     }
                 } else {
                     // If time is in the past
-                    System.out.println("Time, not day, is in the past (Daily)");
                     if (calendar.compareTo(timeNow) != 1) {
                         calendar.add(Calendar.DAY_OF_YEAR, 1);
                     }
                 }
                 // Repeat every day
-                System.out.println(calendar.toString());
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifySender);
             } else {
                 // If date (not time) is in the past
                 if (TimeUnit.MILLISECONDS.toDays(calendar.getTimeInMillis() - timeNow.getTimeInMillis()) < 0) {
-                    System.out.println("Day is wrong");
                     // If days between current date and past date divisible by 2,
                     if (TimeUnit.MILLISECONDS.toDays(Math.abs(timeNow.getTimeInMillis() - calendar.getTimeInMillis())) % 2 == 0) {
-                        System.out.println("Day, not time, is in the past (Other Daily)");
                         // If the day *and* time are wrong, this should progress day to tomorrow
                         if (calendar.compareTo(timeNow) != 1) {
                             calendar = Calendar.getInstance();
@@ -344,7 +339,6 @@ public class Medicine extends Fragment {
                         }
                     } else {
                         // Sets date to tomorrow
-                        System.out.println("Day, not time, is in the past (Other Daily - Uneven)");
                         calendar = Calendar.getInstance();
                         calendar.add(Calendar.DAY_OF_YEAR, 1);
                         calendar.set(Calendar.HOUR_OF_DAY, hourToSet);
@@ -354,12 +348,10 @@ public class Medicine extends Fragment {
                 } else {
                     // If time is in the past
                     if (calendar.compareTo(timeNow) != 1) {
-                        System.out.println("Time, not day, is in the past (Other Daily)");
                         calendar.add(Calendar.DAY_OF_YEAR, 2);
                     }
                 }
                 // Else repeat every other day
-                System.out.println(calendar.toString());
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY * 2, notifySender);
             }
         }
