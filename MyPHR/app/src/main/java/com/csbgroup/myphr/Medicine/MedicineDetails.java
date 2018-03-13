@@ -454,6 +454,14 @@ public class MedicineDetails extends Fragment {
 
             this.mode = "view";
 
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                    db.medicineDao().update(thismedicine);
+                }
+            }).start();
+
             Medicine.sendNotification(thismedicine);
         }
     }
