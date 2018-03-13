@@ -163,6 +163,9 @@ public class AppointmentsDetails extends Fragment {
                         db.appointmentsDao().update(thisappointment);
                     }
                 }).start();
+
+                // Checks which notification type the user wants *after* database updates
+                Appointments.sendNotification(thisappointment);
             }
         });
 
@@ -172,11 +175,9 @@ public class AppointmentsDetails extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                 if (isChecked) {
                     thisappointment.setRemind_week(true);
-                    Appointments.sendNotification(thisappointment);
                 }
                 else {
                     thisappointment.setRemind_week(false);
-                    Appointments.cancelNotification(thisappointment, 1000);
                 }
 
                 new Thread(new Runnable() {
@@ -186,6 +187,13 @@ public class AppointmentsDetails extends Fragment {
                         db.appointmentsDao().update(thisappointment);
                     }
                 }).start();
+
+                // Checks if user wants weekly reminders *after* database updates
+                if (thisappointment.isRemind_week()) {
+                    Appointments.sendNotification(thisappointment);
+                } else {
+                    Appointments.cancelNotification(thisappointment, 1000);
+                }
             }
         });
         day.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -193,11 +201,9 @@ public class AppointmentsDetails extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                 if (isChecked) {
                     thisappointment.setRemind_day(true);
-                    Appointments.sendNotification(thisappointment);
                 }
                 else {
                     thisappointment.setRemind_day(false);
-                    Appointments.cancelNotification(thisappointment, 2000);
                 }
 
                 new Thread(new Runnable() {
@@ -207,6 +213,13 @@ public class AppointmentsDetails extends Fragment {
                         db.appointmentsDao().update(thisappointment);
                     }
                 }).start();
+
+                // Checks if user wants daily reminders *after* database updates
+                if (thisappointment.isRemind_day()) {
+                    Appointments.sendNotification(thisappointment);
+                } else {
+                    Appointments.cancelNotification(thisappointment, 2000);
+                }
             }
         });
         morning.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -214,11 +227,9 @@ public class AppointmentsDetails extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
                 if (isChecked) {
                     thisappointment.setRemind_morning(true);
-                    Appointments.sendNotification(thisappointment);
                 }
                 else {
                     thisappointment.setRemind_morning(false);
-                    Appointments.cancelNotification(thisappointment, 3000);
                 }
 
                 new Thread(new Runnable() {
@@ -228,6 +239,13 @@ public class AppointmentsDetails extends Fragment {
                         db.appointmentsDao().update(thisappointment);
                     }
                 }).start();
+
+                // Checks if user wants morning reminders *after* database updates
+                if (thisappointment.isRemind_morning()) {
+                    Appointments.sendNotification(thisappointment);
+                } else {
+                    Appointments.cancelNotification(thisappointment, 3000);
+                }
             }
         });
 
@@ -430,7 +448,6 @@ public class AppointmentsDetails extends Fragment {
         }
 
         if (this.mode.equals("edit")){
-            Appointments.sendNotification(thisappointment);
 
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
@@ -463,6 +480,16 @@ public class AppointmentsDetails extends Fragment {
             }).start();
 
             this.mode = "view";
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                    db.appointmentsDao().update(thisappointment);
+                }
+            }).start();
+
+            Appointments.sendNotification(thisappointment);
         }
     }
 

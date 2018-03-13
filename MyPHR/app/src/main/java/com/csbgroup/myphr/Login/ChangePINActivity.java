@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.andrognito.pinlockview.PinLockView;
@@ -15,7 +14,6 @@ import com.andrognito.pinlockview.PinLockListener;
 import com.csbgroup.myphr.R;
 
 public class ChangePINActivity extends AppCompatActivity {
-    public static final String TAG = "PinLockView";
     PinLockView mPinLockView_change;
     IndicatorDots mIndicatorDots_change;
     public static final String PREFS = "pin";
@@ -56,12 +54,10 @@ public class ChangePINActivity extends AppCompatActivity {
 
         @Override
         public void onEmpty() {
-            Log.d(TAG, "PIN empty");
         }
 
         @Override
         public void onPinChange(int pinLength, String intermediatePin) {
-            Log.d(TAG, "Pin changed, new length " + pinLength + " with intermediate pin " + intermediatePin);
         }
     };
 

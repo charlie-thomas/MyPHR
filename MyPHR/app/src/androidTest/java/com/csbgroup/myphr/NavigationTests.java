@@ -8,10 +8,21 @@ import android.view.ViewParent;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 
+import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.AppointmentsDao;
+import com.csbgroup.myphr.database.AppointmentsEntity;
+import com.csbgroup.myphr.database.InvestigationsDao;
+import com.csbgroup.myphr.database.InvestigationsEntity;
+import com.csbgroup.myphr.database.MedicineDao;
+import com.csbgroup.myphr.database.MedicineEntity;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.hamcrest.core.IsInstanceOf;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -36,6 +47,8 @@ public class NavigationTests extends ActivityInstrumentationTestCase2<MainActivi
     @Override
     protected void setUp() throws Exception {
         mainActivity = getActivity();
+        populateAppointments();
+        populateMedicine();
     }
 
     /* Navigation Bar */
@@ -132,5 +145,99 @@ public class NavigationTests extends ActivityInstrumentationTestCase2<MainActivi
                         && view.equals(((ViewGroup) parent).getChildAt(position));
             }
         };
+    }
+
+    private void populateAppointments() {
+        AppointmentsDao dao = AppDatabase.getAppDatabase(getInstrumentation().getContext()).appointmentsDao();
+        dao.deleteAll();
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Clinic 1", "Royal Hospital for Children, Glasgow",
+                df.format(c.getTime()), "15:55","Go to desk on ground floor ward 2.", true, 1,
+                false, false, false));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Check Up 1", "Children's Hospital",
+                df.format(c.getTime()), "16:00","Appointment Notes", false, 0,
+                false, false, false));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Check Up 2", "Children's Hospital",
+                df.format(c.getTime()), "16:00","Appointment Notes", true, 0,
+                false, false, false));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Clinic 2", "Children's Hospital",
+                df.format(c.getTime()), "17:00","Appointment Notes", false, 1,
+                false, false, false));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Check Up 3", "Children's Hospital",
+                df.format(c.getTime()), "14:00","Appointment Notes", true, 1,
+                false, false, false));
+
+        InvestigationsDao inv_dao = AppDatabase.getAppDatabase(getInstrumentation().getContext()).investigationDao();
+        inv_dao.deleteAll();
+
+        InvestigationsEntity ie = new InvestigationsEntity("Blood Test", "03/01/2018", "Due again in 6 months time (03/07/2018)");
+        InvestigationsEntity ie1 = new InvestigationsEntity("Hearing Test", "29/12/2017", "Due again in 12 months (29/12/2018)");
+        InvestigationsEntity ie2 = new InvestigationsEntity("Blood Test", "04/06/2017", "Due again in 6 months (04/12/2017)");
+        InvestigationsEntity ie3 = new InvestigationsEntity("Hearing Test", "30/06/2017", "Due again in 12 months (30/06/2018)");
+
+        inv_dao.insertAll(ie, ie1, ie2, ie3);
+    }
+
+    private void populateMedicine() {
+        MedicineDao dao = AppDatabase.getAppDatabase(getInstrumentation().getContext()).medicineDao();
+        dao.deleteAll();
+
+        dao.insertAll(
+                new MedicineEntity(
+                        "Oestrogen",
+                        "Helps in the development and maintenance of sexual maturation.",
+                        "2mg",
+                        "Tablets/patches should be taken once a day, every day.",
+                        true,
+                        1,
+                        true,
+                        false,
+                        "26/02/2018",
+                        "15:50"),
+                new MedicineEntity(
+                        "Progesterone",
+                        "Sex hormone involved in the menstrual cycle, pregnancy and embryogenesis",
+                        "5mg",
+                        "To be taken on 7-12 days of calendar month either monthly, every 2nd month or" +
+                                "every 3rd month.",
+                        false,
+                        0,
+                        true,
+                        true,
+                        "05/02/2018",
+                        "13:30"),
+                new MedicineEntity(
+                        "Thyroxine",
+                        "Main thyroid hormone",
+                        "2mg",
+                        "Vital roles in regulating the body’s metabolic rate, heart and digestive " +
+                                "functions, muscle control, brain development and maintenance of bones.\nTo be taken daily.",
+                        true,
+                        1,
+                        false,
+                        true,
+                        "01/01/2010",
+                        "13:15"),
+                new MedicineEntity(
+                        "Growth Hormone",
+                        "Natural hormone to simulate growth.",
+                        "5mg",
+                        "To be taken once a day, every day.",
+                        false,
+                        1,
+                        true,
+                        false,
+                        "26/02/2018",
+                        "21:15")
+        );
     }
 }

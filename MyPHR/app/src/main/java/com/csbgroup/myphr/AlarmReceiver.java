@@ -74,8 +74,12 @@ public class AlarmReceiver extends BroadcastReceiver {
                         bigText.setBigContentTitle("New reminder");
                         bigText.setSummaryText("Reminder");
                     } else {
-                        bigText.bigText(location + ".");
-                        bigText.setBigContentTitle(appointment + " - " + date + " " + time);
+                        if (location.equals("")) {
+                            bigText.bigText("No location specified.");
+                        } else {
+                            bigText.bigText(location + ".");
+                        }
+                        bigText.setBigContentTitle(appointment + " - " + date + ", " + time);
                         bigText.setSummaryText("Appointment");
                     }
 
@@ -88,8 +92,6 @@ public class AlarmReceiver extends BroadcastReceiver {
             mBuilder.setPriority(Notification.PRIORITY_MAX);
             mBuilder.setStyle(bigText);
 
-            int id = intent.getIntExtra(NOTIFICATION_ID, 0);
-
             NotificationManager mNotificationManager =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -97,18 +99,21 @@ public class AlarmReceiver extends BroadcastReceiver {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 NotificationChannel channel = new NotificationChannel("notify_001",
                         "Notifications",
-                        NotificationManager.IMPORTANCE_DEFAULT);
+                        NotificationManager.IMPORTANCE_HIGH);
                 channel.setShowBadge(false);
                 if (mNotificationManager != null) {
                     mNotificationManager.createNotificationChannel(channel);
                 }
             }
 
-            // Starts notification
-            if (mNotificationManager != null) {
-                mNotificationManager.notify(id, mBuilder.build());
-            }
+            int id = intent.getIntExtra(NOTIFICATION_ID, 0);
 
+            // Starts notification
+            if (bigText != null && !bigText.toString().equals("")) {
+                if (mNotificationManager != null) {
+                    mNotificationManager.notify(id, mBuilder.build());
+                }
+            }
 
             ComponentName receiver = new ComponentName(context, AlarmReceiver.class);
             PackageManager pm = context.getPackageManager();

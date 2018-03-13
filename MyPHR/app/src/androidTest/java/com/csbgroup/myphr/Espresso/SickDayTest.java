@@ -1,4 +1,4 @@
-package com.csbgroup.myphr;
+package com.csbgroup.myphr.Espresso;
 
 
 import android.support.test.espresso.ViewInteraction;
@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import com.csbgroup.myphr.Login.StartupActivity;
+import com.csbgroup.myphr.MainActivity;
+import com.csbgroup.myphr.R;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -24,32 +26,25 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
 import static android.support.test.espresso.action.ViewActions.replaceText;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class ForgotPINTest {
+public class SickDayTest {
 
     @Rule
     public ActivityTestRule<StartupActivity> mActivityTestRule = new ActivityTestRule<>(StartupActivity.class);
 
     @Test
-    public void forgotPINTest() {
-        ViewInteraction imageView = onView(
-                allOf(withId(R.id.iconLoginStart), withContentDescription("App Icon"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        imageView.check(matches(isDisplayed()));
-
+    public void sickDayTest() {
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.button), withText("5"),
                         childAtPosition(
@@ -128,10 +123,10 @@ public class ForgotPINTest {
                                         0),
                                 5),
                         isDisplayed()));
-        appCompatEditText4.perform(replaceText("b"), closeSoftKeyboard());
+        appCompatEditText4.perform(replaceText("a"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText5 = onView(
-                allOf(withId(R.id.security_2_answer), withText("b"),
+                allOf(withId(R.id.security_2_answer), withText("a"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -151,175 +146,44 @@ public class ForgotPINTest {
         appCompatButton5.perform(click());
 
         ViewInteraction appCompatButton6 = onView(
-                allOf(withText("Forgot PIN?"),
+                allOf(withId(R.id.button), withText("5"),
                         childAtPosition(
-                                allOf(withId(R.id.login_layout),
-                                        childAtPosition(
-                                                withId(android.R.id.content),
-                                                0)),
-                                4),
+                                childAtPosition(
+                                        withId(R.id.pin_lock_view),
+                                        4),
+                                0),
                         isDisplayed()));
         appCompatButton6.perform(click());
 
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.security_1_text), withText("Please answer first security question"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView.check(matches(withText("Please answer first security question")));
-
-        ViewInteraction appCompatEditText6 = onView(
-                allOf(withId(R.id.attempt_1_answer),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        appCompatEditText6.perform(click());
-
-        ViewInteraction appCompatEditText7 = onView(
-                allOf(withId(R.id.attempt_1_answer),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        appCompatEditText7.perform(replaceText("a"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText8 = onView(
-                allOf(withId(R.id.attempt_1_answer), withText("a"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        appCompatEditText8.perform(pressImeActionButton());
-
-        ViewInteraction appCompatEditText9 = onView(
-                allOf(withId(R.id.attempt_2_answer),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                5),
-                        isDisplayed()));
-        appCompatEditText9.perform(replaceText("b"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText10 = onView(
-                allOf(withId(R.id.attempt_2_answer), withText("b"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                5),
-                        isDisplayed()));
-        appCompatEditText10.perform(pressImeActionButton());
-
         ViewInteraction appCompatButton7 = onView(
-                allOf(withId(R.id.saveQuestions), withText("Enter"),
+                allOf(withId(R.id.button), withText("5"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                6),
+                                        withId(R.id.pin_lock_view),
+                                        4),
+                                0),
                         isDisplayed()));
         appCompatButton7.perform(click());
 
-        ViewInteraction textView2 = onView(
-                allOf(withText("Please set new PIN"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView2.check(matches(withText("Please set new PIN")));
-
         ViewInteraction appCompatButton8 = onView(
-                allOf(withId(R.id.button), withText("1"),
+                allOf(withId(R.id.button), withText("5"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.pin_change_entry),
-                                        0),
+                                        withId(R.id.pin_lock_view),
+                                        4),
                                 0),
                         isDisplayed()));
         appCompatButton8.perform(click());
 
         ViewInteraction appCompatButton9 = onView(
-                allOf(withId(R.id.button), withText("2"),
+                allOf(withId(R.id.button), withText("5"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.pin_change_entry),
-                                        1),
+                                        withId(R.id.pin_lock_view),
+                                        4),
                                 0),
                         isDisplayed()));
         appCompatButton9.perform(click());
-
-        ViewInteraction appCompatButton10 = onView(
-                allOf(withId(R.id.button), withText("3"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.pin_change_entry),
-                                        2),
-                                0),
-                        isDisplayed()));
-        appCompatButton10.perform(click());
-
-        ViewInteraction appCompatButton11 = onView(
-                allOf(withId(R.id.button), withText("4"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.pin_change_entry),
-                                        3),
-                                0),
-                        isDisplayed()));
-        appCompatButton11.perform(click());
-
-        ViewInteraction appCompatButton12 = onView(
-                allOf(withId(R.id.button), withText("1"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.pin_lock_view),
-                                        0),
-                                0),
-                        isDisplayed()));
-        appCompatButton12.perform(click());
-
-        ViewInteraction appCompatButton13 = onView(
-                allOf(withId(R.id.button), withText("2"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.pin_lock_view),
-                                        1),
-                                0),
-                        isDisplayed()));
-        appCompatButton13.perform(click());
-
-        ViewInteraction appCompatButton14 = onView(
-                allOf(withId(R.id.button), withText("3"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.pin_lock_view),
-                                        2),
-                                0),
-                        isDisplayed()));
-        appCompatButton14.perform(click());
-
-        ViewInteraction appCompatButton15 = onView(
-                allOf(withId(R.id.button), withText("4"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.pin_lock_view),
-                                        3),
-                                0),
-                        isDisplayed()));
-        appCompatButton15.perform(click());
 
         // Added a sleep statement to match the app's execution delay.
         // The recommended way to handle such scenarios is to use Espresso idling resources:
@@ -330,7 +194,7 @@ public class ForgotPINTest {
             e.printStackTrace();
         }
 
-        ViewInteraction textView3 = onView(
+        ViewInteraction textView = onView(
                 allOf(withText("My Calendar"),
                         childAtPosition(
                                 allOf(withId(R.id.toolbar),
@@ -339,7 +203,66 @@ public class ForgotPINTest {
                                                 0)),
                                 0),
                         isDisplayed()));
-        textView3.check(matches(withText("My Calendar")));
+        textView.check(matches(withText("My Calendar")));
+
+        ViewInteraction dayView = onView(
+                allOf(withText("13"),
+                        childAtPosition(
+                                allOf(withContentDescription("Calendar"),
+                                        childAtPosition(
+                                                withId(R.id.mcv_pager),
+                                                0)),
+                                22),
+                        isDisplayed()));
+        dayView.perform(click());
+
+        ViewInteraction floatingActionButton = onView(
+                allOf(withId(R.id.sick_fab),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.frame_layout),
+                                        0),
+                                2),
+                        isDisplayed()));
+        floatingActionButton.perform(click());
+
+        ViewInteraction appCompatButton10 = onView(
+                allOf(withId(android.R.id.button1), withText("Yes"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.ScrollView")),
+                                        0),
+                                3)));
+        appCompatButton10.perform(scrollTo(), click());
+
+        ViewInteraction textView2 = onView(
+                allOf(withId(R.id.snackbar_text), withText("13/03/2018 is marked as a sick day"),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.FrameLayout.class),
+                                        0),
+                                0),
+                        isDisplayed()));
+        textView2.check(matches(withText("13/03/2018 is marked as a sick day")));
+
+        ViewInteraction floatingActionButton2 = onView(
+                allOf(withId(R.id.sick_fab),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.frame_layout),
+                                        0),
+                                2),
+                        isDisplayed()));
+        floatingActionButton2.perform(click());
+
+        ViewInteraction appCompatButton11 = onView(
+                allOf(withId(android.R.id.button2), withText("No"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.ScrollView")),
+                                        0),
+                                2)));
+        appCompatButton11.perform(scrollTo(), click());
 
     }
 

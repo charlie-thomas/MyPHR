@@ -1,7 +1,6 @@
-package com.csbgroup.myphr;
+package com.csbgroup.myphr.Espresso;
 
 
-import android.support.test.espresso.DataInteraction;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import com.csbgroup.myphr.Login.StartupActivity;
+import com.csbgroup.myphr.R;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -20,20 +20,17 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.pressImeActionButton;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -44,6 +41,16 @@ public class LoginActivityTest {
 
     @Test
     public void loginActivityTest() {
+        ViewInteraction imageView = onView(
+                allOf(withId(R.id.iconLoginStart), withContentDescription("App Icon"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        imageView.check(matches(isDisplayed()));
+
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.button), withText("5"),
                         childAtPosition(
@@ -84,7 +91,7 @@ public class LoginActivityTest {
                         isDisplayed()));
         appCompatButton4.perform(click());
 
-        ViewInteraction textView3 = onView(
+        ViewInteraction textView = onView(
                 allOf(withId(R.id.security_1_text), withText("Please pick a security question"),
                         childAtPosition(
                                 childAtPosition(
@@ -92,17 +99,7 @@ public class LoginActivityTest {
                                         0),
                                 0),
                         isDisplayed()));
-        textView3.check(matches(withText("Please pick a security question")));
-
-        ViewInteraction textView4 = onView(
-                allOf(withId(R.id.security_1_text), withText("Please pick a security question"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView4.check(matches(withText("Please pick a security question")));
+        textView.check(matches(withText("Please pick a security question")));
 
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.security_1_answer),
@@ -122,26 +119,19 @@ public class LoginActivityTest {
                                         0),
                                 2),
                         isDisplayed()));
-        appCompatEditText2.perform(replaceText("A"), closeSoftKeyboard());
+        appCompatEditText2.perform(replaceText("a"), closeSoftKeyboard());
 
-        ViewInteraction appCompatSpinner = onView(
-                allOf(withId(R.id.security_2),
+        ViewInteraction appCompatEditText3 = onView(
+                allOf(withId(R.id.security_1_answer), withText("a"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                4),
+                                2),
                         isDisplayed()));
-        appCompatSpinner.perform(click());
+        appCompatEditText3.perform(pressImeActionButton());
 
-        DataInteraction appCompatCheckedTextView = onData(anything())
-                .inAdapterView(childAtPosition(
-                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
-                        0))
-                .atPosition(1);
-        appCompatCheckedTextView.perform(click());
-
-        ViewInteraction appCompatEditText3 = onView(
+        ViewInteraction appCompatEditText4 = onView(
                 allOf(withId(R.id.security_2_answer),
                         childAtPosition(
                                 childAtPosition(
@@ -149,9 +139,19 @@ public class LoginActivityTest {
                                         0),
                                 5),
                         isDisplayed()));
-        appCompatEditText3.perform(replaceText("A"), closeSoftKeyboard());
+        appCompatEditText4.perform(replaceText("a"), closeSoftKeyboard());
 
-        ViewInteraction appCompatButton6 = onView(
+        ViewInteraction appCompatEditText5 = onView(
+                allOf(withId(R.id.security_2_answer), withText("a"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                5),
+                        isDisplayed()));
+        appCompatEditText5.perform(pressImeActionButton());
+
+        ViewInteraction appCompatButton5 = onView(
                 allOf(withId(R.id.saveQuestions), withText("Save"),
                         childAtPosition(
                                 childAtPosition(
@@ -159,9 +159,9 @@ public class LoginActivityTest {
                                         0),
                                 6),
                         isDisplayed()));
-        appCompatButton6.perform(click());
+        appCompatButton5.perform(click());
 
-        ViewInteraction imageView = onView(
+        ViewInteraction imageView2 = onView(
                 allOf(withId(R.id.iconLogin), withContentDescription("App Icon"),
                         childAtPosition(
                                 allOf(withId(R.id.login_layout),
@@ -170,7 +170,17 @@ public class LoginActivityTest {
                                                 0)),
                                 0),
                         isDisplayed()));
-        imageView.check(matches(isDisplayed()));
+        imageView2.check(matches(isDisplayed()));
+
+        ViewInteraction appCompatButton6 = onView(
+                allOf(withId(R.id.button), withText("5"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.pin_lock_view),
+                                        4),
+                                0),
+                        isDisplayed()));
+        appCompatButton6.perform(click());
 
         ViewInteraction appCompatButton7 = onView(
                 allOf(withId(R.id.button), withText("5"),
@@ -202,17 +212,16 @@ public class LoginActivityTest {
                         isDisplayed()));
         appCompatButton9.perform(click());
 
-        ViewInteraction appCompatButton10 = onView(
-                allOf(withId(R.id.button), withText("5"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.pin_lock_view),
-                                        4),
-                                0),
-                        isDisplayed()));
-        appCompatButton10.perform(click());
+        // Added a sleep statement to match the app's execution delay.
+        // The recommended way to handle such scenarios is to use Espresso idling resources:
+        // https://google.github.io/android-testing-support-library/docs/espresso/idling-resource/index.html
+        try {
+            Thread.sleep(16);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        ViewInteraction textView5 = onView(
+        ViewInteraction textView2 = onView(
                 allOf(withText("My Calendar"),
                         childAtPosition(
                                 allOf(withId(R.id.toolbar),
@@ -221,7 +230,7 @@ public class LoginActivityTest {
                                                 0)),
                                 0),
                         isDisplayed()));
-        textView5.check(matches(withText("My Calendar")));
+        textView2.check(matches(withText("My Calendar")));
 
     }
 
