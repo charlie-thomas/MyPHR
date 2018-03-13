@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -484,6 +485,7 @@ public class Appointments extends Fragment {
 
             // Set notification to launch at medicine reminder time
             Calendar calendar = Calendar.getInstance();
+            Calendar timeNow = Calendar.getInstance();
             calendar.set(yearToSet, monthToSet, dayToSet, hourToSet, minuteToSet, 0);
             // Subtract one from month to account for Java calendar
             calendar.add(Calendar.MONTH, -1);
@@ -498,33 +500,43 @@ public class Appointments extends Fragment {
             if (appointment.isRemind_week()) {
                 // Subtract a week from calendar for prior week reminder
                 weekCalendar.add(Calendar.DAY_OF_YEAR, -7);
-                // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
+                // Checks if event is in the past. If so, does not activate
+                if (weekCalendar.compareTo(timeNow) != 1) {
+                    // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
+                    } else {
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
+                    }
                 }
+
             }
 
             if (appointment.isRemind_day()) {
                 // Subtract a day from calendar for prior day reminder
                 dayCalendar.add(Calendar.DAY_OF_YEAR, -1);
-                // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyDay);
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyWeek);
+                // Checks if event is in the past. If so, does not activate
+                if (dayCalendar.compareTo(timeNow) != 1) {
+                    // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyDay);
+                    } else {
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyWeek);
+                    }
                 }
             }
 
             if (appointment.isRemind_morning()) {
                 // Set time for 10AM for same-day appointments
                 morningCalendar.set(Calendar.HOUR_OF_DAY, 10);
-                // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyMorning);
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyWeek);
+                // Checks if event is in the past. If so, does not activate
+                if (morningCalendar.compareTo(timeNow) != 1) {
+                    // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyMorning);
+                    } else {
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyWeek);
+                    }
                 }
             }
         }
