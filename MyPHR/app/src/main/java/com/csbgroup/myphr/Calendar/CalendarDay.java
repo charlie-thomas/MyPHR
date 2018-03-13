@@ -299,41 +299,25 @@ public class CalendarDay extends Fragment {
 
                 // set up the dialog
                 LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-                View v = inflater.inflate(R.layout.add_sick_day_dialog, null);
+                final View v = inflater.inflate(R.layout.add_sick_day_dialog, null);
                 final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getActivity());
                 builder.setView(v);
+
+                try{
+                    if (isSickDay(date)) {
+                        TextView title = v.findViewById(R.id.sickday_title);
+                        TextView message = v.findViewById(R.id.sickday_message);
+                        title.setText("Remove as Sick Day");
+                        message.setText("Would you like to remove this day as a sick day?");
+
+                    }
+                } catch (ExecutionException | InterruptedException e) {e.printStackTrace();}
 
                 // add new sick day into database
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        try {
-                            if (!isSickDay(date)) {
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        AppDatabase db = AppDatabase.getAppDatabase(getActivity());
-                                        db.sickDaysDao().insert(new SickDaysEntity(date));
-                                    }
-                                }).start();
 
-                                // Refresh
-                                Fragment cd = CalendarDay.newInstance();
-                                Bundle bundle = new Bundle();
-                                bundle.putString("date", date);
-                                cd.setArguments(bundle);
-                                ((MainActivity)getActivity()).switchFragment(cd, true);
-                            }
-                        } catch (ExecutionException | InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-                // action for cancelling add
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
                         try {
                             if (isSickDay(date)) {
                                 new Thread(new Runnable() {
@@ -351,10 +335,30 @@ public class CalendarDay extends Fragment {
                                 cd.setArguments(bundle);
                                 ((MainActivity)getActivity()).switchFragment(cd, true);
                             }
-                        } catch (ExecutionException | InterruptedException e) {
-                            e.printStackTrace();
-                        }
+
+                            else if (!isSickDay(date)) {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                                        db.sickDaysDao().insert(new SickDaysEntity(date));
+                                    }
+                                }).start();
+
+                                // Refresh
+                                Fragment cd = CalendarDay.newInstance();
+                                Bundle bundle = new Bundle();
+                                bundle.putString("date", date);
+                                cd.setArguments(bundle);
+                                ((MainActivity)getActivity()).switchFragment(cd, true);
+                            }
+                        } catch (ExecutionException | InterruptedException e) {e.printStackTrace();}
                     }
+                });
+
+                // action for cancelling
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface arg0, int arg1) {}
                 });
 
                 android.app.AlertDialog dialog = builder.create();
