@@ -201,11 +201,7 @@ public class MedicineDetails extends Fragment {
                 }).start();
 
                 // Checks which notification type the user wants *after* database updates
-                if (thismedicine.getReminder_type() == 0) {
-                    Medicine.sendNotification(thismedicine);
-                } else {
-                    Medicine.cancelNotification(thismedicine);
-                }
+                Medicine.sendNotification(thismedicine);
             }
         });
 
