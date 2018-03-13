@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 
 import com.csbgroup.myphr.R;
 
+/**
+ * the HolidayLetter class is the fragment displaying the holiday travel letter
+ */
 public class HolidayLetter extends Fragment {
 
     public HolidayLetter() {} // Required empty public constructor
