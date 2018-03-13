@@ -15,11 +15,12 @@ import android.support.v4.app.NotificationCompat;
 import com.csbgroup.myphr.Appointments.Appointments;
 import com.csbgroup.myphr.Login.LoginActivity;
 import com.csbgroup.myphr.Medicine.Medicine;
-import com.csbgroup.myphr.database.MedicineEntity;
 
 import static com.csbgroup.myphr.R.color.colorAccent;
 
 public class AlarmReceiver extends BroadcastReceiver {
+
+    public static String NOTIFICATION_ID = "notification-id";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -105,11 +106,10 @@ public class AlarmReceiver extends BroadcastReceiver {
                 }
             }
 
-            int id = intent.getIntExtra("id", 0);
-            System.out.println(id);
+            int id = intent.getIntExtra(NOTIFICATION_ID, 0);
 
             // Starts notification
-            if (!bigText.toString().equals(null) && !bigText.toString().equals("")) {
+            if (bigText != null && !bigText.toString().equals("")) {
                 if (mNotificationManager != null) {
                     mNotificationManager.notify(id, mBuilder.build());
                 }
