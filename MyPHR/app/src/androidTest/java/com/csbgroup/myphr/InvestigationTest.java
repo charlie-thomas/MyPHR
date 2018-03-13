@@ -5,6 +5,9 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 
 import com.csbgroup.myphr.Appointments.Investigations;
+import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.InvestigationsDao;
+import com.csbgroup.myphr.database.InvestigationsEntity;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
@@ -28,6 +31,7 @@ public class InvestigationTest extends ActivityInstrumentationTestCase2<MainActi
     @Override
     protected void setUp() throws Exception {
         mainActivity = getActivity();
+        populateInvestigations();
 
         Investigations investigations  = Investigations.newInstance();
 
@@ -37,6 +41,19 @@ public class InvestigationTest extends ActivityInstrumentationTestCase2<MainActi
 
         getInstrumentation().waitForIdleSync();
     }
+
+    private void populateInvestigations()  {
+        InvestigationsDao dao = AppDatabase.getAppDatabase(getInstrumentation().getContext()).investigationDao();
+        dao.deleteAll();
+
+        InvestigationsEntity ie = new InvestigationsEntity("Blood Test", "03/01/2018", "Due again in 6 months time (03/07/2018)");
+        InvestigationsEntity ie1 = new InvestigationsEntity("Hearing Test", "29/12/2017", "Due again in 12 months (29/12/2018)");
+        InvestigationsEntity ie2 = new InvestigationsEntity("Blood Test", "04/06/2017", "Due again in 6 months (04/12/2017)");
+        InvestigationsEntity ie3 = new InvestigationsEntity("Hearing Test", "30/06/2017", "Due again in 12 months (30/06/2018)");
+
+        dao.insertAll(ie, ie1, ie2, ie3);
+    }
+
 
     public void testPreconditions() {
         assertNotNull(mainActivity);

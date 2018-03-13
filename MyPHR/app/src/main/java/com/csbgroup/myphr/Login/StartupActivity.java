@@ -91,6 +91,7 @@ public class StartupActivity extends AppCompatActivity {
 
     /* Helper function to populate contacts with staff */
     private void populateContacts(ContactsDao dao) {
+        dao.deleteAll();
         // Key medical staff at Royal Childrens Hospital, Glasgow are pre-loaded
         dao.insertAll(
                 new ContactsEntity(
@@ -115,6 +116,7 @@ public class StartupActivity extends AppCompatActivity {
 
     /* Helper function to populate statistics section */
     private void populateStats(StatisticsDao dao) {
+        dao.deleteAll();
         String[] stats = {"Blood Pressure", "Body Mass Index (BMI)", "Head Circumference", "Height",
                 "Height Velocity", "Weight"};
 
