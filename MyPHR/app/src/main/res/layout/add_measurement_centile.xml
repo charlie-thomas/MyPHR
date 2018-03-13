@@ -36,7 +36,7 @@
         <EditText
             android:id="@+id/measurement"
 
-            android:inputType="text"
+            android:inputType="numberDecimal"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:paddingLeft="8dp" />
