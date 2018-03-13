@@ -4,6 +4,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.csbgroup.myphr.Statistics.Statistics;
+import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.StatValueEntity;
+import com.csbgroup.myphr.database.StatisticsDao;
+import com.csbgroup.myphr.database.StatisticsEntity;
+
+import java.util.ArrayList;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -25,6 +31,7 @@ public class StatisticTest extends ActivityInstrumentationTestCase2<MainActivity
     @Override
     protected void setUp() throws Exception {
         mainActivity = getActivity();
+        populateStats();
 
         Statistics statistics  = Statistics.newInstance();
 
@@ -33,6 +40,17 @@ public class StatisticTest extends ActivityInstrumentationTestCase2<MainActivity
         transaction.commitAllowingStateLoss();
 
         getInstrumentation().waitForIdleSync();
+    }
+
+    private void populateStats() {
+        StatisticsDao dao = AppDatabase.getAppDatabase(getInstrumentation().getContext()).statisticsDao();
+        dao.deleteAll();
+
+        String[] stats = {"Blood Pressure", "Body Mass Index (BMI)", "Head Circumference", "Height",
+                "Height Velocity", "Weight"};
+
+        for (String s : stats)
+            dao.insertAll(new StatisticsEntity(s, new ArrayList<StatValueEntity>()));
     }
 
     public void testPreconditions() {

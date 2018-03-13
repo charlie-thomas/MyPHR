@@ -5,6 +5,12 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 
 import com.csbgroup.myphr.Appointments.Appointments;
+import com.csbgroup.myphr.database.AppDatabase;
+import com.csbgroup.myphr.database.AppointmentsDao;
+import com.csbgroup.myphr.database.AppointmentsEntity;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -26,6 +32,7 @@ public class AppointmentTest extends ActivityInstrumentationTestCase2<MainActivi
     @Override
     protected void setUp() throws Exception {
         mainActivity = getActivity();
+        populateAppointments();
 
         Appointments appointmentsFrag = Appointments.newInstance();
 
@@ -36,6 +43,36 @@ public class AppointmentTest extends ActivityInstrumentationTestCase2<MainActivi
         getInstrumentation().waitForIdleSync();
 
         appointmentsList = getActivity().findViewById(R.id.appointments_list);
+    }
+
+    private void populateAppointments() {
+        AppointmentsDao dao = AppDatabase.getAppDatabase(getInstrumentation().getContext()).appointmentsDao();
+        dao.deleteAll();
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Clinic 1", "Royal Hospital for Children, Glasgow",
+                df.format(c.getTime()), "15:55","Go to desk on ground floor ward 2.", true, 1,
+                false, false, false));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Check Up 1", "Children's Hospital",
+                df.format(c.getTime()), "16:00","Appointment Notes", false, 0,
+                false, false, false));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Check Up 2", "Children's Hospital",
+                df.format(c.getTime()), "16:00","Appointment Notes", true, 0,
+                false, false, false));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Clinic 2", "Children's Hospital",
+                df.format(c.getTime()), "17:00","Appointment Notes", false, 1,
+                false, false, false));
+        c.add(Calendar.DATE, 1);
+        dao.insertAll(new AppointmentsEntity("Check Up 3", "Children's Hospital",
+                df.format(c.getTime()), "14:00","Appointment Notes", true, 1,
+                false, false, false));
     }
 
     public void testPreconditions() {
