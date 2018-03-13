@@ -73,7 +73,11 @@ public class AlarmReceiver extends BroadcastReceiver {
                         bigText.setBigContentTitle("New reminder");
                         bigText.setSummaryText("Reminder");
                     } else {
-                        bigText.bigText(location + ".");
+                        if (location.equals("")) {
+                            bigText.bigText("No location specified.");
+                        } else {
+                            bigText.bigText(location + ".");
+                        }
                         bigText.setBigContentTitle(appointment + " - " + date + " " + time);
                         bigText.setSummaryText("Appointment");
                     }
@@ -110,7 +114,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                     mNotificationManager.notify(id, mBuilder.build());
                 }
             }
-            
+
             ComponentName receiver = new ComponentName(context, AlarmReceiver.class);
             PackageManager pm = context.getPackageManager();
 
