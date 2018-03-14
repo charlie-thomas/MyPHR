@@ -1,12 +1,8 @@
 package com.csbgroup.myphr.Medicine;
 
 import android.annotation.SuppressLint;
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -31,7 +27,6 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.csbgroup.myphr.AlarmReceiver;
 import com.csbgroup.myphr.MainActivity;
 import com.csbgroup.myphr.R;
 import com.csbgroup.myphr.database.AppDatabase;
@@ -39,7 +34,6 @@ import com.csbgroup.myphr.database.MedicineEntity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -62,11 +56,13 @@ public class MedicineDetails extends Fragment {
     private Boolean validTime = true;
     private Boolean validDate = true;
 
+
     public MedicineDetails() {}// Required empty public constructor
 
     public static MedicineDetails newInstance() {
         return new MedicineDetails();
     }
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -272,6 +268,7 @@ public class MedicineDetails extends Fragment {
         return rootView;
     }
 
+
     /**
      * Fetches a single medicine entity from the database, found by the title
      * @param uid is the primary key of the medicine to be retrieved
@@ -298,16 +295,19 @@ public class MedicineDetails extends Fragment {
         return medicine;
     }
 
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit, menu);
         editMenu = menu; // toolbar w/ edit button
     }
+
 
     /**
      * Provides navigation/actions for menu items.
@@ -330,6 +330,7 @@ public class MedicineDetails extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     /**
      * switchMode toggles between viewing and editing the medication details.
@@ -462,6 +463,7 @@ public class MedicineDetails extends Fragment {
         }
     }
 
+
     /**
      * disableEditing sets background and keylistener to null to stop user editing
      * @param field is the editText field to be disabled
@@ -470,6 +472,7 @@ public class MedicineDetails extends Fragment {
         field.setBackground(null);
         field.setKeyListener(null);
     }
+
 
     /**
      * errorChecking live checks the formatting of fields; errors are highlighted to the user
