@@ -13,10 +13,10 @@ MyPHR can be found on the Google Play Store here:
 ``` link goes here ```
 
 ## Screenshots
-![Screenshot_20180314-121206](/uploads/9981948cd4f134af272342a9b4c0b530/Screenshot_20180314-121206.jpg)
-![Screenshot_20180314-121010](/uploads/5ed28d7c5c8736f3abf0779462f76c75/Screenshot_20180314-121010.jpg)
-![Screenshot_20180314-121117](/uploads/c93c415b1e867c4de865b1079be1f8cf/Screenshot_20180314-121117.jpg)
-![Screenshot_20180314-121126](/uploads/6a6a385221562cd568b0ba41f8f3d1d8/Screenshot_20180314-121126.jpg)
+<img src="/uploads/9981948cd4f134af272342a9b4c0b530/Screenshot_20180314-121206.jpg" width="20%">
+<img src="/uploads/5ed28d7c5c8736f3abf0779462f76c75/Screenshot_20180314-121010.jpg" width="20%">
+<img src="/uploads/c93c415b1e867c4de865b1079be1f8cf/Screenshot_20180314-121117.jpg" width="20%">
+<img src="/uploads/6a6a385221562cd568b0ba41f8f3d1d8/Screenshot_20180314-121126.jpg" width="20%">
 
 ## Authors
 * **Charlie Thomas** - charlie.thomas321@gmail.com
