@@ -26,7 +26,6 @@ import com.csbgroup.myphr.MainActivity;
 import com.csbgroup.myphr.R;
 import com.csbgroup.myphr.Adapters.SimpleAdapter;
 import com.csbgroup.myphr.database.AppDatabase;
-import com.csbgroup.myphr.database.AppointmentsEntity;
 import com.csbgroup.myphr.database.MedicineEntity;
 
 import java.text.SimpleDateFormat;
@@ -45,13 +44,12 @@ public class Medicine extends Fragment {
 
     private static Object mContext;
 
-    private FloatingActionButton fab; // add medicine fab
-
     public Medicine() {} // Required empty public constructor
 
     public static Medicine newInstance() {
         return new Medicine();
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -104,6 +102,7 @@ public class Medicine extends Fragment {
         return rootView;
     }
 
+
     /**
      * getMedicines fetches the list of medicines from the database
      * @return the list of medicine entities
@@ -133,10 +132,12 @@ public class Medicine extends Fragment {
         return medicines;
     }
 
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
+
 
     /**
      * buildDialog builds the pop-up dialog for adding a new medicine, with input format checking.
@@ -206,6 +207,7 @@ public class Medicine extends Fragment {
         });
     }
 
+
     /**
      * inputChecking checks the user input when adding a new medication, the add button is disabled
      * until all format conditions are met.
@@ -233,13 +235,15 @@ public class Medicine extends Fragment {
         });
     }
 
+
     /**
-     * Returns the current app context for use
-     * in send/cancel notification functions, which are static
+     * getAppContext returns the current app context for use in send/cancel notification functions,
+     * which are static
      */
     public static Context getAppContext() {
         return (Context)mContext;
     }
+
 
     /**
      * sendNotification runs every time the user changes anything in the reminders section of
@@ -290,6 +294,7 @@ public class Medicine extends Fragment {
         }
     }
 
+
     /**
      * cancelNotification is called when the user switches off reminders altogether or specifically requests only
      * to be reminded at certain times. It cancels all notifications that have already been scheduled by the AlarmManager
@@ -302,6 +307,10 @@ public class Medicine extends Fragment {
         alarmManager.cancel(pendingIntent);
     }
 
+
+    /**
+     * resetNotifications is called upon reboot to reset the notifications
+     */
     public static void resetNotifications() {
 
         final Activity activity = (Activity)mContext;
@@ -322,9 +331,7 @@ public class Medicine extends Fragment {
         List<MedicineEntity> medicines = null;
         try {
             medicines = result.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) {e.printStackTrace();}
 
         if (medicines != null) {
             for (MedicineEntity md : medicines)
