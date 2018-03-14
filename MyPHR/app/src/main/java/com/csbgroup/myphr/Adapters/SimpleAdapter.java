@@ -13,6 +13,10 @@ import com.csbgroup.myphr.R;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * SimpleAdapter is a extended version of the ArrayAdapter used for displaying
+ * a title, and supplying the ListView item with a tag for onClickListeners
+ */
 public class SimpleAdapter extends ArrayAdapter<Map.Entry<Integer, String>> {
 
     private List<Map.Entry<Integer, String>> items;

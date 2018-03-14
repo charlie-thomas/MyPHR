@@ -139,7 +139,6 @@ public class Appointments extends Fragment {
         Collections.sort(events, new Comparator<CalendarEvent>() {
             @Override
             public int compare(CalendarEvent e1, CalendarEvent e2) {
-
                 @SuppressLint("SimpleDateFormat") DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
 
                 int dateComp = 0;
@@ -163,6 +162,7 @@ public class Appointments extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
+
     /**
      * buildDialog builds the pop-up dialog for adding a new appointment, with input format checking.
      * @param fab the floating action button which pulls up the dialog
@@ -172,7 +172,6 @@ public class Appointments extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 // set up the dialog
                 LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
                 @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.add_appointment_dialog, null);
@@ -248,6 +247,7 @@ public class Appointments extends Fragment {
             }
         });
     }
+
 
     /**
      * inputChecking checks the user input when adding a new appointment, the add button is disabled
@@ -377,6 +377,7 @@ public class Appointments extends Fragment {
 
     }
 
+
     /**
      * checkFullDate checks the validity of the full date across the three fields in the add dialog
      * whenever any of them is changed.
@@ -407,6 +408,7 @@ public class Appointments extends Fragment {
         return validDate;
     }
 
+
     /**
      * checkFullTime checks the validity of the full time across the two time fields in the add dialog
      * whenever either of them is changed.
@@ -432,6 +434,7 @@ public class Appointments extends Fragment {
         return validTime;
     }
 
+
     /**
      * Returns the current app context for use
      * in send/cancel notification functions, which are static
@@ -439,6 +442,7 @@ public class Appointments extends Fragment {
     public static Context getAppContext() {
         return (Context)mContext;
     }
+
 
     /**
      * sendNotification runs every time the user changes anything in the reminders section of
@@ -539,6 +543,7 @@ public class Appointments extends Fragment {
         }
     }
 
+
     /**
      * cancelNotification is called when the user switches off reminders altogether or specifically requests only
      * to be reminded at certain times. It cancels all notifications that have already been scheduled by the AlarmManager
@@ -551,6 +556,10 @@ public class Appointments extends Fragment {
         alarmManager.cancel(Intent);
     }
 
+
+    /**
+     * resetNotifications is called when the user reboots their phone to reset the notifications
+     */
     public static void resetNotifications() {
 
         final Activity activity = (Activity)mContext;

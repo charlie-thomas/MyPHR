@@ -50,6 +50,7 @@ public class Investigations extends Fragment {
         return fragment;
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -87,6 +88,7 @@ public class Investigations extends Fragment {
 
         return rootView;
     }
+
 
     /**
      * getInvestigations fetches the list of investigations from the database
@@ -136,6 +138,7 @@ public class Investigations extends Fragment {
 
         return events;
     }
+
 
     /**
      * buildDialog builds the pop-up dialog for adding a new investigation
@@ -220,6 +223,7 @@ public class Investigations extends Fragment {
         });
 
     }
+
 
     /**
      * inputChecking checks the user input when adding a new investigation, the add button is disabled
@@ -308,13 +312,14 @@ public class Investigations extends Fragment {
         });
     }
 
+
     /**
      * checkFullDate checks the validity of the full date across the three fields in the add dialog
      * whenever any of them is changed.
      * @param et1 is the day.
      * @param et2 is the month.
      * @param et3 is the year.
-     * @return
+     * @return validDate is a boolean stating if the date is valid
      */
     public boolean checkFullDate(EditText et1, EditText et2, EditText et3){
 

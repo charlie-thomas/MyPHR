@@ -96,6 +96,7 @@ public class InvestigationDetails extends Fragment {
         return rootView;
     }
 
+
     /**
      * Fetches a single investigation from the database.
      * @param uid is the primary key of the investigation to be retrieved
@@ -123,16 +124,19 @@ public class InvestigationDetails extends Fragment {
 
     }
 
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit, menu);
         editMenu = menu; // edit button
     }
+
 
     /**
      * Provides navigation/actions for menu items.
@@ -154,6 +158,7 @@ public class InvestigationDetails extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     /**
      * switchMode toggles between viewing and editing the appointment details.
@@ -260,6 +265,7 @@ public class InvestigationDetails extends Fragment {
         }
     }
 
+
     /**
      * disableEditing sets background and keylistener of the given edit text to nulls to stop user editing.
      * @param field is the editText field to be disabled
@@ -268,6 +274,7 @@ public class InvestigationDetails extends Fragment {
         field.setBackground(null);
         field.setKeyListener(null);
     }
+
 
     /**
      * errorChecking live checks the formatting of fields; errors are highlighted to the user
