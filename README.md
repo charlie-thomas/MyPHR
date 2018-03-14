@@ -1,6 +1,13 @@
 # MyPHR Android Application - CSB Team Project
 This is the repository for the CSB team project, building an NHS app to help girls of ages 11-18 suffering from Turner Syndrome manage their condition.
 
+## Features
+* Medical contacts
+* Personal calendar
+* Medication management
+* Appointment management
+* Medical metrics
+
 ## Installation
 MyPHR can be found on the Google Play Store here: 
 ``` link goes here ```
