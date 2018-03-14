@@ -36,37 +36,32 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
         manager.authenticate(cryptoObject, cancellationSignal, 0, this, null);
     }
 
+
+    //onAuthenticationError is called when a fatal error has occurred. It provides the error code and error message as its parameters
     @Override
-    //onAuthenticationError is called when a fatal error has occurred. It provides the error code and error message as its parameters//
-
     public void onAuthenticationError(int errMsgId, CharSequence errString) {
-
-        //I’m going to display the results of fingerprint authentication as a series of toasts.
-        //Here, I’m creating the message that’ll be displayed if an error occurs//
-
-        //Toast.makeText(context, "Authentication error\n" + errString, Toast.LENGTH_LONG).show();
-        //Removed toast due to spam
     }
 
+
+    //onAuthenticationFailed is called when the fingerprint doesn’t match with any of the fingerprints registered on the device
     @Override
-
-    //onAuthenticationFailed is called when the fingerprint doesn’t match with any of the fingerprints registered on the device//
-
     public void onAuthenticationFailed() {
         Toast.makeText(context, "Authentication failed", Toast.LENGTH_LONG).show();
     }
 
-    @Override
 
     //onAuthenticationHelp is called when a non-fatal error has occurred. This method provides additional information about the error,
-    //so to provide the user with as much feedback as possible I’m incorporating this information into my toast//
+    //so to provide the user with as much feedback as possible
+    @Override
     public void onAuthenticationHelp(int helpMsgId, CharSequence helpString) {
         Toast.makeText(context, "Authentication help\n" + helpString, Toast.LENGTH_LONG).show();
     }
 
+
     private void CustomAdapter(Context context) {
         this.context = context;
     }
+
 
     //onAuthenticationSucceeded is called when a fingerprint has been successfully matched to one of the fingerprints stored on the user’s device//
     public void onAuthenticationSucceeded(
@@ -74,5 +69,4 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
         CustomAdapter(context);
         context.startActivity(new Intent(context, MainActivity.class));
     }
-
 }

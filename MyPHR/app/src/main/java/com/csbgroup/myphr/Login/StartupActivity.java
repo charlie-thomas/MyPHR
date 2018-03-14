@@ -55,6 +55,13 @@ public class StartupActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * These three functions use the pin lock listener. When the user inputs their pin.
+     * the onComplete method is called and checks for a match with the stored correct pin.
+     * The onEmpty and onPinChange functions are empty but required for the listener to work.
+     * If needed, these functions can be changed to log that the user has changed their pin or offer
+     * guidance on how to proceed, but are not needed here.
+     */
     @SuppressLint("ApplySharedPref")
     private PinLockListener mPinLockListener = new PinLockListener() {
         @Override
@@ -62,7 +69,7 @@ public class StartupActivity extends AppCompatActivity {
             if (pin.equals("####") || pin.length() != 4) {
                 Toast.makeText(getApplicationContext(), "Invalid PIN", Toast.LENGTH_SHORT).show();
             } else {
-                SharedPreferences preferences = getSharedPreferences(PREFS,0);
+                SharedPreferences preferences = getSharedPreferences(PREFS, 0);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("PIN", pin);
                 editor.commit();
@@ -108,6 +115,7 @@ public class StartupActivity extends AppCompatActivity {
                         "07904881485",
                         "Paediatric Endocrine Nurse"));
     }
+
 
     /* Helper function to populate statistics section */
     private void populateStats(StatisticsDao dao) {
