@@ -135,6 +135,7 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
                                 final StatisticsEntity thisstat = getStats(mType);
                                 thisstat.deleteValue(date);
                                 db.statisticsDao().update(thisstat);
+                                StatisticsDetailsList.currentValues = thisstat.getValues();
 
                                 if(mType.equals("Height")){
                                     final StatisticsEntity heightvels = getStats("Height Velocity");

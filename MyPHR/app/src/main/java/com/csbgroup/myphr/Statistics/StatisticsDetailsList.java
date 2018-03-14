@@ -57,6 +57,8 @@ public class StatisticsDetailsList extends Fragment {
     private boolean validMeasurement = false;
     private boolean validDate = false;
     private boolean validCentile = true;
+    private boolean sameDate = false;
+    public static ArrayList<StatValueEntity> currentValues;
 
     public StatisticsDetailsList() {} // Required empty public constructor
 
@@ -83,6 +85,7 @@ public class StatisticsDetailsList extends Fragment {
 
         //valueslist is the list of all the entity's in currentstat. Each contains a date, value and centile.
         ArrayList<StatValueEntity> valueslist =  currentstat.getValues();
+        currentValues = valueslist;
 
         // order valuesList by oldest date first so that graph plots old -> new
         Collections.sort(valueslist, new Comparator<StatValueEntity>(){
@@ -412,7 +415,8 @@ public class StatisticsDetailsList extends Fragment {
                 else {validMeasurement = true;}
 
                 // disable/enable add button following format checks
-                if (validMeasurement && validDate && validCentile) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                if (validMeasurement && validDate && validCentile) {
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
                 else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
 
             }
@@ -426,10 +430,19 @@ public class StatisticsDetailsList extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
-                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY)");} // invalid date
+                else {
+                    validDate = false;
+                    if(sameDate) {
+                        date_error.setError("Date already exists (DD MM YYYY)");// invalid date due to duplicate
+                    } else {
+                        date_error.setError("Invalid date (DD MM YYYY)");// invalid date
+                    }
+                }
 
                 // disable/enable add button following format checks
-                if (validMeasurement && validDate && validCentile) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
+                if (validMeasurement && validDate && validCentile) {
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                }
                 else {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);}
 
                 if (day.getText().toString().length() == 2) {month.requestFocus();}
@@ -444,7 +457,14 @@ public class StatisticsDetailsList extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
-                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY)");} // invalid date
+                else {
+                    validDate = false;
+                    if(sameDate) {
+                        date_error.setError("Date already exists (DD MM YYYY)");// invalid date due to duplicate
+                    } else {
+                        date_error.setError("Invalid date (DD MM YYYY)");// invalid date
+                    }
+                }
 
                 // disable/enable add button following format checks
                 if (validMeasurement && validDate && validCentile) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
@@ -462,7 +482,14 @@ public class StatisticsDetailsList extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
                 if (checkFullDate(day, month, year)){validDate = true; date_error.setError(null);} // valid date
-                else {validDate = false; date_error.setError("Invalid date (DD MM YYYY)");} // invalid date
+                else {
+                    validDate = false;
+                    if(sameDate) {
+                        date_error.setError("Date already exists (DD MM YYYY)");// invalid date due to duplicate
+                    } else {
+                        date_error.setError("Invalid date (DD MM YYYY)");// invalid date
+                    }
+                }
 
                 // disable/enable add button following format checks
                 if (validMeasurement && validDate && validCentile) {dialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);}
@@ -525,6 +552,14 @@ public class StatisticsDetailsList extends Fragment {
                 Date d = sdf.parse(date);
                 if (!date.equals(sdf.format(d))){
                     validDate = false;
+                } else {
+                    sameDate = false;
+                    for (int i = 0; i < currentValues.size(); i++) {
+                        if (currentValues.get(i).getDate().equals(date)) {
+                            validDate = false;
+                            sameDate = true;
+                        }
+                    }
                 }
             } catch (ParseException e) {e.printStackTrace();}
         }
