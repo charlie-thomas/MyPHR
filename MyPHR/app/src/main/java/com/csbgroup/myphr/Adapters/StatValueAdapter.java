@@ -48,6 +48,8 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
     @NonNull
     @Override
     public View getView(final int position, View convertView, ViewGroup parent){
+
+        //get values at list position
         final String date = getItem(position).getDate();
         String value = getItem(position).getValue();
         final String centile = getItem(position).getCentile();
@@ -55,11 +57,13 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource,parent,false);
 
+        //get each View in the adapter
         final TextView tvDate = convertView.findViewById(R.id.textView1);
         final TextView tvValue = convertView.findViewById(R.id.textView2);
         final TextView tvCentile = convertView.findViewById(R.id.textView3);
         final ImageButton deleteBtn = convertView.findViewById(R.id.delete_btn);
 
+        //determine which ending will be required for the type of data
         tvDate.setText(date);
         if(!mType.equals("Body Mass Index (BMI)")) {
             String ending;
@@ -83,12 +87,14 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
                     ending = "";
                     break;
             }
-            tvValue.setText(value + ending);
+            tvValue.setText(value + ending); //concatenate to the end of the value
         } else{
             tvValue.setText(value);
         }
 
-        //if the centile doesn't exist then we remove the textview and double the height of the value's textview
+
+        //if the data doesn't have a centile then make centile view empty
+        //otherwise determine and setText as 'value+ending' for centile textView
         if(centile==null || centile=="" || (!mType.equals("Weight") && !(mType.equals("Height")))){
             tvCentile.setText("");
         } else {
@@ -108,7 +114,8 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
             }
         }
 
-        // show delete buttons in edit mode
+        // show delete buttons in editMode
+        // and make invisible when not in editMode
         if(StatisticsDetailsList.isEditMode) {deleteBtn.setVisibility(View.VISIBLE);}
         else {deleteBtn.setVisibility(View.INVISIBLE);}
 
@@ -135,7 +142,7 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
                                 final StatisticsEntity thisstat = getStats(mType);
                                 thisstat.deleteValue(date);
                                 db.statisticsDao().update(thisstat);
-                                StatisticsDetailsList.currentValues = thisstat.getValues();
+                                StatisticsDetailsList.valuesList = thisstat.getValues();
 
                                 if(mType.equals("Height")){
                                     final StatisticsEntity heightvels = getStats("Height Velocity");

@@ -36,7 +36,7 @@ import java.util.concurrent.Future;
 public class StatisticsDetails extends Fragment {
 
     LineGraphSeries<DataPoint> series;
-    ArrayList<StatValueEntity> valueslist;
+    ArrayList<StatValueEntity> valuesList;
     final SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
     String title;
     GraphView graph;
@@ -60,14 +60,14 @@ public class StatisticsDetails extends Fragment {
         Bundle args = getArguments();
         title = args.getString("title","Measurements");
 
-        //currentstat is a the StatisticsEntity for the current statistics page (e.g weight, height etc)
-        final StatisticsEntity currentstat = getStats(args.getString("title", "Statistics"));
+        //currentStat is a the StatisticsEntity for the current statistics page (e.g weight, height etc)
+        final StatisticsEntity currentStat = getStats(args.getString("title", "Statistics"));
 
-        //valueslist is the list of all the entity's in currentstat. Each contains a date, value and centile.
-        valueslist = currentstat.getValues();
+        //valuesList is the list of all the entity's in currentStat. Each contains a date, value and centile.
+        valuesList = currentStat.getValues();
 
         // order valuesList by oldest date first so that graph plots old -> new
-        Collections.sort(valueslist, new Comparator<StatValueEntity>() {
+        Collections.sort(valuesList, new Comparator<StatValueEntity>() {
             @Override
             public int compare(StatValueEntity t1, StatValueEntity t2) {
                 try {
@@ -82,10 +82,10 @@ public class StatisticsDetails extends Fragment {
         graph = rootView.findViewById(R.id.statistics_graph);
 
         // Loading data onto the graph
-        ArrayList<LineGraphSeries<DataPoint>> serieslist = createDataPoints();
-        graph = createGraph(serieslist.get(0));
+        ArrayList<LineGraphSeries<DataPoint>> seriesList = createDataPoints();
+        graph = createGraph(seriesList.get(0));
         if(title.equals("Blood Pressure")){
-            graph.addSeries(serieslist.get(1));
+            graph.addSeries(seriesList.get(1));
             graph.getLegendRenderer().setVisible(true);
             graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         }
@@ -93,7 +93,7 @@ public class StatisticsDetails extends Fragment {
         // Show "No measurements" message if measurements list empty
         LinearLayout no_stats = rootView.findViewById(R.id.no_stats);
         no_stats.setVisibility(View.INVISIBLE);
-        if (valueslist.size() == 0) {
+        if (valuesList.size() == 0) {
             graph.setVisibility(View.GONE);
             no_stats.setVisibility(View.VISIBLE);
         }
@@ -157,31 +157,37 @@ public class StatisticsDetails extends Fragment {
         LineGraphSeries<DataPoint> series2 = new LineGraphSeries();
         Date d1;
 
-        //Iterating through the valueslist, we format each string date into a java Date and add it as a datapoint
-        for (int i = 0; i < valueslist.size(); i++) {
-            StatValueEntity sve = valueslist.get(i);
+        //Iterating through the valuesList, we format each string date into a java Date and add it as a datapoint
+        for (int i = 0; i < valuesList.size(); i++) {
+            StatValueEntity sve = valuesList.get(i);
             try {
                 d1 = formatter.parse(sve.getDate());
 
-                if(title.equals("Blood Pressure")){
-                    DataPoint dp = new DataPoint(d1, Double.parseDouble(sve.getValue().substring(0,sve.getValue().indexOf("/"))));
-                    DataPoint dp2 = new DataPoint(d1, Double.parseDouble(sve.getValue().substring(sve.getValue().indexOf("/")+1,sve.getValue().length())));
-                    series.appendData(dp, true, valueslist.size()); //adding the datapoint to the graph series here
-                    series2.appendData(dp2, true, valueslist.size()); //adding the datapoint to the graph series here
+                //If blood pressure, we add the systolic value to one line series, and the dialostic to another.
+                //This is because we plot two lines for blood pressure
+                if (title.equals("Blood Pressure")) {
+                    DataPoint dp = new DataPoint(d1, Double.parseDouble(sve.getValue().substring(0, sve.getValue().indexOf("/")))); //adding the systolic value as a datapoint here
+                    DataPoint dp2 = new DataPoint(d1, Double.parseDouble(sve.getValue().substring(sve.getValue().indexOf("/") + 1, sve.getValue().length()))); //adding the dialostic value as a datapoint here
+                    series.appendData(dp, true, valuesList.size()); //adding the datapoint to the graph series here
+                    series2.appendData(dp2, true, valuesList.size()); //adding the datapoint to the graph series here
 
                 } else {
-                    DataPoint dp = new DataPoint(d1, Double.parseDouble(sve.getValue())); //added as a datapoint here]
-                    series.appendData(dp, true, valueslist.size()); //adding the datapoint to the graph series here
+                    DataPoint dp = new DataPoint(d1, Double.parseDouble(sve.getValue())); //added value as a datapoint here
+                    series.appendData(dp, true, valuesList.size()); //adding the datapoint to the graph series here
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
+
+        //Making main graph color red/accent colour
+        //Making secondary graph color (used for diastolic line) blue
         series.setColor(Color.parseColor("#E91E63"));
         series2.setColor(Color.BLUE);
-        series.setThickness(7);
+        series.setThickness(7); //for a more visible line
         series2.setThickness(7);
 
+        //adding blood pressure titles for the legend
         if(title.equals("Blood Pressure")){
             series.setTitle("Systolic");
             series2.setTitle("Diastolic");
@@ -226,15 +232,15 @@ public class StatisticsDetails extends Fragment {
     private void checkGraphMin(){
 
         //this if statement allows for the graph to keep four values at a time and begin scrolling after 4 have been added.
-        if (valueslist.size() > 4) {
+        if (valuesList.size() > 4) {
             try {
-                Date minDate = formatter.parse(valueslist.get(valueslist.size() - 4).getDate());
+                Date minDate = formatter.parse(valuesList.get(valuesList.size() - 4).getDate());
                 graph.getViewport().setMinX(minDate.getTime());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         } else try {
-            if(valueslist.size()>0) graph.getViewport().setMinX(formatter.parse(valueslist.get(0).getDate()).getTime());
+            if(valuesList.size()>0) graph.getViewport().setMinX(formatter.parse(valuesList.get(0).getDate()).getTime());
         }
         catch (ParseException e) {e.printStackTrace();}
     }

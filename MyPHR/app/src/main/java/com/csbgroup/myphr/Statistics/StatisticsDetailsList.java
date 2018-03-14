@@ -43,7 +43,7 @@ public class StatisticsDetailsList extends Fragment {
 
     FloatingActionButton fab; // add measurement fab
 
-    public static ListView listview;
+    public static ListView listView;
     public static StatValueAdapter adapter;
     public static boolean isEditMode = false;
     public static View rootView;
@@ -58,7 +58,7 @@ public class StatisticsDetailsList extends Fragment {
     private boolean validDate = false;
     private boolean validCentile = true;
     private boolean sameDate = false;
-    public static ArrayList<StatValueEntity> currentValues;
+    public static ArrayList<StatValueEntity> valuesList;
 
     public StatisticsDetailsList() {} // Required empty public constructor
 
@@ -80,15 +80,14 @@ public class StatisticsDetailsList extends Fragment {
         Bundle args = getArguments();
         type = args.getString("title");
 
-        //currentstat is a the StatisticsEntity for the current statistics page (e.g weight, height etc)
-        final StatisticsEntity currentstat = getStats(args.getString("title", "Statistics"));
+        //currentStat is  the StatisticsEntity for the current statistics page (e.g weight, height etc)
+        final StatisticsEntity currentStat = getStats(args.getString("title", "Statistics"));
 
-        //valueslist is the list of all the entity's in currentstat. Each contains a date, value and centile.
-        ArrayList<StatValueEntity> valueslist =  currentstat.getValues();
-        currentValues = valueslist;
+        //valuesList is the list of all the entity's in currentStat. Each contains a date, value and centile.
+        valuesList =  currentStat.getValues();
 
         // order valuesList by oldest date first so that graph plots old -> new
-        Collections.sort(valueslist, new Comparator<StatValueEntity>(){
+        Collections.sort(valuesList, new Comparator<StatValueEntity>(){
             @Override
             public int compare(StatValueEntity t1, StatValueEntity t2) {
                 try {
@@ -100,19 +99,19 @@ public class StatisticsDetailsList extends Fragment {
         });
 
         // reorder valuesList by newest date first for list view
-        Collections.reverse(valueslist);
+        Collections.reverse(valuesList);
 
-        listview = rootView.findViewById(R.id.statistics_graph_list);
-        /*The listview uses a custom adapter which uses an xml to print each list item
+        listView = rootView.findViewById(R.id.statistics_graph_list);
+        /*The listView uses a custom adapter which uses an xml to print each list item
         Format located in stat_list_adapter.xml
         Listview is formatted in StatValueAdpater.java */
-        adapter = new StatValueAdapter(getActivity(),R.layout.stat_list_adapter, valueslist,type);
-        listview.setAdapter(adapter);
+        adapter = new StatValueAdapter(getActivity(),R.layout.stat_list_adapter, valuesList,type);
+        listView.setAdapter(adapter);
 
         // Show "No measurements" message if measurements empty
         LinearLayout no_stats = rootView.findViewById(R.id.no_stats);
         no_stats.setVisibility(View.INVISIBLE);
-        if (listview.getAdapter().getCount() == 0) no_stats.setVisibility(View.VISIBLE);
+        if (listView.getAdapter().getCount() == 0) no_stats.setVisibility(View.VISIBLE);
 
         // fab action for adding measurement
         fab = rootView.findViewById(R.id.s_fab);
@@ -155,7 +154,7 @@ public class StatisticsDetailsList extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if(!type.equals("Height Velocity")) inflater.inflate(R.menu.edit, menu); //edit button
+        if(!type.equals("Height Velocity")) inflater.inflate(R.menu.edit, menu); //edit button if type isn't Height Velocity
         editMenu = menu;
     }
 
@@ -173,24 +172,24 @@ public class StatisticsDetailsList extends Fragment {
                 return true;
 
             case (R.id.details_edit): // edit button - edit measurements list
-                if (!type.equals("Height Velocity")) {
+                if (!type.equals("Height Velocity")) { // don't want user be able to edit Height Velocity
                     TabHost tabhost = getActivity().findViewById(R.id.tabHost);
                     View thisfab = rootView.findViewById(R.id.s_fab);
 
-                    if(listview.getChildCount()>0) {
+                    if(listView.getChildCount()>0) { // only edit if there are values to edit
                         if (tabhost.getCurrentTab() == 0) { // list view
-                            if (isEditMode) {
+                            if (isEditMode) { // if already editing then stop
                                 editMenu.getItem(0).setIcon(R.drawable.edit);
                                 isEditMode = false;
                                 adapter.notifyDataSetChanged();
                                 thisfab.setVisibility(View.VISIBLE);
-                            } else {
+                            } else { // if not already editing, then begin
                                 editMenu.getItem(0).setIcon(R.drawable.tick);
                                 isEditMode = true;
                                 adapter.notifyDataSetChanged();
                                 thisfab.setVisibility(View.GONE);
                             }
-                        } else { // graph view
+                        } else { // graph view, change tab to list and activate edit mode
                             tabhost.setCurrentTab(0);
                             isEditMode = true;
                             editMenu.getItem(0).setIcon(R.drawable.tick);
@@ -264,7 +263,7 @@ public class StatisticsDetailsList extends Fragment {
                 final EditText month = v.findViewById(R.id.meas_MM);
                 final EditText year = v.findViewById(R.id.meas_YYYY);
 
-                // hide the invisible edittext
+                // hide the invisible EditText
                 EditText date_error = v.findViewById(R.id.date_error);
                 date_error.setKeyListener(null);
                 date_error.setBackground(null);
@@ -275,7 +274,7 @@ public class StatisticsDetailsList extends Fragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         // join date into one string
-                        final String fulldate = day.getText().toString() + "/" + month.getText().toString()
+                        final String fullDate = day.getText().toString() + "/" + month.getText().toString()
                                 + "/" + year.getText().toString();
 
                         // concatenate blood pressure measurments
@@ -294,16 +293,17 @@ public class StatisticsDetailsList extends Fragment {
                                 public void run() {
                                 AppDatabase db = AppDatabase.getAppDatabase(getActivity());
                                 final StatisticsEntity thisstat = getStats(type);
-                                thisstat.addValue(mmnt, fulldate, centile);
+                                thisstat.addValue(mmnt, fullDate, centile);
                                 db.statisticsDao().update(thisstat);
 
-                                    if(type.equals("Height")){
-                                        final StatisticsEntity heightvels = getStats("Height Velocity");
-                                        ArrayList<StatValueEntity> newvels = updateHeightVelocity(getStats("Height").getValues());
-                                        heightvels.getValues().clear();
-                                        heightvels.getValues().addAll(newvels);
-                                        db.statisticsDao().update(heightvels);
-                                    }
+                                //if type is height, then we also calculate the height velocities and add these to the database
+                                if(type.equals("Height")){
+                                    final StatisticsEntity heightvels = getStats("Height Velocity");
+                                    ArrayList<StatValueEntity> newvels = updateHeightVelocity(getStats("Height").getValues());
+                                    heightvels.getValues().clear();
+                                    heightvels.getValues().addAll(newvels);
+                                    db.statisticsDao().update(heightvels);
+                                }
 
                                 // refresh the view
                                 Fragment details = StatisticsSection.newInstance();
@@ -336,12 +336,12 @@ public class StatisticsDetailsList extends Fragment {
 
     /**
      * updateHeightVelocity updates the height velocity calculations.
-     * @param orderedheight is the list of height measurements as StatValueEntities
-     * @return the heigh velocity values
+     * @param orderedHeight is the list of height measurements as StatValueEntities
+     * @return the height velocity values
      */
-    public static ArrayList<StatValueEntity> updateHeightVelocity(ArrayList<StatValueEntity> orderedheight){
+    public static ArrayList<StatValueEntity> updateHeightVelocity(ArrayList<StatValueEntity> orderedHeight){
 
-        Collections.sort(orderedheight, new Comparator<StatValueEntity>() {
+        Collections.sort(orderedHeight, new Comparator<StatValueEntity>() {
             @Override
             public int compare(StatValueEntity t1, StatValueEntity t2) {
                 try {
@@ -352,26 +352,26 @@ public class StatisticsDetailsList extends Fragment {
             }
         });
 
-        double heightchanged;
+        double heightChanged;
         long diff;
-        double heightvelocity;
+        double heightVelocity;
         float days = 0;
-        final ArrayList<StatValueEntity> heightvels = new ArrayList<>();
+        final ArrayList<StatValueEntity> heightVels = new ArrayList<>();
 
-        for(int i=1; i<orderedheight.size(); i++) {
-            heightchanged = Double.parseDouble(orderedheight.get(i).getValue()) - Double.parseDouble(orderedheight.get(i-1).getValue());
+        for(int i=1; i<orderedHeight.size(); i++) {
+            heightChanged = Double.parseDouble(orderedHeight.get(i).getValue()) - Double.parseDouble(orderedHeight.get(i-1).getValue());
             try {
-                diff = formatter.parse(orderedheight.get(i).getDate()).getTime() -
-                        formatter.parse(orderedheight.get(i-1).getDate()).getTime();
+                diff = formatter.parse(orderedHeight.get(i).getDate()).getTime() -
+                        formatter.parse(orderedHeight.get(i-1).getDate()).getTime();
                 days = (diff / (1000 * 60 * 60 * 24));
 
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            heightvelocity = Math.round(heightchanged / (days / 365));
-            heightvels.add(new StatValueEntity(Double.toString(heightvelocity), orderedheight.get(i).getDate(), null));
+            heightVelocity = Math.round(heightChanged / (days / 365));
+            heightVels.add(new StatValueEntity(Double.toString(heightVelocity), orderedHeight.get(i).getDate(), null));
         }
-        return heightvels;
+        return heightVels;
     }
 
     /**
@@ -554,8 +554,8 @@ public class StatisticsDetailsList extends Fragment {
                     validDate = false;
                 } else {
                     sameDate = false;
-                    for (int i = 0; i < currentValues.size(); i++) {
-                        if (currentValues.get(i).getDate().equals(date)) {
+                    for (int i = 0; i < valuesList.size(); i++) {
+                        if (valuesList.get(i).getDate().equals(date)) {
                             validDate = false;
                             sameDate = true;
                         }

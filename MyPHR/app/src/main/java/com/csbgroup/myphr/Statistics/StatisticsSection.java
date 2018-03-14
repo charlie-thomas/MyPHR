@@ -62,6 +62,8 @@ public class StatisticsSection extends Fragment {
         transaction.replace(R.id.list_tab, detailsList);
         transaction.commit();
 
+        //if tab is changed then change the edit mode to false so the delete btn's don't remain
+        //if tab is changed to the graph tab then reload the graph in case changes have been made from the list page
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String s) {
