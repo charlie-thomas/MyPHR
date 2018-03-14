@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.calendar);
     }
 
+
     /**
      * setToolbar is a helper function to set the title displayed in the toolbar.
      * @param title is the title to be shown
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(back);
         getSupportActionBar().setDisplayShowHomeEnabled(back);
     }
+
 
     /**
      * switchFragment is a helper function to change the fragment in the frame
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+
     @Override
     public void onBackPressed() {
         FragmentManager fm = getSupportFragmentManager();
@@ -106,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
             } else fm.popBackStack();
         } else super.onBackPressed();
     }
+
 
     @Override
     public void onRestart() {
