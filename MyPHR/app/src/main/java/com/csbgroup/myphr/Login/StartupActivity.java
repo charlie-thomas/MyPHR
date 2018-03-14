@@ -91,7 +91,9 @@ public class StartupActivity extends AppCompatActivity {
     };
 
 
-    /* Helper function to populate contacts with staff */
+    /**
+    * populateContacts is a helper function to populate contacts with staff 
+    */
     private void populateContacts(ContactsDao dao) {
         dao.deleteAll();
         // Key medical staff at Royal Childrens Hospital, Glasgow are pre-loaded
@@ -117,7 +119,9 @@ public class StartupActivity extends AppCompatActivity {
     }
 
 
-    /* Helper function to populate statistics section */
+    /**
+    * populateStats is a helper function to populate statistics section with the measurement types
+    */
     private void populateStats(StatisticsDao dao) {
         dao.deleteAll();
         String[] stats = {"Blood Pressure", "Body Mass Index (BMI)", "Head Circumference", "Height",
