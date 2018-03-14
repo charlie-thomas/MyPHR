@@ -28,7 +28,7 @@ public class ForgotPINActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(activity_forgot_pin);
 
-        SharedPreferences preferences = getSharedPreferences(PREFS,0);
+        SharedPreferences preferences = getSharedPreferences(PREFS, 0);
 
         answer1Text = findViewById(R.id.attempt_1_answer);
         answer2Text = findViewById(R.id.attempt_2_answer);
@@ -40,8 +40,11 @@ public class ForgotPINActivity extends AppCompatActivity {
         chosen2.setText(preferences.getString("chosen2", "####"));
     }
 
+
+    // Checks user input against stored answers and redirects to the
+    // change PIN activity if there is a match.
     public void forgotButton(View view) {
-        SharedPreferences preferences = getSharedPreferences(PREFS,0);
+        SharedPreferences preferences = getSharedPreferences(PREFS, 0);
 
         answer1 = answer1Text.getText().toString().toLowerCase();
         answer2 = answer2Text.getText().toString().toLowerCase();

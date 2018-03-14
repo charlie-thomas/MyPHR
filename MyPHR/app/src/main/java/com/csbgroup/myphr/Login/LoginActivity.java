@@ -55,7 +55,6 @@ public class LoginActivity extends AppCompatActivity {
     FingerprintManager fingerprintManager;
     KeyguardManager keyguardManager;
 
-
     // PIN input variables
     public static final String PREFS = "pin";
     PinLockView mPinLockView;
@@ -65,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
     private PinLockListener mPinLockListener = new PinLockListener() {
         @Override
         public void onComplete(String pin) {
-            SharedPreferences preferences = getSharedPreferences(PREFS,0);
+            SharedPreferences preferences = getSharedPreferences(PREFS, 0);
             String pinn = preferences.getString("PIN", "####"); // default pin is ####
 
             if (pin.equals(pinn)) {
@@ -87,6 +86,8 @@ public class LoginActivity extends AppCompatActivity {
     };
 
 
+    // Method to take the user to the Forgot PIN activity when they press
+    // the "Forgot PIN" button
     public void goToForgot(View view) {
         Intent intent = new Intent(this, ForgotPINActivity.class);
         startActivity(intent);
@@ -96,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Test for first time setup
-        SharedPreferences preferences = getSharedPreferences(PREFS,0);
+        SharedPreferences preferences = getSharedPreferences(PREFS, 0);
         String pin = preferences.getString("PIN", "####");
 
         if (pin.equals("####")) {
@@ -167,6 +168,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+
     //Create the generateKey method that we’ll use to gain access to the Android keystore and generate the encryption key//
     @TargetApi(Build.VERSION_CODES.M)
     private void generateKey() throws FingerprintException {
@@ -209,7 +211,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    //Create a new method that we’ll use to initialize our cipher//
+
+    //Create a new method that we’ll use to initialize our cipher
     @TargetApi(Build.VERSION_CODES.M)
     public boolean initCipher() {
         try {
@@ -240,6 +243,7 @@ public class LoginActivity extends AppCompatActivity {
             throw new RuntimeException("Failed to init Cipher", e);
         }
     }
+
 
     private class FingerprintException extends Exception {
         private FingerprintException(Exception e) {
