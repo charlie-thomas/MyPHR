@@ -1,7 +1,8 @@
 package com.csbgroup.myphr.Calendar;
 
-/* Object to represent all types of event: Medicine/Appointments/Investigations
-   Used to ease the display of such items */
+/**
+ * Class to hold objects to be displayed on the calendar
+ */
 public class CalendarEvent {
 
     private int uid;
@@ -11,6 +12,7 @@ public class CalendarEvent {
     private String event;
     private String type;
 
+    // Constructor
     public CalendarEvent(int uid, int hour, String time, String date, String event, String type) {
         this.uid = uid;
         this.hour = hour;
@@ -20,6 +22,7 @@ public class CalendarEvent {
         this.type = type;
     }
 
+    // Getters
     public String getTime() {
         return time;
     }

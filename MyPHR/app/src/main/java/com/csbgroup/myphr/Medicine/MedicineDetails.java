@@ -155,12 +155,11 @@ public class MedicineDetails extends Fragment {
                     case R.id.daily:
                         thismedicine.setOther_days(false);
                         thismedicine.setDaily(true);
-                        Medicine.sendNotification(thismedicine);
                         break;
                     case R.id.everyotherday:
                         thismedicine.setDaily(false);
                         thismedicine.setOther_days(true);
-                        Medicine.sendNotification(thismedicine);
+
                         break;
                 }
                 new Thread(new Runnable() {
@@ -170,6 +169,8 @@ public class MedicineDetails extends Fragment {
                         db.medicineDao().update(thismedicine);
                     }
                 }).start();
+
+                Medicine.sendNotification(thismedicine);
             }
         });
 
@@ -182,11 +183,9 @@ public class MedicineDetails extends Fragment {
                 switch (checkedId){
                     case R.id.general:
                         thismedicine.setReminder_type(0);
-                        Medicine.sendNotification(thismedicine);
                         break;
                     case R.id.descriptive:
                         thismedicine.setReminder_type(1);
-                        Medicine.cancelNotification(thismedicine);
                         break;
                 }
                 new Thread(new Runnable() {
@@ -196,6 +195,9 @@ public class MedicineDetails extends Fragment {
                         db.medicineDao().update(thismedicine);
                     }
                 }).start();
+
+                // Checks which notification type the user wants *after* database updates
+                Medicine.sendNotification(thismedicine);
             }
         });
 
@@ -414,7 +416,6 @@ public class MedicineDetails extends Fragment {
         }
 
         if (this.mode.equals("edit")) { // exiting edit mode
-            Medicine.sendNotification(thismedicine);
 
             editMenu.getItem(0).setIcon(R.drawable.edit);
 
@@ -449,6 +450,16 @@ public class MedicineDetails extends Fragment {
             }).start();
 
             this.mode = "view";
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    AppDatabase db = AppDatabase.getAppDatabase(getActivity());
+                    db.medicineDao().update(thismedicine);
+                }
+            }).start();
+
+            Medicine.sendNotification(thismedicine);
         }
     }
 

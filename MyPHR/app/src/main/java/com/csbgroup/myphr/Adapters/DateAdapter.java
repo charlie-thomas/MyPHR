@@ -13,6 +13,10 @@ import com.csbgroup.myphr.R;
 
 import java.util.List;
 
+/**
+ * DateAdapter is a extended version of the ArrayAdapter used for displaying
+ * events with a given date and title
+ */
 public class DateAdapter extends ArrayAdapter<CalendarEvent> {
 
     private List<CalendarEvent> events;

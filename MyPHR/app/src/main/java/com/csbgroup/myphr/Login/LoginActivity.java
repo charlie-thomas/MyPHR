@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import com.andrognito.pinlockview.PinLockView;
 import com.andrognito.pinlockview.IndicatorDots;
@@ -59,7 +58,6 @@ public class LoginActivity extends AppCompatActivity {
 
     // PIN input variables
     public static final String PREFS = "pin";
-    public static final String TAG = "PinLockView";
     PinLockView mPinLockView;
     IndicatorDots mIndicatorDots;
 
@@ -81,7 +79,6 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void onEmpty() {
-            Log.d(TAG, "PIN empty");
         }
 
         @Override

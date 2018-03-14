@@ -1,5 +1,6 @@
 package com.csbgroup.myphr.Appointments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -9,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -47,8 +49,6 @@ public class Appointments extends Fragment {
 
     private static Object mContext;
 
-    private FloatingActionButton fab; // add appointment fab
-
     // format error checking booleans
     private boolean validTitle = false;
     private boolean validDate = false;
@@ -57,12 +57,11 @@ public class Appointments extends Fragment {
     public Appointments() {} // Required empty public constructor
 
     public static Appointments newInstance() {
-        Appointments fragment = new Appointments();
-        return fragment;
+        return new Appointments();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         mContext = this.getContext();
@@ -97,7 +96,7 @@ public class Appointments extends Fragment {
         if (listView.getAdapter().getCount() == 0) noapps.setVisibility(View.VISIBLE);
 
         // fab action for adding appointment
-        fab = rootView.findViewById(R.id.app_fab);
+        FloatingActionButton fab = rootView.findViewById(R.id.app_fab);
         buildDialog(fab);
 
         return rootView;
@@ -125,7 +124,9 @@ public class Appointments extends Fragment {
         List<AppointmentsEntity> appointments = null;
         try {
             appointments = result.get();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Convert into CalendarEvent objects
         ArrayList<CalendarEvent> events = new ArrayList<>();
@@ -138,8 +139,7 @@ public class Appointments extends Fragment {
         Collections.sort(events, new Comparator<CalendarEvent>() {
             @Override
             public int compare(CalendarEvent e1, CalendarEvent e2) {
-
-                DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+                @SuppressLint("SimpleDateFormat") DateFormat f = new SimpleDateFormat("dd/MM/yyyy");
 
                 int dateComp = 0;
                 try {
@@ -162,6 +162,7 @@ public class Appointments extends Fragment {
         super.onActivityCreated(savedInstanceState);
     }
 
+
     /**
      * buildDialog builds the pop-up dialog for adding a new appointment, with input format checking.
      * @param fab the floating action button which pulls up the dialog
@@ -171,10 +172,9 @@ public class Appointments extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 // set up the dialog
                 LayoutInflater inflater = getActivity().getLayoutInflater(); // get inflater
-                View v = inflater.inflate(R.layout.add_appointment_dialog, null);
+                @SuppressLint("InflateParams") View v = inflater.inflate(R.layout.add_appointment_dialog, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setView(v);
 
@@ -247,6 +247,7 @@ public class Appointments extends Fragment {
             }
         });
     }
+
 
     /**
      * inputChecking checks the user input when adding a new appointment, the add button is disabled
@@ -376,6 +377,7 @@ public class Appointments extends Fragment {
 
     }
 
+
     /**
      * checkFullDate checks the validity of the full date across the three fields in the add dialog
      * whenever any of them is changed.
@@ -395,7 +397,7 @@ public class Appointments extends Fragment {
         else if (date.length() != 10) {validDate = false;} // incomplete date
         else {
             try {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 Date d = sdf.parse(date);
                 if (!date.equals(sdf.format(d))){
                     validDate = false; // invalid date
@@ -405,6 +407,7 @@ public class Appointments extends Fragment {
 
         return validDate;
     }
+
 
     /**
      * checkFullTime checks the validity of the full time across the two time fields in the add dialog
@@ -431,6 +434,7 @@ public class Appointments extends Fragment {
         return validTime;
     }
 
+
     /**
      * Returns the current app context for use
      * in send/cancel notification functions, which are static
@@ -438,6 +442,7 @@ public class Appointments extends Fragment {
     public static Context getAppContext() {
         return (Context)mContext;
     }
+
 
     /**
      * sendNotification runs every time the user changes anything in the reminders section of
@@ -484,6 +489,7 @@ public class Appointments extends Fragment {
 
             // Set notification to launch at medicine reminder time
             Calendar calendar = Calendar.getInstance();
+            Calendar timeNow = Calendar.getInstance();
             calendar.set(yearToSet, monthToSet, dayToSet, hourToSet, minuteToSet, 0);
             // Subtract one from month to account for Java calendar
             calendar.add(Calendar.MONTH, -1);
@@ -496,37 +502,47 @@ public class Appointments extends Fragment {
             if (appointment.isRemind_week()) {
                 // Subtract a week from calendar for prior week reminder
                 weekCalendar.add(Calendar.DAY_OF_YEAR, -7);
-                // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
+                // Checks if event is in the past. If so, does not activate
+                if (weekCalendar.compareTo(timeNow) == 1) {
+                    // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
+                    } else {
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, weekCalendar.getTimeInMillis(), notifyWeek);
+                    }
                 }
             }
 
             if (appointment.isRemind_day()) {
                 // Subtract a day from calendar for prior day reminder
                 dayCalendar.add(Calendar.DAY_OF_YEAR, -1);
-                // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyDay);
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyWeek);
+                // Checks if event is in the past. If so, does not activate
+                if (dayCalendar.compareTo(timeNow) == 1) {
+                    // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyDay);
+                    } else {
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, dayCalendar.getTimeInMillis(), notifyWeek);
+                    }
                 }
             }
 
             if (appointment.isRemind_morning()) {
                 // Set time for 10AM for same-day appointments
                 morningCalendar.set(Calendar.HOUR_OF_DAY, 10);
-                // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyMorning);
-                } else {
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyWeek);
+                // Checks if event is in the past. If so, does not activate
+                if (morningCalendar.compareTo(timeNow) == 1) {
+                    // Android 6.0+ has Doze, which will silence alarms, so allow while idle is needed for that
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyMorning);
+                    } else {
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, morningCalendar.getTimeInMillis(), notifyWeek);
+                    }
                 }
             }
         }
     }
+
 
     /**
      * cancelNotification is called when the user switches off reminders altogether or specifically requests only
@@ -540,6 +556,10 @@ public class Appointments extends Fragment {
         alarmManager.cancel(Intent);
     }
 
+
+    /**
+     * resetNotifications is called when the user reboots their phone to reset the notifications
+     */
     public static void resetNotifications() {
 
         final Activity activity = (Activity)mContext;

@@ -31,6 +31,10 @@ import static com.csbgroup.myphr.Statistics.StatisticsDetailsList.updateHeightVe
 
 import static android.view.View.GONE;
 
+/**
+ * StatValueAdapter is a extended version of the ArrayAdapter used for displaying
+ * all the different measurements within the application
+ */
 public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
     private Context mContext;
     int mResource;
@@ -44,6 +48,7 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
         mType = type;
         array = objects;
     }
+
 
     @NonNull
     @Override
@@ -135,6 +140,7 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
                                 final StatisticsEntity thisstat = getStats(mType);
                                 thisstat.deleteValue(date);
                                 db.statisticsDao().update(thisstat);
+                                StatisticsDetailsList.currentValues = thisstat.getValues();
 
                                 if(mType.equals("Height")){
                                     final StatisticsEntity heightvels = getStats("Height Velocity");
@@ -178,6 +184,7 @@ public class StatValueAdapter extends ArrayAdapter<StatValueEntity>{
         });
         return convertView;
     }
+
 
     /**
      * getStats fetches the StatisticsEntity for the specified measurement type (e.g. weight/BMI...)
