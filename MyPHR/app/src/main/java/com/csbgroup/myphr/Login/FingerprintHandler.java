@@ -25,6 +25,8 @@ public class FingerprintHandler extends FingerprintManager.AuthenticationCallbac
         context = mContext;
     }
 
+    public FingerprintHandler() {} // default constructor
+
     //Implement the startAuth method, which is responsible for starting the fingerprint authentication process//
 
     void startAuth(FingerprintManager manager, FingerprintManager.CryptoObject cryptoObject) {
