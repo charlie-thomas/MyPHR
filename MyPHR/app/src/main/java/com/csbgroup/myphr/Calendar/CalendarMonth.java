@@ -52,6 +52,7 @@ public class CalendarMonth extends Fragment {
         return new CalendarMonth();
     }
 
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView =  inflater.inflate(R.layout.fragment_calendar_month, container, false);
@@ -201,6 +202,7 @@ public class CalendarMonth extends Fragment {
         return rootView;
     }
 
+
     /**
      * getUpcomingAppointment is a helper function to retrieve the next upcoming appointment from
      * a list of appointments
@@ -245,6 +247,7 @@ public class CalendarMonth extends Fragment {
         // Return the placeholder if necessary
         return placeholder;
     }
+
 
     /**
      * getTodaysMedicine fetches the list of medications to be taken today from the database
@@ -292,6 +295,7 @@ public class CalendarMonth extends Fragment {
 
         return todaysMeds;
     }
+
 
     /**
      * getAllEvents fetches the list of appointments, investigations and sick day for today where

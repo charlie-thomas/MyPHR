@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.csbgroup.myphr"
-    >
+    package="com.csbgroup.myphr">
 
     <!-- Tells Google Play Store that fingerprint scanners are preferred but *not* required -->
     <uses-feature android:name="android.hardware.fingerprint"

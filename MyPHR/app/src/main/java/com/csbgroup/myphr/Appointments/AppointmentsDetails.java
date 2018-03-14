@@ -34,7 +34,6 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.csbgroup.myphr.AlarmReceiver;
 import com.csbgroup.myphr.MainActivity;
 import com.csbgroup.myphr.R;
 import com.csbgroup.myphr.database.AppDatabase;
@@ -42,7 +41,6 @@ import com.csbgroup.myphr.database.AppointmentsEntity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -306,6 +304,7 @@ public class AppointmentsDetails extends Fragment {
         return rootView;
     }
 
+
     /**
      * getAppointment etches a single appointment from the database.
      * @param uid is the primary key of the appointment to be retrieved
@@ -334,16 +333,19 @@ public class AppointmentsDetails extends Fragment {
         return appointment;
     }
 
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit, menu);
         editMenu = menu;
     }
+
 
     /**
      * onOptionsItemSelected provides navigation/actions for menu items.
@@ -366,6 +368,7 @@ public class AppointmentsDetails extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     /**
      * switchMode toggles between viewing and editing the appointment details.
@@ -493,6 +496,7 @@ public class AppointmentsDetails extends Fragment {
         }
     }
 
+
     /**
      * disableEditing sets an editText's background and keylistener to null to stop user editing.
      * @param field is the editText field to be disabled
@@ -501,6 +505,7 @@ public class AppointmentsDetails extends Fragment {
         field.setBackground(null);
         field.setKeyListener(null);
     }
+
 
     /**
      * errorChecking live checks the formatting of fields; errors are highlighted to the user

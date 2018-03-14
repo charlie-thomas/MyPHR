@@ -22,6 +22,12 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     public static String NOTIFICATION_ID = "notification-id";
 
+
+    /*
+     *  When other functions send a notification, the alarmreceiver gets the
+     *  call and the onreceive method is activated, which then gets all the required
+     *  information and sends the appropriate notification.
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -109,7 +115,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             int id = intent.getIntExtra(NOTIFICATION_ID, 0);
 
             // Starts notification
-            if (bigText != null && !bigText.toString().equals("")) {
+            if (!bigText.toString().equals("")) {
                 if (mNotificationManager != null) {
                     mNotificationManager.notify(id, mBuilder.build());
                 }

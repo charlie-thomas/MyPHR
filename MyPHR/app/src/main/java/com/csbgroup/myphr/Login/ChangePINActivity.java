@@ -36,12 +36,14 @@ public class ChangePINActivity extends AppCompatActivity {
 
     }
 
+
+    // Listener functions for the PIN input buttons
     @SuppressLint("ApplySharedPref")
     private PinLockListener mPinLockListener = new PinLockListener() {
         @Override
         public void onComplete(String pin) {
 
-            SharedPreferences preferences = getSharedPreferences(PREFS,0);
+            SharedPreferences preferences = getSharedPreferences(PREFS, 0);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("PIN", pin);
             editor.commit();
@@ -52,13 +54,14 @@ public class ChangePINActivity extends AppCompatActivity {
             finish();
         }
 
+
         @Override
         public void onEmpty() {
         }
+
 
         @Override
         public void onPinChange(int pinLength, String intermediatePin) {
         }
     };
-
 }

@@ -22,6 +22,7 @@ public class QuestionsActivity extends AppCompatActivity {
     static String chosen1;
     static String chosen2;
 
+    // The answers to the security questions that will be stored
     public static final String PREFS = "answers";
 
     @Override
@@ -44,11 +45,11 @@ public class QuestionsActivity extends AppCompatActivity {
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner2.setAdapter(adapter2);
 
-
         answer1Text = findViewById(id.security_1_answer);
         answer2Text = findViewById(id.security_2_answer);
 
     }
+
 
     @SuppressLint("ApplySharedPref")
     public void questionsButton(View view) {

@@ -51,6 +51,7 @@ public class CalendarDay extends Fragment {
         return new CalendarDay();
     }
 
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -146,6 +147,7 @@ public class CalendarDay extends Fragment {
         return rootView;
     }
 
+
     /**
      * onStop removes the snackbar sick day message
      */
@@ -154,6 +156,7 @@ public class CalendarDay extends Fragment {
         if (sb != null) sb.dismiss();
         super.onStop();
     }
+
 
     /**
      * changeDate is a helper function which aids the switchDate methods, and adds a given number
@@ -178,6 +181,7 @@ public class CalendarDay extends Fragment {
         }
     }
 
+
     /**
      * setUseVisibleHint sets whether the sickday snackbar should display on the day view
      * @param visible is whether the snackbar should be visible
@@ -190,6 +194,8 @@ public class CalendarDay extends Fragment {
             sb.dismiss();
         }
     }
+
+
     /**
      * switchDate is a helper function which switches which date the user is looking at to the
      * supplied date
@@ -204,6 +210,7 @@ public class CalendarDay extends Fragment {
 
         ((MainActivity) getActivity()).switchFragment(newDayFragment, true);
     }
+
 
     /**
      * getEvents retrieves all medications and appointments that should be shown in the current view
@@ -260,6 +267,7 @@ public class CalendarDay extends Fragment {
         return allEvents;
     }
 
+
     /**
      * isOtherDay is a helper function to calculate whether the start date and follow up date are correctly spaced
      * @param d1 is the first date
@@ -273,6 +281,7 @@ public class CalendarDay extends Fragment {
 
         return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) % 2 == 0;
     }
+
 
     /**
      * isSickDay retrieves whether the specified date is or is not marked as a sick day
@@ -298,11 +307,11 @@ public class CalendarDay extends Fragment {
         return result_app.get() != null;
     }
 
+
     /**
-     * Provides navigation for menu items; currenty only needed for navigation back to the
+     * Provides navigation for menu items; currently only needed for navigation back to the
      * main calendar view.
      * @param item the clicked menu item
-     * @return
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -313,6 +322,7 @@ public class CalendarDay extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     /**
      * buildDialog builds the pop-up dialog for marking a sick day

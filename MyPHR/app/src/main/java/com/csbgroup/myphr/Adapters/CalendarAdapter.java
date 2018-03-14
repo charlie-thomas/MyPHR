@@ -23,6 +23,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * CalendarAdapter is a extended version of the RecyclerView Adapter used for displaying
+ * CalendarEvent objects on to the CalendarDay fragment
+ */
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
     private final List<List<CalendarEvent>> events;
@@ -33,6 +37,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
         this.events = events;
     }
 
+
     @Override
     public CalendarViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ctx = parent.getContext();
@@ -40,11 +45,13 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
                 .inflate(R.layout.calendar_event_item, parent, false));
     }
 
+
     @Override
     public void onBindViewHolder(final CalendarViewHolder holder, int position) {
 
         final List<CalendarEvent> hours_events = events.get(position);
 
+        // Sort the each hours events so the are in order by time
         Collections.sort(hours_events, new Comparator<CalendarEvent>() {
             @Override
             public int compare(CalendarEvent o1, CalendarEvent o2) {
@@ -54,10 +61,14 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
         LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        // Set the text for each hour
         String hourString = hours_events.get(0).getHour() + ":00";
         holder.time.setText(hourString);
 
+        // Loop through each event for each hour
         for (final CalendarEvent e : hours_events) {
+
+            // Depending on the type of the event, add it to the correct hour, with the correct design and onClickListener
             switch (e.getType()) {
                 case "Empty":
                     break;

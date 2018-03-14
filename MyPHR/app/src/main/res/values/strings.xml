@@ -1,5 +1,6 @@
 <resources>
-    
+
+    // Basic strings
     <string name="app_name">MyPHR</string>
     <string name="contacts">Contacts</string>
     <string name="medication">Medication</string>
