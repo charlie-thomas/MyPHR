@@ -9,8 +9,7 @@ This is the repository for MyPHR, the CSB team project mobile application, built
 * Medical metrics
 
 ## Installation
-MyPHR can be found on the Google Play Store here: 
-``` link goes here ```
+MyPHR can be found on the Google Play Store here: ``` https://play.google.com/store/apps/details?id=com.csbgroup.myphr ```
 
 ## Screenshots
 <img src="/uploads/9981948cd4f134af272342a9b4c0b530/Screenshot_20180314-121206.jpg" width="20%">
